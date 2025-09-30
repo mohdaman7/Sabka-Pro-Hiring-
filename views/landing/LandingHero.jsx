@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, Briefcase, Users, Building2, ArrowRight } from "lucide-react"
+import { Menu, X, Users, Building2, ArrowRight } from "lucide-react"
 
 export default function LandingHero() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -18,11 +18,15 @@ export default function LandingHero() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-all duration-300 group-hover:scale-105">
-                <Briefcase className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 bg-white">
+                <img 
+                  src="/sabka-logo.png" 
+                  alt="Sabka Pro" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold text-white tracking-tight">Sabka Pro HIRIN</span>
+                <span className="text-lg font-bold text-white tracking-tight">Sabka Pro HIRING</span>
                 <span className="text-[10px] text-blue-300/70 -mt-1">Your Career Partner</span>
               </div>
             </Link>
