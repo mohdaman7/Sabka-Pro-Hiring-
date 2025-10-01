@@ -194,7 +194,7 @@ export default function CandidateLeadForm() {
       <form onSubmit={handleSubmit} className="space-y-6 relative">
         {/* Name Field */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <label htmlFor="name" className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label htmlFor="name" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
             <FileText className="w-4 h-4 text-primary" />
             Full Name <span className="text-destructive">*</span>
           </label>
@@ -233,7 +233,7 @@ export default function CandidateLeadForm() {
 
         {/* Email Field */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <label htmlFor="email" className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label htmlFor="email" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
             <Mail className="w-4 h-4 text-primary" />
             Email Address <span className="text-destructive">*</span>
           </label>
@@ -272,7 +272,7 @@ export default function CandidateLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
           <label
             htmlFor="whatsapp"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <Phone className="w-4 h-4 text-primary" />
             WhatsApp Number <span className="text-destructive">*</span>
@@ -312,7 +312,7 @@ export default function CandidateLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
           <label
             htmlFor="qualification"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <GraduationCap className="w-4 h-4 text-primary" />
             Educational Qualification <span className="text-destructive">*</span>
@@ -358,7 +358,7 @@ export default function CandidateLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <label
             htmlFor="jobPreferences"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <Briefcase className="w-4 h-4 text-primary" />
             Job Preferences <span className="text-destructive">*</span>
@@ -396,7 +396,7 @@ export default function CandidateLeadForm() {
 
         {/* CV Upload */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
-          <label htmlFor="cvFile" className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label htmlFor="cvFile" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
             <Upload className="w-4 h-4 text-primary" />
             Upload CV (Optional)
           </label>

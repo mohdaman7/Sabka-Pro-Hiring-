@@ -217,7 +217,7 @@ export default function LandingHero() {
             {/* Candidate Card */}
             <Link
               href="/register?type=candidate"
-              className="group block bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center border border-purple-400/20 relative overflow-hidden flex-1"
+              className="group bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center border border-purple-400/20 relative overflow-hidden flex-1"
             >
               {/* Subtle gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

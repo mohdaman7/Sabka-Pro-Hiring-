@@ -185,7 +185,7 @@ export default function EmployerLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <label
             htmlFor="companyName"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <Building2 className="w-4 h-4 text-primary" />
             Company Name <span className="text-destructive">*</span>
@@ -225,7 +225,7 @@ export default function EmployerLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <label
             htmlFor="contactPerson"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <User className="w-4 h-4 text-primary" />
             Contact Person Name <span className="text-destructive">*</span>
@@ -263,7 +263,7 @@ export default function EmployerLeadForm() {
 
         {/* Email */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <label htmlFor="email" className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label htmlFor="email" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
             <Mail className="w-4 h-4 text-primary" />
             Business Email <span className="text-destructive">*</span>
           </label>
@@ -300,7 +300,7 @@ export default function EmployerLeadForm() {
 
         {/* Phone */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <label htmlFor="phone" className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label htmlFor="phone" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
             <Phone className="w-4 h-4 text-primary" />
             Phone Number <span className="text-destructive">*</span>
           </label>
@@ -339,7 +339,7 @@ export default function EmployerLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <label
             htmlFor="companySize"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <Users className="w-4 h-4 text-primary" />
             Company Size <span className="text-destructive">*</span>
@@ -385,7 +385,7 @@ export default function EmployerLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
           <label
             htmlFor="industry"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <Briefcase className="w-4 h-4 text-primary" />
             Industry <span className="text-destructive">*</span>
@@ -425,7 +425,7 @@ export default function EmployerLeadForm() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
           <label
             htmlFor="hiringNeeds"
-            className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <FileText className="w-4 h-4 text-primary" />
             Current Hiring Needs <span className="text-destructive">*</span>

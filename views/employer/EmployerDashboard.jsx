@@ -110,15 +110,15 @@ export default function EmployerDashboard() {
   ]
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 rounded-xl p-8 text-white shadow-lg">
+    <div className="p-6 space-y-6 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 min-h-screen">
+      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 rounded-xl p-8 text-white shadow-xl">
         <h1 className="text-3xl font-bold mb-2">Welcome back, Tech Solutions!</h1>
         <p className="text-white/90 mb-6">You have 23 new applications and 12 active job postings</p>
         <div className="flex gap-4">
-          <button className="px-6 py-2 bg-white text-blue-600 hover:bg-gray-50 rounded-lg transition-colors font-medium shadow-sm">
+          <button className="px-6 py-2 bg-white text-blue-600 hover:bg-gray-50 rounded-lg transition-all font-medium shadow-md hover:shadow-lg hover:scale-105">
             Post New Job
           </button>
-          <button className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors font-medium border border-white/20 backdrop-blur-sm">
+          <button className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all font-medium border border-white/20 backdrop-blur-sm hover:scale-105">
             Browse Candidates
           </button>
         </div>
@@ -130,10 +130,10 @@ export default function EmployerDashboard() {
           return (
             <div
               key={index}
-              className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-xl transition-all hover:scale-105 hover:border-blue-300"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
+                <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center shadow-sm`}>
                   <Icon className={`w-6 h-6 ${stat.color}`} />
                 </div>
               </div>
@@ -147,10 +147,10 @@ export default function EmployerDashboard() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Active Jobs */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-shadow">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">Active Job Postings</h2>
-            <a href="/employer/jobs" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <a href="/employer/jobs" className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline">
               View All
             </a>
           </div>
@@ -158,9 +158,9 @@ export default function EmployerDashboard() {
             {activeJobs.map((job) => (
               <div
                 key={job.id}
-                className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all"
+                className="p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all"
               >
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center justify-between mb-3">
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">{job.title}</h3>
                     <div className="flex flex-wrap gap-3 text-sm text-gray-600">
@@ -202,13 +202,13 @@ export default function EmployerDashboard() {
         </div>
 
         {/* Recent Applications */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Applications</h2>
           <div className="space-y-4">
             {recentApplications.map((application) => (
               <div
                 key={application.id}
-                className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
+                className="p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -246,23 +246,23 @@ export default function EmployerDashboard() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
-          <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-            <Briefcase className="w-6 h-6 text-blue-600" />
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-400 hover:shadow-xl transition-all cursor-pointer hover:scale-105">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
+            <Briefcase className="w-6 h-6 text-white" />
           </div>
           <h3 className="font-semibold text-gray-900 mb-2">Post a New Job</h3>
           <p className="text-sm text-gray-600">Create and publish a new job opening</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-cyan-300 hover:shadow-md transition-all cursor-pointer">
-          <div className="w-12 h-12 bg-cyan-50 rounded-lg flex items-center justify-center mb-4">
-            <Users className="w-6 h-6 text-cyan-600" />
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-cyan-400 hover:shadow-xl transition-all cursor-pointer hover:scale-105">
+          <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
+            <Users className="w-6 h-6 text-white" />
           </div>
           <h3 className="font-semibold text-gray-900 mb-2">Browse Candidates</h3>
           <p className="text-sm text-gray-600">Search verified candidate profiles</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer">
-          <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center mb-4">
-            <FileText className="w-6 h-6 text-purple-600" />
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-purple-400 hover:shadow-xl transition-all cursor-pointer hover:scale-105">
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
+            <FileText className="w-6 h-6 text-white" />
           </div>
           <h3 className="font-semibold text-gray-900 mb-2">Review Applications</h3>
           <p className="text-sm text-gray-600">Manage pending applications</p>
