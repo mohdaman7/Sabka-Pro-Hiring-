@@ -35,15 +35,18 @@ export default function StudentSidebar() {
     <aside
       className={`${
         collapsed ? "w-20" : "w-64"
-      } bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-sm`}
+      } bg-slate-900 border-r border-slate-800 transition-all duration-300 flex flex-col shadow-xl`}
     >
-      <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
-        {!collapsed && <span className="text-lg font-bold text-gray-900">Student Portal</span>}
-        <button onClick={() => setCollapsed(!collapsed)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
+        {!collapsed && <span className="text-lg font-bold text-white">Student Portal</span>}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
+        >
           {collapsed ? (
-            <ChevronRight className="w-5 h-5 text-gray-600" />
+            <ChevronRight className="w-5 h-5 text-slate-400" />
           ) : (
-            <ChevronLeft className="w-5 h-5 text-gray-600" />
+            <ChevronLeft className="w-5 h-5 text-slate-400" />
           )}
         </button>
       </div>
@@ -56,8 +59,10 @@ export default function StudentSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-                isActive ? "bg-blue-600 text-white shadow-sm" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                isActive
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/50"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800"
               }`}
               title={collapsed ? item.label : ""}
             >

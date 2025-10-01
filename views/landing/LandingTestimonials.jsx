@@ -184,7 +184,6 @@ export default function LandingTestimonials() {
             </div>
           </div>
 
-
           {testimonials.length > cardsPerPage && (
             <button
               onClick={handleNext}
@@ -235,6 +234,3 @@ export default function LandingTestimonials() {
     </section>
   )
 }
-
-
-

@@ -32,18 +32,15 @@ export default function EmployerSidebar() {
     <aside
       className={`${
         collapsed ? "w-20" : "w-64"
-      } bg-surface border-r border-border transition-all duration-300 flex flex-col`}
+      } bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-sm`}
     >
-      <div className="h-16 flex items-center justify-between px-4 border-b border-border">
-        {!collapsed && <span className="text-lg font-bold text-foreground">Employer Portal</span>}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-2 hover:bg-surface-hover rounded-lg transition-colors"
-        >
+      <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+        {!collapsed && <span className="text-lg font-bold text-gray-900">Employer Portal</span>}
+        <button onClick={() => setCollapsed(!collapsed)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
           {collapsed ? (
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            <ChevronRight className="w-5 h-5 text-gray-600" />
           ) : (
-            <ChevronLeft className="w-5 h-5 text-muted-foreground" />
+            <ChevronLeft className="w-5 h-5 text-gray-600" />
           )}
         </button>
       </div>
@@ -52,7 +49,7 @@ export default function EmployerSidebar() {
         <div className="p-4">
           <Link
             href="/employer/jobs/new"
-            className="w-full px-4 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors font-medium flex items-center justify-center gap-2"
+            className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-sm"
           >
             <Plus className="w-5 h-5" />
             Post New Job
@@ -70,8 +67,8 @@ export default function EmployerSidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                 isActive
-                  ? "bg-primary text-white"
-                  : "text-muted-foreground hover:text-foreground hover:bg-surface-hover"
+                  ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-sm"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
               }`}
               title={collapsed ? item.label : ""}
             >

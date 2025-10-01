@@ -22,7 +22,7 @@ function RegisterContent() {
 
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-[95%] mx-auto px-4 lg:px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-11 h-11 rounded-full overflow-hidden shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-all duration-300 group-hover:scale-105 bg-white ring-2 ring-primary/20">
@@ -44,7 +44,7 @@ function RegisterContent() {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
+      <div className="max-w-[90%] mx-auto px-4 lg:px-6 py-12 relative">
         {/* Type Selector */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
