@@ -2,14 +2,14 @@ import { ArrowRight } from "lucide-react"
 
 export default function LandingCTA() {
   return (
-    <section className="relative py-24 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 overflow-hidden">
+    <section className="relative py-24 bg-[#0f172a] overflow-hidden">
       {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-300/20 via-transparent to-transparent"></div>
+      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-300/20 via-transparent to-transparent"></div> */}
       
       {/* Decorative animated circles */}
-      <div className="absolute top-10 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-10 left-20 w-80 h-80 bg-cyan-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      {/* <div className="absolute top-10 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-10 left-20 w-80 h-80 bg-cyan-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div> */}
       
       {/* Floating elements */}
       <div className="absolute top-1/4 left-10 w-20 h-20 border-2 border-white/20 rounded-full"></div>

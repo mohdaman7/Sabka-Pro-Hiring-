@@ -3,10 +3,10 @@ import { Briefcase, Mail, Phone, MapPin, ArrowRight } from "lucide-react"
 
 export default function LandingFooter() {
   return (
-    <footer className="relative bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 border-t border-blue-500/10 overflow-hidden">
+    <footer className="relative bg-[#0f172a] overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
-      <div className="absolute top-0 left-1/3 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+      {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
+      <div className="absolute top-0 left-1/3 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div> */}
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-4 gap-8">
