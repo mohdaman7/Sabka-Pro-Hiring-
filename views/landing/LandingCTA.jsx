@@ -1,75 +1,118 @@
-import { ArrowRight } from "lucide-react"
+"use client"
+
+import { ArrowRight, CheckCircle2, Users, Zap } from "lucide-react"
+import { motion } from "framer-motion"
 
 export default function LandingCTA() {
   return (
-    <section className="relative py-24 bg-[#0f172a] overflow-hidden">
-      {/* Animated gradient overlay */}
-      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-300/20 via-transparent to-transparent"></div> */}
-      
-      {/* Decorative animated circles */}
-      {/* <div className="absolute top-10 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-10 left-20 w-80 h-80 bg-cyan-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div> */}
-      
-      {/* Floating elements */}
-      <div className="absolute top-1/4 left-10 w-20 h-20 border-2 border-white/20 rounded-full"></div>
-      <div className="absolute bottom-1/4 right-10 w-32 h-32 border-2 border-white/10 rounded-lg rotate-45"></div>
-      
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full border border-white/30 mb-6">
-          <span className="text-sm font-medium text-white">Join Us Today</span>
+    <section className="relative py-32 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
+      {/* Subtle grid pattern overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+
+      {/* Gradient orbs */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px]"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px]"></div>
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-8"
+          >
+            <Zap className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm font-medium text-white">Start Your Journey Today</span>
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight"
+          >
+            Ready to Transform Your Career?
+          </motion.h2>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg md:text-xl text-white/80 mb-12 text-pretty max-w-2xl mx-auto leading-relaxed"
+          >
+            Join thousands of professionals and employers who trust Sabka Pro HIRING for their recruitment needs.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+          >
+            <a
+              href="/register?type=candidate"
+              className="group relative px-8 py-4 bg-white text-slate-900 rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl hover:shadow-white/20 hover:-translate-y-0.5 min-w-[260px] overflow-hidden"
+            >
+              <span className="relative z-10">Get Started as Candidate</span>
+              <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white to-gray-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </a>
+            <a
+              href="/register?type=employer"
+              className="group relative px-8 py-4 bg-transparent border-2 border-white/30 text-white rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 hover:bg-white/10 hover:border-white/50 hover:-translate-y-0.5 min-w-[260px] backdrop-blur-sm"
+            >
+              <span>Post Jobs as Employer</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </motion.div>
         </div>
 
-        {/* Heading */}
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight">
-          Ready to Take the Next Step?
-        </h2>
-        
-        {/* Description */}
-        <p className="text-xl md:text-2xl text-white/95 mb-12 text-pretty max-w-2xl mx-auto leading-relaxed">
-          Join thousands of professionals who have found success with Sabka Pro HIRIN.
-        </p>
-        
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a
-            href="/register?type=candidate"
-            className="group px-8 py-4 bg-white text-blue-600 hover:bg-gray-50 rounded-xl transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 shadow-2xl shadow-black/20 hover:shadow-black/30 hover:scale-105 min-w-[240px]"
-          >
-            Get Started as Candidate
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
-          <a
-            href="/register?type=employer"
-            className="group px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-blue-600 rounded-xl transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 hover:scale-105 min-w-[240px]"
-          >
-            Post Jobs as Employer
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
+        {/* Trust indicators - Professional stats grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+        >
+          <div className="flex flex-col items-center gap-3 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+            <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+              <Users className="w-6 h-6 text-cyan-400" />
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white mb-1">10,000+</div>
+              <div className="text-sm text-white/70">Success Stories</div>
+            </div>
+          </div>
 
-        {/* Trust indicators */}
-        <div className="mt-12 flex flex-wrap justify-center items-center gap-8 text-white/90">
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span className="text-sm font-medium">10,000+ Success Stories</span>
+          <div className="flex flex-col items-center gap-3 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+            <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+              <CheckCircle2 className="w-6 h-6 text-green-400" />
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white mb-1">Verified</div>
+              <div className="text-sm text-white/70">Trusted Platform</div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-sm font-medium">Verified Platform</span>
+
+          <div className="flex flex-col items-center gap-3 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+            <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-blue-400" />
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white mb-1">Fast</div>
+              <div className="text-sm text-white/70">Quick Placements</div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <span className="text-sm font-medium">Quick Placements</span>
-          </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

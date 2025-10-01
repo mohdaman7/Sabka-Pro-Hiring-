@@ -112,7 +112,7 @@ export default function EmployerDashboard() {
   return (
     <div className="p-6 space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-accent to-primary rounded-xl p-8 text-white">
+      <div className="bg-[#0f172a] rounded-xl p-8 text-white">
         <h1 className="text-3xl font-bold mb-2">Welcome back, Tech Solutions!</h1>
         <p className="text-white/90 mb-6">You have 23 new applications and 12 active job postings</p>
         <div className="flex gap-4">
