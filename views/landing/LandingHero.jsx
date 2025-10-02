@@ -1,123 +1,19 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, CheckCircle2 } from "lucide-react"
+import { CheckCircle2 } from "lucide-react"
+import LandingNavbar from "./LandingNavbar"
 
 export default function LandingHero() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   return (
     <div className="relative bg-[#0f172a] text-white">
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700/20 via-transparent to-transparent"></div>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0f172a] border-b border-blue-400/10 shadow-lg shadow-blue-900/5">
-        <div className="max-w-[95%] mx-auto px-4 lg:px-6">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 bg-white">
-                <img src="/sabka-logo.png" alt="Sabka Pro" className="w-full h-full object-cover" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-white tracking-tight">Sabka Pro HIRING</span>
-                <span className="text-[10px] text-blue-300/70 -mt-1">Your Career Partner</span>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-2">
-              <Link
-                href="#features"
-                className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                Features
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                How It Works
-              </Link>
-              <Link
-                href="#testimonials"
-                className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                Testimonials
-              </Link>
-
-              <div className="ml-4 h-6 w-px bg-blue-400/20"></div>
-
-              <Link
-                href="/login"
-                className="ml-2 px-5 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 text-sm font-semibold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105"
-              >
-                Get Started
-              </Link>
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-gradient-to-b from-slate-900/98 to-blue-900/95 backdrop-blur-2xl border-t border-blue-400/10">
-            <div className="px-6 py-6 space-y-2">
-              <Link
-                href="#features"
-                className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                Features
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                How It Works
-              </Link>
-              <Link
-                href="#testimonials"
-                className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                Testimonials
-              </Link>
-
-              <div className="h-px bg-blue-400/20 my-4"></div>
-
-              <Link
-                href="/login"
-                className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                className="block px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 text-sm font-semibold text-center shadow-lg shadow-blue-500/30"
-              >
-                Get Started
-              </Link>
-            </div>
-          </div>
-        )}
-      </nav>
+      <LandingNavbar />
 
       {/* Hero Content */}
-      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6 pt-36 pb-12">
+      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6 pt-28 pb-12">
         <div className="grid lg:grid-cols-2 gap-4 items-start">
           {/* Left Column - Main Card */}
           <div className="bg-gradient-to-br from-gray-50 via-white to-blue-50/30 rounded-3xl p-8 shadow-2xl relative overflow-hidden flex flex-col justify-center border border-blue-100/50 min-h-[420px]">
@@ -183,12 +79,14 @@ export default function LandingHero() {
                   <span className="relative z-10">Get started →</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 </button>
+                {/* Supporting Text Below CTA */}
+                <p className="text-xs text-gray-500 mt-2">No credit card required • Start your journey today</p>
               </div>
             </div>
           </div>
 
           {/* Right Column - Cards Stack */}
-          <div className="space-y-5 h-full flex flex-col min-h-[420px]">
+          <div className="space-y-4 h-full flex flex-col min-h-[420px]">
             {/* Employee Card */}
             <Link
               href="/register?type=employer"
@@ -217,7 +115,7 @@ export default function LandingHero() {
             {/* Candidate Card */}
             <Link
               href="/register?type=candidate"
-              className="group bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center border border-purple-400/20 relative overflow-hidden flex-1"
+              className="group block bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center border border-purple-400/20 relative overflow-hidden flex-1"
             >
               {/* Subtle gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
