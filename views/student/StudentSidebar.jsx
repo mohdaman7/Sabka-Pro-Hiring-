@@ -1,77 +1,67 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import {
-  LayoutDashboard,
-  Briefcase,
-  GraduationCap,
-  Video,
-  Calendar,
-  Star,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  User,
-} from "lucide-react"
+import { LayoutDashboard, User, Briefcase, GraduationCap, Video, Calendar, Settings, Sparkles, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-export default function StudentSidebar() {
-  const [collapsed, setCollapsed] = useState(false)
+const navigation = [
+  { name: "Dashboard", href: "/student", icon: LayoutDashboard },
+  { name: "My Profile", href: "/student/profile", icon: User },
+  { name: "Job Listings", href: "/student/jobs", icon: Briefcase },
+  { name: "Training Courses", href: "/student/courses", icon: GraduationCap },
+  { name: "Video Resume", href: "/student/video-resume", icon: Video },
+  { name: "Interviews", href: "/student/interviews", icon: Calendar },
+  { name: "Upgrade to Pro", href: "/student/upgrade", icon: Sparkles, highlight: true },
+  { name: "Settings", href: "/student/settings", icon: Settings },
+]
+
+export default function StudentSidebar({ isOpen, onClose }) {
   const pathname = usePathname()
 
-  const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/student" },
-    { icon: User, label: "My Profile", href: "/student/profile" },
-    { icon: Briefcase, label: "Job Listings", href: "/student/jobs" },
-    { icon: GraduationCap, label: "Training Courses", href: "/student/courses" },
-    { icon: Video, label: "Video Resume", href: "/student/video-resume" },
-    { icon: Calendar, label: "Interviews", href: "/student/interviews" },
-    { icon: Star, label: "Upgrade to Pro", href: "/student/upgrade" },
-    { icon: Settings, label: "Settings", href: "/student/settings" },
-  ]
-
   return (
-    <aside
-      className={`${
-        collapsed ? "w-20" : "w-64"
-      } bg-slate-900 border-r border-slate-800 transition-all duration-300 flex flex-col shadow-xl`}
-    >
-      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
-        {!collapsed && <span className="text-lg font-bold text-white">Student Portal</span>}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
-        >
-          {collapsed ? (
-            <ChevronRight className="w-5 h-5 text-slate-400" />
-          ) : (
-            <ChevronLeft className="w-5 h-5 text-slate-400" />
-          )}
-        </button>
-      </div>
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && <div className="fixed inset-0 z-40 bg-slate-900/50 md:hidden" onClick={onClose} />}
 
-      <nav className="flex-1 p-4 space-y-2">
-        {menuItems.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
-                isActive
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/50"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-              title={collapsed ? item.label : ""}
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" />
-              {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
-            </Link>
-          )
-        })}
-      </nav>
-    </aside>
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 h-screen w-64 bg-slate-900 transition-transform duration-300 md:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-slate-800 px-6">
+          <h1 className="text-xl font-bold text-white">Student Portal</h1>
+          <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-slate-800" onClick={onClose}>
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <nav className="flex flex-col gap-1 p-4 overflow-y-auto h-[calc(100vh-4rem)]">
+          {navigation.map((item) => {
+            const isActive = pathname === item.href
+            const Icon = item.icon
+
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => onClose()}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  isActive ? "bg-slate-800 text-white" : "text-slate-300 hover:bg-slate-800 hover:text-white",
+                  item.highlight && "bg-blue-600 text-white hover:bg-blue-700",
+                )}
+              >
+                <Icon className="h-5 w-5" />
+                {item.name}
+              </Link>
+            )
+          })}
+        </nav>
+      </aside>
+    </>
   )
 }

@@ -83,7 +83,7 @@ export default function UpgradePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+    <div className="-m-6 min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
       <div className="relative overflow-hidden border-b border-slate-200">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/20 via-transparent to-transparent" />
