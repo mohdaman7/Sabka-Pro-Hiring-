@@ -33,7 +33,7 @@ export default function StudentCourses() {
       id: 1,
       title: "Full Stack Web Development",
       category: "it",
-      thumbnail: "/web-development-coding.png",
+      thumbnail: "/goal.jpg",
       progress: 45,
       totalVideos: 45,
       completedVideos: 20,
@@ -72,7 +72,7 @@ export default function StudentCourses() {
       id: 4,
       title: "Introduction to Programming",
       category: "it",
-      thumbnail: "/programming-basics.png",
+      thumbnail: "/programming.jpg",
       progress: 0,
       totalVideos: 20,
       completedVideos: 0,
@@ -201,14 +201,14 @@ export default function StudentCourses() {
             key={course.id}
             className="bg-white rounded-xl overflow-hidden hover:shadow-2xl transition-all shadow-lg hover:scale-105 duration-300 border border-gray-100"
           >
-            <div className="relative group">
+            <div className="relative group overflow-hidden rounded-t-xl isolate">
               <img
                 src={course.thumbnail || "/placeholder.svg"}
                 alt={course.title}
-                className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                className="relative z-0 w-full h-48 object-cover origin-center will-change-transform transition-transform duration-300 group-hover:scale-110"
               />
               {course.isPro && !isPro && (
-                <div className="absolute inset-0 bg-gradient-to-br from-black/70 to-black/50 flex items-center justify-center backdrop-blur-sm">
+                <div className="absolute inset-0 z-10 bg-gradient-to-br from-black/70 to-black/50 flex items-center justify-center backdrop-blur-sm">
                   <div className="text-center">
                     <div className="p-4 bg-white/10 rounded-full backdrop-blur-sm inline-block mb-2">
                       <Lock className="w-10 h-10 text-white" />
@@ -218,7 +218,7 @@ export default function StudentCourses() {
                 </div>
               )}
               {course.isEnrolled && (
-                <div className="absolute top-3 left-3">
+                <div className="absolute top-3 left-3 z-20">
                   <span className="px-3 py-1.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg text-xs font-semibold shadow-lg flex items-center gap-1">
                     <CheckCircle className="w-3 h-3" />
                     Enrolled
