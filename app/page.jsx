@@ -11,9 +11,9 @@ export default function HomePage() {
     <main className="min-h-screen">
       <LandingHero />
       <LandingFeatures />
-      <LandingPlans />
       <LandingAbout />
       <LandingTestimonials />
+      <LandingPlans />
       <LandingCTA />
       <LandingFooter />
     </main>

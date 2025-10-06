@@ -1,4 +1,5 @@
 import "./globals.css"
+import ReduxProvider from './providers/ReduxProvider'
 
 export const metadata = {
   title: "Sabka Pro HIRIN - Job Consultancy & Training Platform",
@@ -18,7 +19,11 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+         <ReduxProvider>
+          {children}
+        </ReduxProvider>
+      </body>
     </html>
   )
 }
