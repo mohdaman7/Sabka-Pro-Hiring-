@@ -15,6 +15,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Headphones,    
+  History,       
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -27,8 +29,8 @@ const navigation = [
   { name: "Video Resume", href: "/student/video-resume", icon: Video },
   { name: "Interviews", href: "/student/interviews", icon: Calendar },
   { name: "Upgrade to Pro", href: "/student/upgrade", icon: Sparkles, highlight: true },
-  { name: "Support", href: "/student/settings", icon: Settings },
-  { name: "History", href: "/student/settings", icon: Settings },
+  { name: "Support", href: "/student/support", icon: Headphones },
+  { name: "History", href: "/student/history", icon: History },
   { name: "Settings", href: "/student/settings", icon: Settings },
 ]
 
