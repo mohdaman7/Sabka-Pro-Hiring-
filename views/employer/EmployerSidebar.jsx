@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useState } from "react"
 import {
   LayoutDashboard,
   Briefcase,
@@ -10,77 +10,98 @@ import {
   FileText,
   BarChart3,
   Settings,
+  X,
   ChevronLeft,
   ChevronRight,
   Plus,
+  Sparkles,
 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-export default function EmployerSidebar() {
-  const [collapsed, setCollapsed] = useState(false)
+const navigation = [
+  { name: "Dashboard", href: "/employer", icon: LayoutDashboard },
+  { name: "Job Postings", href: "/employer/jobs", icon: Briefcase },
+  { name: "Candidates", href: "/employer/candidates", icon: Users },
+  { name: "Applications", href: "/employer/applications", icon: FileText },
+  { name: "Analytics", href: "/employer/analytics", icon: BarChart3 },
+  { name: "Upgrade to Pro", href: "/employer/upgrade", icon: Sparkles, highlight: true },
+  { name: "Settings", href: "/employer/settings", icon: Settings },
+]
+
+export default function EmployerSidebar({ isOpen, onClose }) {
   const pathname = usePathname()
-
-  const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/employer" },
-    { icon: Briefcase, label: "Job Postings", href: "/employer/jobs" },
-    { icon: Users, label: "Candidates", href: "/employer/candidates" },
-    { icon: FileText, label: "Applications", href: "/employer/applications" },
-    { icon: BarChart3, label: "Analytics", href: "/employer/analytics" },
-    { icon: Settings, label: "Settings", href: "/employer/settings" },
-  ]
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
-    <aside
-      className={`${
-        collapsed ? "w-20" : "w-64"
-      } bg-slate-900 border-r border-slate-800 transition-all duration-300 flex flex-col shadow-xl`}
-    >
-      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
-        {!collapsed && <span className="text-lg font-bold text-white">Employer Portal</span>}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
-        >
-          {collapsed ? (
-            <ChevronRight className="w-5 h-5 text-slate-400" />
-          ) : (
-            <ChevronLeft className="w-5 h-5 text-slate-400" />
-          )}
-        </button>
-      </div>
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && <div className="fixed inset-0 z-40 bg-slate-900/50 md:hidden" onClick={onClose} />}
 
-      {!collapsed && (
-        <div className="p-4">
-          <Link
-            href="/employer/jobs/new"
-            className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
-          >
-            <Plus className="w-5 h-5" />
-            Post New Job
-          </Link>
-        </div>
-      )}
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 h-screen bg-slate-900 transition-all duration-300 md:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full",
+          isCollapsed ? "w-20" : "w-64",
+        )}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-slate-800 px-6">
+          {!isCollapsed && <h1 className="text-2xl font-bold text-white">Employer Portal</h1>}
 
-      <nav className="flex-1 p-4 space-y-2">
-        {menuItems.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-5 px-3 py-2.5 rounded-lg transition-all ${
-                isActive
-                  ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-              title={collapsed ? item.label : ""}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hidden md:flex text-white hover:bg-slate-800"
+              onClick={() => setIsCollapsed(!isCollapsed)}
             >
-              <Icon className="w-6 h-6 flex-shrink-0" />
-              {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+              {isCollapsed ? <ChevronRight className="h-6 w-6" /> : <ChevronLeft className="h-6 w-6" />}
+            </Button>
+            <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-slate-800" onClick={onClose}>
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Post New Job Button */}
+        {!isCollapsed && (
+          <div className="p-4 border-b border-slate-800">
+            <Link
+              href="/employer/jobs/new"
+              className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 text-sm"
+            >
+              <Plus className="h-5 w-5" />
+              Post New Job
             </Link>
-          )
-        })}
-      </nav>
-    </aside>
+          </div>
+        )}
+
+        <nav className="flex flex-col gap-3 p-4 overflow-y-auto h-[calc(100vh-4rem)]">
+          {navigation.map((item) => {
+            const isActive = pathname === item.href
+            const Icon = item.icon
+
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => onClose()}
+                className={cn(
+                  "flex items-center rounded-lg px-3 py-3 text-base font-medium transition-colors",
+                  isCollapsed ? "justify-center" : "gap-3",
+                  isActive ? "bg-slate-800 text-white" : "text-slate-300 hover:bg-slate-800 hover:text-white",
+                  item.highlight && "bg-blue-600 text-white hover:bg-blue-700",
+                )}
+                title={isCollapsed ? item.name : ""}
+              >
+                <Icon className="h-6 w-6 flex-shrink-0" />
+                {!isCollapsed && <span>{item.name}</span>}
+              </Link>
+            )
+          })}
+        </nav>
+      </aside>
+    </>
   )
 }
