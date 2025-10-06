@@ -4,9 +4,22 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { CheckCircle, Loader2, Sparkles, Building2, User, Mail, Phone, Users, Briefcase, FileText } from "lucide-react"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
+
+function generateTemporaryPassword() {
+  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%*"
+  let result = ""
+  for (let i = 0; i < 12; i++) {
+    result += characters[Math.floor(Math.random() * characters.length)]
+  }
+  return result
+}
+
 export default function EmployerLeadForm() {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [serverError, setServerError] = useState("")
+  const [temporaryPassword, setTemporaryPassword] = useState("")
 
   const [formData, setFormData] = useState({
     companyName: "",
@@ -76,10 +89,40 @@ export default function EmployerLeadForm() {
       return
     }
 
+    setServerError("")
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setLoading(false)
-    setSubmitted(true)
+    try {
+      const tempPassword = generateTemporaryPassword()
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: tempPassword,
+          role: "employer",
+          firstName: formData.contactPerson,
+          lastName: "",
+        }),
+      })
+
+      const data = await response.json()
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || "Registration failed")
+      }
+
+      if (data?.token) {
+        try {
+          localStorage.setItem("token", data.token)
+        } catch {}
+      }
+
+      setTemporaryPassword(tempPassword)
+      setSubmitted(true)
+    } catch (err) {
+      setServerError(err?.message || "Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (submitted) {
@@ -141,6 +184,12 @@ export default function EmployerLeadForm() {
               <span className="text-sm text-muted-foreground">Email</span>
               <span className="text-sm font-medium text-foreground truncate ml-2">{formData.email}</span>
             </div>
+            {temporaryPassword && (
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Temporary Password</span>
+                <span className="text-sm font-semibold text-foreground tracking-wide">{temporaryPassword}</span>
+              </div>
+            )}
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Plan</span>
               <span
@@ -556,6 +605,16 @@ export default function EmployerLeadForm() {
             </motion.label>
           </div>
         </motion.div>
+
+        {serverError && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-sm text-destructive text-center"
+          >
+            {serverError}
+          </motion.p>
+        )}
 
         {/* Submit Button */}
         <motion.button
