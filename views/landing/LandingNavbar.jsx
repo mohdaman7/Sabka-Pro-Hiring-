@@ -24,6 +24,13 @@ export default function LandingNavbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-2">
+             <Link
+              href="#"
+              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
             <Link
               href="#features"
               className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
@@ -79,6 +86,13 @@ export default function LandingNavbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-gradient-to-b from-slate-900/98 to-blue-900/95 backdrop-blur-2xl border-t border-blue-400/10">
           <div className="px-6 py-6 space-y-2">
+            <Link
+              href="#"
+              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
             <Link
               href="#features"
               className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"

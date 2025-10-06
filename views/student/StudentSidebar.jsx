@@ -27,6 +27,8 @@ const navigation = [
   { name: "Video Resume", href: "/student/video-resume", icon: Video },
   { name: "Interviews", href: "/student/interviews", icon: Calendar },
   { name: "Upgrade to Pro", href: "/student/upgrade", icon: Sparkles, highlight: true },
+  { name: "Support", href: "/student/settings", icon: Settings },
+  { name: "History", href: "/student/settings", icon: Settings },
   { name: "Settings", href: "/student/settings", icon: Settings },
 ]
 
