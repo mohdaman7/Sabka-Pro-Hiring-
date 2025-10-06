@@ -68,14 +68,14 @@ export default function EmployerSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+              className={`flex items-center gap-5 px-3 py-2.5 rounded-lg transition-all ${
                 isActive
                   ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
                   : "text-slate-300 hover:text-white hover:bg-slate-800"
               }`}
               title={collapsed ? item.label : ""}
             >
-              <Icon className="w-5 h-5 flex-shrink-0" />
+              <Icon className="w-6 h-6 flex-shrink-0" />
               {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
             </Link>
           )
