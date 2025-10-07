@@ -1,20 +1,27 @@
-import dotenv from 'dotenv';
-import { z } from 'zod';
+import dotenv from "dotenv";
+import { z } from "zod";
 
 dotenv.config();
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(["development", "test", "production"])
+    .default("development"),
   PORT: z.string().optional(),
-  MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
-  JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
+  MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
+  JWT_SECRET: z.string().min(1, "JWT_SECRET is required"),
   CORS_ORIGIN: z.string().optional(),
 });
+
+console.log(process.env.MONGODB_URI);
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error('Invalid environment variables:', parsed.error.flatten().fieldErrors);
+  console.error(
+    "Invalid environment variables:",
+    parsed.error.flatten().fieldErrors
+  );
   process.exit(1);
 }
 

@@ -10,28 +10,32 @@ import applicationRoutes from './routes/applications.js';
 import crmRoutes from './routes/crm.js';
 
 async function bootstrap() {
-  await connectToDatabase(env.mongoUri);
+  try {
+    console.log('Connecting to MongoDB...');
+    await connectToDatabase(env.mongoUri);
+    console.log('✅ Connected to MongoDB successfully!');
 
-  const app = express();
-  app.use(cors({ origin: env.corsOrigin || true }));
-  app.use(express.json());
-  app.use(morgan('dev'));
+    const app = express();
+    app.use(cors({ origin: env.corsOrigin || true }));
+    app.use(express.json());
+    app.use(morgan('dev'));
 
-  app.get('/health', (_req, res) => res.json({ ok: true }));
+    app.get('/health', (_req, res) => res.json({ ok: true }));
 
-  app.use('/api/auth', authRoutes);
-  app.use('/api/jobs', jobRoutes);
-  app.use('/api/applications', applicationRoutes);
-  app.use('/api/crm', crmRoutes);
+    app.use('/api/auth', authRoutes);
+    app.use('/api/jobs', jobRoutes);
+    app.use('/api/applications', applicationRoutes);
+    app.use('/api/crm', crmRoutes);
 
-  app.use(errorHandler);
+    app.use(errorHandler);
 
-  app.listen(env.port, () => {
-    console.log(`API listening on http://localhost:${env.port}`);
-  });
+    app.listen(env.port, () => {
+      console.log(`🚀 API listening on http://localhost:${env.port}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
 }
 
-bootstrap().catch((err) => {
-  console.error('Failed to start server', err);
-  process.exit(1);
-});
+bootstrap();
