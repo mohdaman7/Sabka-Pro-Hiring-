@@ -1,145 +1,160 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Upload, CheckCircle, Loader2, Sparkles, FileText, Mail, Phone, GraduationCap, Briefcase } from "lucide-react"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Upload,
+  CheckCircle,
+  Loader2,
+  Sparkles,
+  FileText,
+  Mail,
+  Phone,
+  GraduationCap,
+  Briefcase,
+  Eye,
+  EyeOff,
+  Lock,
+} from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
-
-function generateTemporaryPassword() {
-  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%*"
-  let result = ""
-  for (let i = 0; i < 12; i++) {
-    result += characters[Math.floor(Math.random() * characters.length)]
-  }
-  return result
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 export default function CandidateLeadForm() {
-  const [loading, setLoading] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [serverError, setServerError] = useState("")
-  const [temporaryPassword, setTemporaryPassword] = useState("")
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
     whatsapp: "",
     qualification: "",
     jobPreferences: "",
     cvFile: null,
     registrationType: "free",
-  })
+  });
 
-  const [errors, setErrors] = useState({})
-  const [focusedField, setFocusedField] = useState(null)
+  const [errors, setErrors] = useState({});
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }))
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-  }
+  };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
       const allowedTypes = [
         "application/pdf",
         "application/msword",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ]
+      ];
       if (!allowedTypes.includes(file.type)) {
-        setErrors((prev) => ({ ...prev, cvFile: "Please upload a PDF or Word document" }))
-        return
+        setErrors((prev) => ({
+          ...prev,
+          cvFile: "Please upload a PDF or Word document",
+        }));
+        return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        setErrors((prev) => ({ ...prev, cvFile: "File size must be less than 5MB" }))
-        return
+        setErrors((prev) => ({
+          ...prev,
+          cvFile: "File size must be less than 5MB",
+        }));
+        return;
       }
-      setFormData((prev) => ({ ...prev, cvFile: file }))
-      setErrors((prev) => ({ ...prev, cvFile: "" }))
+      setFormData((prev) => ({ ...prev, cvFile: file }));
+      setErrors((prev) => ({ ...prev, cvFile: "" }));
     }
-  }
+  };
 
   const validate = () => {
-    const newErrors = {}
+    const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
+      newErrors.name = "Name is required";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format"
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     if (!formData.whatsapp.trim()) {
-      newErrors.whatsapp = "WhatsApp number is required"
+      newErrors.whatsapp = "WhatsApp number is required";
     } else if (!/^\d{10}$/.test(formData.whatsapp.replace(/\D/g, ""))) {
-      newErrors.whatsapp = "Invalid phone number (10 digits required)"
+      newErrors.whatsapp = "Invalid phone number (10 digits required)";
     }
 
     if (!formData.qualification.trim()) {
-      newErrors.qualification = "Educational qualification is required"
+      newErrors.qualification = "Educational qualification is required";
     }
 
     if (!formData.jobPreferences.trim()) {
-      newErrors.jobPreferences = "Job preferences are required"
+      newErrors.jobPreferences = "Job preferences are required";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validate()) {
-      return
+      return;
     }
 
-    setServerError("")
-    setLoading(true)
+    setServerError("");
+    setLoading(true);
     try {
-      const tempPassword = generateTemporaryPassword()
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.email,
-          password: tempPassword,
+          password: formData.password,
           role: "student",
           firstName: formData.name,
           lastName: "",
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
       if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Registration failed")
+        throw new Error(data?.message || "Registration failed");
       }
 
       if (data?.token) {
         try {
-          localStorage.setItem("token", data.token)
+          localStorage.setItem("token", data.token);
         } catch {}
       }
 
-      setTemporaryPassword(tempPassword)
-      setSubmitted(true)
+      setSubmitted(true);
     } catch (err) {
-      setServerError(err?.message || "Something went wrong. Please try again.")
+      setServerError(err?.message || "Something went wrong. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (submitted) {
     return (
-        <motion.div
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="bg-gradient-to-br from-card via-card to-accent/5 rounded-2xl border border-border shadow-2xl p-8 md:p-12 text-center relative overflow-hidden"
@@ -171,8 +186,8 @@ export default function CandidateLeadForm() {
           transition={{ delay: 0.4 }}
           className="text-muted-foreground text-lg mb-8 max-w-md mx-auto"
         >
-          Your registration is complete. We'll reach out to you shortly via WhatsApp and email with exciting
-          opportunities.
+          Your registration is complete. We'll reach out to you shortly via
+          WhatsApp and email with exciting opportunities.
         </motion.p>
 
         <motion.div
@@ -183,23 +198,23 @@ export default function CandidateLeadForm() {
         >
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="w-5 h-5 text-primary" />
-            <p className="text-sm font-semibold text-foreground">Registration Summary</p>
+            <p className="text-sm font-semibold text-foreground">
+              Registration Summary
+            </p>
           </div>
           <div className="space-y-3 text-left">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Name</span>
-              <span className="text-sm font-medium text-foreground">{formData.name}</span>
+              <span className="text-sm font-medium text-foreground">
+                {formData.name}
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Email</span>
-              <span className="text-sm font-medium text-foreground truncate ml-2">{formData.email}</span>
+              <span className="text-sm font-medium text-foreground truncate ml-2">
+                {formData.email}
+              </span>
             </div>
-            {temporaryPassword && (
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Temporary Password</span>
-                <span className="text-sm font-semibold text-foreground tracking-wide">{temporaryPassword}</span>
-              </div>
-            )}
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Plan</span>
               <span
@@ -215,7 +230,7 @@ export default function CandidateLeadForm() {
           </div>
         </motion.div>
       </motion.div>
-    )
+    );
   }
 
   return (
@@ -234,16 +249,29 @@ export default function CandidateLeadForm() {
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4"
         >
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-primary">Start Your Career Journey</span>
+          <span className="text-sm font-medium text-primary">
+            Start Your Career Journey
+          </span>
         </motion.div>
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2 text-balance">Candidate Registration</h1>
-        <p className="text-muted-foreground text-lg">Join thousands of professionals finding their dream jobs</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2 text-balance">
+          Candidate Registration
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Join thousands of professionals finding their dream jobs
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 relative">
         {/* Name Field */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <label htmlFor="name" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <label
+            htmlFor="name"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+          >
             <FileText className="w-4 h-4 text-primary" />
             Full Name <span className="text-destructive">*</span>
           </label>
@@ -260,8 +288,8 @@ export default function CandidateLeadForm() {
                 errors.name
                   ? "border-destructive"
                   : focusedField === "name"
-                    ? "border-primary shadow-lg shadow-primary/20"
-                    : "border-border"
+                  ? "border-primary shadow-lg shadow-primary/20"
+                  : "border-border"
               } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
               placeholder="Enter your full name"
             />
@@ -281,8 +309,15 @@ export default function CandidateLeadForm() {
         </motion.div>
 
         {/* Email Field */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <label htmlFor="email" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <label
+            htmlFor="email"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+          >
             <Mail className="w-4 h-4 text-primary" />
             Email Address <span className="text-destructive">*</span>
           </label>
@@ -298,8 +333,8 @@ export default function CandidateLeadForm() {
               errors.email
                 ? "border-destructive"
                 : focusedField === "email"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
             placeholder="your.email@example.com"
           />
@@ -317,8 +352,72 @@ export default function CandidateLeadForm() {
           </AnimatePresence>
         </motion.div>
 
+        {/* Password Field */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <label
+            htmlFor="password"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+          >
+            <Lock className="w-4 h-4 text-primary" />
+            Password <span className="text-destructive">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              onFocus={() => setFocusedField("password")}
+              onBlur={() => setFocusedField(null)}
+              className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
+                errors.password
+                  ? "border-destructive"
+                  : focusedField === "password"
+                  ? "border-primary shadow-lg shadow-primary/20"
+                  : "border-border"
+              } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200 pr-12`}
+              placeholder="Create a strong password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {showPassword ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+          <AnimatePresence>
+            {errors.password && (
+              <motion.p
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-2 text-sm text-destructive"
+              >
+                {errors.password}
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <p className="text-xs text-muted-foreground mt-1">
+            Must be at least 6 characters long
+          </p>
+        </motion.div>
+
         {/* WhatsApp Field */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
           <label
             htmlFor="whatsapp"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
@@ -338,8 +437,8 @@ export default function CandidateLeadForm() {
               errors.whatsapp
                 ? "border-destructive"
                 : focusedField === "whatsapp"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
             placeholder="+91 98765 43210"
           />
@@ -358,13 +457,18 @@ export default function CandidateLeadForm() {
         </motion.div>
 
         {/* Qualification Field */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
           <label
             htmlFor="qualification"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
           >
             <GraduationCap className="w-4 h-4 text-primary" />
-            Educational Qualification <span className="text-destructive">*</span>
+            Educational Qualification{" "}
+            <span className="text-destructive">*</span>
           </label>
           <select
             id="qualification"
@@ -377,8 +481,8 @@ export default function CandidateLeadForm() {
               errors.qualification
                 ? "border-destructive"
                 : focusedField === "qualification"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground focus:outline-none transition-all duration-200`}
           >
             <option value="">Select your qualification</option>
@@ -404,7 +508,11 @@ export default function CandidateLeadForm() {
         </motion.div>
 
         {/* Job Preferences Field */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
           <label
             htmlFor="jobPreferences"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
@@ -424,8 +532,8 @@ export default function CandidateLeadForm() {
               errors.jobPreferences
                 ? "border-destructive"
                 : focusedField === "jobPreferences"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200 resize-none`}
             placeholder="e.g., Software Developer, Full-time, Remote, Mumbai"
           />
@@ -444,8 +552,15 @@ export default function CandidateLeadForm() {
         </motion.div>
 
         {/* CV Upload */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
-          <label htmlFor="cvFile" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <label
+            htmlFor="cvFile"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+          >
             <Upload className="w-4 h-4 text-primary" />
             Upload CV (Optional)
           </label>
@@ -464,8 +579,8 @@ export default function CandidateLeadForm() {
                 errors.cvFile
                   ? "border-destructive"
                   : formData.cvFile
-                    ? "border-primary bg-primary/5"
-                    : "border-dashed border-border"
+                  ? "border-primary bg-primary/5"
+                  : "border-dashed border-border"
               } rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-200 group`}
             >
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -473,9 +588,13 @@ export default function CandidateLeadForm() {
               </div>
               <div className="text-center">
                 <p className="text-sm font-medium text-foreground mb-1">
-                  {formData.cvFile ? formData.cvFile.name : "Click to upload your CV"}
+                  {formData.cvFile
+                    ? formData.cvFile.name
+                    : "Click to upload your CV"}
                 </p>
-                <p className="text-xs text-muted-foreground">PDF, DOC, DOCX - Max 5MB</p>
+                <p className="text-xs text-muted-foreground">
+                  PDF, DOC, DOCX - Max 5MB
+                </p>
               </div>
             </label>
           </div>
@@ -494,7 +613,11 @@ export default function CandidateLeadForm() {
         </motion.div>
 
         {/* Registration Type */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
           <label className="block text-sm font-semibold text-foreground mb-4">
             Choose Your Plan <span className="text-destructive">*</span>
           </label>
@@ -564,7 +687,9 @@ export default function CandidateLeadForm() {
                   <span className="text-3xl font-bold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
                     ₹999
                   </span>
-                  <span className="text-xs text-muted-foreground block">/month</span>
+                  <span className="text-xs text-muted-foreground block">
+                    /month
+                  </span>
                 </div>
               </div>
               <ul className="space-y-2.5 text-sm text-muted-foreground">
@@ -629,11 +754,14 @@ export default function CandidateLeadForm() {
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="/privacy" className="text-primary hover:underline font-medium">
+          <a
+            href="/privacy"
+            className="text-primary hover:underline font-medium"
+          >
             Privacy Policy
           </a>
         </p>
       </form>
     </motion.div>
-  )
+  );
 }

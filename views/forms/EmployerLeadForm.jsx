@@ -1,129 +1,139 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { CheckCircle, Loader2, Sparkles, Building2, User, Mail, Phone, Users, Briefcase, FileText } from "lucide-react"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  CheckCircle,
+  Loader2,
+  Sparkles,
+  Building2,
+  User,
+  Mail,
+  Phone,
+  Users,
+  Briefcase,
+  FileText,
+  Eye,
+  EyeOff,
+  Lock,
+} from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
-
-function generateTemporaryPassword() {
-  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%*"
-  let result = ""
-  for (let i = 0; i < 12; i++) {
-    result += characters[Math.floor(Math.random() * characters.length)]
-  }
-  return result
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 export default function EmployerLeadForm() {
-  const [loading, setLoading] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [serverError, setServerError] = useState("")
-  const [temporaryPassword, setTemporaryPassword] = useState("")
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     companyName: "",
     contactPerson: "",
     email: "",
+    password: "",
     phone: "",
     companySize: "",
     industry: "",
     hiringNeeds: "",
     registrationType: "free",
-  })
+  });
 
-  const [errors, setErrors] = useState({})
-  const [focusedField, setFocusedField] = useState(null)
+  const [errors, setErrors] = useState({});
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }))
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-  }
+  };
 
   const validate = () => {
-    const newErrors = {}
+    const newErrors = {};
 
     if (!formData.companyName.trim()) {
-      newErrors.companyName = "Company name is required"
+      newErrors.companyName = "Company name is required";
     }
 
     if (!formData.contactPerson.trim()) {
-      newErrors.contactPerson = "Contact person name is required"
+      newErrors.contactPerson = "Contact person name is required";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format"
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required"
+      newErrors.phone = "Phone number is required";
     } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
-      newErrors.phone = "Invalid phone number (10 digits required)"
+      newErrors.phone = "Invalid phone number (10 digits required)";
     }
 
     if (!formData.companySize) {
-      newErrors.companySize = "Company size is required"
+      newErrors.companySize = "Company size is required";
     }
 
     if (!formData.industry.trim()) {
-      newErrors.industry = "Industry is required"
+      newErrors.industry = "Industry is required";
     }
 
     if (!formData.hiringNeeds.trim()) {
-      newErrors.hiringNeeds = "Hiring needs are required"
+      newErrors.hiringNeeds = "Hiring needs are required";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validate()) {
-      return
+      return;
     }
 
-    setServerError("")
-    setLoading(true)
+    setServerError("");
+    setLoading(true);
     try {
-      const tempPassword = generateTemporaryPassword()
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.email,
-          password: tempPassword,
+          password: formData.password,
           role: "employer",
           firstName: formData.contactPerson,
           lastName: "",
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
       if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Registration failed")
+        throw new Error(data?.message || "Registration failed");
       }
 
       if (data?.token) {
         try {
-          localStorage.setItem("token", data.token)
+          localStorage.setItem("token", data.token);
         } catch {}
       }
 
-      setTemporaryPassword(tempPassword)
-      setSubmitted(true)
+      setSubmitted(true);
     } catch (err) {
-      setServerError(err?.message || "Something went wrong. Please try again.")
+      setServerError(err?.message || "Something went wrong. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (submitted) {
     return (
@@ -158,7 +168,8 @@ export default function EmployerLeadForm() {
           transition={{ delay: 0.4 }}
           className="text-muted-foreground text-lg mb-8 max-w-md mx-auto"
         >
-          Thank you for your interest. Our team will verify your company details and contact you within 24-48 hours.
+          Thank you for your interest. Our team will verify your company details
+          and contact you within 24-48 hours.
         </motion.p>
 
         <motion.div
@@ -169,27 +180,29 @@ export default function EmployerLeadForm() {
         >
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="w-5 h-5 text-primary" />
-            <p className="text-sm font-semibold text-foreground">Registration Summary</p>
+            <p className="text-sm font-semibold text-foreground">
+              Registration Summary
+            </p>
           </div>
           <div className="space-y-3 text-left">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Company</span>
-              <span className="text-sm font-medium text-foreground">{formData.companyName}</span>
+              <span className="text-sm font-medium text-foreground">
+                {formData.companyName}
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Contact</span>
-              <span className="text-sm font-medium text-foreground">{formData.contactPerson}</span>
+              <span className="text-sm font-medium text-foreground">
+                {formData.contactPerson}
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Email</span>
-              <span className="text-sm font-medium text-foreground truncate ml-2">{formData.email}</span>
+              <span className="text-sm font-medium text-foreground truncate ml-2">
+                {formData.email}
+              </span>
             </div>
-            {temporaryPassword && (
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Temporary Password</span>
-                <span className="text-sm font-semibold text-foreground tracking-wide">{temporaryPassword}</span>
-              </div>
-            )}
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Plan</span>
               <span
@@ -199,13 +212,15 @@ export default function EmployerLeadForm() {
                     : "bg-muted text-muted-foreground"
                 }`}
               >
-                {formData.registrationType === "premium" ? "Premium ⭐" : "Free"}
+                {formData.registrationType === "premium"
+                  ? "Premium ⭐"
+                  : "Free"}
               </span>
             </div>
           </div>
         </motion.div>
       </motion.div>
-    )
+    );
   }
 
   return (
@@ -223,15 +238,25 @@ export default function EmployerLeadForm() {
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4"
         >
           <Building2 className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-primary">Find Top Talent</span>
+          <span className="text-sm font-medium text-primary">
+            Find Top Talent
+          </span>
         </motion.div>
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2 text-balance">Employer Registration</h1>
-        <p className="text-muted-foreground text-lg">Connect with verified candidates and build your dream team</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2 text-balance">
+          Employer Registration
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Connect with verified candidates and build your dream team
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 relative">
         {/* Company Name */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <label
             htmlFor="companyName"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
@@ -251,8 +276,8 @@ export default function EmployerLeadForm() {
               errors.companyName
                 ? "border-destructive"
                 : focusedField === "companyName"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
             placeholder="Enter your company name"
           />
@@ -271,7 +296,11 @@ export default function EmployerLeadForm() {
         </motion.div>
 
         {/* Contact Person */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <label
             htmlFor="contactPerson"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
@@ -291,8 +320,8 @@ export default function EmployerLeadForm() {
               errors.contactPerson
                 ? "border-destructive"
                 : focusedField === "contactPerson"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
             placeholder="Enter contact person name"
           />
@@ -311,8 +340,15 @@ export default function EmployerLeadForm() {
         </motion.div>
 
         {/* Email */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <label htmlFor="email" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <label
+            htmlFor="email"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+          >
             <Mail className="w-4 h-4 text-primary" />
             Business Email <span className="text-destructive">*</span>
           </label>
@@ -328,8 +364,8 @@ export default function EmployerLeadForm() {
               errors.email
                 ? "border-destructive"
                 : focusedField === "email"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
             placeholder="company@example.com"
           />
@@ -347,9 +383,76 @@ export default function EmployerLeadForm() {
           </AnimatePresence>
         </motion.div>
 
+        {/* Password Field */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+        >
+          <label
+            htmlFor="password"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+          >
+            <Lock className="w-4 h-4 text-primary" />
+            Password <span className="text-destructive">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              onFocus={() => setFocusedField("password")}
+              onBlur={() => setFocusedField(null)}
+              className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
+                errors.password
+                  ? "border-destructive"
+                  : focusedField === "password"
+                  ? "border-primary shadow-lg shadow-primary/20"
+                  : "border-border"
+              } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200 pr-12`}
+              placeholder="Create a strong password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {showPassword ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+          <AnimatePresence>
+            {errors.password && (
+              <motion.p
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-2 text-sm text-destructive"
+              >
+                {errors.password}
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <p className="text-xs text-muted-foreground mt-1">
+            Must be at least 6 characters long
+          </p>
+        </motion.div>
+
         {/* Phone */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <label htmlFor="phone" className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <label
+            htmlFor="phone"
+            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+          >
             <Phone className="w-4 h-4 text-primary" />
             Phone Number <span className="text-destructive">*</span>
           </label>
@@ -365,8 +468,8 @@ export default function EmployerLeadForm() {
               errors.phone
                 ? "border-destructive"
                 : focusedField === "phone"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
             placeholder="+91 98765 43210"
           />
@@ -385,7 +488,11 @@ export default function EmployerLeadForm() {
         </motion.div>
 
         {/* Company Size */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
           <label
             htmlFor="companySize"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
@@ -404,8 +511,8 @@ export default function EmployerLeadForm() {
               errors.companySize
                 ? "border-destructive"
                 : focusedField === "companySize"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground focus:outline-none transition-all duration-200`}
           >
             <option value="">Select company size</option>
@@ -431,7 +538,11 @@ export default function EmployerLeadForm() {
         </motion.div>
 
         {/* Industry */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
           <label
             htmlFor="industry"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
@@ -451,8 +562,8 @@ export default function EmployerLeadForm() {
               errors.industry
                 ? "border-destructive"
                 : focusedField === "industry"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
             placeholder="e.g., IT, Healthcare, Finance, Manufacturing"
           />
@@ -471,7 +582,11 @@ export default function EmployerLeadForm() {
         </motion.div>
 
         {/* Hiring Needs */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
           <label
             htmlFor="hiringNeeds"
             className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
@@ -491,8 +606,8 @@ export default function EmployerLeadForm() {
               errors.hiringNeeds
                 ? "border-destructive"
                 : focusedField === "hiringNeeds"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
+                ? "border-primary shadow-lg shadow-primary/20"
+                : "border-border"
             } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200 resize-none`}
             placeholder="Describe the positions you're looking to fill and any specific requirements"
           />
@@ -511,7 +626,11 @@ export default function EmployerLeadForm() {
         </motion.div>
 
         {/* Registration Type */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
           <label className="block text-sm font-semibold text-foreground mb-4">
             Choose Plan <span className="text-destructive">*</span>
           </label>
@@ -581,7 +700,9 @@ export default function EmployerLeadForm() {
                   <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
                     ₹4,999
                   </span>
-                  <span className="text-xs text-muted-foreground block">/month</span>
+                  <span className="text-xs text-muted-foreground block">
+                    /month
+                  </span>
                 </div>
               </div>
               <ul className="space-y-2.5 text-sm text-muted-foreground">
@@ -646,11 +767,14 @@ export default function EmployerLeadForm() {
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="/privacy" className="text-primary hover:underline font-medium">
+          <a
+            href="/privacy"
+            className="text-primary hover:underline font-medium"
+          >
             Privacy Policy
           </a>
         </p>
       </form>
     </motion.div>
-  )
+  );
 }
