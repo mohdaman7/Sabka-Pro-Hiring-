@@ -11,6 +11,12 @@ const envSchema = z.object({
   MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
   JWT_SECRET: z.string().min(1, "JWT_SECRET is required"),
   CORS_ORIGIN: z.string().optional(),
+  SMTP_HOST: z.string().min(1, "SMTP_HOST is required"),
+  SMTP_PORT: z.string().min(1, "SMTP_PORT is required"),
+  SMTP_SECURE: z.string().default("false"),
+  SMTP_USER: z.string().min(1, "SMTP_USER is required"),
+  SMTP_PASS: z.string().min(1, "SMTP_PASS is required"),
+  ADMIN_EMAIL: z.string().email(),
 });
 
 console.log(process.env.MONGODB_URI);
@@ -31,4 +37,10 @@ export const env = {
   mongoUri: parsed.data.MONGODB_URI,
   jwtSecret: parsed.data.JWT_SECRET,
   corsOrigin: parsed.data.CORS_ORIGIN,
+  smtpHost: parsed.data.SMTP_HOST,
+  smtpPort: Number(parsed.data.SMTP_PORT),
+  smtpSecure: parsed.data.SMTP_SECURE,
+  smtpUser: parsed.data.SMTP_USER,
+  smtpPass: parsed.data.SMTP_PASS,
+  adminEmail: parsed.data.ADMIN_EMAIL,
 };
