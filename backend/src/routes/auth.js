@@ -3,8 +3,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { UserModel } from "../models/User.js";
+import { StudentModel } from "../models/Student.js";
+import { EmployerModel } from "../models/Employer.js";
 import { env } from "../config/env.js";
-import { sendRegistrationAlert } from "../utils/mailer.js"; // ✅ Mail function
+import { sendRegistrationAlert } from "../utils/mailer.js";
 
 const router = Router();
 
@@ -12,8 +14,8 @@ const registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   role: z.enum(["student", "employer"]).default("student"),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
 });
 
 router.post("/register", async (req, res, next) => {
@@ -35,6 +37,13 @@ router.post("/register", async (req, res, next) => {
       lastName: parsed.lastName,
     });
 
+    // Create profile based on role
+    if (parsed.role === "student") {
+      await StudentModel.create({ userId: user._id });
+    } else if (parsed.role === "employer") {
+      await EmployerModel.create({ userId: user._id });
+    }
+
     // ✅ Send email alert to admin
     sendRegistrationAlert(user).catch((err) =>
       console.error("❌ Failed to send registration alert:", err)
@@ -44,7 +53,12 @@ router.post("/register", async (req, res, next) => {
       expiresIn: "7d",
     });
 
-    res.status(201).json({ success: true, data: serializeUser(user), token });
+    res.status(201).json({
+      success: true,
+      data: serializeUser(user),
+      token,
+      message: "Registration successful. Please complete your profile.",
+    });
   } catch (err) {
     next(err);
   }
@@ -87,6 +101,7 @@ function serializeUser(user) {
     role: user.role,
     firstName: user.firstName,
     lastName: user.lastName,
+    profileCompleted: user.profileCompleted,
     createdAt: user.createdAt,
   };
 }

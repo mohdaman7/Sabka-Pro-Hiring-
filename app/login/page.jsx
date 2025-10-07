@@ -22,7 +22,6 @@ function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
