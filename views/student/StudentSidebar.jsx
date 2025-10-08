@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   LayoutDashboard,
   User,
@@ -15,11 +15,11 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Headphones,    
-  History,       
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+  Headphones,
+  History,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Dashboard", href: "/student", icon: LayoutDashboard },
@@ -28,42 +28,72 @@ const navigation = [
   { name: "Training Courses", href: "/student/courses", icon: GraduationCap },
   { name: "Video Resume", href: "/student/video-resume", icon: Video },
   { name: "Interviews", href: "/student/interviews", icon: Calendar },
-  { name: "Upgrade to Pro", href: "/student/upgrade", icon: Sparkles, highlight: true },
+  {
+    name: "Upgrade to Pro",
+    href: "/student/upgrade",
+    icon: Sparkles,
+    highlight: true,
+  },
   { name: "Support", href: "/student/support", icon: Headphones },
   { name: "History", href: "/student/history", icon: History },
   { name: "Settings", href: "/student/settings", icon: Settings },
-]
+];
 
 export default function StudentSidebar({ isOpen, onClose }) {
-  const pathname = usePathname()
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <>
       {/* Mobile backdrop */}
-      {isOpen && <div className="fixed inset-0 z-40 bg-slate-900/50 md:hidden" onClick={onClose} />}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 md:hidden"
+          onClick={onClose}
+          style={{ background: "rgba(128,55,145,0.18)" }}
+        />
+      )}
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-screen bg-slate-900 transition-all duration-300 md:translate-x-0",
+          "fixed left-0 top-0 z-50 h-screen transition-all duration-300 md:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
-          isCollapsed ? "w-20" : "w-64",
+          isCollapsed ? "w-20" : "w-64"
         )}
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(128,55,145,0.12), rgba(184,123,209,0.06))",
+          borderRight: "1px solid rgba(255,255,255,0.04)",
+          backdropFilter: "blur(8px)",
+        }}
       >
         <div className="flex h-16 items-center justify-between border-b border-slate-800 px-6">
-          {!isCollapsed && <h1 className="text-2xl font-bold text-white">Student Portal</h1>}
+          {!isCollapsed && (
+            <h1 className="text-2xl font-extrabold text-white">
+              Student Portal
+            </h1>
+          )}
 
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
-              className="hidden md:flex text-white hover:bg-slate-800"
+              className="hidden md:flex text-white hover:bg-white/6"
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
-              {isCollapsed ? <ChevronRight className="h-6 w-6" /> : <ChevronLeft className="h-6 w-6" />}
+              {isCollapsed ? (
+                <ChevronRight className="h-6 w-6" />
+              ) : (
+                <ChevronLeft className="h-6 w-6" />
+              )}
             </Button>
-            <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-slate-800" onClick={onClose}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden text-white hover:bg-white/6"
+              onClick={onClose}
+            >
               <X className="h-6 w-6" />
             </Button>
           </div>
@@ -71,8 +101,8 @@ export default function StudentSidebar({ isOpen, onClose }) {
 
         <nav className="flex flex-col gap-3 p-4 overflow-y-auto h-[calc(100vh-4rem)]">
           {navigation.map((item) => {
-            const isActive = pathname === item.href
-            const Icon = item.icon
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
 
             return (
               <Link
@@ -82,18 +112,21 @@ export default function StudentSidebar({ isOpen, onClose }) {
                 className={cn(
                   "flex items-center rounded-lg px-3 py-3 text-base font-medium transition-colors",
                   isCollapsed ? "justify-center" : "gap-3",
-                  isActive ? "bg-slate-800 text-white" : "text-slate-300 hover:bg-slate-800 hover:text-white",
-                  item.highlight && "bg-blue-600 text-white hover:bg-blue-700",
+                  isActive
+                    ? "bg-white/6 text-white font-semibold"
+                    : "text-white/80 hover:bg-white/6 hover:text-white",
+                  item.highlight &&
+                    "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-sm"
                 )}
                 title={isCollapsed ? item.name : ""}
               >
                 <Icon className="h-6 w-6 flex-shrink-0" />
                 {!isCollapsed && <span>{item.name}</span>}
               </Link>
-            )
+            );
           })}
         </nav>
       </aside>
     </>
-  )
+  );
 }
