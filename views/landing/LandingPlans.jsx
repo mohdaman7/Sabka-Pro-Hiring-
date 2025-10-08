@@ -118,9 +118,14 @@ export default function LandingPlans() {
               Simple Pricing
             </span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h2 className="text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
             Choose Your Perfect{" "}
-            <span className="gradient-text-blue">Career Plan</span>
+            <span
+              className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-500"
+              style={{ fontWeight: "900" }}
+            >
+              Career Plan
+            </span>
           </h2>
           <p className="text-xl text-gray-400">
             Start free or unlock premium features to accelerate your career
@@ -257,51 +262,6 @@ export default function LandingPlans() {
               </div>
             );
           })}
-        </div>
-
-        {/* Bottom section */}
-        <div className="mt-20 text-center">
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 relative overflow-hidden">
-              {/* Subtle gradient overlay */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgba(128,55,145,0.05), rgba(184,123,209,0.05))",
-                }}
-              ></div>
-
-              <div className="relative">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <TrendingUp className="w-6 h-6 text-emerald-400" />
-                  <h3 className="text-2xl font-bold text-white">
-                    Not sure which plan to choose?
-                  </h3>
-                </div>
-                <p className="text-gray-400 mb-6">
-                  Get a personalized recommendation based on your career goals
-                  and experience level
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button
-                    className="px-8 py-3 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                    style={{
-                      background: "linear-gradient(90deg,#803791,#b87bd1)",
-                    }}
-                  >
-                    Talk to Our Team
-                  </button>
-                  <button className="px-8 py-3 bg-slate-800/80 hover:bg-slate-700/80 text-white rounded-xl font-semibold border border-slate-600 hover:border-slate-500 transition-all duration-300">
-                    Compare Plans
-                  </button>
-                </div>
-                <p className="text-gray-500 text-sm mt-6">
-                  All plans include 14-day money-back guarantee • No hidden fees
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

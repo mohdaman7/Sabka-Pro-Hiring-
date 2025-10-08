@@ -82,26 +82,9 @@ export default function LandingHero() {
       <LandingNavbar />
 
       {/* Hero Content */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-40 pb-24">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-34 pb-24">
         {/* Main Heading Section */}
         <div className="text-center mb-20">
-          <div
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border mb-8 backdrop-blur-sm shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(128,55,145,0.15), rgba(184,123,209,0.1))",
-              borderColor: "rgba(128,55,145,0.3)",
-            }}
-          >
-            <Sparkles
-              className="w-4 h-4 animate-pulse"
-              style={{ color: "#b87bd1" }}
-            />
-            <span className="text-sm font-bold" style={{ color: "#e8cfee" }}>
-              Professional Services Platform
-            </span>
-          </div>
-
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
             Welcome To The
             <br />
@@ -117,26 +100,6 @@ export default function LandingHero() {
           </p>
 
           {/* Quick Stats */}
-          <div className="flex flex-wrap justify-center gap-6 mb-12">
-            <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-              <CheckCircle className="w-5 h-5 text-emerald-400" />
-              <span className="text-sm font-semibold text-gray-200">
-                Verified Profiles
-              </span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-              <TrendingUp className="w-5 h-5 text-blue-400" />
-              <span className="text-sm font-semibold text-gray-200">
-                95% Success Rate
-              </span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-              <Shield className="w-5 h-5 text-purple-400" />
-              <span className="text-sm font-semibold text-gray-200">
-                Trusted by 500+ Companies
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* Services Grid - 3 columns */}
