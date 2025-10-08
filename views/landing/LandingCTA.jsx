@@ -1,17 +1,23 @@
-"use client"
+"use client";
 
-import { ArrowRight, CheckCircle2, Users, Zap } from "lucide-react"
-import { motion } from "framer-motion"
+import { ArrowRight, CheckCircle2, Users, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function LandingCTA() {
   return (
-    <section className="relative py-32 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
+    <section className="relative py-32 gradient-slate-purple overflow-hidden">
       {/* Subtle grid pattern overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
       {/* Gradient orbs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px]"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px]"></div>
+      <div
+        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[120px]"
+        style={{ background: "rgba(128,55,145,0.16)" }}
+      ></div>
+      <div
+        className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[120px]"
+        style={{ background: "rgba(184,123,209,0.12)" }}
+      ></div>
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
@@ -21,10 +27,16 @@ export default function LandingCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              borderColor: "rgba(255,255,255,0.12)",
+            }}
           >
-            <Zap className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm font-medium text-white">Start Your Journey Today</span>
+            <Zap className="w-4 h-4" style={{ color: "#b87bd1" }} />
+            <span className="text-sm font-medium text-white">
+              Start Your Journey Today
+            </span>
           </motion.div>
 
           {/* Heading */}
@@ -46,7 +58,8 @@ export default function LandingCTA() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-white/80 mb-12 text-pretty max-w-2xl mx-auto leading-relaxed"
           >
-            Join thousands of professionals and employers who trust Sabka Pro HIRING for their recruitment needs.
+            Join thousands of professionals and employers who trust Sabka Pro
+            HIRING for their recruitment needs.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -59,15 +72,19 @@ export default function LandingCTA() {
           >
             <a
               href="/register?type=candidate"
-              className="group relative px-8 py-4 bg-white text-slate-900 rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl hover:shadow-white/20 hover:-translate-y-0.5 min-w-[260px] overflow-hidden"
+              className="group relative px-8 py-4 rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 min-w-[260px] overflow-hidden"
+              style={{
+                background: "linear-gradient(90deg,#803791,#b87bd1)",
+                color: "white",
+              }}
             >
               <span className="relative z-10">Get Started as Candidate</span>
               <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              <div className="absolute inset-0 bg-gradient-to-r from-white to-gray-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </a>
             <a
               href="/register?type=employer"
-              className="group relative px-8 py-4 bg-transparent border-2 border-white/30 text-white rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 hover:bg-white/10 hover:border-white/50 hover:-translate-y-0.5 min-w-[260px] backdrop-blur-sm"
+              className="group relative px-8 py-4 bg-transparent border-2 text-white rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 hover:bg-white/10 hover:-translate-y-0.5 min-w-[260px] backdrop-blur-sm"
+              style={{ borderColor: "rgba(255,255,255,0.18)" }}
             >
               <span>Post Jobs as Employer</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -115,5 +132,5 @@ export default function LandingCTA() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

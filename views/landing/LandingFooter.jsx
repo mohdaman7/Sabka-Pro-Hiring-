@@ -1,9 +1,12 @@
-import Link from "next/link"
-import { Mail, Phone, MapPin, ArrowRight } from "lucide-react"
+import Link from "next/link";
+import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 
 export default function LandingFooter() {
   return (
-    <footer className="relative bg-[#0f172a] overflow-hidden">
+    <footer
+      className="relative overflow-hidden"
+      style={{ background: "linear-gradient(180deg,#0d0410 0%, #120615 60%)" }}
+    >
       {/* Decorative background elements */}
       {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
       <div className="absolute top-0 left-1/3 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div> */}
@@ -13,8 +16,12 @@ export default function LandingFooter() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 bg-white">
-                <img src="/sabka-logo.png" alt="Sabka Pro" className="w-full h-full object-cover" />
+              <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-[rgba(184,123,209,0.18)] transition-all duration-300 group-hover:scale-105 bg-white">
+                <img
+                  src="/sabka-logo.png"
+                  alt="Sabka Pro"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="text-xl font-bold text-white">Sabka Pro</span>
             </div>
@@ -24,10 +31,11 @@ export default function LandingFooter() {
             <div className="flex gap-3 pt-2">
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-slate-800/50 border border-blue-500/10 hover:border-blue-400/30 flex items-center justify-center transition-all duration-200 hover:bg-blue-500/10 group"
+                className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
+                style={{ borderColor: "rgba(128,55,145,0.08)" }}
               >
                 <svg
-                  className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors"
+                  className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -36,10 +44,11 @@ export default function LandingFooter() {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-slate-800/50 border border-blue-500/10 hover:border-blue-400/30 flex items-center justify-center transition-all duration-200 hover:bg-blue-500/10 group"
+                className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
+                style={{ borderColor: "rgba(128,55,145,0.08)" }}
               >
                 <svg
-                  className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors"
+                  className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -48,10 +57,11 @@ export default function LandingFooter() {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-slate-800/50 border border-blue-500/10 hover:border-blue-400/30 flex items-center justify-center transition-all duration-200 hover:bg-blue-500/10 group"
+                className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
+                style={{ borderColor: "rgba(128,55,145,0.08)" }}
               >
                 <svg
-                  className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors"
+                  className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -68,7 +78,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/about"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   About Us
@@ -77,7 +87,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/how-it-works"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   How It Works
@@ -86,7 +96,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/pricing"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Pricing
@@ -95,7 +105,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Contact
@@ -111,7 +121,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/jobs"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Browse Jobs
@@ -120,7 +130,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/courses"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Training Courses
@@ -129,7 +139,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/register?type=candidate"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Register
@@ -138,7 +148,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/candidate-login"
-                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Login
@@ -151,20 +161,29 @@ export default function LandingFooter() {
           <div>
             <h3 className="font-semibold text-white mb-4">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-blue-400 transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-slate-800/50 border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:border-blue-400/30 transition-all">
+              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div
+                  className="w-8 h-8 rounded-lg bg-slate-800/50 border flex items-center justify-center flex-shrink-0 transition-all"
+                  style={{ borderColor: "rgba(128,55,145,0.08)" }}
+                >
                   <Mail className="w-4 h-4" />
                 </div>
                 <span className="mt-1">info@sabkapro.com</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-blue-400 transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-slate-800/50 border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:border-blue-400/30 transition-all">
+              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div
+                  className="w-8 h-8 rounded-lg bg-slate-800/50 border flex items-center justify-center flex-shrink-0 transition-all"
+                  style={{ borderColor: "rgba(128,55,145,0.08)" }}
+                >
                   <Phone className="w-4 h-4" />
                 </div>
                 <span className="mt-1">+91 98765 43210</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-blue-400 transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-slate-800/50 border border-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:border-blue-400/30 transition-all">
+              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div
+                  className="w-8 h-8 rounded-lg bg-slate-800/50 border flex items-center justify-center flex-shrink-0 transition-all"
+                  style={{ borderColor: "rgba(128,55,145,0.08)" }}
+                >
                   <MapPin className="w-4 h-4" />
                 </div>
                 <span className="mt-1">Mumbai, Maharashtra, India</span>
@@ -175,17 +194,25 @@ export default function LandingFooter() {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-blue-500/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-400">© 2025 Sabka Pro HIRIN. All rights reserved.</p>
+          <p className="text-sm text-gray-400">
+            © 2025 Sabka Pro HIRIN. All rights reserved.
+          </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-sm text-gray-400 hover:text-blue-400 transition-colors">
+            <Link
+              href="/privacy"
+              className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-sm text-gray-400 hover:text-blue-400 transition-colors">
+            <Link
+              href="/terms"
+              className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
+            >
               Terms of Service
             </Link>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

@@ -1,6 +1,15 @@
-"use client"
+"use client";
 
-import { Check, Zap, Crown, Rocket, Star, TrendingUp, Award, Sparkles } from "lucide-react"
+import {
+  Check,
+  Zap,
+  Crown,
+  Rocket,
+  Star,
+  TrendingUp,
+  Award,
+  Sparkles,
+} from "lucide-react";
 
 export default function LandingPlans() {
   const plans = [
@@ -23,14 +32,15 @@ export default function LandingPlans() {
       ],
       popular: false,
       cta: "Get Started Free",
-      delay: "0ms"
+      delay: "0ms",
     },
     {
       name: "Pro Plan",
       icon: Crown,
       price: "₹999",
       period: "per month",
-      description: "Accelerate your career with premium features and expert guidance",
+      description:
+        "Accelerate your career with premium features and expert guidance",
       gradient: "from-purple-500 via-pink-500 to-orange-500",
       bgGradient: "from-purple-500/10 via-pink-500/10 to-orange-500/10",
       borderGradient: "from-purple-400 via-pink-400 to-orange-400",
@@ -52,17 +62,26 @@ export default function LandingPlans() {
       popular: true,
       cta: "Start Free Trial",
       badge: "Most Popular",
-      delay: "100ms"
+      delay: "100ms",
     },
-  ]
+  ];
 
   return (
-    <section className="relative py-24 bg-gradient-to-b from-[#0f172a] via-slate-900 to-[#0f172a] overflow-hidden">
+    <section className="relative py-24 gradient-slate-purple overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          style={{ background: "rgba(128,55,145,0.24)" }}
+        ></div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s", background: "rgba(184,123,209,0.16)" }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s", background: "rgba(240,194,238,0.12)" }}
+        ></div>
       </div>
 
       {/* Floating particles */}
@@ -70,12 +89,13 @@ export default function LandingPlans() {
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-20"
+            className="absolute w-1 h-1 rounded-full opacity-20"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
+              background: "rgba(184,123,209,0.16)",
               animation: `float ${5 + Math.random() * 10}s linear infinite`,
-              animationDelay: `${Math.random() * 5}s`
+              animationDelay: `${Math.random() * 5}s`,
             }}
           ></div>
         ))}
@@ -83,7 +103,8 @@ export default function LandingPlans() {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0) translateX(0);
           }
           25% {
@@ -101,37 +122,47 @@ export default function LandingPlans() {
       <div className="relative max-w-[95%] mx-auto px-4 lg:px-6">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full border border-purple-400/30 mb-6 backdrop-blur-sm">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 backdrop-blur-sm"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(128,55,145,0.12), rgba(184,123,209,0.08))",
+              borderColor: "rgba(128,55,145,0.18)",
+            }}
+          >
             <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-sm font-semibold text-purple-300">Simple Pricing</span>
+            <span className="text-sm font-semibold text-[#e8cfee]">
+              Simple Pricing
+            </span>
           </div>
           <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
             Choose Your Perfect{" "}
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-              Career Plan
-            </span>
+            <span className="gradient-text-blue">Career Plan</span>
           </h2>
           <p className="text-xl text-gray-400">
-            Start free or unlock premium features to accelerate your career growth
+            Start free or unlock premium features to accelerate your career
+            growth
           </p>
         </div>
 
         {/* Plans Grid */}
         <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => {
-            const Icon = plan.icon
+            const Icon = plan.icon;
             return (
               <div
                 key={index}
                 className={`relative group transition-all duration-700 hover:scale-105 ${
-                  plan.popular ? 'lg:-translate-y-4' : ''
+                  plan.popular ? "lg:-translate-y-4" : ""
                 }`}
                 style={{ animationDelay: plan.delay }}
               >
                 {/* Popular badge */}
                 {plan.badge && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
-                    <div className={`px-6 py-2 bg-gradient-to-r ${plan.gradient} text-white rounded-full text-sm font-bold shadow-xl flex items-center gap-2`}>
+                    <div
+                      className={`px-6 py-2 bg-gradient-to-r ${plan.gradient} text-white rounded-full text-sm font-bold shadow-xl flex items-center gap-2`}
+                    >
                       <Star className="w-4 h-4 fill-current" />
                       {plan.badge}
                     </div>
@@ -139,51 +170,71 @@ export default function LandingPlans() {
                 )}
 
                 {/* Card */}
-                <div className={`relative h-full bg-slate-900/50 backdrop-blur-xl rounded-3xl overflow-hidden border-2 transition-all duration-500 ${
-                  plan.popular 
-                    ? 'border-purple-400/50 shadow-2xl shadow-purple-500/20' 
-                    : 'border-slate-700/50 hover:border-blue-400/50'
-                }`}>
+                <div
+                  className={`relative h-full bg-slate-900/50 backdrop-blur-xl rounded-3xl overflow-hidden border-2 transition-all duration-500 ${
+                    plan.popular
+                      ? "border-purple-400/50 shadow-2xl shadow-purple-500/20"
+                      : "border-slate-700/50 hover:border-blue-400/50"
+                  }`}
+                >
                   {/* Gradient background overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${plan.bgGradient} opacity-50 group-hover:opacity-70 transition-opacity duration-500`}></div>
-                  
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${plan.bgGradient} opacity-50 group-hover:opacity-70 transition-opacity duration-500`}
+                  ></div>
+
                   {/* Animated gradient border on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${plan.borderGradient} opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`}></div>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-r ${plan.borderGradient} opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`}
+                  ></div>
 
                   {/* Content */}
                   <div className="relative p-8">
                     {/* Icon */}
                     <div className="mb-6">
-                      <div className={`w-16 h-16 bg-gradient-to-br ${plan.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500 group-hover:rotate-6`}>
+                      <div
+                        className={`w-16 h-16 bg-gradient-to-br ${plan.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500 group-hover:rotate-6`}
+                      >
                         <Icon className="w-8 h-8 text-white" />
                       </div>
                     </div>
 
                     {/* Plan name */}
-                    <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                    <p className="text-gray-400 text-sm mb-6 min-h-[40px]">{plan.description}</p>
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      {plan.name}
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-6 min-h-[40px]">
+                      {plan.description}
+                    </p>
 
                     {/* Price */}
                     <div className="mb-8">
                       <div className="flex items-baseline gap-2">
-                        <span className={`text-5xl font-bold bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`}>
+                        <span
+                          className={`text-5xl font-bold bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`}
+                        >
                           {plan.price}
                         </span>
                         {plan.period !== "Forever" && (
-                          <span className="text-gray-400 text-sm">/{plan.period}</span>
+                          <span className="text-gray-400 text-sm">
+                            /{plan.period}
+                          </span>
                         )}
                       </div>
                       {plan.period === "Forever" && (
-                        <span className="text-gray-400 text-sm">{plan.period}</span>
+                        <span className="text-gray-400 text-sm">
+                          {plan.period}
+                        </span>
                       )}
                     </div>
 
                     {/* CTA Button */}
-                    <button className={`w-full py-4 rounded-xl font-semibold text-white mb-8 transition-all duration-300 relative overflow-hidden group/btn ${
-                      plan.popular 
-                        ? `bg-gradient-to-r ${plan.gradient} shadow-lg hover:shadow-2xl hover:shadow-purple-500/50` 
-                        : 'bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500'
-                    }`}>
+                    <button
+                      className={`w-full py-4 rounded-xl font-semibold text-white mb-8 transition-all duration-300 relative overflow-hidden group/btn ${
+                        plan.popular
+                          ? `bg-gradient-to-r ${plan.gradient} shadow-lg hover:shadow-2xl hover:shadow-purple-500/50`
+                          : "bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500"
+                      }`}
+                    >
                       <span className="relative z-10">{plan.cta}</span>
                       {plan.popular && (
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
@@ -202,20 +253,26 @@ export default function LandingPlans() {
                           className="flex items-start gap-3 text-gray-300 group-hover:translate-x-1 transition-transform duration-300"
                           style={{ transitionDelay: `${idx * 50}ms` }}
                         >
-                          <div className={`flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-r ${plan.gradient} flex items-center justify-center mt-0.5`}>
+                          <div
+                            className={`flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-r ${plan.gradient} flex items-center justify-center mt-0.5`}
+                          >
                             <Check className="w-3 h-3 text-white" />
                           </div>
-                          <span className="text-sm leading-relaxed">{feature}</span>
+                          <span className="text-sm leading-relaxed">
+                            {feature}
+                          </span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Decorative corner gradient */}
-                  <div className={`absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl ${plan.gradient} opacity-10 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-tl-full`}></div>
+                  <div
+                    className={`absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl ${plan.gradient} opacity-10 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-tl-full`}
+                  ></div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -224,18 +281,32 @@ export default function LandingPlans() {
           <div className="max-w-3xl mx-auto">
             <div className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 relative overflow-hidden">
               {/* Subtle gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
-              
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(90deg, rgba(128,55,145,0.05), rgba(184,123,209,0.05))",
+                }}
+              ></div>
+
               <div className="relative">
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <TrendingUp className="w-6 h-6 text-emerald-400" />
-                  <h3 className="text-2xl font-bold text-white">Not sure which plan to choose?</h3>
+                  <h3 className="text-2xl font-bold text-white">
+                    Not sure which plan to choose?
+                  </h3>
                 </div>
                 <p className="text-gray-400 mb-6">
-                  Get a personalized recommendation based on your career goals and experience level
+                  Get a personalized recommendation based on your career goals
+                  and experience level
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                  <button
+                    className="px-8 py-3 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                    style={{
+                      background: "linear-gradient(90deg,#803791,#b87bd1)",
+                    }}
+                  >
                     Talk to Our Team
                   </button>
                   <button className="px-8 py-3 bg-slate-800/80 hover:bg-slate-700/80 text-white rounded-xl font-semibold border border-slate-600 hover:border-slate-500 transition-all duration-300">
@@ -251,5 +322,5 @@ export default function LandingPlans() {
         </div>
       </div>
     </section>
-  )
+  );
 }
