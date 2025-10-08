@@ -5,19 +5,19 @@ import { motion } from "framer-motion";
 
 export default function LandingCTA() {
   return (
-    <section className="relative py-32 gradient-slate-purple overflow-hidden">
+    <section className="relative py-32 overflow-hidden">
       {/* Subtle grid pattern overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
-      {/* Gradient orbs */}
+      {/* Gradient orbs (subtle) */}
       <div
         className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[120px]"
-        style={{ background: "rgba(128,55,145,0.16)" }}
-      ></div>
+        style={{ background: "rgba(128,55,145,0.06)" }}
+      />
       <div
         className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[120px]"
-        style={{ background: "rgba(184,123,209,0.12)" }}
-      ></div>
+        style={{ background: "rgba(184,123,209,0.04)" }}
+      />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">

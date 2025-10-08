@@ -69,23 +69,20 @@ export default function LandingFeatures() {
   ];
 
   return (
-    <section
-      id="features"
-      className="relative py-24 gradient-slate-purple overflow-hidden"
-    >
+    <section id="features" className="relative py-24 overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
         <div
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ background: "rgba(128,55,145,0.24)" }}
+          style={{ background: "rgba(128,55,145,0.08)" }}
         ></div>
         <div
           className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s", background: "rgba(184,123,209,0.16)" }}
+          style={{ animationDelay: "1s", background: "rgba(184,123,209,0.06)" }}
         ></div>
         <div
           className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "2s", background: "rgba(240,194,238,0.12)" }}
+          style={{ animationDelay: "2s", background: "rgba(240,194,238,0.03)" }}
         ></div>
       </div>
 

@@ -13,7 +13,7 @@ export default function LandingHero() {
       <LandingNavbar />
 
       {/* Hero Content */}
-      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6 pt-28 pb-12">
+      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6 pt-30 pb-12">
         <div className="grid lg:grid-cols-2 gap-4 items-start">
           {/* Left Column - Main Card */}
           <div className="bg-card text-card-foreground rounded-3xl p-8 shadow-2xl relative overflow-hidden flex flex-col justify-center border border-border min-h-[420px]">
@@ -21,7 +21,10 @@ export default function LandingHero() {
             <div className="absolute top-0 right-0 w-64 h-64 gradient-blue rounded-full blur-3xl opacity-30"></div>
             {/* Decorative doodle pattern */}
             <div className="absolute right-0 top-0 w-96 h-96 opacity-20 text-muted-foreground">
-              <svg viewBox="0 0 400 400" className="w-full h-full text-muted-foreground">
+              <svg
+                viewBox="0 0 400 400"
+                className="w-full h-full text-muted-foreground"
+              >
                 <path
                   d="M200,50 Q250,80 280,120 T320,200"
                   stroke="currentColor"
@@ -89,15 +92,21 @@ export default function LandingHero() {
               <div className="space-y-2 mb-8">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0" />
-                  <span className="text-sm">Expert mentorship from industry leaders</span>
+                  <span className="text-sm">
+                    Expert mentorship from industry leaders
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0" />
-                  <span className="text-sm">Personalized career roadmap & guidance</span>
+                  <span className="text-sm">
+                    Personalized career roadmap & guidance
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0" />
-                  <span className="text-sm">Interview preparation & resume building</span>
+                  <span className="text-sm">
+                    Interview preparation & resume building
+                  </span>
                 </div>
               </div>
 
@@ -108,7 +117,9 @@ export default function LandingHero() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 </button>
                 {/* Supporting Text Below CTA */}
-                <p className="text-xs text-muted-foreground/70 mt-2">No credit card required • Start your journey today</p>
+                <p className="text-xs text-muted-foreground/70 mt-2">
+                  No credit card required • Start your journey today
+                </p>
               </div>
             </div>
           </div>
@@ -120,13 +131,19 @@ export default function LandingHero() {
               href="/register?type=employer"
               className="group block rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 relative border border-white/10 flex-[2]"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/80 via-orange-800/85 to-amber-800/90"></div>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(128,55,145,0.06), rgba(128,55,145,0.02))",
+                }}
+              ></div>
               <img
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop"
                 alt="Employee collaboration"
                 className="w-full h-full object-cover absolute inset-0"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
               <div className="absolute top-4 left-4">
                 <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded text-xs font-medium">
                   Employee
@@ -155,9 +172,9 @@ export default function LandingHero() {
 
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 border-4 border-purple-600"></div>
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-4 border-purple-600"></div>
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-4 border-purple-600"></div>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-4 border-purple-600"></div>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-400 to-purple-600 border-4 border-purple-600"></div>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-300 to-purple-500 border-4 border-purple-600"></div>
                 </div>
                 <span className="text-white font-medium">+56 mentors</span>
               </div>

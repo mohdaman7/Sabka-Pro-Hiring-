@@ -67,38 +67,21 @@ export default function LandingPlans() {
   ];
 
   return (
-    <section className="relative py-24 gradient-slate-purple overflow-hidden">
+    <section className="relative py-24 overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
         <div
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ background: "rgba(128,55,145,0.24)" }}
-        ></div>
+          style={{ background: "rgba(128,55,145,0.06)" }}
+        />
         <div
           className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s", background: "rgba(184,123,209,0.16)" }}
-        ></div>
+          style={{ animationDelay: "1s", background: "rgba(184,123,209,0.04)" }}
+        />
         <div
           className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "2s", background: "rgba(240,194,238,0.12)" }}
-        ></div>
-      </div>
-
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 rounded-full opacity-20"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              background: "rgba(184,123,209,0.16)",
-              animation: `float ${5 + Math.random() * 10}s linear infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          ></div>
-        ))}
+          style={{ animationDelay: "2s", background: "rgba(240,194,238,0.03)" }}
+        />
       </div>
 
       <style jsx>{`

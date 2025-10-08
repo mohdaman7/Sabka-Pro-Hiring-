@@ -5,7 +5,7 @@ export default function LandingFooter() {
   return (
     <footer
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(180deg,#0d0410 0%, #120615 60%)" }}
+      style={{ background: "linear-gradient(180deg,#0b0610 0%, #120615 60%)" }}
     >
       {/* Decorative background elements */}
       {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
@@ -32,7 +32,7 @@ export default function LandingFooter() {
               <a
                 href="#"
                 className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
-                style={{ borderColor: "rgba(128,55,145,0.08)" }}
+                style={{ borderColor: "rgba(128,55,145,0.06)" }}
               >
                 <svg
                   className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
@@ -45,7 +45,7 @@ export default function LandingFooter() {
               <a
                 href="#"
                 className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
-                style={{ borderColor: "rgba(128,55,145,0.08)" }}
+                style={{ borderColor: "rgba(128,55,145,0.06)" }}
               >
                 <svg
                   className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
@@ -58,7 +58,7 @@ export default function LandingFooter() {
               <a
                 href="#"
                 className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
-                style={{ borderColor: "rgba(128,55,145,0.08)" }}
+                style={{ borderColor: "rgba(128,55,145,0.06)" }}
               >
                 <svg
                   className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
@@ -193,7 +193,10 @@ export default function LandingFooter() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-blue-500/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div
+          className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4"
+          style={{ borderColor: "rgba(128,55,145,0.04)" }}
+        >
           <p className="text-sm text-gray-400">
             © 2025 Sabka Pro HIRIN. All rights reserved.
           </p>
