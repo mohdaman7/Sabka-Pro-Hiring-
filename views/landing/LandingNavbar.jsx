@@ -6,9 +6,10 @@ import { Menu, X } from "lucide-react";
 
 export default function LandingNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [active, setActive] = useState("home");
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border shadow-lg">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-sm border-b border-border/30 shadow-lg">
       <div className="max-w-[95%] mx-auto px-4 lg:px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -34,32 +35,65 @@ export default function LandingNavbar() {
           <div className="hidden md:flex items-center gap-2">
             <Link
               href="#"
-              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => setActive("home")}
+              className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                active === "home"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
             >
-              Home
+              <span className="relative inline-block">
+                Home
+                {active === "home" && (
+                  <span className="block h-0.5 w-6 bg-[#b87bd1] rounded-full mt-1" />
+                )}
+              </span>
             </Link>
+
             <Link
               href="#features"
-              className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+              onClick={() => setActive("features")}
+              className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
+                active === "features"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
             >
               Features
             </Link>
+
             <Link
               href="#about"
-              className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+              onClick={() => setActive("about")}
+              className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
+                active === "about"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
             >
               About Us
             </Link>
+
             <Link
               href="#how-it-works"
-              className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+              onClick={() => setActive("how")}
+              className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
+                active === "how"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
             >
               How It Works
             </Link>
+
             <Link
               href="#testimonials"
-              className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+              onClick={() => setActive("testimonials")}
+              className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
+                active === "testimonials"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
             >
               Testimonials
             </Link>
@@ -68,13 +102,20 @@ export default function LandingNavbar() {
 
             <Link
               href="/login"
-              className="ml-2 px-5 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+              onClick={() => setActive("login")}
+              className={`ml-2 px-5 py-2 text-sm rounded-lg transition-all duration-200 ${
+                active === "login"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
             >
               Login
             </Link>
+
             <Link
               href="/register"
-              className="px-6 py-2.5 bg-gradient-blue hover:scale-105 text-white rounded-lg transition-all duration-200 text-sm font-semibold shadow-lg"
+              onClick={() => setActive("register")}
+              className="px-6 py-2.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#8f4aa0] hover:to-[#c78be0] text-white rounded-lg transition-all duration-200 text-sm font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/30"
             >
               Get Started
             </Link>
@@ -83,7 +124,8 @@ export default function LandingNavbar() {
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+            className="md:hidden p-2.5 text-gray-300 hover:text-white hover:bg-white/6 rounded-lg transition-all duration-200"
+            aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
               <X className="w-5 h-5" />
@@ -98,55 +140,110 @@ export default function LandingNavbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-2xl border-t border-border/20">
           <div className="px-6 py-6 space-y-2">
-            <Link
-              href="#"
-              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Home
+            <Link href="#">
+              <a
+                onClick={() => {
+                  setActive("home");
+                  setMobileMenuOpen(false);
+                }}
+                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                  active === "home"
+                    ? "text-white font-semibold bg-white/5"
+                    : "text-gray-300 hover:text-white hover:bg-white/6"
+                }`}
+              >
+                Home
+              </a>
             </Link>
-            <Link
-              href="#features"
-              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Features
+
+            <Link href="#features">
+              <a
+                onClick={() => {
+                  setActive("features");
+                  setMobileMenuOpen(false);
+                }}
+                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                  active === "features"
+                    ? "text-white font-semibold bg-white/5"
+                    : "text-gray-300 hover:text-white hover:bg-white/6"
+                }`}
+              >
+                Features
+              </a>
             </Link>
-            <Link
-              href="#about"
-              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              About Us
+
+            <Link href="#about">
+              <a
+                onClick={() => {
+                  setActive("about");
+                  setMobileMenuOpen(false);
+                }}
+                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                  active === "about"
+                    ? "text-white font-semibold bg-white/5"
+                    : "text-gray-300 hover:text-white hover:bg-white/6"
+                }`}
+              >
+                About Us
+              </a>
             </Link>
-            <Link
-              href="#how-it-works"
-              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              How It Works
+
+            <Link href="#how-it-works">
+              <a
+                onClick={() => {
+                  setActive("how");
+                  setMobileMenuOpen(false);
+                }}
+                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                  active === "how"
+                    ? "text-white font-semibold bg-white/5"
+                    : "text-gray-300 hover:text-white hover:bg-white/6"
+                }`}
+              >
+                How It Works
+              </a>
             </Link>
-            <Link
-              href="#testimonials"
-              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Testimonials
+
+            <Link href="#testimonials">
+              <a
+                onClick={() => {
+                  setActive("testimonials");
+                  setMobileMenuOpen(false);
+                }}
+                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                  active === "testimonials"
+                    ? "text-white font-semibold bg-white/5"
+                    : "text-gray-300 hover:text-white hover:bg-white/6"
+                }`}
+              >
+                Testimonials
+              </a>
             </Link>
 
             <div className="h-px bg-border/20 my-4"></div>
 
-            <Link
-              href="/login"
-              className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-            >
-              Login
+            <Link href="/login">
+              <a
+                onClick={() => {
+                  setActive("login");
+                  setMobileMenuOpen(false);
+                }}
+                className="block px-4 py-3 text-sm rounded-lg text-gray-300 hover:text-white hover:bg-white/6 transition-all duration-200"
+              >
+                Login
+              </a>
             </Link>
-            <Link
-              href="/register"
-              className="block px-4 py-3 bg-gradient-blue text-white rounded-lg transition-all duration-200 text-sm font-semibold text-center shadow-lg"
-            >
-              Get Started
+
+            <Link href="/register">
+              <a
+                onClick={() => {
+                  setActive("register");
+                  setMobileMenuOpen(false);
+                }}
+                className="block px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg transition-all duration-200 text-sm font-semibold text-center shadow-lg"
+              >
+                Get Started
+              </a>
             </Link>
           </div>
         </div>
