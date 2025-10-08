@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Calendar,
   Clock,
@@ -16,15 +16,15 @@ import {
   TrendingUp,
   Award,
   AlertCircle,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Card } from "@/components/ui/card"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 export default function InterviewsPage() {
-  const [filter, setFilter] = useState("all")
-  const [searchQuery, setSearchQuery] = useState("")
+  const [filter, setFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const stats = [
     {
@@ -34,8 +34,20 @@ export default function InterviewsPage() {
       color: "from-purple-500 to-blue-500",
       icon: Calendar,
     },
-    { label: "Upcoming", value: "5", change: "Next in 2 days", color: "from-green-500 to-emerald-500", icon: Bell },
-    { label: "Completed", value: "18", change: "85% success rate", color: "from-blue-500 to-cyan-500", icon: Award },
+    {
+      label: "Upcoming",
+      value: "5",
+      change: "Next in 2 days",
+      color: "from-green-500 to-emerald-500",
+      icon: Bell,
+    },
+    {
+      label: "Completed",
+      value: "18",
+      change: "85% success rate",
+      color: "from-blue-500 to-cyan-500",
+      icon: Award,
+    },
     {
       label: "Pending Response",
       value: "1",
@@ -43,7 +55,7 @@ export default function InterviewsPage() {
       color: "from-amber-500 to-orange-500",
       icon: AlertCircle,
     },
-  ]
+  ];
 
   const interviews = [
     {
@@ -140,54 +152,64 @@ export default function InterviewsPage() {
       logo: "https://logo.clearbit.com/stripe.com",
       notes: "Awaiting interviewer assignment",
     },
-  ]
+  ];
 
   const getTypeIcon = (type) => {
     switch (type) {
       case "video":
-        return <Video className="w-4 h-4" />
+        return <Video className="w-4 h-4" />;
       case "phone":
-        return <Phone className="w-4 h-4" />
+        return <Phone className="w-4 h-4" />;
       case "onsite":
-        return <MapPin className="w-4 h-4" />
+        return <MapPin className="w-4 h-4" />;
       default:
-        return <Calendar className="w-4 h-4" />
+        return <Calendar className="w-4 h-4" />;
     }
-  }
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
       case "upcoming":
-        return "bg-green-100 text-green-700 border-green-200"
+        return "bg-green-100 text-green-700 border-green-200";
       case "completed":
-        return "bg-blue-100 text-blue-700 border-blue-200"
+        return "bg-blue-100 text-blue-700 border-blue-200";
       case "pending":
-        return "bg-amber-100 text-amber-700 border-amber-200"
+        return "bg-amber-100 text-amber-700 border-amber-200";
       default:
-        return "bg-slate-100 text-slate-700 border-slate-200"
+        return "bg-slate-100 text-slate-700 border-slate-200";
     }
-  }
+  };
 
   const filteredInterviews = interviews.filter((interview) => {
-    const matchesFilter = filter === "all" || interview.status === filter
+    const matchesFilter = filter === "all" || interview.status === filter;
     const matchesSearch =
       interview.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      interview.position.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesFilter && matchesSearch
-  })
+      interview.position.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+    <div className="min-h-screen relative bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
+              color: "#fff",
+            }}
+          >
             <Calendar className="w-4 h-4" />
             Interview Scheduler
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 text-balance">Your Interview Dashboard</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto text-pretty">
-            Stay organized and prepared with all your interview schedules, reminders, and important dates in one place.
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+            Your Interview Dashboard
+          </h1>
+          <p className="text-lg text-white/80 max-w-2xl mx-auto">
+            Stay organized and prepared with all your interview schedules,
+            reminders, and important dates in one place.
           </p>
         </div>
 
@@ -196,28 +218,38 @@ export default function InterviewsPage() {
           {stats.map((stat, index) => (
             <Card
               key={index}
-              className="relative group bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-transparent transition-all duration-300 overflow-hidden hover:shadow-2xl hover:-translate-y-1"
+              className="relative group rounded-2xl p-6 overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
             >
-              {/* Gradient border on hover */}
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl`}
-                style={{ padding: "2px" }}
-              >
-                <div className="w-full h-full bg-white rounded-2xl" />
-              </div>
+                className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-60 transition-opacity duration-300 rounded-2xl`}
+              />
 
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <div
-                    className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center shadow-lg`}
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg`}
+                    style={{
+                      background: `linear-gradient(135deg,#803791,#b87bd1)`,
+                    }}
                   >
                     <stat.icon className="w-6 h-6 text-white" />
                   </div>
-                  <TrendingUp className="w-5 h-5 text-green-500" />
+                  <TrendingUp className="w-5 h-5 text-white/70" />
                 </div>
-                <p className="text-slate-600 text-sm font-medium mb-2">{stat.label}</p>
-                <p className="text-4xl font-bold text-slate-900 mb-1">{stat.value}</p>
-                <p className="text-xs text-slate-500 font-medium">{stat.change}</p>
+                <p className="text-white/80 text-sm font-medium mb-2">
+                  {stat.label}
+                </p>
+                <p className="text-4xl font-bold text-white mb-1">
+                  {stat.value}
+                </p>
+                <p className="text-xs text-white/60 font-medium">
+                  {stat.change}
+                </p>
               </div>
             </Card>
           ))}
@@ -233,8 +265,8 @@ export default function InterviewsPage() {
                 size="sm"
                 className={
                   filter === status
-                    ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-md rounded-xl font-semibold"
-                    : "bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-purple-300 rounded-xl font-medium"
+                    ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-md rounded-xl font-semibold"
+                    : "bg-white/6 border border-white/6 text-white/80 hover:bg-white/10 rounded-xl font-medium"
                 }
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -243,12 +275,12 @@ export default function InterviewsPage() {
           </div>
 
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
             <Input
               placeholder="Search interviews..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white border-2 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-purple-400 rounded-xl"
+              className="pl-10 bg-white/6 border border-white/8 text-white placeholder:text-white/60 focus:border-[#b87bd1] rounded-xl"
             />
           </div>
         </div>
@@ -258,21 +290,27 @@ export default function InterviewsPage() {
           {filteredInterviews.map((interview) => (
             <Card
               key={interview.id}
-              className="relative group bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-transparent transition-all duration-300 overflow-hidden hover:shadow-2xl hover:-translate-y-1"
+              className="relative group rounded-2xl p-6 overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
             >
-              {/* Gradient border on hover */}
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"
-                style={{ padding: "2px" }}
-              >
-                <div className="w-full h-full bg-white rounded-2xl" />
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-[#b87bd1]/10 opacity-0 group-hover:opacity-40 transition-opacity duration-300 rounded-2xl" />
 
               <div className="relative z-10 flex flex-col lg:flex-row gap-6">
                 {/* Company Logo with Date Badge */}
                 <div className="flex-shrink-0">
                   <div className="relative">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 border-2 border-slate-200 flex items-center justify-center overflow-hidden shadow-md">
+                    <div
+                      className="w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden shadow-md"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+                        border: "1px solid rgba(255,255,255,0.04)",
+                      }}
+                    >
                       <img
                         src={interview.logo || "/placeholder.svg"}
                         alt={interview.company}
@@ -281,7 +319,12 @@ export default function InterviewsPage() {
                     </div>
                     {/* Date Badge */}
                     {interview.status === "upcoming" && (
-                      <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg">
+                      <div
+                        className="absolute -bottom-2 -right-2 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg"
+                        style={{
+                          background: "linear-gradient(90deg,#803791,#b87bd1)",
+                        }}
+                      >
                         {new Date(interview.date).getDate()}
                       </div>
                     )}
@@ -292,13 +335,17 @@ export default function InterviewsPage() {
                 <div className="flex-1 space-y-4">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-1 group-hover:text-purple-600 transition-colors duration-300">
+                      <h3 className="text-xl font-bold text-white mb-1 transition-colors duration-300">
                         {interview.position}
                       </h3>
-                      <p className="text-slate-600 font-medium">{interview.company}</p>
+                      <p className="text-white/80 font-medium">
+                        {interview.company}
+                      </p>
                     </div>
                     <Badge
-                      className={`${getStatusColor(interview.status)} border-2 font-semibold px-3 py-1 rounded-lg`}
+                      className={`${getStatusColor(
+                        interview.status
+                      )} border font-semibold px-3 py-1 rounded-lg`}
                     >
                       {interview.status}
                     </Badge>
@@ -306,48 +353,114 @@ export default function InterviewsPage() {
 
                   {/* Date and Time - Prominent Display */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="flex items-center gap-3 bg-purple-50 p-3 rounded-xl border border-purple-100">
-                      <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
+                    <div
+                      className="flex items-center gap-3 p-3 rounded-xl"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
+                        border: "1px solid rgba(255,255,255,0.04)",
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md"
+                        style={{
+                          background: "linear-gradient(135deg,#803791,#b87bd1)",
+                        }}
+                      >
                         <Calendar className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-xs text-slate-500 font-medium">Date</p>
-                        <p className="text-sm font-bold text-slate-900">{interview.date}</p>
+                        <p className="text-xs text-white/70 font-medium">
+                          Date
+                        </p>
+                        <p className="text-sm font-bold text-white">
+                          {interview.date}
+                        </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 bg-blue-50 p-3 rounded-xl border border-blue-100">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-md">
+                    <div
+                      className="flex items-center gap-3 p-3 rounded-xl"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
+                        border: "1px solid rgba(255,255,255,0.04)",
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md"
+                        style={{
+                          background: "linear-gradient(135deg,#6fb1ff,#00d4ff)",
+                        }}
+                      >
                         <Clock className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-xs text-slate-500 font-medium">Time</p>
-                        <p className="text-sm font-bold text-slate-900">{interview.time}</p>
+                        <p className="text-xs text-white/70 font-medium">
+                          Time
+                        </p>
+                        <p className="text-sm font-bold text-white">
+                          {interview.time}
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Additional Details */}
                   <div className="flex flex-wrap gap-3 text-sm">
-                    <div className="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                    <div
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg"
+                      style={{
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.04)",
+                      }}
+                    >
                       {getTypeIcon(interview.type)}
-                      <span className="capitalize font-medium text-slate-700">{interview.type}</span>
+                      <span className="capitalize font-medium text-white/85">
+                        {interview.type}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
-                      <span className="font-semibold text-slate-900">{interview.round}</span>
+                    <div
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg"
+                      style={{
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.04)",
+                      }}
+                    >
+                      <span className="font-semibold text-white">
+                        {interview.round}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
-                      <span className="text-slate-600">with</span>
-                      <span className="font-semibold text-slate-900">{interview.interviewer}</span>
+                    <div
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg"
+                      style={{
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.04)",
+                      }}
+                    >
+                      <span className="text-white/70">with</span>
+                      <span className="font-semibold text-white">
+                        {interview.interviewer}
+                      </span>
                     </div>
                   </div>
 
                   {/* Notes/Reminders */}
                   {interview.notes && (
-                    <div className="flex items-start gap-3 bg-amber-50 p-4 rounded-xl border border-amber-200">
-                      <MessageSquare className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                    <div
+                      className="flex items-start gap-3 p-4 rounded-xl"
+                      style={{
+                        background: "rgba(184,123,209,0.05)",
+                        border: "1px solid rgba(184,123,209,0.06)",
+                      }}
+                    >
+                      <MessageSquare className="w-5 h-5 text-[#b87bd1] mt-0.5 flex-shrink-0" />
                       <div>
-                        <p className="text-xs text-amber-600 font-semibold mb-1">Reminder</p>
-                        <p className="text-sm text-slate-700 font-medium">{interview.notes}</p>
+                        <p className="text-xs text-[#b87bd1] font-semibold mb-1">
+                          Reminder
+                        </p>
+                        <p className="text-sm text-white/85 font-medium">
+                          {interview.notes}
+                        </p>
                       </div>
                     </div>
                   )}
@@ -360,9 +473,17 @@ export default function InterviewsPage() {
                   )}
 
                   {interview.result && (
-                    <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg border border-green-200 w-fit">
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      <span className="text-sm font-semibold text-green-700">Result: {interview.result}</span>
+                    <div
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg w-fit"
+                      style={{
+                        background: "rgba(34,197,94,0.06)",
+                        border: "1px solid rgba(34,197,94,0.06)",
+                      }}
+                    >
+                      <CheckCircle2 className="w-5 h-5 text-green-300" />
+                      <span className="text-sm font-semibold text-white">
+                        Result: {interview.result}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -406,12 +527,16 @@ export default function InterviewsPage() {
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-100 to-blue-100 border-2 border-slate-200 flex items-center justify-center mx-auto mb-6">
                 <Calendar className="w-10 h-10 text-purple-600" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">No interviews found</h3>
-              <p className="text-slate-600">Try adjusting your filters or search query</p>
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">
+                No interviews found
+              </h3>
+              <p className="text-slate-600">
+                Try adjusting your filters or search query
+              </p>
             </div>
           </Card>
         )}
       </div>
     </div>
-  )
+  );
 }
