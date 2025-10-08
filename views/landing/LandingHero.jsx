@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { CheckCircle2 } from "lucide-react"
-import LandingNavbar from "./LandingNavbar"
+import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
+import LandingNavbar from "./LandingNavbar";
 
 export default function LandingHero() {
   return (
@@ -22,13 +22,39 @@ export default function LandingHero() {
             {/* Decorative doodle pattern */}
             <div className="absolute right-0 top-0 w-96 h-96 opacity-20">
               <svg viewBox="0 0 400 400" className="w-full h-full">
-                <path d="M200,50 Q250,80 280,120 T320,200" stroke="#000" strokeWidth="2" fill="none" />
+                <path
+                  d="M200,50 Q250,80 280,120 T320,200"
+                  stroke="#000"
+                  strokeWidth="2"
+                  fill="none"
+                />
                 <circle cx="250" cy="100" r="8" fill="#000" />
-                <path d="M150,150 Q180,120 220,140" stroke="#000" strokeWidth="2" fill="none" />
+                <path
+                  d="M150,150 Q180,120 220,140"
+                  stroke="#000"
+                  strokeWidth="2"
+                  fill="none"
+                />
                 <circle cx="180" cy="180" r="6" fill="#000" />
-                <path d="M280,250 L290,260 M285,250 L295,260" stroke="#000" strokeWidth="2" />
-                <circle cx="320" cy="280" r="10" stroke="#000" strokeWidth="2" fill="none" />
-                <path d="M220,300 Q240,320 260,300" stroke="#000" strokeWidth="2" fill="none" />
+                <path
+                  d="M280,250 L290,260 M285,250 L295,260"
+                  stroke="#000"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx="320"
+                  cy="280"
+                  r="10"
+                  stroke="#000"
+                  strokeWidth="2"
+                  fill="none"
+                />
+                <path
+                  d="M220,300 Q240,320 260,300"
+                  stroke="#000"
+                  strokeWidth="2"
+                  fill="none"
+                />
               </svg>
             </div>
 
@@ -53,23 +79,31 @@ export default function LandingHero() {
               </p>
 
               <p className="text-base text-gray-500 mb-8 leading-relaxed">
-                Join our comprehensive program designed to help you land your dream job. Get personalized mentorship,
-                industry insights, and the skills you need to succeed in today's competitive job market.
+                Join our comprehensive program designed to help you land your
+                dream job. Get personalized mentorship, industry insights, and
+                the skills you need to succeed in today's competitive job
+                market.
               </p>
 
               {/* Feature Highlights */}
               <div className="space-y-2 mb-8">
                 <div className="flex items-center gap-2 text-gray-700">
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span className="text-sm">Expert mentorship from industry leaders</span>
+                  <span className="text-sm">
+                    Expert mentorship from industry leaders
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-700">
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span className="text-sm">Personalized career roadmap & guidance</span>
+                  <span className="text-sm">
+                    Personalized career roadmap & guidance
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-700">
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span className="text-sm">Interview preparation & resume building</span>
+                  <span className="text-sm">
+                    Interview preparation & resume building
+                  </span>
                 </div>
               </div>
 
@@ -80,7 +114,9 @@ export default function LandingHero() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 </button>
                 {/* Supporting Text Below CTA */}
-                <p className="text-xs text-gray-500 mt-2">No credit card required • Start your journey today</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  No credit card required • Start your journey today
+                </p>
               </div>
             </div>
           </div>
@@ -105,7 +141,9 @@ export default function LandingHero() {
                 </span>
               </div>
               <div className="absolute bottom-4 left-4 right-4">
-                <h3 className="text-xl font-bold text-white mb-2">Welcome to the Employee Portal</h3>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Welcome to the Employee Portal
+                </h3>
                 <button className="bg-white text-gray-900 px-5 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-all duration-200">
                   Click Here
                 </button>
@@ -115,7 +153,7 @@ export default function LandingHero() {
             {/* Candidate Card */}
             <Link
               href="/register?type=candidate"
-              className="group block bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center border border-purple-400/20 relative overflow-hidden flex-1"
+              className="group bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col justify-center border border-purple-400/20 relative overflow-hidden flex-1"
             >
               {/* Subtle gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -136,5 +174,5 @@ export default function LandingHero() {
         </div>
       </div>
     </div>
-  )
+  );
 }
