@@ -48,16 +48,15 @@ export default function StudentSidebar({ isOpen, onClose }) {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 md:hidden"
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={onClose}
-          style={{ background: "rgba(128,55,145,0.18)" }}
         />
       )}
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-screen transition-all duration-300 md:translate-x-0",
+          "fixed left-0 top-0 z-50 h-screen transition-all duration-300 md:relative md:translate-x-0 flex flex-col",
           isOpen ? "translate-x-0" : "-translate-x-full",
           isCollapsed ? "w-20" : "w-64"
         )}
@@ -68,63 +67,73 @@ export default function StudentSidebar({ isOpen, onClose }) {
           backdropFilter: "blur(8px)",
         }}
       >
-        <div className="flex h-16 items-center justify-between border-b border-slate-800 px-6">
+        {/* Header - fixed height */}
+        <div className="flex-shrink-0 flex h-16 items-center justify-between border-b border-white/10 px-4">
           {!isCollapsed && (
-            <h1 className="text-2xl font-extrabold text-white">
-              Student Portal
-            </h1>
+            <h1 className="text-lg font-bold text-white">Student Portal</h1>
           )}
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Button
               variant="ghost"
-              size="icon"
-              className="hidden md:flex text-white hover:bg-white/6"
+              size="sm"
+              className="hidden md:flex text-white hover:bg-white/6 h-8 w-8"
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
               {isCollapsed ? (
-                <ChevronRight className="h-6 w-6" />
+                <ChevronRight className="h-4 w-4" />
               ) : (
-                <ChevronLeft className="h-6 w-6" />
+                <ChevronLeft className="h-4 w-4" />
               )}
             </Button>
             <Button
               variant="ghost"
-              size="icon"
-              className="md:hidden text-white hover:bg-white/6"
+              size="sm"
+              className="md:hidden text-white hover:bg-white/6 h-8 w-8"
               onClick={onClose}
             >
-              <X className="h-6 w-6" />
+              <X className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        <nav className="flex flex-col gap-3 p-4 overflow-y-auto h-[calc(100vh-4rem)]">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+        {/* Navigation - takes remaining space without scrolling */}
+        <nav className="flex-1 flex flex-col p-3 overflow-hidden">
+          <div className="space-y-1 h-full overflow-hidden hover:overflow-y-auto">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => onClose()}
-                className={cn(
-                  "flex items-center rounded-lg px-3 py-3 text-base font-medium transition-colors",
-                  isCollapsed ? "justify-center" : "gap-3",
-                  isActive
-                    ? "bg-white/6 text-white font-semibold"
-                    : "text-white/80 hover:bg-white/6 hover:text-white",
-                  item.highlight &&
-                    "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-sm"
-                )}
-                title={isCollapsed ? item.name : ""}
-              >
-                <Icon className="h-6 w-6 flex-shrink-0" />
-                {!isCollapsed && <span>{item.name}</span>}
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      onClose();
+                    }
+                  }}
+                  className={cn(
+                    "flex items-center rounded-lg px-3 py-4 transition-all duration-200",
+                    isCollapsed ? "justify-center" : "gap-3",
+                    isActive
+                      ? "bg-white/10 text-white font-medium"
+                      : "text-white/80 hover:bg-white/6 hover:text-white",
+                    item.highlight &&
+                      "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-md"
+                  )}
+                  title={isCollapsed ? item.name : ""}
+                >
+                  <Icon className="h-6 w-6 flex-shrink-0" />
+                  {!isCollapsed && (
+                    <span className="text-base font-medium truncate">
+                      {item.name}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
         </nav>
       </aside>
     </>
