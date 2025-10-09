@@ -1,7 +1,24 @@
-"use client"
+"use client";
 
-import { Users, Briefcase, TrendingUp, DollarSign, ArrowUp, ArrowDown } from "lucide-react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts"
+import {
+  Users,
+  Briefcase,
+  TrendingUp,
+  DollarSign,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from "recharts";
 
 export default function CRMDashboard() {
   const stats = [
@@ -45,7 +62,7 @@ export default function CRMDashboard() {
       bgColor: "bg-purple-50",
       borderColor: "border-purple-200",
     },
-  ]
+  ];
 
   const placementData = [
     { month: "Jan", placements: 120 },
@@ -54,7 +71,7 @@ export default function CRMDashboard() {
     { month: "Apr", placements: 142 },
     { month: "May", placements: 178 },
     { month: "Jun", placements: 195 },
-  ]
+  ];
 
   const revenueData = [
     { month: "Jan", revenue: 320 },
@@ -63,7 +80,7 @@ export default function CRMDashboard() {
     { month: "Apr", revenue: 390 },
     { month: "May", revenue: 450 },
     { month: "Jun", revenue: 420 },
-  ]
+  ];
 
   const recentLeads = [
     {
@@ -94,50 +111,65 @@ export default function CRMDashboard() {
       status: "New",
       date: "1 day ago",
     },
-  ]
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6 space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's what's happening with your platform today.</p>
+        <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
+        <p className="text-white/75">
+          Welcome back! Here's what's happening with your platform today.
+        </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
-          const Icon = stat.icon
+          const Icon = stat.icon;
           return (
             <div
               key={index}
-              className={`bg-white rounded-xl border-2 ${stat.borderColor} p-6 hover:shadow-xl hover:scale-105 transition-all duration-300`}
+              className={`bg-white/5 rounded-xl border border-[#803791]/10 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-300`}
             >
               <div className="flex items-start justify-between mb-4">
-                <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
-                  <Icon className={`w-6 h-6 ${stat.color}`} />
+                <div
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center`}
+                  style={{
+                    background: "linear-gradient(135deg,#803791,#b87bd1)",
+                  }}
+                >
+                  <Icon className={`w-6 h-6 text-white`} />
                 </div>
                 <div
                   className={`flex items-center gap-1 text-sm font-medium ${
-                    stat.trend === "up" ? "text-green-600" : "text-red-600"
+                    stat.trend === "up" ? "text-green-300" : "text-red-300"
                   }`}
                 >
-                  {stat.trend === "up" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
+                  {stat.trend === "up" ? (
+                    <ArrowUp className="w-4 h-4" />
+                  ) : (
+                    <ArrowDown className="w-4 h-4" />
+                  )}
                   {stat.change}
                 </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
+              <div className="text-3xl font-bold text-white mb-1">
+                {stat.value}
+              </div>
+              <div className="text-sm text-white/75">{stat.label}</div>
             </div>
-          )
+          );
         })}
       </div>
 
       {/* Charts */}
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Placements Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Placements</h3>
+        <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-6 shadow-lg hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Monthly Placements
+          </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={placementData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -150,7 +182,11 @@ export default function CRMDashboard() {
                   borderRadius: "8px",
                 }}
               />
-              <Bar dataKey="placements" fill="url(#blueGradient)" radius={[8, 8, 0, 0]} />
+              <Bar
+                dataKey="placements"
+                fill="url(#blueGradient)"
+                radius={[8, 8, 0, 0]}
+              />
               <defs>
                 <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#3b82f6" />
@@ -162,8 +198,10 @@ export default function CRMDashboard() {
         </div>
 
         {/* Revenue Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend (₹ in thousands)</h3>
+        <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-6 shadow-lg hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Revenue Trend (₹ in thousands)
+          </h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={revenueData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -189,33 +227,55 @@ export default function CRMDashboard() {
       </div>
 
       {/* Recent Leads */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-lg hover:shadow-xl transition-shadow">
+      <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-6 shadow-lg hover:shadow-xl transition-shadow">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Recent Leads</h3>
-          <a href="/crm/leads" className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline">
+          <h3 className="text-lg font-semibold text-white">Recent Leads</h3>
+          <a
+            href="/crm/leads"
+            className="text-sm text-[#b87bd1] hover:text-[#a36bc2] font-medium hover:underline"
+          >
             View All
           </a>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Name</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Email</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Type</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Status</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Date</th>
+              <tr className="border-b border-white/6">
+                <th className="text-left py-3 px-4 text-sm font-medium text-white/90">
+                  Name
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-white/90">
+                  Email
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-white/90">
+                  Type
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-white/90">
+                  Status
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-white/90">
+                  Date
+                </th>
               </tr>
             </thead>
             <tbody>
               {recentLeads.map((lead, index) => (
-                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-4 text-sm text-gray-900 font-medium">{lead.name}</td>
-                  <td className="py-3 px-4 text-sm text-gray-600">{lead.email}</td>
+                <tr
+                  key={index}
+                  className="border-b border-white/6 hover:bg-white/4 transition-colors"
+                >
+                  <td className="py-3 px-4 text-sm text-white font-medium">
+                    {lead.name}
+                  </td>
+                  <td className="py-3 px-4 text-sm text-white/75">
+                    {lead.email}
+                  </td>
                   <td className="py-3 px-4 text-sm">
                     <span
                       className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                        lead.type === "Candidate" ? "bg-blue-100 text-blue-700" : "bg-cyan-100 text-cyan-700"
+                        lead.type === "Candidate"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-cyan-100 text-cyan-700"
                       }`}
                     >
                       {lead.type}
@@ -227,14 +287,16 @@ export default function CRMDashboard() {
                         lead.status === "New"
                           ? "bg-yellow-100 text-yellow-700"
                           : lead.status === "Follow-up"
-                            ? "bg-orange-100 text-orange-700"
-                            : "bg-green-100 text-green-700"
+                          ? "bg-orange-100 text-orange-700"
+                          : "bg-green-100 text-green-700"
                       }`}
                     >
                       {lead.status}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-sm text-gray-600">{lead.date}</td>
+                  <td className="py-3 px-4 text-sm text-white/75">
+                    {lead.date}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -242,5 +304,5 @@ export default function CRMDashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }
