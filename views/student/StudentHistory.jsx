@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Calendar,
   Clock,
@@ -18,12 +18,12 @@ import {
   TrendingUp,
   Award,
   FileText,
-  PlayCircle
-} from "lucide-react"
+  PlayCircle,
+} from "lucide-react";
 
 export default function StudentHistory() {
-  const [activeTab, setActiveTab] = useState("applications")
-  const [dateFilter, setDateFilter] = useState("all")
+  const [activeTab, setActiveTab] = useState("applications");
+  const [dateFilter, setDateFilter] = useState("all");
 
   const applicationHistory = [
     {
@@ -40,8 +40,8 @@ export default function StudentHistory() {
         { action: "Applied", date: "2024-01-10", status: "completed" },
         { action: "Screening", date: "2024-01-12", status: "completed" },
         { action: "Technical Round", date: "2024-01-18", status: "upcoming" },
-        { action: "HR Round", date: "2024-01-25", status: "pending" }
-      ]
+        { action: "HR Round", date: "2024-01-25", status: "pending" },
+      ],
     },
     {
       id: 2,
@@ -55,8 +55,8 @@ export default function StudentHistory() {
       matchScore: 88,
       timeline: [
         { action: "Applied", date: "2024-01-12", status: "completed" },
-        { action: "Screening", date: "2024-01-20", status: "upcoming" }
-      ]
+        { action: "Screening", date: "2024-01-20", status: "upcoming" },
+      ],
     },
     {
       id: 3,
@@ -72,10 +72,10 @@ export default function StudentHistory() {
         { action: "Applied", date: "2024-01-08", status: "completed" },
         { action: "Screening", date: "2024-01-10", status: "completed" },
         { action: "Technical Round", date: "2024-01-12", status: "completed" },
-        { action: "Rejected", date: "2024-01-14", status: "completed" }
-      ]
-    }
-  ]
+        { action: "Rejected", date: "2024-01-14", status: "completed" },
+      ],
+    },
+  ];
 
   const courseHistory = [
     {
@@ -87,7 +87,7 @@ export default function StudentHistory() {
       totalLessons: 16,
       lastAccessed: "2024-01-14",
       duration: "8 hours",
-      certificate: true
+      certificate: true,
     },
     {
       id: 2,
@@ -98,7 +98,7 @@ export default function StudentHistory() {
       totalLessons: 20,
       lastAccessed: "2024-01-13",
       duration: "12 hours",
-      certificate: false
+      certificate: false,
     },
     {
       id: 3,
@@ -109,9 +109,9 @@ export default function StudentHistory() {
       totalLessons: 20,
       lastAccessed: "2024-01-12",
       duration: "6 hours",
-      certificate: true
-    }
-  ]
+      certificate: true,
+    },
+  ];
 
   const interviewHistory = [
     {
@@ -123,7 +123,7 @@ export default function StudentHistory() {
       type: "Video Call",
       status: "Upcoming",
       duration: "45 minutes",
-      interviewer: "Sarah Johnson"
+      interviewer: "Sarah Johnson",
     },
     {
       id: 2,
@@ -135,7 +135,7 @@ export default function StudentHistory() {
       status: "Completed",
       duration: "60 minutes",
       interviewer: "Mike Chen",
-      feedback: "Positive - Technical skills were excellent"
+      feedback: "Positive - Technical skills were excellent",
     },
     {
       id: 3,
@@ -147,58 +147,61 @@ export default function StudentHistory() {
       status: "Completed",
       duration: "30 minutes",
       interviewer: "Priya Sharma",
-      feedback: "Rejected - Lack of experience in React Native"
-    }
-  ]
+      feedback: "Rejected - Lack of experience in React Native",
+    },
+  ];
 
   const getStatusColor = (status) => {
+    // return classes tuned for the purple glass theme
     switch (status.toLowerCase()) {
       case "interview":
       case "upcoming":
-        return "text-blue-600 bg-blue-50 border-blue-200"
+        return "text-[#6f2e7a] bg-[#6f2e7a]/10 border-[#6f2e7a]/20";
       case "applied":
-        return "text-orange-600 bg-orange-50 border-orange-200"
+        return "text-[#d97706] bg-[#d97706]/10 border-[#d97706]/20";
       case "completed":
-        return "text-green-600 bg-green-50 border-green-200"
+        return "text-emerald-500 bg-emerald-50 border-emerald-200";
       case "rejected":
-        return "text-red-600 bg-red-50 border-red-200"
+        return "text-red-500 bg-red-50 border-red-200";
       default:
-        return "text-gray-600 bg-gray-50 border-gray-200"
+        return "text-slate-600 bg-slate-50 border-slate-200";
     }
-  }
+  };
 
   const getStatusIcon = (status) => {
     switch (status.toLowerCase()) {
       case "interview":
       case "upcoming":
-        return <Clock4 className="w-4 h-4" />
+        return <Clock4 className="w-4 h-4" />;
       case "applied":
-        return <FileText className="w-4 h-4" />
+        return <FileText className="w-4 h-4" />;
       case "completed":
-        return <CheckCircle className="w-4 h-4" />
+        return <CheckCircle className="w-4 h-4" />;
       case "rejected":
-        return <XCircle className="w-4 h-4" />
+        return <XCircle className="w-4 h-4" />;
       default:
-        return <FileText className="w-4 h-4" />
+        return <FileText className="w-4 h-4" />;
     }
-  }
+  };
 
   return (
-    <div className="p-6 space-y-6 bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 min-h-screen">
+    <div className="min-h-screen p-6 space-y-6 bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent">
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-2xl"></div>
+      <div className="relative overflow-hidden rounded-2xl p-8 bg-white/5 backdrop-blur-md border border-[#803791]/10 text-white shadow-xl">
+        <div className="absolute -right-8 -top-10 w-64 h-64 bg-[#803791]/25 rounded-full blur-3xl"></div>
+        <div className="absolute -left-6 bottom-6 w-48 h-48 bg-[#b87bd1]/12 rounded-full blur-2xl"></div>
         <div className="relative flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg">
-              <Clock className="w-10 h-10" />
+            <div className="w-20 h-20 bg-gradient-to-br from-[#803791] to-[#b87bd1] rounded-2xl flex items-center justify-center shadow-lg">
+              <Clock className="w-10 h-10 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold mb-2 text-white">
                 Activity History
               </h1>
-              <p className="text-white/90 text-lg">Track your job applications, course progress, and interviews</p>
+              <p className="text-white/80 text-lg">
+                Track your job applications, course progress, and interviews
+              </p>
             </div>
           </div>
           <div className="text-right">
@@ -211,47 +214,64 @@ export default function StudentHistory() {
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
-          { label: "Jobs Applied", value: "23", icon: Briefcase, color: "blue", change: "+12%" },
-          { label: "Courses Completed", value: "8", icon: GraduationCap, color: "emerald", change: "+5%" },
-          { label: "Interviews", value: "15", icon: Calendar, color: "purple", change: "+8%" },
-          { label: "Certificates", value: "5", icon: Award, color: "orange", change: "+3%" },
+          {
+            label: "Jobs Applied",
+            value: "23",
+            icon: Briefcase,
+            change: "+12%",
+          },
+          {
+            label: "Courses Completed",
+            value: "8",
+            icon: GraduationCap,
+            change: "+5%",
+          },
+          { label: "Interviews", value: "15", icon: Calendar, change: "+8%" },
+          { label: "Certificates", value: "5", icon: Award, change: "+3%" },
         ].map((stat, index) => (
           <div
             key={index}
-            className="bg-white rounded-2xl border border-slate-200 p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            className="bg-white/5 backdrop-blur-sm border border-[#803791]/8 rounded-2xl p-5 shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 bg-${stat.color}-50 rounded-xl flex items-center justify-center`}>
-                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
+            <div className="flex items-center justify-between mb-3">
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center`}
+                style={{
+                  background: "linear-gradient(135deg,#803791,#b87bd1)",
+                }}
+              >
+                <stat.icon className={`w-6 h-6 text-white`} />
               </div>
-              <div className="flex items-center gap-1 text-green-600 text-sm font-semibold">
+              <div className="flex items-center gap-1 text-emerald-400 text-sm font-semibold">
                 <TrendingUp className="w-4 h-4" />
                 {stat.change}
               </div>
             </div>
-            <div className="text-3xl font-bold text-slate-900 mb-1">{stat.value}</div>
-            <div className="text-sm text-slate-600">{stat.label}</div>
+            <div className="text-2xl md:text-3xl font-bold text-white mb-1">
+              {stat.value}
+            </div>
+            <div className="text-sm text-white/80">{stat.label}</div>
           </div>
         ))}
       </div>
 
       {/* Tabs and Filters */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-2 shadow-lg">
+      <div className="bg-white/5 backdrop-blur-sm border border-[#803791]/8 rounded-2xl p-3 shadow-md">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="flex space-x-2 flex-1">
             {[
               { id: "applications", name: "Job Applications", icon: Briefcase },
               { id: "courses", name: "Course Progress", icon: GraduationCap },
               { id: "interviews", name: "Interviews", icon: Calendar },
-              { id: "documents", name: "Documents", icon: FileText }
+              { id: "documents", name: "Documents", icon: FileText },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-3 px-6 py-4 rounded-xl font-semibold transition-all flex-1 justify-center ${
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg font-semibold transition-all flex-1 justify-center ${
                   activeTab === tab.id
-                    ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/25"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                    ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg"
+                    : "text-white/80 hover:bg-white/5"
                 }`}
               >
                 <tab.icon className="w-5 h-5" />
@@ -259,20 +279,20 @@ export default function StudentHistory() {
               </button>
             ))}
           </div>
-          
+
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
               <input
                 type="text"
                 placeholder="Search history..."
-                className="pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="pl-10 pr-4 py-2 bg-white/5 text-white placeholder-white/60 border border-[#803791]/8 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all"
               />
             </div>
             <select
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              className="px-4 py-2 bg-fuchsia-900 text-white border border-[#803791]/8 rounded-lg focus:ring-2 focus:ring-[#803791]/30 transition-all"
             >
               <option value="all">All Time</option>
               <option value="week">This Week</option>
@@ -289,17 +309,26 @@ export default function StudentHistory() {
           {applicationHistory.map((application) => (
             <div
               key={application.id}
-              className="bg-white rounded-2xl border border-slate-200 p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-md">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(135deg,#803791,#b87bd1)",
+                    }}
+                  >
                     <Briefcase className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-1">{application.jobTitle}</h3>
-                    <p className="text-slate-600 text-lg mb-2">{application.company}</p>
-                    <div className="flex items-center gap-4 text-sm text-slate-500">
+                    <h3 className="text-xl font-bold text-white mb-1">
+                      {application.jobTitle}
+                    </h3>
+                    <p className="text-white/80 text-lg mb-2">
+                      {application.company}
+                    </p>
+                    <div className="flex items-center gap-4 text-sm text-white/70">
                       <span className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
                         {application.location}
@@ -308,48 +337,69 @@ export default function StudentHistory() {
                         <Clock className="w-4 h-4" />
                         {application.type}
                       </span>
-                      <span className="font-semibold text-slate-700">{application.salary}</span>
+                      <span className="font-semibold text-white/90">
+                        {application.salary}
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1 px-3 py-1 bg-green-50 rounded-full border border-green-200">
-                    <span className="text-sm font-semibold text-green-700">{application.matchScore}% Match</span>
+                  <div className="flex items-center gap-1 px-3 py-1 bg-emerald-900/10 rounded-full border border-emerald-800/10">
+                    <span className="text-sm font-semibold text-emerald-300">
+                      {application.matchScore}% Match
+                    </span>
                   </div>
-                  <div className={`px-4 py-2 rounded-full border text-sm font-semibold flex items-center gap-2 ${getStatusColor(application.status)}`}>
+                  <div
+                    className={`px-4 py-2 rounded-full border text-sm font-semibold flex items-center gap-2 ${getStatusColor(
+                      application.status
+                    )}`}
+                  >
                     {getStatusIcon(application.status)}
-                    {application.status}
+                    <span className="capitalize">{application.status}</span>
                   </div>
                 </div>
               </div>
 
               {/* Timeline */}
-              <div className="border-t border-slate-200 pt-6">
-                <h4 className="text-lg font-semibold text-slate-900 mb-4">Application Timeline</h4>
+              <div className="border-t border-[#803791]/6 pt-6">
+                <h4 className="text-lg font-semibold text-white mb-4">
+                  Application Timeline
+                </h4>
                 <div className="flex items-center justify-between relative">
                   {application.timeline.map((step, index) => (
-                    <div key={index} className="flex flex-col items-center text-center flex-1 relative">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 z-10 ${
-                        step.status === "completed" 
-                          ? "bg-green-500 text-white shadow-lg shadow-green-500/25" 
-                          : step.status === "upcoming"
-                          ? "bg-blue-500 text-white shadow-lg shadow-blue-500/25"
-                          : "bg-slate-300 text-slate-600"
-                      }`}>
+                    <div
+                      key={index}
+                      className="flex flex-col items-center text-center flex-1 relative"
+                    >
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 z-10 ${
+                          step.status === "completed"
+                            ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25"
+                            : step.status === "upcoming"
+                            ? "bg-[#803791] text-white shadow-lg shadow-[#803791]/25"
+                            : "bg-slate-500 text-white"
+                        }`}
+                      >
                         {step.status === "completed" ? (
                           <CheckCircle className="w-5 h-5" />
                         ) : step.status === "upcoming" ? (
                           <Clock4 className="w-5 h-5" />
                         ) : (
-                          <div className="w-2 h-2 bg-slate-400 rounded-full"></div>
+                          <div className="w-2 h-2 bg-slate-300 rounded-full"></div>
                         )}
                       </div>
-                      <div className="text-sm font-medium text-slate-900 mb-1">{step.action}</div>
-                      <div className="text-xs text-slate-500">{step.date}</div>
+                      <div className="text-sm font-medium text-white mb-1">
+                        {step.action}
+                      </div>
+                      <div className="text-xs text-white/70">{step.date}</div>
                       {index < application.timeline.length - 1 && (
-                        <div className={`absolute top-5 left-1/2 w-full h-0.5 ${
-                          step.status === "completed" ? "bg-green-500" : "bg-slate-300"
-                        }`}></div>
+                        <div
+                          className={`absolute top-5 left-1/2 w-full h-0.5 ${
+                            step.status === "completed"
+                              ? "bg-emerald-500"
+                              : "bg-white/10"
+                          }`}
+                        ></div>
                       )}
                     </div>
                   ))}
@@ -365,31 +415,40 @@ export default function StudentHistory() {
           {courseHistory.map((course) => (
             <div
               key={course.id}
-              className="bg-white rounded-2xl border border-slate-200 p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-md">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(135deg,#803791,#b87bd1)",
+                    }}
+                  >
                     <GraduationCap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-1">{course.title}</h3>
-                    <p className="text-slate-600 mb-2">{course.category}</p>
-                    <div className="flex items-center gap-4 text-sm text-slate-500">
+                    <h3 className="text-xl font-bold text-white mb-1">
+                      {course.title}
+                    </h3>
+                    <p className="text-white/80 mb-2">{course.category}</p>
+                    <div className="flex items-center gap-4 text-sm text-white/70">
                       <span>{course.duration}</span>
-                      <span>{course.completedLessons}/{course.totalLessons} lessons</span>
+                      <span>
+                        {course.completedLessons}/{course.totalLessons} lessons
+                      </span>
                       <span>Last accessed: {course.lastAccessed}</span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   {course.certificate && (
-                    <button className="px-4 py-2 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 border border-orange-200 hover:border-orange-300">
+                    <button className="px-4 py-2 bg-amber-900/10 hover:bg-amber-900/15 text-amber-300 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 border border-amber-900/10">
                       <Download className="w-4 h-4" />
                       Certificate
                     </button>
                   )}
-                  <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                  <button className="px-4 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
                     <PlayCircle className="w-4 h-4" />
                     Continue
                   </button>
@@ -399,13 +458,20 @@ export default function StudentHistory() {
               {/* Progress Bar */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-700 font-medium">Course Progress</span>
-                  <span className="text-slate-900 font-semibold">{course.progress}%</span>
+                  <span className="text-white font-medium">
+                    Course Progress
+                  </span>
+                  <span className="text-white font-semibold">
+                    {course.progress}%
+                  </span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-3">
+                <div className="w-full bg-white/5 rounded-full h-3">
                   <div
-                    className="bg-gradient-to-r from-emerald-500 to-teal-500 h-3 rounded-full transition-all duration-1000 shadow-lg shadow-emerald-500/25"
-                    style={{ width: `${course.progress}%` }}
+                    className="h-3 rounded-full transition-all duration-1000 shadow-md"
+                    style={{
+                      width: `${course.progress}%`,
+                      background: "linear-gradient(90deg,#803791,#b87bd1)",
+                    }}
                   ></div>
                 </div>
               </div>
@@ -419,17 +485,26 @@ export default function StudentHistory() {
           {interviewHistory.map((interview) => (
             <div
               key={interview.id}
-              className="bg-white rounded-2xl border border-slate-200 p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-md">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(135deg,#803791,#b87bd1)",
+                    }}
+                  >
                     <Calendar className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-1">{interview.position}</h3>
-                    <p className="text-slate-600 text-lg mb-2">{interview.company}</p>
-                    <div className="flex items-center gap-4 text-sm text-slate-500">
+                    <h3 className="text-xl font-bold text-white mb-1">
+                      {interview.position}
+                    </h3>
+                    <p className="text-white/80 text-lg mb-2">
+                      {interview.company}
+                    </p>
+                    <div className="flex items-center gap-4 text-sm text-white/70">
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {interview.date} at {interview.time}
@@ -439,26 +514,32 @@ export default function StudentHistory() {
                     </div>
                   </div>
                 </div>
-                <div className={`px-4 py-2 rounded-full border text-sm font-semibold flex items-center gap-2 ${getStatusColor(interview.status)}`}>
+                <div
+                  className={`px-4 py-2 rounded-full border text-sm font-semibold flex items-center gap-2 ${getStatusColor(
+                    interview.status
+                  )}`}
+                >
                   {getStatusIcon(interview.status)}
-                  {interview.status}
+                  <span className="capitalize">{interview.status}</span>
                 </div>
               </div>
 
               {interview.feedback && (
-                <div className="bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-xl p-4 border border-slate-200">
-                  <h4 className="font-semibold text-slate-900 mb-2">Interview Feedback</h4>
-                  <p className="text-slate-600">{interview.feedback}</p>
+                <div className="bg-white/5 rounded-xl p-4 border border-[#803791]/6">
+                  <h4 className="font-semibold text-white mb-2">
+                    Interview Feedback
+                  </h4>
+                  <p className="text-white/80">{interview.feedback}</p>
                 </div>
               )}
 
               <div className="flex items-center gap-3 mt-4">
-                <button className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                <button className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
                   <Eye className="w-4 h-4" />
                   View Details
                 </button>
                 {interview.status === "Upcoming" && (
-                  <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                  <button className="px-4 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
                     <Video className="w-4 h-4" />
                     Join Interview
                   </button>
@@ -469,5 +550,5 @@ export default function StudentHistory() {
         </div>
       )}
     </div>
-  )
+  );
 }

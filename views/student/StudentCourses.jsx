@@ -16,29 +16,6 @@ import {
   Zap,
 } from "lucide-react";
 
-// Custom scrollbar styles
-const scrollbarStyles = `
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #803791, #b87bd1);
-    border-radius: 10px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #903fa1, #c88be1);
-  }
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #803791 rgba(255, 255, 255, 0.03);
-  }
-`;
-
 export default function StudentCourses() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isPro, setIsPro] = useState(false);
@@ -122,8 +99,6 @@ export default function StudentCourses() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
-
       <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
         {/* Decorative background orbs */}
         <div className="absolute inset-0 pointer-events-none -z-10">
