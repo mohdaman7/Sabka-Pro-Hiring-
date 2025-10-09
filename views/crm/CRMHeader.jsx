@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Bell, Search } from "lucide-react"
+import { Bell, Search } from "lucide-react";
 
 export default function CRMHeader() {
   return (
@@ -25,5 +25,5 @@ export default function CRMHeader() {
         </button>
       </div>
     </header>
-  )
+  );
 }
