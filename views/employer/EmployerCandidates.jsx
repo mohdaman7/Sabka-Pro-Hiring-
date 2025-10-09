@@ -1,383 +1,314 @@
 "use client";
 
-import { useState } from "react";
 import {
-  Search,
-  Filter,
-  Download,
-  Mail,
-  Phone,
+  Users,
   MapPin,
   Briefcase,
-  GraduationCap,
   Star,
-  CheckCircle,
-  XCircle,
-  Eye,
-  Award,
-  TrendingUp,
-  Users,
-  Target,
+  Mail,
+  Phone,
   Calendar,
-  ArrowUp,
-  Sparkles,
-  DollarSign,
+  Download,
+  Filter,
+  Search,
+  ChevronRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
-export default function EmployerCandidates() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterType, setFilterType] = useState("all");
-
+export default function CandidatesPage() {
   const candidates = [
     {
       id: 1,
       name: "Amit Sharma",
-      avatar: "AS",
-      email: "amit.sharma@email.com",
-      phone: "+91 98765 43210",
+      position: "Senior Frontend Developer",
       location: "Mumbai, Maharashtra",
-      experience: "5 years",
-      currentRole: "Senior Frontend Developer",
-      qualification: "B.Tech in Computer Science",
-      skills: ["React", "TypeScript", "Next.js", "Node.js", "AWS"],
+      experience: "5+ years",
+      skills: ["React", "TypeScript", "Next.js", "Node.js"],
       matchScore: 95,
-      availability: "Immediate",
-      expectedSalary: "₹15-18 LPA",
-      isPro: true,
-      rating: 4.8,
-      appliedJobs: 3,
-      status: "Available",
+      status: "New",
+      lastActive: "2 hours ago",
+      avatar: "",
+      salary: "₹12-15 LPA",
+      noticePeriod: "30 days",
+      appliedDate: "2024-01-15",
     },
     {
       id: 2,
       name: "Priya Patel",
-      avatar: "PP",
-      email: "priya.patel@email.com",
-      phone: "+91 98765 43211",
-      location: "Bangalore, Karnataka",
-      experience: "3 years",
-      currentRole: "UI/UX Designer",
-      qualification: "B.Des in Design",
-      skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
+      position: "Backend Developer",
+      location: "Remote",
+      experience: "4+ years",
+      skills: ["Node.js", "Python", "AWS", "MongoDB"],
       matchScore: 88,
-      availability: "2 weeks",
-      expectedSalary: "₹10-12 LPA",
-      isPro: true,
-      rating: 4.6,
-      appliedJobs: 2,
-      status: "Available",
+      status: "Under Review",
+      lastActive: "5 hours ago",
+      avatar: "",
+      salary: "₹10-14 LPA",
+      noticePeriod: "15 days",
+      appliedDate: "2024-01-14",
     },
     {
       id: 3,
       name: "Rahul Kumar",
-      avatar: "RK",
-      email: "rahul.kumar@email.com",
-      phone: "+91 98765 43212",
-      location: "Pune, Maharashtra",
-      experience: "4 years",
-      currentRole: "Backend Developer",
-      qualification: "B.Tech in IT",
-      skills: ["Python", "Django", "PostgreSQL", "Docker", "Kubernetes"],
+      position: "UI/UX Designer",
+      location: "Bangalore, Karnataka",
+      experience: "3+ years",
+      skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
       matchScore: 92,
-      availability: "1 month",
-      expectedSalary: "₹12-15 LPA",
-      isPro: false,
-      rating: 4.7,
-      appliedJobs: 1,
-      status: "Available",
+      status: "Shortlisted",
+      lastActive: "1 day ago",
+      avatar: "",
+      salary: "₹8-12 LPA",
+      noticePeriod: "Immediate",
+      appliedDate: "2024-01-13",
     },
     {
       id: 4,
       name: "Sneha Desai",
-      avatar: "SD",
-      email: "sneha.desai@email.com",
-      phone: "+91 98765 43213",
+      position: "Full Stack Developer",
+      location: "Pune, Maharashtra",
+      experience: "6+ years",
+      skills: ["React", "Node.js", "PostgreSQL", "Docker"],
+      matchScore: 85,
+      status: "New",
+      lastActive: "2 days ago",
+      avatar: "",
+      salary: "₹15-20 LPA",
+      noticePeriod: "60 days",
+      appliedDate: "2024-01-12",
+    },
+    {
+      id: 5,
+      name: "Vikram Singh",
+      position: "DevOps Engineer",
       location: "Hyderabad, Telangana",
-      experience: "6 years",
-      currentRole: "Product Manager",
-      qualification: "MBA + B.Tech",
-      skills: ["Product Strategy", "Agile", "Data Analysis", "Roadmapping"],
+      experience: "4+ years",
+      skills: ["AWS", "Kubernetes", "Terraform", "CI/CD"],
       matchScore: 90,
-      availability: "Immediate",
-      expectedSalary: "₹18-22 LPA",
-      isPro: true,
-      rating: 4.9,
-      appliedJobs: 4,
-      status: "Available",
+      status: "Under Review",
+      lastActive: "3 hours ago",
+      avatar: "",
+      salary: "₹14-18 LPA",
+      noticePeriod: "30 days",
+      appliedDate: "2024-01-11",
+    },
+    {
+      id: 6,
+      name: "Anjali Mehta",
+      position: "Product Manager",
+      location: "Delhi, NCR",
+      experience: "7+ years",
+      skills: ["Product Strategy", "Agile", "Analytics", "Roadmapping"],
+      matchScore: 87,
+      status: "Shortlisted",
+      lastActive: "1 day ago",
+      avatar: "",
+      salary: "₹18-25 LPA",
+      noticePeriod: "45 days",
+      appliedDate: "2024-01-10",
     },
   ];
 
-  const stats = [
-    {
-      label: "Total Candidates",
-      value: candidates.length,
-      icon: Users,
-      gradient: "from-blue-500 to-blue-600",
-      change: "+12 this week",
-      changePositive: true,
-    },
-    {
-      label: "Pro Members",
-      value: candidates.filter((c) => c.isPro).length,
-      icon: Award,
-      gradient: "from-purple-500 to-purple-600",
-      change: "Premium verified",
-      changePositive: true,
-    },
-    {
-      label: "Avg Match Score",
-      value: "91%",
-      icon: Target,
-      gradient: "from-emerald-500 to-emerald-600",
-      change: "High compatibility",
-      changePositive: true,
-    },
-    {
-      label: "Active Applicants",
-      value: candidates.reduce((sum, c) => sum + c.appliedJobs, 0),
-      icon: TrendingUp,
-      gradient: "from-cyan-500 to-cyan-600",
-      change: "Last 30 days",
-      changePositive: true,
-    },
+  const filters = [
+    "All Candidates",
+    "New Applications",
+    "Shortlisted",
+    "Under Review",
+    "Rejected",
   ];
-
-  const filteredCandidates = candidates.filter((candidate) => {
-    const matchesSearch =
-      candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      candidate.currentRole.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      candidate.skills.some((skill) =>
-        skill.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    return matchesSearch;
-  });
 
   return (
-    <div className="p-6 space-y-6 bg-background min-h-screen">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+      {/* Decorative background orbs matching dashboard theme */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(128,55,145,0.08)" }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(184,123,209,0.06)" }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
+          style={{ background: "rgba(240,194,238,0.03)" }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
+      </div>
+
+      {/* Header Section */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Candidate Database
-          </h1>
-          <p className="text-gray-600">
-            Browse and connect with verified professionals
+          <h1 className="text-3xl font-bold text-white mb-2">Candidates</h1>
+          <p className="text-white/80">
+            Browse and manage candidate applications
           </p>
         </div>
-        <button className="px-6 py-3 bg-gradient-blue text-white rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all font-medium flex items-center gap-2">
-          <Download className="w-4 h-4" />
-          Export List
-        </button>
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 bg-white/6 hover:bg-white/10 text-white rounded-lg transition-colors border border-white/12">
+            <Filter className="w-4 h-4" />
+            Filter
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg transition-transform transform hover:-translate-y-0.5 font-medium">
+            <Download className="w-4 h-4" />
+            Export
+          </button>
+        </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <div
-            key={index}
-            className="relative bg-card text-card-foreground rounded-xl border border-border p-6 shadow-lg hover:shadow-2xl transition-all hover:scale-105 overflow-hidden group"
-          >
-            {/* Decorative gradient background */}
-            <div
-              className={`absolute top-0 right-0 w-32 h-32 gradient-blue opacity-8 rounded-full -mr-16 -mt-16 group-hover:opacity-20 transition-opacity`}
-            ></div>
-
-            <div className="relative">
-              <div className="flex items-start justify-between mb-4">
-                <div
-                  className={`w-14 h-14 bg-gradient-to-br ${stat.gradient} rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow`}
-                >
-                  <stat.icon className="w-7 h-7 text-white" />
-                </div>
-                {stat.changePositive && (
-                  <div className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-semibold">
-                    <ArrowUp className="w-3 h-3" />
-                    <span>Live</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <p className="text-4xl font-bold text-card-foreground">
-                  {stat.value}
-                </p>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                  {stat.label}
-                </p>
-                <p className="text-xs text-accent font-medium">{stat.change}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Search and Filters */}
-      <div className="bg-card rounded-xl border border-border p-6 shadow-md">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              placeholder="Search by name, role, or skills..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 py-6 border-border focus:border-primary rounded-xl"
+      {/* Search and Stats */}
+      <div className="grid lg:grid-cols-4 gap-6">
+        <div
+          className="lg:col-span-3 rounded-xl p-4"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+            <input
+              type="text"
+              placeholder="Search candidates by name, skills, or position..."
+              className="w-full pl-10 pr-4 py-2 bg-transparent text-white placeholder-white/60 border-none focus:outline-none"
             />
           </div>
-          <div className="flex gap-3">
-            <button className="px-5 py-3 bg-gradient-blue text-white rounded-xl font-medium shadow-md hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
-              <Filter className="w-4 h-4" />
-              Advanced Filters
-            </button>
-          </div>
         </div>
+        <div
+          className="rounded-xl p-4 text-center"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div className="text-2xl font-bold text-white">
+            {candidates.length}
+          </div>
+          <div className="text-sm text-white/80">Total Candidates</div>
+        </div>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap gap-2">
+        {filters.map((filter, index) => (
+          <button
+            key={index}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              index === 0
+                ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white"
+                : "bg-white/6 hover:bg-white/10 text-white/80"
+            }`}
+          >
+            {filter}
+          </button>
+        ))}
       </div>
 
       {/* Candidates Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {filteredCandidates.map((candidate) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {candidates.map((candidate) => (
           <div
             key={candidate.id}
-            className="relative bg-card rounded-xl border border-border p-6 shadow-lg hover:shadow-2xl transition-all group overflow-hidden"
+            className="rounded-xl p-6 hover:shadow-2xl transition-all hover:-translate-y-1 group cursor-pointer"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
           >
-            {/* Decorative gradient */}
-            <div className="absolute top-0 right-0 w-40 h-40 gradient-blue opacity-6 rounded-full -mr-20 -mt-20 group-hover:opacity-12 transition-opacity"></div>
-
-            <div className="relative">
-              {/* Header */}
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start gap-4">
-                  <div className="relative">
-                    <div className="w-16 h-16 gradient-blue rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-border group-hover:ring-sidebar-ring transition-all">
-                      {candidate.avatar}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-xl font-bold text-card-foreground">
-                        {candidate.name}
-                      </h3>
-                      {candidate.isPro && (
-                        <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0 font-semibold shadow-md">
-                          <Award className="w-3 h-3 mr-1" />
-                          PRO
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-muted-foreground font-medium mb-2">
-                      {candidate.currentRole}
-                    </p>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Briefcase className="w-4 h-4 text-muted-foreground" />
-                        <span>{candidate.experience}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4 text-muted-foreground" />
-                        <span>{candidate.location}</span>
-                      </div>
-                    </div>
-                  </div>
+            {/* Candidate Header */}
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
+                  style={{
+                    background: "linear-gradient(135deg,#803791,#b87bd1)",
+                  }}
+                >
+                  <span className="text-white font-semibold text-sm">
+                    {candidate.name.charAt(0)}
+                  </span>
                 </div>
-                <div className="text-right">
-                  <div className="flex items-center gap-1 text-yellow-500 mb-1">
-                    <Star className="w-5 h-5 fill-current" />
-                    <span className="text-lg font-bold text-card-foreground">
-                      {candidate.rating}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Rating</p>
+                <div>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#b87bd1] transition-colors">
+                    {candidate.name}
+                  </h3>
+                  <p className="text-sm text-white/80">{candidate.position}</p>
                 </div>
               </div>
-
-              {/* Match Score */}
-              <div className="mb-4 p-4 bg-card rounded-xl border border-border shadow-sm">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-muted-foreground">
-                    Match Score
-                  </span>
-                  <span className="text-2xl font-bold text-card-foreground">
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/6">
+                  <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                  <span className="text-xs font-semibold text-white">
                     {candidate.matchScore}%
                   </span>
                 </div>
-                <div className="w-full bg-muted rounded-full h-3 shadow-inner">
-                  <div
-                    className="h-3 rounded-full bg-accent"
-                    style={{ width: `${candidate.matchScore}%` }}
-                  ></div>
-                </div>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    candidate.status === "New"
+                      ? "bg-blue-500/20 text-blue-400"
+                      : candidate.status === "Shortlisted"
+                      ? "bg-emerald-500/20 text-emerald-400"
+                      : "bg-purple-500/20 text-purple-400"
+                  }`}
+                >
+                  {candidate.status}
+                </span>
               </div>
+            </div>
 
-              {/* Skills */}
-              <div className="mb-4">
-                <p className="text-sm font-semibold text-muted-foreground mb-2">
-                  Key Skills
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {candidate.skills.slice(0, 5).map((skill, idx) => (
-                    <Badge
-                      key={idx}
-                      className="bg-accent/10 text-accent border border-border font-medium"
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
+            {/* Candidate Details */}
+            <div className="space-y-3 mb-4">
+              <div className="flex items-center gap-2 text-sm text-white/80">
+                <MapPin className="w-4 h-4 text-white/80" />
+                {candidate.location}
               </div>
-
-              {/* Details Grid */}
-              <div className="grid grid-cols-2 gap-4 mb-4 p-4 bg-card rounded-xl border border-border">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                    <GraduationCap className="w-3 h-3" />
-                    Qualification
-                  </p>
-                  <p className="text-sm font-semibold text-card-foreground">
-                    {candidate.qualification}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    Availability
-                  </p>
-                  <p className="text-sm font-semibold text-card-foreground">
-                    {candidate.availability}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                    <DollarSign className="w-3 h-3" />
-                    Expected Salary
-                  </p>
-                  <p className="text-sm font-semibold text-emerald-600">
-                    {candidate.expectedSalary}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                    <Briefcase className="w-3 h-3" />
-                    Applied Jobs
-                  </p>
-                  <p className="text-sm font-semibold text-card-foreground">
-                    {candidate.appliedJobs} positions
-                  </p>
-                </div>
+              <div className="flex items-center gap-2 text-sm text-white/80">
+                <Briefcase className="w-4 h-4 text-white/80" />
+                {candidate.experience} • {candidate.salary}
               </div>
+              <div className="flex items-center gap-2 text-sm text-white/80">
+                <Calendar className="w-4 h-4 text-white/80" />
+                Notice: {candidate.noticePeriod}
+              </div>
+            </div>
 
-              {/* Actions */}
+            {/* Skills */}
+            <div className="mb-4">
+              <div className="flex flex-wrap gap-1">
+                {candidate.skills.slice(0, 3).map((skill, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80"
+                  >
+                    {skill}
+                  </span>
+                ))}
+                {candidate.skills.length > 3 && (
+                  <span className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80">
+                    +{candidate.skills.length - 3}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/10">
+              <div className="text-xs text-white/60">
+                Applied {candidate.appliedDate}
+              </div>
               <div className="flex gap-2">
-                <button className="flex-1 px-4 py-3 bg-gradient-blue text-white rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all font-medium flex items-center justify-center gap-2">
-                  <Eye className="w-4 h-4" />
-                  View Profile
+                <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                  <Mail className="w-4 h-4 text-white/80" />
                 </button>
-                <button className="px-4 py-3 bg-card border border-border text-muted-foreground rounded-xl shadow-sm hover:shadow-md hover:scale-105 transition-all">
-                  <Mail className="w-4 h-4" />
+                <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                  <Phone className="w-4 h-4 text-white/80" />
                 </button>
-                <button className="px-4 py-3 bg-card border border-border text-muted-foreground rounded-xl shadow-sm hover:shadow-md hover:scale-105 transition-all">
-                  <Phone className="w-4 h-4" />
+                <button className="flex items-center gap-1 px-3 py-1 text-sm bg-white/6 hover:bg-white/10 text-white/80 rounded-lg transition-colors">
+                  View
+                  <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -385,17 +316,18 @@ export default function EmployerCandidates() {
         ))}
       </div>
 
-      {filteredCandidates.length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-16 text-center shadow-md">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Users className="w-10 h-10 text-gray-400" />
-          </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">
-            No candidates found
-          </h3>
-          <p className="text-gray-600">Try adjusting your search criteria</p>
-        </div>
-      )}
+      {/* Load More */}
+      <div className="flex justify-center">
+        <button
+          className="px-6 py-3 rounded-lg border border-white/12 hover:bg-white/10 text-white/80 transition-colors"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+          }}
+        >
+          Load More Candidates
+        </button>
+      </div>
     </div>
   );
 }
