@@ -9,6 +9,7 @@ import {
   Clock,
   DollarSign,
   Plus,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -18,32 +19,24 @@ export default function EmployerDashboard() {
       label: "Active Job Posts",
       value: "12",
       icon: Briefcase,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
       change: "+2 this week",
     },
     {
       label: "Total Applications",
       value: "156",
       icon: FileText,
-      color: "text-cyan-600",
-      bgColor: "bg-cyan-50",
       change: "+23 new",
     },
     {
       label: "Shortlisted",
       value: "34",
       icon: Users,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
       change: "12 pending review",
     },
     {
       label: "Hired",
       value: "8",
       icon: TrendingUp,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-50",
       change: "This month",
     },
   ];
@@ -120,23 +113,48 @@ export default function EmployerDashboard() {
   ];
 
   return (
-    <div className="p-6 space-y-6 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 min-h-screen">
-      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 rounded-xl p-8 text-white shadow-xl">
-        <h1 className="text-3xl font-bold mb-2">
+    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+      {/* Decorative background orbs matching student theme */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(128,55,145,0.08)" }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(184,123,209,0.06)" }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
+          style={{ background: "rgba(240,194,238,0.03)" }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
+      </div>
+
+      {/* Welcome Section - glass style */}
+      <div
+        className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl backdrop-blur-md border border-white/6"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
+          boxShadow: "0 12px 40px rgba(128,55,145,0.12)",
+        }}
+      >
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-2">
           Welcome back, Tech Solutions!
         </h1>
-        <p className="text-white/90 mb-6">
+        <p className="text-white/85 mb-6">
           You have 23 new applications and 12 active job postings
         </p>
         <div className="flex gap-4">
           <Link href="/employer/jobs/new">
-            <button className="flex items-center gap-2 px-6 py-2 bg-white text-blue-600 hover:bg-gray-50 rounded-lg transition-all font-medium shadow-md hover:shadow-lg hover:scale-105">
+            <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg transition-transform transform hover:-translate-y-0.5 font-medium shadow-lg hover:shadow-xl">
               <Plus className="w-4 h-4" />
               Post New Job
             </button>
           </Link>
           <Link href="/employer/candidates">
-            <button className="flex items-center gap-2 px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all font-medium border border-white/20 backdrop-blur-sm hover:scale-105">
+            <button className="flex items-center gap-2 px-6 py-2 bg-white/6 hover:bg-white/10 text-white rounded-lg transition-colors font-medium border border-white/12 hover:scale-105">
               <Users className="w-4 h-4" />
               Browse Candidates
             </button>
@@ -144,26 +162,35 @@ export default function EmployerDashboard() {
         </div>
       </div>
 
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
             <div
               key={index}
-              className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-xl transition-all hover:scale-105 hover:border-blue-300"
+              className="rounded-xl p-6 shadow-lg transition-all hover:-translate-y-1 group"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
             >
               <div className="flex items-center justify-between mb-4">
                 <div
-                  className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center shadow-sm`}
+                  className="w-12 h-12 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-all duration-300"
+                  style={{
+                    background: "linear-gradient(135deg,#803791,#b87bd1)",
+                  }}
                 >
-                  <Icon className={`w-6 h-6 ${stat.color}`} />
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">
+              <div className="text-3xl font-bold text-white mb-1">
                 {stat.value}
               </div>
-              <div className="text-sm text-gray-600 mb-1">{stat.label}</div>
-              <div className="text-xs text-cyan-600 font-medium">
+              <div className="text-sm text-white/80 mb-1">{stat.label}</div>
+              <div className="text-xs text-[#b87bd1] font-medium">
                 {stat.change}
               </div>
             </div>
@@ -171,67 +198,87 @@ export default function EmployerDashboard() {
         })}
       </div>
 
+      {/* Main Content Grid */}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Active Jobs */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-shadow">
+        <div
+          className="lg:col-span-2 rounded-xl p-6 shadow-xl"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-white">
               Active Job Postings
             </h2>
             <a
               href="/employer/jobs"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
+              className="text-sm text-[#b87bd1] hover:underline flex items-center gap-1"
             >
               View All
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
           <div className="space-y-4">
             {activeJobs.map((job) => (
               <div
                 key={job.id}
-                className="p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all"
+                className="p-4 rounded-lg hover:shadow-2xl transition-all hover:-translate-y-0.5"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
+                  border: "1px solid rgba(255,255,255,0.04)",
+                }}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">
+                    <h3 className="font-semibold text-white mb-1">
                       {job.title}
                     </h3>
-                    <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+                    <div className="flex flex-wrap gap-3 text-sm text-white/80">
                       <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
+                        <MapPin className="w-4 h-4 text-white/80" />
                         {job.location}
                       </div>
                       <div className="flex items-center gap-1">
-                        <Briefcase className="w-4 h-4" />
+                        <Briefcase className="w-4 h-4 text-white/80" />
                         {job.type}
                       </div>
                       <div className="flex items-center gap-1">
-                        <DollarSign className="w-4 h-4" />
+                        <DollarSign className="w-4 h-4 text-white/80" />
                         {job.salary}
                       </div>
                     </div>
                   </div>
-                  <span className="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-medium">
+                  <span
+                    className="px-2 py-1 rounded-full text-xs font-medium"
+                    style={{
+                      background: "rgba(184,123,209,0.08)",
+                      color: "#b87bd1",
+                    }}
+                  >
                     {job.status}
                   </span>
                 </div>
-                <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                  <div className="flex gap-4 text-sm text-gray-600">
+                <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                  <div className="flex gap-4 text-sm text-white/80">
                     <span>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-white">
                         {job.applications}
                       </span>{" "}
                       applications
                     </span>
                     <span>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-white">
                         {job.views}
                       </span>{" "}
                       views
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-gray-500">
-                    <Clock className="w-4 h-4" />
+                  <div className="flex items-center gap-1 text-sm text-white/60">
+                    <Clock className="w-4 h-4 text-white/80" />
                     {job.postedDate}
                   </div>
                 </div>
@@ -241,53 +288,70 @@ export default function EmployerDashboard() {
         </div>
 
         {/* Recent Applications */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        <div
+          className="rounded-xl p-6 shadow-xl"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <h2 className="text-xl font-semibold text-white mb-6">
             Recent Applications
           </h2>
           <div className="space-y-4">
             {recentApplications.map((application) => (
               <div
                 key={application.id}
-                className="p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all"
+                className="p-4 rounded-lg hover:shadow-2xl transition-all hover:-translate-y-0.5"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
+                  border: "1px solid rgba(255,255,255,0.04)",
+                }}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center shadow-sm">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+                      style={{
+                        background: "linear-gradient(135deg,#803791,#b87bd1)",
+                      }}
+                    >
                       <span className="text-white font-semibold text-sm">
                         {application.candidateName.charAt(0)}
                       </span>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-sm">
+                      <h3 className="font-semibold text-white text-sm">
                         {application.candidateName}
                       </h3>
-                      <p className="text-xs text-gray-600">
+                      <p className="text-xs text-white/80">
                         {application.position}
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-600">Match:</span>
-                    <span className="text-xs font-semibold text-cyan-600">
+                    <span className="text-xs text-white/80">Match:</span>
+                    <span className="text-xs font-semibold text-[#b87bd1]">
                       {application.matchScore}%
                     </span>
                   </div>
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       application.status === "New"
-                        ? "bg-blue-50 text-blue-600"
+                        ? "bg-blue-500/20 text-blue-400"
                         : application.status === "Shortlisted"
-                        ? "bg-emerald-50 text-emerald-600"
-                        : "bg-purple-50 text-purple-600"
+                        ? "bg-emerald-500/20 text-emerald-400"
+                        : "bg-purple-500/20 text-purple-400"
                     }`}
                   >
                     {application.status}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-white/60 mt-2">
                   {application.appliedDate}
                 </p>
               </div>
@@ -296,35 +360,68 @@ export default function EmployerDashboard() {
         </div>
       </div>
 
+      {/* Quick Actions */}
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-400 hover:shadow-xl transition-all cursor-pointer hover:scale-105">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
+        <div
+          className="rounded-xl p-6 hover:shadow-xl transition-all cursor-pointer hover:-translate-y-1 group"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div
+            className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 shadow-md transform group-hover:scale-110 transition-all duration-300"
+            style={{
+              background: "linear-gradient(135deg,#803791,#b87bd1)",
+            }}
+          >
             <Briefcase className="w-6 h-6 text-white" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Post a New Job</h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="font-semibold text-white mb-2">Post a New Job</h3>
+          <p className="text-sm text-white/80">
             Create and publish a new job opening
           </p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-cyan-400 hover:shadow-xl transition-all cursor-pointer hover:scale-105">
-          <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
+        <div
+          className="rounded-xl p-6 hover:shadow-xl transition-all cursor-pointer hover:-translate-y-1 group"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div
+            className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 shadow-md transform group-hover:scale-110 transition-all duration-300"
+            style={{
+              background: "linear-gradient(135deg,#803791,#b87bd1)",
+            }}
+          >
             <Users className="w-6 h-6 text-white" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">
-            Browse Candidates
-          </h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="font-semibold text-white mb-2">Browse Candidates</h3>
+          <p className="text-sm text-white/80">
             Search verified candidate profiles
           </p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-purple-400 hover:shadow-xl transition-all cursor-pointer hover:scale-105">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-4 shadow-md">
+        <div
+          className="rounded-xl p-6 hover:shadow-xl transition-all cursor-pointer hover:-translate-y-1 group"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div
+            className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 shadow-md transform group-hover:scale-110 transition-all duration-300"
+            style={{
+              background: "linear-gradient(135deg,#803791,#b87bd1)",
+            }}
+          >
             <FileText className="w-6 h-6 text-white" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">
-            Review Applications
-          </h3>
-          <p className="text-sm text-gray-600">Manage pending applications</p>
+          <h3 className="font-semibold text-white mb-2">Review Applications</h3>
+          <p className="text-sm text-white/80">Manage pending applications</p>
         </div>
       </div>
     </div>
