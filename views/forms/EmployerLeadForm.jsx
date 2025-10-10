@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Upload,
   Loader2,
@@ -16,258 +17,148 @@ import {
   Briefcase,
   Globe,
   Users,
-  Calendar,
 } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+// Redux imports
+import {
+  updateField,
+  updateFileField,
+  setErrors,
+  setStep,
+  setTimer,
+  decrementTimer,
+  clearServerError,
+} from "@/src/store/slices/employerSlice";
+import {
+  sendOTP,
+  verifyOTP,
+  registerEmployer,
+} from "@/src/store/slices/employerSlice";
+import {
+  validateStep1,
+  validateStep3,
+  validateFile,
+} from "@/src/store/utils/validation";
+
+// Constants
+const companySizes = [
+  "1-10",
+  "11-50",
+  "51-200",
+  "201-500",
+  "501-1000",
+  "1000+",
+];
+const industries = [
+  "Technology",
+  "Healthcare",
+  "Finance",
+  "Education",
+  "Manufacturing",
+  "Retail",
+  "Hospitality",
+  "Construction",
+  "Transportation",
+  "Media & Entertainment",
+  "Real Estate",
+  "Other",
+];
 
 export default function EmployerLeadForm({ onSuccess }) {
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [timer, setTimer] = useState(0);
+  const dispatch = useDispatch();
+  const employerState = useSelector((state) => state.employer);
 
-  const [formData, setFormData] = useState({
-    // Basic Information
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    otp: "",
-    termsAccepted: false,
+  const {
+    formData,
+    step,
+    loading,
+    serverError,
+    otpSent,
+    timer,
+    errors,
+    isRegistered,
+  } = employerState;
 
-    // Company Information (NEW FIELDS)
-    position: "",
-    companyName: "",
-    companyIndustry: "",
-    companySize: "",
-    companyWebsite: "",
-    companyDescription: "",
+  // Timer effect
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        dispatch(decrementTimer());
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timer, dispatch]);
 
-    // Hiring Type & Location
-    hiringType: "company",
-    location: "",
-
-    // KYC Information
-    kycDocument: null,
-    kycType: "aadhar",
-    kycNumber: "",
-  });
-
-  const [errors, setErrors] = useState({});
+  // Handle success registration
+  useEffect(() => {
+    if (isRegistered && employerState.registrationResult && onSuccess) {
+      onSuccess(employerState.registrationResult.formData);
+    }
+  }, [isRegistered, employerState.registrationResult, onSuccess]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    // Update form data
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-
-    // Clear the specific error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-
-    // Clear server error when user makes any change
-    if (serverError) {
-      setServerError("");
-    }
+    dispatch(
+      updateField({
+        field: name,
+        value: type === "checkbox" ? checked : value,
+      })
+    );
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const allowedTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "application/pdf",
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        setErrors((prev) => ({
-          ...prev,
-          kycDocument: "Please upload JPG, PNG, or PDF file",
-        }));
+      const fileError = validateFile(file);
+      if (fileError) {
+        dispatch(setErrors({ ...errors, kycDocument: fileError }));
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        setErrors((prev) => ({
-          ...prev,
-          kycDocument: "File size must be less than 5MB",
-        }));
-        return;
-      }
-      setFormData((prev) => ({ ...prev, kycDocument: file }));
-      setErrors((prev) => ({ ...prev, kycDocument: "" }));
+      dispatch(updateFileField({ field: "kycDocument", file }));
     }
   };
 
-  const validateStep1 = () => {
-    const newErrors = {};
+  const handleSendOTP = async () => {
+    const step1Errors = validateStep1(formData);
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
-      newErrors.phone = "Invalid phone number (10 digits required)";
-    }
-
-    if (!formData.termsAccepted) {
-      newErrors.termsAccepted = "You must accept the terms and conditions";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateStep3 = () => {
-    const newErrors = {};
-
-    // Company Information Validation with clear error messages
-    if (!formData.position || !formData.position.trim()) {
-      newErrors.position = "Your job position/title is required";
-    }
-
-    if (!formData.companyName || !formData.companyName.trim()) {
-      newErrors.companyName = "Company name is required";
-    }
-
-    if (!formData.companyIndustry || !formData.companyIndustry.trim()) {
-      newErrors.companyIndustry = "Please select your company's industry";
-    }
-
-    if (!formData.companySize) {
-      newErrors.companySize = "Company size is required";
-    }
-
-    // Hiring Type & Location
-    if (!formData.hiringType) {
-      newErrors.hiringType = "Please select hiring type";
-    }
-
-    if (!formData.location.trim()) {
-      newErrors.location = "Location is required";
-    }
-
-    // KYC Information
-    if (!formData.kycNumber.trim()) {
-      newErrors.kycNumber = "KYC document number is required";
-    }
-
-    if (!formData.kycDocument) {
-      newErrors.kycDocument = "KYC document upload is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const sendOTP = async () => {
-    if (!validateStep1()) return;
-
-    setLoading(true);
-    setServerError("");
-
-    try {
-      const response = await fetch(`${API_URL}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: formData.phone,
-          email: formData.email,
-        }),
-      });
-
-      if (response.status === 404) {
-        console.log("OTP sent (mock):", "123456");
-        setOtpSent(true);
-        setStep(2);
-        setTimer(60);
-        return;
-      }
-
-      const data = await response.json();
-
-      if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Failed to send OTP");
-      }
-
-      setOtpSent(true);
-      setStep(2);
-      setTimer(60);
-    } catch (err) {
-      setServerError(err?.message || "Failed to send OTP. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const verifyOTP = async () => {
-    if (!formData.otp.trim() || formData.otp.length !== 6) {
-      setErrors({ otp: "Please enter valid 6-digit OTP" });
+    if (Object.keys(step1Errors).length > 0) {
+      dispatch(setErrors(step1Errors));
       return;
     }
 
-    setLoading(true);
-    setServerError("");
+    dispatch(
+      sendOTP({
+        phone: formData.phone,
+        email: formData.email,
+      })
+    );
+  };
 
-    try {
-      const response = await fetch(`${API_URL}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: formData.phone,
-          otp: formData.otp,
-        }),
-      });
-
-      if (response.status === 404) {
-        console.log("OTP verified (mock)");
-        setStep(3);
-        return;
-      }
-
-      const data = await response.json();
-
-      if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Invalid OTP");
-      }
-
-      setStep(3);
-    } catch (err) {
-      setServerError(err?.message || "Invalid OTP. Please try again.");
-    } finally {
-      setLoading(false);
+  const handleVerifyOTP = async () => {
+    if (!formData.otp.trim() || formData.otp.length !== 6) {
+      dispatch(setErrors({ otp: "Please enter valid 6-digit OTP" }));
+      return;
     }
+
+    dispatch(
+      verifyOTP({
+        phone: formData.phone,
+        otp: formData.otp,
+      })
+    );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all required fields before submission
-    const isStep3Valid = validateStep3();
-    if (!isStep3Valid) {
-      setServerError(
-        "Please fill in all required company information and KYC details"
-      );
+    const step3Errors = validateStep3(formData);
+
+    if (Object.keys(step3Errors).length > 0) {
+      dispatch(setErrors(step3Errors));
+
       // Scroll to the first error if any
-      const firstErrorField = Object.keys(errors)[0];
+      const firstErrorField = Object.keys(step3Errors)[0];
       if (firstErrorField) {
         const element = document.querySelector(`[name="${firstErrorField}"]`);
         element?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -275,139 +166,21 @@ export default function EmployerLeadForm({ onSuccess }) {
       return;
     }
 
-    setServerError("");
-    setLoading(true);
+    dispatch(registerEmployer(formData));
+  };
 
-    try {
-      const tempPassword = `Temp@${Math.random().toString(36).slice(-8)}`;
-
-      // Register employer with required position and company fields
-      const registerResponse = await fetch(`${API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: tempPassword,
-          role: "employer",
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
-          // Add required employer fields
-          position: formData.position,
-          company: {
-            name: formData.companyName,
-            description: formData.companyDescription,
-            industry: formData.companyIndustry,
-            size: formData.companySize,
-            website: formData.companyWebsite,
-          },
-        }),
-      });
-
-      const registerData = await registerResponse.json();
-
-      if (!registerResponse.ok || !registerData?.success) {
-        throw new Error(registerData?.message || "Registration failed");
-      }
-
-      if (registerData?.token) {
-        try {
-          localStorage.setItem("token", registerData.token);
-          localStorage.setItem("user", JSON.stringify(registerData.data));
-        } catch {}
-      }
-
-      // Update employer profile with additional details
-      if (registerData.token) {
-        const profileResponse = await fetch(`${API_URL}/api/employer/profile`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${registerData.token}`,
-          },
-          body: JSON.stringify({
-            contact: {
-              phone: formData.phone,
-              address: {
-                city: formData.location,
-                country: "India",
-              },
-            },
-            // Store KYC info in verificationDocuments
-            verificationDocuments: [
-              {
-                type: "other",
-                filename: formData.kycDocument?.name || "kyc_document",
-                url: "pending_upload",
-              },
-            ],
-            hiringNeeds: {
-              typesOfRoles: [],
-              locations: [formData.location],
-            },
-            bio:
-              formData.companyDescription ||
-              `Registered via lead form - ${formData.hiringType} hiring`,
-            hiringGoals: "Looking to hire talented professionals",
-          }),
-        });
-
-        const profileData = await profileResponse.json();
-
-        if (!profileResponse.ok || !profileData?.success) {
-          console.warn("Profile update warning:", profileData?.message);
-        }
-      }
-
-      // Call success callback
-      if (onSuccess) {
-        onSuccess({
-          ...formData,
-          userId: registerData.data?.id || registerData.data?._id,
-          token: registerData.token,
-        });
-      }
-    } catch (err) {
-      setServerError(err?.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+  const handleBack = () => {
+    if (step > 1) {
+      dispatch(setStep(step - 1));
+      dispatch(clearServerError());
     }
   };
 
-  useState(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-      }, 1000);
-      return () => clearInterval(interval);
+  const handleResendOTP = () => {
+    if (timer === 0) {
+      handleSendOTP();
     }
-  }, [timer]);
-
-  // Company size options
-  const companySizes = [
-    "1-10",
-    "11-50",
-    "51-200",
-    "201-500",
-    "501-1000",
-    "1000+",
-  ];
-
-  // Industry options
-  const industries = [
-    "Technology",
-    "Healthcare",
-    "Finance",
-    "Education",
-    "Manufacturing",
-    "Retail",
-    "Hospitality",
-    "Construction",
-    "Transportation",
-    "Media & Entertainment",
-    "Real Estate",
-    "Other",
-  ];
+  };
 
   return (
     <motion.div
@@ -603,7 +376,7 @@ export default function EmployerLeadForm({ onSuccess }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="button"
-              onClick={sendOTP}
+              onClick={handleSendOTP}
               disabled={loading}
               className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
@@ -656,7 +429,7 @@ export default function EmployerLeadForm({ onSuccess }) {
               ) : (
                 <button
                   type="button"
-                  onClick={sendOTP}
+                  onClick={handleResendOTP}
                   className="text-primary hover:underline"
                 >
                   Resend OTP
@@ -670,7 +443,7 @@ export default function EmployerLeadForm({ onSuccess }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="button"
-              onClick={verifyOTP}
+              onClick={handleVerifyOTP}
               disabled={loading}
               className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
@@ -689,7 +462,7 @@ export default function EmployerLeadForm({ onSuccess }) {
 
             <button
               type="button"
-              onClick={() => setStep(1)}
+              onClick={handleBack}
               className="w-full text-sm text-muted-foreground hover:text-foreground"
             >
               ← Back to Basic Info
@@ -1008,7 +781,7 @@ export default function EmployerLeadForm({ onSuccess }) {
 
             <button
               type="button"
-              onClick={() => setStep(2)}
+              onClick={handleBack}
               className="w-full text-sm text-muted-foreground hover:text-foreground"
             >
               ← Back to OTP Verification
