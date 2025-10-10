@@ -1,32 +1,24 @@
 import { Router } from "express";
+import * as employerController from "../controllers/employerController.js";
 import { authenticate, authorize } from "../middleware/auth.js";
-import {
-  getEmployerProfile,
-  updateEmployerProfile,
-  getEmployerById,
-  getAllEmployers,
-} from "../controllers/employerController.js";
 
 const router = Router();
 
-// Get employer profile
-router.get(
-  "/profile",
-  authenticate,
-  authorize(["employer"]),
-  getEmployerProfile
-);
+// All routes require authentication
+router.use(authenticate);
 
-// Update employer profile
-router.put(
-  "/profile",
-  authenticate,
-  authorize(["employer"]),
-  updateEmployerProfile
-);
+// Optional: Only allow employers to access these routes
+// router.use(authorize(['employer']));
 
-// Public routes (optional - for employer listings)
-router.get("/", getAllEmployers);
-router.get("/:id", getEmployerById);
+// Employer profile routes
+router.get("/profile", employerController.getEmployerProfile);
+router.get("/dashboard", employerController.getEmployerDashboard);
+router.post("/complete-profile", employerController.completeEmployerProfile); // For initial setup
+router.put("/profile", employerController.updateEmployerProfile); // For partial updates
+router.put("/hiring-preferences", employerController.updateHiringPreferences);
+
+// Public routes (optional) - remove authentication for these
+router.get("/public/:id", employerController.getEmployerById);
+router.get("/public", employerController.getAllEmployers);
 
 export default router;

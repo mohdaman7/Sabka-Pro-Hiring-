@@ -24,14 +24,54 @@ const verifyOTPSchema = z.object({
   otp: z.string().length(6),
 });
 
-const registerSchema = z.object({
+// Base registration schema
+const baseRegisterSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.enum(["student", "employer"]).default("student"),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   phone: z.string().optional(),
 });
+
+// Student-specific schema
+const studentRegisterSchema = baseRegisterSchema.extend({
+  role: z.literal("student"),
+  education: z
+    .array(
+      z.object({
+        institution: z.string(),
+        degree: z.string(),
+        field: z.string(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+      })
+    )
+    .optional(),
+  skills: z.array(z.string()).optional(),
+});
+
+// Employer-specific schema
+const employerRegisterSchema = baseRegisterSchema.extend({
+  role: z.literal("employer"),
+  position: z.string().min(1, "Position is required"),
+  department: z.string().optional(),
+  company: z.object({
+    name: z.string().min(1, "Company name is required"),
+    description: z.string().optional(),
+    industry: z.string().optional(),
+    size: z
+      .enum(["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"])
+      .optional(),
+    website: z.string().optional(),
+    foundedYear: z.number().optional(),
+  }),
+});
+
+// Combined register schema using discriminated union
+const registerSchema = z.discriminatedUnion("role", [
+  studentRegisterSchema,
+  employerRegisterSchema,
+]);
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -151,18 +191,25 @@ export async function verifyOTP(req, res, next) {
   }
 }
 
-// Register
+// Register (Combined endpoint)
 export async function register(req, res, next) {
   try {
+    console.log("📝 Register request:", req.body);
+
     const parsed = registerSchema.parse(req.body);
 
-    // const existing = await UserModel.findOne({ email: parsed.email });
-    // if (existing)
-    //   return res
-    //     .status(409)
-    //     .json({ success: false, message: "Email already registered" });
+    // Check if user already exists
+    const existingUser = await UserModel.findOne({ email: parsed.email });
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "Email already registered",
+      });
+    }
 
     const passwordHash = await bcrypt.hash(parsed.password, 10);
+
+    // Create user
     const user = await UserModel.create({
       email: parsed.email,
       passwordHash,
@@ -177,10 +224,43 @@ export async function register(req, res, next) {
       profile = await StudentModel.create({
         userId: user._id,
         phone: parsed.phone,
-        phoneVerified: true, // Assuming OTP was verified
+        phoneVerified: true,
+        education: parsed.education || [],
+        skills: parsed.skills || [],
       });
+
+      console.log("🎓 Student profile created:", profile._id);
+      // In the register function, modify the employer creation part:
     } else if (parsed.role === "employer") {
-      profile = await EmployerModel.create({ userId: user._id });
+      // Create employer with basic info - position and company are optional now
+      const employerData = {
+        userId: user._id,
+        contact: {
+          phone: parsed.phone || "",
+        },
+        profileCompletion: 10, // Basic registration complete
+      };
+
+      // Add position if provided
+      if (parsed.position) {
+        employerData.position = parsed.position;
+      }
+
+      // Add company if provided
+      if (parsed.company) {
+        employerData.company = {
+          name: parsed.company.name || "",
+          description: parsed.company.description || "",
+          industry: parsed.company.industry || "",
+          size: parsed.company.size || "",
+          website: parsed.company.website || "",
+          foundedYear: parsed.company.foundedYear || null,
+        };
+      }
+
+      profile = await EmployerModel.create(employerData);
+
+      console.log("💼 Employer profile created:", profile._id);
     }
 
     // Send email alert to admin
@@ -188,17 +268,159 @@ export async function register(req, res, next) {
       console.error("❌ Failed to send registration alert:", err)
     );
 
-    const token = jwt.sign({ id: user._id, role: user.role }, env.jwtSecret, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+      },
+      env.jwtSecret,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.status(201).json({
       success: true,
       data: serializeUser(user),
       token,
+      profileId: profile?._id,
       message: "Registration successful. Please complete your profile.",
     });
   } catch (err) {
+    console.error("❌ Registration error:", err);
+    next(err);
+  }
+}
+
+// Separate registration functions (alternative approach)
+export async function registerStudent(req, res, next) {
+  try {
+    console.log("🎓 Student registration request:", req.body);
+
+    const parsed = studentRegisterSchema.parse(req.body);
+
+    const existingUser = await UserModel.findOne({ email: parsed.email });
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "Email already registered",
+      });
+    }
+
+    const passwordHash = await bcrypt.hash(parsed.password, 10);
+
+    const user = await UserModel.create({
+      email: parsed.email,
+      passwordHash,
+      role: "student",
+      firstName: parsed.firstName,
+      lastName: parsed.lastName,
+    });
+
+    const studentProfile = await StudentModel.create({
+      userId: user._id,
+      phone: parsed.phone,
+      phoneVerified: true,
+      education: parsed.education || [],
+      skills: parsed.skills || [],
+    });
+
+    // Send email alert to admin
+    sendRegistrationAlert(user).catch((err) =>
+      console.error("❌ Failed to send registration alert:", err)
+    );
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+      },
+      env.jwtSecret,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.status(201).json({
+      success: true,
+      data: serializeUser(user),
+      token,
+      profileId: studentProfile._id,
+      message: "Student registration successful.",
+    });
+  } catch (err) {
+    console.error("❌ Student registration error:", err);
+    next(err);
+  }
+}
+
+export async function registerEmployer(req, res, next) {
+  try {
+    console.log("💼 Employer registration request:", req.body);
+
+    const parsed = employerRegisterSchema.parse(req.body);
+
+    const existingUser = await UserModel.findOne({ email: parsed.email });
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "Email already registered",
+      });
+    }
+
+    const passwordHash = await bcrypt.hash(parsed.password, 10);
+
+    const user = await UserModel.create({
+      email: parsed.email,
+      passwordHash,
+      role: "employer",
+      firstName: parsed.firstName,
+      lastName: parsed.lastName,
+    });
+
+    const employerProfile = await EmployerModel.create({
+      userId: user._id,
+      position: parsed.position,
+      department: parsed.department || "",
+      company: {
+        name: parsed.company.name,
+        description: parsed.company.description || "",
+        industry: parsed.company.industry || "",
+        size: parsed.company.size || "",
+        website: parsed.company.website || "",
+        foundedYear: parsed.company.foundedYear || null,
+      },
+      contact: {
+        phone: parsed.phone || "",
+      },
+      profileCompletion: 30,
+    });
+
+    // Send email alert to admin
+    sendRegistrationAlert(user).catch((err) =>
+      console.error("❌ Failed to send registration alert:", err)
+    );
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+      },
+      env.jwtSecret,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.status(201).json({
+      success: true,
+      data: serializeUser(user),
+      token,
+      profileId: employerProfile._id,
+      message: "Employer registration successful.",
+    });
+  } catch (err) {
+    console.error("❌ Employer registration error:", err);
     next(err);
   }
 }
@@ -223,7 +445,11 @@ export async function login(req, res, next) {
       expiresIn: "7d",
     });
 
-    res.json({ success: true, data: serializeUser(user), token });
+    res.json({
+      success: true,
+      data: serializeUser(user),
+      token,
+    });
   } catch (err) {
     next(err);
   }

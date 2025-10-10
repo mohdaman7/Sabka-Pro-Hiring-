@@ -13,6 +13,10 @@ import {
   Building,
   Shield,
   CheckCircle,
+  Briefcase,
+  Globe,
+  Users,
+  Calendar,
 } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
@@ -33,8 +37,16 @@ export default function EmployerLeadForm({ onSuccess }) {
     otp: "",
     termsAccepted: false,
 
+    // Company Information (NEW FIELDS)
+    position: "",
+    companyName: "",
+    companyIndustry: "",
+    companySize: "",
+    companyWebsite: "",
+    companyDescription: "",
+
     // Hiring Type & Location
-    hiringType: "company", // "company" or "personal"
+    hiringType: "company",
     location: "",
 
     // KYC Information
@@ -47,13 +59,21 @@ export default function EmployerLeadForm({ onSuccess }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    // Update form data
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
 
+    // Clear the specific error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+
+    // Clear server error when user makes any change
+    if (serverError) {
+      setServerError("");
     }
   };
 
@@ -119,6 +139,24 @@ export default function EmployerLeadForm({ onSuccess }) {
   const validateStep3 = () => {
     const newErrors = {};
 
+    // Company Information Validation with clear error messages
+    if (!formData.position || !formData.position.trim()) {
+      newErrors.position = "Your job position/title is required";
+    }
+
+    if (!formData.companyName || !formData.companyName.trim()) {
+      newErrors.companyName = "Company name is required";
+    }
+
+    if (!formData.companyIndustry || !formData.companyIndustry.trim()) {
+      newErrors.companyIndustry = "Please select your company's industry";
+    }
+
+    if (!formData.companySize) {
+      newErrors.companySize = "Company size is required";
+    }
+
+    // Hiring Type & Location
     if (!formData.hiringType) {
       newErrors.hiringType = "Please select hiring type";
     }
@@ -127,6 +165,7 @@ export default function EmployerLeadForm({ onSuccess }) {
       newErrors.location = "Location is required";
     }
 
+    // KYC Information
     if (!formData.kycNumber.trim()) {
       newErrors.kycNumber = "KYC document number is required";
     }
@@ -221,7 +260,20 @@ export default function EmployerLeadForm({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateStep3()) return;
+    // Validate all required fields before submission
+    const isStep3Valid = validateStep3();
+    if (!isStep3Valid) {
+      setServerError(
+        "Please fill in all required company information and KYC details"
+      );
+      // Scroll to the first error if any
+      const firstErrorField = Object.keys(errors)[0];
+      if (firstErrorField) {
+        const element = document.querySelector(`[name="${firstErrorField}"]`);
+        element?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
+    }
 
     setServerError("");
     setLoading(true);
@@ -229,7 +281,7 @@ export default function EmployerLeadForm({ onSuccess }) {
     try {
       const tempPassword = `Temp@${Math.random().toString(36).slice(-8)}`;
 
-      // Register employer
+      // Register employer with required position and company fields
       const registerResponse = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -239,6 +291,16 @@ export default function EmployerLeadForm({ onSuccess }) {
           role: "employer",
           firstName: formData.firstName,
           lastName: formData.lastName,
+          phone: formData.phone,
+          // Add required employer fields
+          position: formData.position,
+          company: {
+            name: formData.companyName,
+            description: formData.companyDescription,
+            industry: formData.companyIndustry,
+            size: formData.companySize,
+            website: formData.companyWebsite,
+          },
         }),
       });
 
@@ -255,59 +317,54 @@ export default function EmployerLeadForm({ onSuccess }) {
         } catch {}
       }
 
-      // Update employer profile with the new structure
-      const profileResponse = await fetch(`${API_URL}/api/employer/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${registerData.token}`,
-        },
-        body: JSON.stringify({
-          phone: formData.phone,
-          company: {
-            name:
-              formData.hiringType === "company"
-                ? `${formData.firstName} ${formData.lastName}'s Company`
-                : `${formData.firstName} ${formData.lastName} (Personal)`,
-            // Set default values for required fields
-            industry: "General",
-            size: "1-10",
+      // Update employer profile with additional details
+      if (registerData.token) {
+        const profileResponse = await fetch(`${API_URL}/api/employer/profile`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${registerData.token}`,
           },
-          position: formData.hiringType === "company" ? "HR Manager" : "Owner",
-          contact: {
-            phone: formData.phone,
-            address: {
-              city: formData.location,
+          body: JSON.stringify({
+            contact: {
+              phone: formData.phone,
+              address: {
+                city: formData.location,
+                country: "India",
+              },
             },
-          },
-          // Store KYC info in verificationDocuments
-          verificationDocuments: [
-            {
-              type: "other",
-              filename: formData.kycDocument?.name || "kyc_document",
-              // In a real app, you'd upload the file and get a URL
-              url: "pending_upload",
+            // Store KYC info in verificationDocuments
+            verificationDocuments: [
+              {
+                type: "other",
+                filename: formData.kycDocument?.name || "kyc_document",
+                url: "pending_upload",
+              },
+            ],
+            hiringNeeds: {
+              typesOfRoles: [],
+              locations: [formData.location],
             },
-          ],
-          kycInfo: {
-            type: formData.kycType,
-            number: formData.kycNumber,
-            verified: false,
-          },
-        }),
-      });
+            bio:
+              formData.companyDescription ||
+              `Registered via lead form - ${formData.hiringType} hiring`,
+            hiringGoals: "Looking to hire talented professionals",
+          }),
+        });
 
-      const profileData = await profileResponse.json();
+        const profileData = await profileResponse.json();
 
-      if (!profileResponse.ok || !profileData?.success) {
-        console.warn("Profile creation warning:", profileData?.message);
+        if (!profileResponse.ok || !profileData?.success) {
+          console.warn("Profile update warning:", profileData?.message);
+        }
       }
 
       // Call success callback
       if (onSuccess) {
         onSuccess({
           ...formData,
-          userId: registerData.data?._id || registerData.data?.id,
+          userId: registerData.data?.id || registerData.data?._id,
+          token: registerData.token,
         });
       }
     } catch (err) {
@@ -325,6 +382,32 @@ export default function EmployerLeadForm({ onSuccess }) {
       return () => clearInterval(interval);
     }
   }, [timer]);
+
+  // Company size options
+  const companySizes = [
+    "1-10",
+    "11-50",
+    "51-200",
+    "201-500",
+    "501-1000",
+    "1000+",
+  ];
+
+  // Industry options
+  const industries = [
+    "Technology",
+    "Healthcare",
+    "Finance",
+    "Education",
+    "Manufacturing",
+    "Retail",
+    "Hospitality",
+    "Construction",
+    "Transportation",
+    "Media & Entertainment",
+    "Real Estate",
+    "Other",
+  ];
 
   return (
     <motion.div
@@ -361,7 +444,7 @@ export default function EmployerLeadForm({ onSuccess }) {
         <div className="flex justify-between mt-2 text-xs text-muted-foreground">
           <span>Basic Info</span>
           <span>OTP Verify</span>
-          <span>Details & KYC</span>
+          <span>Company & KYC</span>
         </div>
       </div>
 
@@ -369,12 +452,12 @@ export default function EmployerLeadForm({ onSuccess }) {
         <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
           {step === 1 && "Contact Information"}
           {step === 2 && "Verify OTP"}
-          {step === 3 && "Complete Your Profile"}
+          {step === 3 && "Company Details & KYC"}
         </h1>
         <p className="text-muted-foreground">
           {step === 1 && "Enter your basic details to get started"}
           {step === 2 && "Enter the OTP sent to your phone"}
-          {step === 3 && "Add your hiring details and KYC information"}
+          {step === 3 && "Add your company information and complete KYC"}
         </p>
       </div>
 
@@ -614,62 +697,179 @@ export default function EmployerLeadForm({ onSuccess }) {
           </>
         )}
 
-        {/* Step 3: Hiring Details & KYC */}
+        {/* Step 3: Company Details & KYC */}
         {step === 3 && (
           <>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <label className="text-sm font-semibold text-foreground mb-3 block">
-                Hiring for Company / Personal Hiring{" "}
-                <span className="text-destructive">*</span>
-              </label>
-              <div className="grid grid-cols-2 gap-4">
-                <label
-                  className={`flex items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
-                    formData.hiringType === "company"
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-border-light"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="hiringType"
-                    value="company"
-                    checked={formData.hiringType === "company"}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <Building className="w-5 h-5 mr-2" />
-                  <span className="font-semibold">Company Hiring</span>
-                </label>
-                <label
-                  className={`flex items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
-                    formData.hiringType === "personal"
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-border-light"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="hiringType"
-                    value="personal"
-                    checked={formData.hiringType === "personal"}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <User className="w-5 h-5 mr-2" />
-                  <span className="font-semibold">Personal Hiring</span>
-                </label>
-              </div>
-              {errors.hiringType && (
-                <p className="mt-1 text-sm text-destructive">
-                  {errors.hiringType}
-                </p>
-              )}
-            </motion.div>
+            {/* Company Information Section */}
+            <div className="bg-primary/5 rounded-xl p-6 border border-primary/20">
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <Building className="w-5 h-5 text-primary" />
+                Company Information
+              </h3>
 
+              <div className="space-y-4">
+                {/* Position */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-primary" />
+                    Your Position <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="position"
+                    value={formData.position}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                      errors.position ? "border-destructive" : "border-border"
+                    } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                    placeholder="e.g., HR Manager, Recruiter, Founder"
+                  />
+                  {errors.position && (
+                    <p className="mt-1 text-sm text-destructive">
+                      {errors.position}
+                    </p>
+                  )}
+                </motion.div>
+
+                {/* Company Name */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                    <Building className="w-4 h-4 text-primary" />
+                    Company Name <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                      errors.companyName
+                        ? "border-destructive"
+                        : "border-border"
+                    } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                    placeholder="Enter company name"
+                  />
+                  {errors.companyName && (
+                    <p className="mt-1 text-sm text-destructive">
+                      {errors.companyName}
+                    </p>
+                  )}
+                </motion.div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Industry */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-primary" />
+                      Industry <span className="text-destructive">*</span>
+                    </label>
+                    <select
+                      name="companyIndustry"
+                      value={formData.companyIndustry}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 bg-background/50 border-2 ${
+                        errors.companyIndustry
+                          ? "border-destructive"
+                          : "border-border"
+                      } rounded-xl focus:outline-none focus:border-primary`}
+                    >
+                      <option value="">Select Industry</option>
+                      {industries.map((industry) => (
+                        <option key={industry} value={industry}>
+                          {industry}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.companyIndustry && (
+                      <p className="mt-1 text-sm text-destructive">
+                        {errors.companyIndustry}
+                      </p>
+                    )}
+                  </motion.div>
+
+                  {/* Company Size */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-primary" />
+                      Company Size <span className="text-destructive">*</span>
+                    </label>
+                    <select
+                      name="companySize"
+                      value={formData.companySize}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 bg-background/50 border-2 ${
+                        errors.companySize
+                          ? "border-destructive"
+                          : "border-border"
+                      } rounded-xl focus:outline-none focus:border-primary`}
+                    >
+                      <option value="">Select Size</option>
+                      {companySizes.map((size) => (
+                        <option key={size} value={size}>
+                          {size} employees
+                        </option>
+                      ))}
+                    </select>
+                    {errors.companySize && (
+                      <p className="mt-1 text-sm text-destructive">
+                        {errors.companySize}
+                      </p>
+                    )}
+                  </motion.div>
+                </div>
+
+                {/* Website */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-primary" />
+                    Company Website
+                  </label>
+                  <input
+                    type="url"
+                    name="companyWebsite"
+                    value={formData.companyWebsite}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 border-border rounded-xl focus:outline-none focus:border-primary transition-all"
+                    placeholder="https://example.com"
+                  />
+                </motion.div>
+
+                {/* Company Description */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <label className="text-sm font-semibold text-foreground mb-2">
+                    Company Description
+                  </label>
+                  <textarea
+                    name="companyDescription"
+                    value={formData.companyDescription}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 border-border rounded-xl focus:outline-none focus:border-primary transition-all resize-none"
+                    placeholder="Brief description about your company..."
+                  />
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Location */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -695,14 +895,12 @@ export default function EmployerLeadForm({ onSuccess }) {
               )}
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <label className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                <Shield className="w-4 h-4 text-primary" />
+            {/* KYC Section */}
+            <div className="bg-primary/5 rounded-xl p-6 border border-primary/20">
+              <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-primary" />
                 KYC Verification <span className="text-destructive">*</span>
-              </label>
+              </h3>
 
               <div className="space-y-4">
                 <div>
@@ -725,7 +923,7 @@ export default function EmployerLeadForm({ onSuccess }) {
 
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-2 block">
-                    Document Number
+                    Document Number <span className="text-destructive">*</span>
                   </label>
                   <input
                     type="text"
@@ -746,7 +944,7 @@ export default function EmployerLeadForm({ onSuccess }) {
 
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-2 block">
-                    Upload Document
+                    Upload Document <span className="text-destructive">*</span>
                   </label>
                   <input
                     type="file"
@@ -784,7 +982,7 @@ export default function EmployerLeadForm({ onSuccess }) {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             <motion.button
               initial={{ opacity: 0, y: 20 }}

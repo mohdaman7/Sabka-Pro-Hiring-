@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const companySchema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String },
   description: { type: String },
   industry: { type: String },
   size: {
@@ -46,7 +46,7 @@ const employerSchema = new Schema(
     contact: contactSchema,
 
     // Position in Company
-    position: { type: String, required: true },
+    position: { type: String },
     department: { type: String },
 
     // Hiring Preferences
