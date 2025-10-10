@@ -75,7 +75,7 @@ export default function LandingNavbar() {
             </Link>
 
             <Link
-              href="#how-it-works"
+              href="#plans"
               onClick={() => setActive("how")}
               className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
                 active === "how"
@@ -83,7 +83,7 @@ export default function LandingNavbar() {
                   : "text-gray-300 hover:text-white hover:bg-white/6"
               }`}
             >
-              How It Works
+              Plans
             </Link>
 
             <Link

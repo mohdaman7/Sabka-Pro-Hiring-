@@ -115,7 +115,7 @@ export default function StudentSidebar({ isOpen, onClose }) {
                   }}
                   className={cn(
                     "flex items-center rounded-lg px-4 py-4 transition-all duration-200",
-                    isCollapsed ? "justify-center" : "gap-3",
+                    isCollapsed ? "justify-center" : "gap-2",
                     isActive
                       ? "bg-white/10 text-white font-medium"
                       : "text-white/80 hover:bg-white/6 hover:text-white",

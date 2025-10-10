@@ -67,7 +67,7 @@ export default function LandingPlans() {
   ];
 
   return (
-    <section className="relative py-24 overflow-hidden">
+    <section id="plans" className="relative py-24 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
         <div

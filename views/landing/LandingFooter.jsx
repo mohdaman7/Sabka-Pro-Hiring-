@@ -25,17 +25,16 @@ export default function LandingFooter() {
               </div>
               <span className="text-xl font-bold text-white">Sabka Pro</span>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p className="text-white/75 text-sm leading-relaxed">
               Your trusted partner in career growth and talent acquisition.
             </p>
             <div className="flex gap-3 pt-2">
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
-                style={{ borderColor: "rgba(128,55,145,0.06)" }}
+                className="w-9 h-9 rounded-lg bg-white/4 border border-[#b87bd1]/10 flex items-center justify-center transition-all duration-200 group hover:bg-white/6"
               >
                 <svg
-                  className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
+                  className="w-4 h-4 text-white/70 group-hover:text-[#b87bd1] transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -44,11 +43,10 @@ export default function LandingFooter() {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
-                style={{ borderColor: "rgba(128,55,145,0.06)" }}
+                className="w-9 h-9 rounded-lg bg-white/4 border border-[#b87bd1]/10 flex items-center justify-center transition-all duration-200 group hover:bg-white/6"
               >
                 <svg
-                  className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
+                  className="w-4 h-4 text-white/70 group-hover:text-[#b87bd1] transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -57,11 +55,10 @@ export default function LandingFooter() {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-slate-800/50 border flex items-center justify-center transition-all duration-200 group"
-                style={{ borderColor: "rgba(128,55,145,0.06)" }}
+                className="w-9 h-9 rounded-lg bg-white/4 border border-[#b87bd1]/10 flex items-center justify-center transition-all duration-200 group hover:bg-white/6"
               >
                 <svg
-                  className="w-4 h-4 text-gray-400 group-hover:text-[#b87bd1] transition-colors"
+                  className="w-4 h-4 text-white/70 group-hover:text-[#b87bd1] transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -78,7 +75,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/about"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   About Us
@@ -87,7 +84,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/how-it-works"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   How It Works
@@ -96,7 +93,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/pricing"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Pricing
@@ -105,7 +102,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Contact
@@ -121,7 +118,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/jobs"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Browse Jobs
@@ -130,7 +127,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/courses"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Training Courses
@@ -139,7 +136,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/register?type=candidate"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Register
@@ -148,7 +145,7 @@ export default function LandingFooter() {
               <li>
                 <Link
                   href="/candidate-login"
-                  className="text-gray-400 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   Login
@@ -161,32 +158,25 @@ export default function LandingFooter() {
           <div>
             <h3 className="font-semibold text-white mb-4">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-[#b87bd1] transition-colors cursor-pointer">
-                <div
-                  className="w-8 h-8 rounded-lg bg-slate-800/50 border flex items-center justify-center flex-shrink-0 transition-all"
-                  style={{ borderColor: "rgba(128,55,145,0.08)" }}
-                >
-                  <Mail className="w-4 h-4" />
+              <li className="flex items-start gap-3 text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div className="w-8 h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
+                  <Mail className="w-4 h-4 text-white/75" />
                 </div>
-                <span className="mt-1">info@sabkapro.com</span>
+                <span className="mt-1 text-white/75">info@sabkapro.com</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-[#b87bd1] transition-colors cursor-pointer">
-                <div
-                  className="w-8 h-8 rounded-lg bg-slate-800/50 border flex items-center justify-center flex-shrink-0 transition-all"
-                  style={{ borderColor: "rgba(128,55,145,0.08)" }}
-                >
-                  <Phone className="w-4 h-4" />
+              <li className="flex items-start gap-3 text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div className="w-8 h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
+                  <Phone className="w-4 h-4 text-white/75" />
                 </div>
-                <span className="mt-1">+91 98765 43210</span>
+                <span className="mt-1 text-white/75">+91 98765 43210</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-gray-400 group hover:text-[#b87bd1] transition-colors cursor-pointer">
-                <div
-                  className="w-8 h-8 rounded-lg bg-slate-800/50 border flex items-center justify-center flex-shrink-0 transition-all"
-                  style={{ borderColor: "rgba(128,55,145,0.08)" }}
-                >
-                  <MapPin className="w-4 h-4" />
+              <li className="flex items-start gap-3 text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div className="w-8 h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
+                  <MapPin className="w-4 h-4 text-white/75" />
                 </div>
-                <span className="mt-1">Mumbai, Maharashtra, India</span>
+                <span className="mt-1 text-white/75">
+                  Mumbai, Maharashtra, India
+                </span>
               </li>
             </ul>
           </div>
@@ -197,19 +187,19 @@ export default function LandingFooter() {
           className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4"
           style={{ borderColor: "rgba(128,55,145,0.04)" }}
         >
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-white/70">
             © 2025 Sabka Pro HIRIN. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link
               href="/privacy"
-              className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
+              className="text-sm text-white/70 hover:text-[#b87bd1] transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
+              className="text-sm text-white/70 hover:text-[#b87bd1] transition-colors"
             >
               Terms of Service
             </Link>

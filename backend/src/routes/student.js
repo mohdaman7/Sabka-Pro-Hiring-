@@ -33,7 +33,9 @@ router.get(
 // Update student profile
 const updateStudentSchema = z.object({
   phone: z.string().optional(),
+  phoneVerified: z.boolean().optional(),
   dateOfBirth: z.string().optional(),
+  experienceType: z.enum(["fresher", "experienced"]).optional(),
   address: z
     .object({
       street: z.string().optional(),
@@ -44,6 +46,14 @@ const updateStudentSchema = z.object({
     })
     .optional(),
   bio: z.string().max(500).optional(),
+  kycInfo: z
+    .object({
+      type: z.enum(["aadhar", "pan", "passport"]).optional(),
+      number: z.string().optional(),
+      documentUrl: z.string().optional(),
+      verified: z.boolean().optional(),
+    })
+    .optional(),
   education: z
     .array(
       z.object({

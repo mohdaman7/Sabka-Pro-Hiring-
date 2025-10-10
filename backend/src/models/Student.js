@@ -38,6 +38,7 @@ const studentSchema = new Schema(
       unique: true,
     },
     phone: { type: String },
+    phoneVerified: { type: Boolean, default: false },
     dateOfBirth: { type: Date },
     address: {
       street: String,
@@ -47,6 +48,26 @@ const studentSchema = new Schema(
       zipCode: String,
     },
     bio: { type: String, maxlength: 500 },
+
+    // Experience Type
+    experienceType: {
+      type: String,
+      enum: ["fresher", "experienced"],
+      default: "fresher",
+    },
+
+    // KYC Information
+    kycInfo: {
+      type: {
+        type: String,
+        enum: ["aadhar", "pan", "passport"],
+      },
+      number: String,
+      documentUrl: String,
+      verified: { type: Boolean, default: false },
+      verifiedAt: Date,
+      verifiedBy: { type: Schema.Types.ObjectId, ref: "User" },
+    },
 
     // Education
     education: [educationSchema],
@@ -65,7 +86,7 @@ const studentSchema = new Schema(
       expectedSalary: {
         min: Number,
         max: Number,
-        currency: { type: String, default: "USD" },
+        currency: { type: String, default: "INR" },
       },
       willingToRelocate: { type: Boolean, default: false },
     },
