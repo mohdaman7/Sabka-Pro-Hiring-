@@ -11,8 +11,8 @@ import {
   User,
   MapPin,
   Building,
-  Briefcase,
-  Globe,
+  Shield,
+  CheckCircle,
 } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
@@ -25,6 +25,7 @@ export default function EmployerLeadForm({ onSuccess }) {
   const [timer, setTimer] = useState(0);
 
   const [formData, setFormData] = useState({
+    // Basic Information
     firstName: "",
     lastName: "",
     email: "",
@@ -32,16 +33,14 @@ export default function EmployerLeadForm({ onSuccess }) {
     otp: "",
     termsAccepted: false,
 
-    // Company Information
-    companyName: "",
-    companySize: "",
-    industry: "",
-    website: "",
+    // Hiring Type & Location
+    hiringType: "company", // "company" or "personal"
     location: "",
 
-    // Position
-    position: "",
-    department: "",
+    // KYC Information
+    kycDocument: null,
+    kycType: "aadhar",
+    kycNumber: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -55,6 +54,34 @@ export default function EmployerLeadForm({ onSuccess }) {
 
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "application/pdf",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        setErrors((prev) => ({
+          ...prev,
+          kycDocument: "Please upload JPG, PNG, or PDF file",
+        }));
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({
+          ...prev,
+          kycDocument: "File size must be less than 5MB",
+        }));
+        return;
+      }
+      setFormData((prev) => ({ ...prev, kycDocument: file }));
+      setErrors((prev) => ({ ...prev, kycDocument: "" }));
     }
   };
 
@@ -92,20 +119,20 @@ export default function EmployerLeadForm({ onSuccess }) {
   const validateStep3 = () => {
     const newErrors = {};
 
-    if (!formData.companyName.trim()) {
-      newErrors.companyName = "Company name is required";
+    if (!formData.hiringType) {
+      newErrors.hiringType = "Please select hiring type";
     }
 
-    if (!formData.companySize) {
-      newErrors.companySize = "Company size is required";
+    if (!formData.location.trim()) {
+      newErrors.location = "Location is required";
     }
 
-    if (!formData.industry.trim()) {
-      newErrors.industry = "Industry is required";
+    if (!formData.kycNumber.trim()) {
+      newErrors.kycNumber = "KYC document number is required";
     }
 
-    if (!formData.position.trim()) {
-      newErrors.position = "Your position is required";
+    if (!formData.kycDocument) {
+      newErrors.kycDocument = "KYC document upload is required";
     }
 
     setErrors(newErrors);
@@ -228,7 +255,7 @@ export default function EmployerLeadForm({ onSuccess }) {
         } catch {}
       }
 
-      // Update employer profile with company info
+      // Update employer profile with the new structure
       const profileResponse = await fetch(`${API_URL}/api/employer/profile`, {
         method: "PUT",
         headers: {
@@ -238,13 +265,35 @@ export default function EmployerLeadForm({ onSuccess }) {
         body: JSON.stringify({
           phone: formData.phone,
           company: {
-            name: formData.companyName,
-            size: formData.companySize,
-            industry: formData.industry,
-            website: formData.website,
+            name:
+              formData.hiringType === "company"
+                ? `${formData.firstName} ${formData.lastName}'s Company`
+                : `${formData.firstName} ${formData.lastName} (Personal)`,
+            // Set default values for required fields
+            industry: "General",
+            size: "1-10",
           },
-          position: formData.position,
-          department: formData.department,
+          position: formData.hiringType === "company" ? "HR Manager" : "Owner",
+          contact: {
+            phone: formData.phone,
+            address: {
+              city: formData.location,
+            },
+          },
+          // Store KYC info in verificationDocuments
+          verificationDocuments: [
+            {
+              type: "other",
+              filename: formData.kycDocument?.name || "kyc_document",
+              // In a real app, you'd upload the file and get a URL
+              url: "pending_upload",
+            },
+          ],
+          kycInfo: {
+            type: formData.kycType,
+            number: formData.kycNumber,
+            verified: false,
+          },
         }),
       });
 
@@ -312,7 +361,7 @@ export default function EmployerLeadForm({ onSuccess }) {
         <div className="flex justify-between mt-2 text-xs text-muted-foreground">
           <span>Basic Info</span>
           <span>OTP Verify</span>
-          <span>Company Info</span>
+          <span>Details & KYC</span>
         </div>
       </div>
 
@@ -320,12 +369,12 @@ export default function EmployerLeadForm({ onSuccess }) {
         <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
           {step === 1 && "Contact Information"}
           {step === 2 && "Verify OTP"}
-          {step === 3 && "Company Details"}
+          {step === 3 && "Complete Your Profile"}
         </h1>
         <p className="text-muted-foreground">
-          {step === 1 && "Enter your basic contact details"}
+          {step === 1 && "Enter your basic details to get started"}
           {step === 2 && "Enter the OTP sent to your phone"}
-          {step === 3 && "Tell us about your company"}
+          {step === 3 && "Add your hiring details and KYC information"}
         </p>
       </div>
 
@@ -394,7 +443,7 @@ export default function EmployerLeadForm({ onSuccess }) {
             >
               <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
                 <Mail className="w-4 h-4 text-primary" />
-                Work Email <span className="text-destructive">*</span>
+                Email <span className="text-destructive">*</span>
               </label>
               <input
                 type="email"
@@ -404,7 +453,7 @@ export default function EmployerLeadForm({ onSuccess }) {
                 className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
                   errors.email ? "border-destructive" : "border-border"
                 } rounded-xl focus:outline-none focus:border-primary transition-all`}
-                placeholder="your.email@company.com"
+                placeholder="your.email@example.com"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-destructive">{errors.email}</p>
@@ -565,60 +614,58 @@ export default function EmployerLeadForm({ onSuccess }) {
           </>
         )}
 
-        {/* Step 3: Company Information */}
+        {/* Step 3: Hiring Details & KYC */}
         {step === 3 && (
           <>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-                <Building className="w-4 h-4 text-primary" />
-                Company Name <span className="text-destructive">*</span>
-              </label>
-              <input
-                type="text"
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
-                  errors.companyName ? "border-destructive" : "border-border"
-                } rounded-xl focus:outline-none focus:border-primary transition-all`}
-                placeholder="Enter your company name"
-              />
-              {errors.companyName && (
-                <p className="mt-1 text-sm text-destructive">
-                  {errors.companyName}
-                </p>
-              )}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
               <label className="text-sm font-semibold text-foreground mb-3 block">
-                Company Size <span className="text-destructive">*</span>
+                Hiring for Company / Personal Hiring{" "}
+                <span className="text-destructive">*</span>
               </label>
-              <select
-                name="companySize"
-                value={formData.companySize}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 bg-background/50 border-2 ${
-                  errors.companySize ? "border-destructive" : "border-border"
-                } rounded-xl focus:outline-none focus:border-primary`}
-              >
-                <option value="">Select company size</option>
-                <option value="1-10">1-10 employees</option>
-                <option value="11-50">11-50 employees</option>
-                <option value="51-200">51-200 employees</option>
-                <option value="201-500">201-500 employees</option>
-                <option value="501-1000">501-1000 employees</option>
-                <option value="1000+">1000+ employees</option>
-              </select>
-              {errors.companySize && (
+              <div className="grid grid-cols-2 gap-4">
+                <label
+                  className={`flex items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                    formData.hiringType === "company"
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-border-light"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="hiringType"
+                    value="company"
+                    checked={formData.hiringType === "company"}
+                    onChange={handleChange}
+                    className="sr-only"
+                  />
+                  <Building className="w-5 h-5 mr-2" />
+                  <span className="font-semibold">Company Hiring</span>
+                </label>
+                <label
+                  className={`flex items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                    formData.hiringType === "personal"
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-border-light"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="hiringType"
+                    value="personal"
+                    checked={formData.hiringType === "personal"}
+                    onChange={handleChange}
+                    className="sr-only"
+                  />
+                  <User className="w-5 h-5 mr-2" />
+                  <span className="font-semibold">Personal Hiring</span>
+                </label>
+              </div>
+              {errors.hiringType && (
                 <p className="mt-1 text-sm text-destructive">
-                  {errors.companySize}
+                  {errors.hiringType}
                 </p>
               )}
             </motion.div>
@@ -628,22 +675,22 @@ export default function EmployerLeadForm({ onSuccess }) {
               animate={{ opacity: 1, y: 0 }}
             >
               <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-primary" />
-                Industry <span className="text-destructive">*</span>
+                <MapPin className="w-4 h-4 text-primary" />
+                Location (City) <span className="text-destructive">*</span>
               </label>
               <input
                 type="text"
-                name="industry"
-                value={formData.industry}
+                name="location"
+                value={formData.location}
                 onChange={handleChange}
                 className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
-                  errors.industry ? "border-destructive" : "border-border"
+                  errors.location ? "border-destructive" : "border-border"
                 } rounded-xl focus:outline-none focus:border-primary transition-all`}
-                placeholder="e.g., IT, Healthcare, Finance"
+                placeholder="e.g., Bangalore, Mumbai, Delhi"
               />
-              {errors.industry && (
+              {errors.location && (
                 <p className="mt-1 text-sm text-destructive">
-                  {errors.industry}
+                  {errors.location}
                 </p>
               )}
             </motion.div>
@@ -652,43 +699,91 @@ export default function EmployerLeadForm({ onSuccess }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-                <Globe className="w-4 h-4 text-primary" />
-                Company Website
+              <label className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Shield className="w-4 h-4 text-primary" />
+                KYC Verification <span className="text-destructive">*</span>
               </label>
-              <input
-                type="url"
-                name="website"
-                value={formData.website}
-                onChange={handleChange}
-                className="w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 border-border rounded-xl focus:outline-none focus:border-primary transition-all"
-                placeholder="https://company.com"
-              />
-            </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-primary" />
-                Your Position <span className="text-destructive">*</span>
-              </label>
-              <input
-                type="text"
-                name="position"
-                value={formData.position}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
-                  errors.position ? "border-destructive" : "border-border"
-                } rounded-xl focus:outline-none focus:border-primary transition-all`}
-                placeholder="e.g., HR Manager, CEO, Recruiter"
-              />
-              {errors.position && (
-                <p className="mt-1 text-sm text-destructive">
-                  {errors.position}
-                </p>
-              )}
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                    Document Type
+                  </label>
+                  <select
+                    name="kycType"
+                    value={formData.kycType}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-background/50 border border-border rounded-xl focus:outline-none focus:border-primary"
+                  >
+                    <option value="aadhar">Aadhar Card</option>
+                    <option value="pan">PAN Card</option>
+                    <option value="passport">Passport</option>
+                    <option value="business_license">Business License</option>
+                    <option value="gst">GST Certificate</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                    Document Number
+                  </label>
+                  <input
+                    type="text"
+                    name="kycNumber"
+                    value={formData.kycNumber}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 bg-background/50 border-2 ${
+                      errors.kycNumber ? "border-destructive" : "border-border"
+                    } rounded-xl focus:outline-none focus:border-primary`}
+                    placeholder="Enter document number"
+                  />
+                  {errors.kycNumber && (
+                    <p className="mt-1 text-sm text-destructive">
+                      {errors.kycNumber}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                    Upload Document
+                  </label>
+                  <input
+                    type="file"
+                    id="kycDocument"
+                    onChange={handleFileChange}
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="kycDocument"
+                    className={`flex flex-col items-center justify-center gap-2 w-full px-6 py-6 bg-background/50 backdrop-blur-sm border-2 ${
+                      errors.kycDocument
+                        ? "border-destructive"
+                        : formData.kycDocument
+                        ? "border-primary bg-primary/5"
+                        : "border-dashed border-border"
+                    } rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-200 group`}
+                  >
+                    <Upload className="w-6 h-6 text-primary" />
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-foreground">
+                        {formData.kycDocument
+                          ? formData.kycDocument.name
+                          : "Click to upload document"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        JPG, PNG, PDF - Max 5MB
+                      </p>
+                    </div>
+                  </label>
+                  {errors.kycDocument && (
+                    <p className="mt-1 text-sm text-destructive">
+                      {errors.kycDocument}
+                    </p>
+                  )}
+                </div>
+              </div>
             </motion.div>
 
             <motion.button

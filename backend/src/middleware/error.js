@@ -12,10 +12,10 @@ export const errorHandler = (err, req, res, next) => {
   }
 
   // Mongoose duplicate key
-  if (err.code === 11000) {
-    const message = "Duplicate field value entered";
-    error = { message, statusCode: 400 };
-  }
+  // if (err.code === 11000) {
+  //   const message = "Duplicate field value entered";
+  //   error = { message, statusCode: 400 };
+  // }
 
   // Mongoose validation error
   if (err.name === "ValidationError") {

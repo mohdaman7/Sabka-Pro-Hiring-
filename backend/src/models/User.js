@@ -11,15 +11,22 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    passwordHash: { type: String, required: true },
+    password: {
+      type: String,
+      required: true,
+    },
     role: {
       type: String,
       enum: ["student", "employer", "admin"],
       required: true,
     },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    profileCompleted: { type: Boolean, default: false },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    lastLogin: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
