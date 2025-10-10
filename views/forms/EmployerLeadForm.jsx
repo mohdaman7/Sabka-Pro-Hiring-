@@ -1,63 +1,72 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-  CheckCircle,
+  Upload,
   Loader2,
   Sparkles,
-  Building2,
-  User,
   Mail,
   Phone,
-  Users,
+  User,
+  MapPin,
+  Building,
   Briefcase,
-  FileText,
-  Eye,
-  EyeOff,
-  Lock,
+  Globe,
 } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
-export default function EmployerLeadForm() {
+export default function EmployerLeadForm({ onSuccess }) {
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [timer, setTimer] = useState(0);
 
   const [formData, setFormData] = useState({
-    companyName: "",
-    contactPerson: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    password: "",
     phone: "",
+    otp: "",
+    termsAccepted: false,
+
+    // Company Information
+    companyName: "",
     companySize: "",
     industry: "",
-    hiringNeeds: "",
-    registrationType: "free",
+    website: "",
+    location: "",
+
+    // Position
+    position: "",
+    department: "",
   });
 
   const [errors, setErrors] = useState({});
-  const [focusedField, setFocusedField] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
-  const validate = () => {
+  const validateStep1 = () => {
     const newErrors = {};
 
-    if (!formData.companyName.trim()) {
-      newErrors.companyName = "Company name is required";
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required";
     }
 
-    if (!formData.contactPerson.trim()) {
-      newErrors.contactPerson = "Contact person name is required";
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
     }
 
     if (!formData.email.trim()) {
@@ -66,16 +75,25 @@ export default function EmployerLeadForm() {
       newErrors.email = "Invalid email format";
     }
 
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
     } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
       newErrors.phone = "Invalid phone number (10 digits required)";
+    }
+
+    if (!formData.termsAccepted) {
+      newErrors.termsAccepted = "You must accept the terms and conditions";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateStep3 = () => {
+    const newErrors = {};
+
+    if (!formData.companyName.trim()) {
+      newErrors.companyName = "Company name is required";
     }
 
     if (!formData.companySize) {
@@ -86,48 +104,163 @@ export default function EmployerLeadForm() {
       newErrors.industry = "Industry is required";
     }
 
-    if (!formData.hiringNeeds.trim()) {
-      newErrors.hiringNeeds = "Hiring needs are required";
+    if (!formData.position.trim()) {
+      newErrors.position = "Your position is required";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const sendOTP = async () => {
+    if (!validateStep1()) return;
 
-    if (!validate()) {
+    setLoading(true);
+    setServerError("");
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/send-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: formData.phone,
+          email: formData.email,
+        }),
+      });
+
+      if (response.status === 404) {
+        console.log("OTP sent (mock):", "123456");
+        setOtpSent(true);
+        setStep(2);
+        setTimer(60);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || "Failed to send OTP");
+      }
+
+      setOtpSent(true);
+      setStep(2);
+      setTimer(60);
+    } catch (err) {
+      setServerError(err?.message || "Failed to send OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyOTP = async () => {
+    if (!formData.otp.trim() || formData.otp.length !== 6) {
+      setErrors({ otp: "Please enter valid 6-digit OTP" });
       return;
     }
 
+    setLoading(true);
+    setServerError("");
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: formData.phone,
+          otp: formData.otp,
+        }),
+      });
+
+      if (response.status === 404) {
+        console.log("OTP verified (mock)");
+        setStep(3);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || "Invalid OTP");
+      }
+
+      setStep(3);
+    } catch (err) {
+      setServerError(err?.message || "Invalid OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateStep3()) return;
+
     setServerError("");
     setLoading(true);
+
     try {
-      const response = await fetch(`${API_URL}/api/auth/register`, {
+      const tempPassword = `Temp@${Math.random().toString(36).slice(-8)}`;
+
+      // Register employer
+      const registerResponse = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password,
+          password: tempPassword,
           role: "employer",
-          firstName: formData.contactPerson,
-          lastName: "",
+          firstName: formData.firstName,
+          lastName: formData.lastName,
         }),
       });
 
-      const data = await response.json();
-      if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Registration failed");
+      const registerData = await registerResponse.json();
+
+      if (!registerResponse.ok || !registerData?.success) {
+        throw new Error(registerData?.message || "Registration failed");
       }
 
-      if (data?.token) {
+      if (registerData?.token) {
         try {
-          localStorage.setItem("token", data.token);
+          localStorage.setItem("token", registerData.token);
+          localStorage.setItem("user", JSON.stringify(registerData.data));
         } catch {}
       }
 
-      setSubmitted(true);
+      // Update employer profile with company info
+      const profileResponse = await fetch(`${API_URL}/api/employer/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${registerData.token}`,
+        },
+        body: JSON.stringify({
+          phone: formData.phone,
+          company: {
+            name: formData.companyName,
+            size: formData.companySize,
+            industry: formData.industry,
+            website: formData.website,
+          },
+          position: formData.position,
+          department: formData.department,
+        }),
+      });
+
+      const profileData = await profileResponse.json();
+
+      if (!profileResponse.ok || !profileData?.success) {
+        console.warn("Profile creation warning:", profileData?.message);
+      }
+
+      // Call success callback
+      if (onSuccess) {
+        onSuccess({
+          ...formData,
+          userId: registerData.data?._id || registerData.data?.id,
+        });
+      }
     } catch (err) {
       setServerError(err?.message || "Something went wrong. Please try again.");
     } finally {
@@ -135,645 +268,470 @@ export default function EmployerLeadForm() {
     }
   };
 
-  if (submitted) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-br from-card via-card to-accent/5 rounded-2xl border border-border shadow-2xl p-8 md:p-12 text-center relative overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
-
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="relative w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/50"
-        >
-          <CheckCircle className="w-10 h-10 text-white" />
-        </motion.div>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-3xl md:text-4xl font-bold text-foreground mb-3"
-        >
-          Registration Submitted! 🎉
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="text-muted-foreground text-lg mb-8 max-w-md mx-auto"
-        >
-          Thank you for your interest. Our team will verify your company details
-          and contact you within 24-48 hours.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-background/80 backdrop-blur-sm rounded-xl p-6 border border-border shadow-inner max-w-md mx-auto"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="w-5 h-5 text-primary" />
-            <p className="text-sm font-semibold text-foreground">
-              Registration Summary
-            </p>
-          </div>
-          <div className="space-y-3 text-left">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Company</span>
-              <span className="text-sm font-medium text-foreground">
-                {formData.companyName}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Contact</span>
-              <span className="text-sm font-medium text-foreground">
-                {formData.contactPerson}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Email</span>
-              <span className="text-sm font-medium text-foreground truncate ml-2">
-                {formData.email}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Plan</span>
-              <span
-                className={`text-sm font-semibold px-3 py-1 rounded-full ${
-                  formData.registrationType === "premium"
-                    ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {formData.registrationType === "premium"
-                  ? "Premium ⭐"
-                  : "Free"}
-              </span>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-    );
-  }
+  useState(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timer]);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-card via-card to-primary/5 rounded-2xl border border-border shadow-2xl p-8 md:p-10 relative overflow-hidden"
+      className="bg-gradient-to-br from-card via-card to-primary/5 rounded-2xl border border-border shadow-2xl p-6 md:p-8 relative overflow-hidden max-w-2xl mx-auto"
     >
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
 
+      {/* Progress Steps */}
       <div className="relative mb-8">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4"
-        >
-          <Building2 className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-primary">
-            Find Top Talent
-          </span>
-        </motion.div>
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2 text-balance">
-          Employer Registration
+        <div className="flex justify-between items-center">
+          {[1, 2, 3].map((s) => (
+            <div key={s} className="flex items-center flex-1">
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
+                  step >= s
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {s}
+              </div>
+              {s < 3 && (
+                <div
+                  className={`flex-1 h-1 mx-2 rounded transition-all ${
+                    step > s ? "bg-primary" : "bg-muted"
+                  }`}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+          <span>Basic Info</span>
+          <span>OTP Verify</span>
+          <span>Company Info</span>
+        </div>
+      </div>
+
+      <div className="relative mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+          {step === 1 && "Contact Information"}
+          {step === 2 && "Verify OTP"}
+          {step === 3 && "Company Details"}
         </h1>
-        <p className="text-muted-foreground text-lg">
-          Connect with verified candidates and build your dream team
+        <p className="text-muted-foreground">
+          {step === 1 && "Enter your basic contact details"}
+          {step === 2 && "Enter the OTP sent to your phone"}
+          {step === 3 && "Tell us about your company"}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 relative">
-        {/* Company Name */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <label
-            htmlFor="companyName"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <Building2 className="w-4 h-4 text-primary" />
-            Company Name <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="text"
-            id="companyName"
-            name="companyName"
-            value={formData.companyName}
-            onChange={handleChange}
-            onFocus={() => setFocusedField("companyName")}
-            onBlur={() => setFocusedField(null)}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-              errors.companyName
-                ? "border-destructive"
-                : focusedField === "companyName"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
-            placeholder="Enter your company name"
-          />
-          <AnimatePresence>
-            {errors.companyName && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
+      <form
+        onSubmit={step === 3 ? handleSubmit : (e) => e.preventDefault()}
+        className="space-y-6 relative"
+      >
+        {/* Step 1: Basic Information */}
+        {step === 1 && (
+          <>
+            <div className="grid md:grid-cols-2 gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                {errors.companyName}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
+                <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <User className="w-4 h-4 text-primary" />
+                  First Name <span className="text-destructive">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                    errors.firstName ? "border-destructive" : "border-border"
+                  } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                  placeholder="Enter first name"
+                />
+                {errors.firstName && (
+                  <p className="mt-1 text-sm text-destructive">
+                    {errors.firstName}
+                  </p>
+                )}
+              </motion.div>
 
-        {/* Contact Person */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <label
-            htmlFor="contactPerson"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <User className="w-4 h-4 text-primary" />
-            Contact Person Name <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="text"
-            id="contactPerson"
-            name="contactPerson"
-            value={formData.contactPerson}
-            onChange={handleChange}
-            onFocus={() => setFocusedField("contactPerson")}
-            onBlur={() => setFocusedField(null)}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-              errors.contactPerson
-                ? "border-destructive"
-                : focusedField === "contactPerson"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
-            placeholder="Enter contact person name"
-          />
-          <AnimatePresence>
-            {errors.contactPerson && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                {errors.contactPerson}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
+                <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <User className="w-4 h-4 text-primary" />
+                  Last Name <span className="text-destructive">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                    errors.lastName ? "border-destructive" : "border-border"
+                  } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                  placeholder="Enter last name"
+                />
+                {errors.lastName && (
+                  <p className="mt-1 text-sm text-destructive">
+                    {errors.lastName}
+                  </p>
+                )}
+              </motion.div>
+            </div>
 
-        {/* Email */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <label
-            htmlFor="email"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <Mail className="w-4 h-4 text-primary" />
-            Business Email <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            onFocus={() => setFocusedField("email")}
-            onBlur={() => setFocusedField(null)}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-              errors.email
-                ? "border-destructive"
-                : focusedField === "email"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
-            placeholder="company@example.com"
-          />
-          <AnimatePresence>
-            {errors.email && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
-              >
-                {errors.email}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                <Mail className="w-4 h-4 text-primary" />
+                Work Email <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                  errors.email ? "border-destructive" : "border-border"
+                } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                placeholder="your.email@company.com"
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-destructive">{errors.email}</p>
+              )}
+            </motion.div>
 
-        {/* Password Field */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
-        >
-          <label
-            htmlFor="password"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <Lock className="w-4 h-4 text-primary" />
-            Password <span className="text-destructive">*</span>
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              onFocus={() => setFocusedField("password")}
-              onBlur={() => setFocusedField(null)}
-              className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-                errors.password
-                  ? "border-destructive"
-                  : focusedField === "password"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
-              } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200 pr-12`}
-              placeholder="Create a strong password"
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                <Phone className="w-4 h-4 text-primary" />
+                Mobile Number <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                  errors.phone ? "border-destructive" : "border-border"
+                } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                placeholder="+91 98765 43210"
+              />
+              {errors.phone && (
+                <p className="mt-1 text-sm text-destructive">{errors.phone}</p>
+              )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="termsAccepted"
+                  checked={formData.termsAccepted}
+                  onChange={handleChange}
+                  className="mt-1 w-5 h-5 rounded border-border text-primary focus:ring-primary"
+                />
+                <span className="text-sm text-foreground">
+                  I accept the{" "}
+                  <a href="/terms" className="text-primary hover:underline">
+                    Terms & Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a href="/privacy" className="text-primary hover:underline">
+                    Privacy Policy
+                  </a>
+                  <span className="text-destructive ml-1">*</span>
+                </span>
+              </label>
+              {errors.termsAccepted && (
+                <p className="mt-1 text-sm text-destructive">
+                  {errors.termsAccepted}
+                </p>
+              )}
+            </motion.div>
+
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={sendOTP}
+              disabled={loading}
+              className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Sending OTP...
+                </>
+              ) : (
+                <>
+                  Send OTP
+                  <Sparkles className="w-5 h-5" />
+                </>
+              )}
+            </motion.button>
+          </>
+        )}
+
+        {/* Step 2: OTP Verification */}
+        {step === 2 && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-2 block text-center">
+                Enter 6-Digit OTP
+              </label>
+              <input
+                type="text"
+                name="otp"
+                value={formData.otp}
+                onChange={handleChange}
+                maxLength={6}
+                className={`w-full px-4 py-4 bg-background/50 backdrop-blur-sm border-2 ${
+                  errors.otp ? "border-destructive" : "border-border"
+                } rounded-xl focus:outline-none focus:border-primary transition-all text-center text-2xl font-bold tracking-widest`}
+                placeholder="000000"
+              />
+              {errors.otp && (
+                <p className="mt-1 text-sm text-destructive text-center">
+                  {errors.otp}
+                </p>
+              )}
+            </motion.div>
+
+            <div className="text-center text-sm text-muted-foreground">
+              {timer > 0 ? (
+                <p>Resend OTP in {timer}s</p>
+              ) : (
+                <button
+                  type="button"
+                  onClick={sendOTP}
+                  className="text-primary hover:underline"
+                >
+                  Resend OTP
+                </button>
+              )}
+            </div>
+
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={verifyOTP}
+              disabled={loading}
+              className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                <>
+                  Verify OTP
+                  <CheckCircle className="w-5 h-5" />
+                </>
+              )}
+            </motion.button>
+
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => setStep(1)}
+              className="w-full text-sm text-muted-foreground hover:text-foreground"
             >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
+              ← Back to Basic Info
             </button>
-          </div>
-          <AnimatePresence>
-            {errors.password && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
-              >
-                {errors.password}
-              </motion.p>
-            )}
-          </AnimatePresence>
-          <p className="text-xs text-muted-foreground mt-1">
-            Must be at least 6 characters long
-          </p>
-        </motion.div>
+          </>
+        )}
 
-        {/* Phone */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <label
-            htmlFor="phone"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <Phone className="w-4 h-4 text-primary" />
-            Phone Number <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            onFocus={() => setFocusedField("phone")}
-            onBlur={() => setFocusedField(null)}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-              errors.phone
-                ? "border-destructive"
-                : focusedField === "phone"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
-            placeholder="+91 98765 43210"
-          />
-          <AnimatePresence>
-            {errors.phone && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
-              >
-                {errors.phone}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
+        {/* Step 3: Company Information */}
+        {step === 3 && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                <Building className="w-4 h-4 text-primary" />
+                Company Name <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="text"
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                  errors.companyName ? "border-destructive" : "border-border"
+                } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                placeholder="Enter your company name"
+              />
+              {errors.companyName && (
+                <p className="mt-1 text-sm text-destructive">
+                  {errors.companyName}
+                </p>
+              )}
+            </motion.div>
 
-        {/* Company Size */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <label
-            htmlFor="companySize"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <Users className="w-4 h-4 text-primary" />
-            Company Size <span className="text-destructive">*</span>
-          </label>
-          <select
-            id="companySize"
-            name="companySize"
-            value={formData.companySize}
-            onChange={handleChange}
-            onFocus={() => setFocusedField("companySize")}
-            onBlur={() => setFocusedField(null)}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-              errors.companySize
-                ? "border-destructive"
-                : focusedField === "companySize"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground focus:outline-none transition-all duration-200`}
-          >
-            <option value="">Select company size</option>
-            <option value="1-10">1-10 employees</option>
-            <option value="11-50">11-50 employees</option>
-            <option value="51-200">51-200 employees</option>
-            <option value="201-500">201-500 employees</option>
-            <option value="501-1000">501-1000 employees</option>
-            <option value="1000+">1000+ employees</option>
-          </select>
-          <AnimatePresence>
-            {errors.companySize && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-3 block">
+                Company Size <span className="text-destructive">*</span>
+              </label>
+              <select
+                name="companySize"
+                value={formData.companySize}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 bg-background/50 border-2 ${
+                  errors.companySize ? "border-destructive" : "border-border"
+                } rounded-xl focus:outline-none focus:border-primary`}
               >
-                {errors.companySize}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
+                <option value="">Select company size</option>
+                <option value="1-10">1-10 employees</option>
+                <option value="11-50">11-50 employees</option>
+                <option value="51-200">51-200 employees</option>
+                <option value="201-500">201-500 employees</option>
+                <option value="501-1000">501-1000 employees</option>
+                <option value="1000+">1000+ employees</option>
+              </select>
+              {errors.companySize && (
+                <p className="mt-1 text-sm text-destructive">
+                  {errors.companySize}
+                </p>
+              )}
+            </motion.div>
 
-        {/* Industry */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <label
-            htmlFor="industry"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <Briefcase className="w-4 h-4 text-primary" />
-            Industry <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="text"
-            id="industry"
-            name="industry"
-            value={formData.industry}
-            onChange={handleChange}
-            onFocus={() => setFocusedField("industry")}
-            onBlur={() => setFocusedField(null)}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-              errors.industry
-                ? "border-destructive"
-                : focusedField === "industry"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
-            placeholder="e.g., IT, Healthcare, Finance, Manufacturing"
-          />
-          <AnimatePresence>
-            {errors.industry && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
-              >
-                {errors.industry}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-primary" />
+                Industry <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="text"
+                name="industry"
+                value={formData.industry}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                  errors.industry ? "border-destructive" : "border-border"
+                } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                placeholder="e.g., IT, Healthcare, Finance"
+              />
+              {errors.industry && (
+                <p className="mt-1 text-sm text-destructive">
+                  {errors.industry}
+                </p>
+              )}
+            </motion.div>
 
-        {/* Hiring Needs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-        >
-          <label
-            htmlFor="hiringNeeds"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
-          >
-            <FileText className="w-4 h-4 text-primary" />
-            Current Hiring Needs <span className="text-destructive">*</span>
-          </label>
-          <textarea
-            id="hiringNeeds"
-            name="hiringNeeds"
-            value={formData.hiringNeeds}
-            onChange={handleChange}
-            onFocus={() => setFocusedField("hiringNeeds")}
-            onBlur={() => setFocusedField(null)}
-            rows={4}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
-              errors.hiringNeeds
-                ? "border-destructive"
-                : focusedField === "hiringNeeds"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200 resize-none`}
-            placeholder="Describe the positions you're looking to fill and any specific requirements"
-          />
-          <AnimatePresence>
-            {errors.hiringNeeds && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2 text-sm text-destructive"
-              >
-                {errors.hiringNeeds}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                <Globe className="w-4 h-4 text-primary" />
+                Company Website
+              </label>
+              <input
+                type="url"
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 border-border rounded-xl focus:outline-none focus:border-primary transition-all"
+                placeholder="https://company.com"
+              />
+            </motion.div>
 
-        {/* Registration Type */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          <label className="block text-sm font-semibold text-foreground mb-4">
-            Choose Plan <span className="text-destructive">*</span>
-          </label>
-          <div className="grid md:grid-cols-2 gap-4">
-            <motion.label
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <label className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-primary" />
+                Your Position <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="text"
+                name="position"
+                value={formData.position}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 bg-background/50 backdrop-blur-sm border-2 ${
+                  errors.position ? "border-destructive" : "border-border"
+                } rounded-xl focus:outline-none focus:border-primary transition-all`}
+                placeholder="e.g., HR Manager, CEO, Recruiter"
+              />
+              {errors.position && (
+                <p className="mt-1 text-sm text-destructive">
+                  {errors.position}
+                </p>
+              )}
+            </motion.div>
+
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`relative flex flex-col p-6 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                formData.registrationType === "free"
-                  ? "border-primary bg-primary/5 shadow-lg shadow-primary/20"
-                  : "border-border bg-background/50 hover:border-border-light"
-              }`}
+              type="submit"
+              disabled={loading}
+              className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              <input
-                type="radio"
-                name="registrationType"
-                value="free"
-                checked={formData.registrationType === "free"}
-                onChange={handleChange}
-                className="sr-only"
-              />
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-lg font-bold text-foreground">Free</span>
-                <span className="text-3xl font-bold text-foreground">₹0</span>
-              </div>
-              <ul className="space-y-2.5 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Post up to 3 jobs</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Basic candidate search</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Email support</span>
-                </li>
-              </ul>
-            </motion.label>
+              {loading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                <>
+                  Complete Registration
+                  <Sparkles className="w-5 h-5" />
+                </>
+              )}
+            </motion.button>
 
-            <motion.label
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`relative flex flex-col p-6 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                formData.registrationType === "premium"
-                  ? "border-blue-500 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 shadow-lg shadow-blue-500/20"
-                  : "border-border bg-background/50 hover:border-border-light"
-              }`}
+            <button
+              type="button"
+              onClick={() => setStep(2)}
+              className="w-full text-sm text-muted-foreground hover:text-foreground"
             >
-              <input
-                type="radio"
-                name="registrationType"
-                value="premium"
-                checked={formData.registrationType === "premium"}
-                onChange={handleChange}
-                className="sr-only"
-              />
-              <div className="absolute -top-3 -right-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                RECOMMENDED
-              </div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-lg font-bold text-foreground flex items-center gap-1">
-                  Premium <Sparkles className="w-4 h-4 text-blue-500" />
-                </span>
-                <div className="text-right">
-                  <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
-                    ₹4,999
-                  </span>
-                  <span className="text-xs text-muted-foreground block">
-                    /month
-                  </span>
-                </div>
-              </div>
-              <ul className="space-y-2.5 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <span>Unlimited job postings</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <span>Advanced candidate filtering</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <span>Priority support & fast-track verification</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <span>ATS integration & analytics dashboard</span>
-                </li>
-              </ul>
-            </motion.label>
-          </div>
-        </motion.div>
+              ← Back to OTP Verification
+            </button>
+          </>
+        )}
 
         {serverError && (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-sm text-destructive text-center"
+            className="text-sm text-destructive text-center bg-destructive/10 py-2 px-4 rounded-lg"
           >
             {serverError}
           </motion.p>
         )}
-
-        {/* Submit Button */}
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          type="submit"
-          disabled={loading}
-          className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-primary/30"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" />
-              Submitting...
-            </>
-          ) : (
-            <>
-              Submit Registration
-              <Sparkles className="w-5 h-5" />
-            </>
-          )}
-        </motion.button>
-
-        <p className="text-sm text-muted-foreground text-center">
-          By registering, you agree to our{" "}
-          <a href="/terms" className="text-primary hover:underline font-medium">
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a
-            href="/privacy"
-            className="text-primary hover:underline font-medium"
-          >
-            Privacy Policy
-          </a>
-        </p>
       </form>
     </motion.div>
   );

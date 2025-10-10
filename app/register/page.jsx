@@ -1,17 +1,51 @@
-"use client"
+"use client";
 
-import { Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import { motion } from "framer-motion"
-import CandidateLeadForm from "@/views/forms/CandidateLeadForm"
-import EmployerLeadForm from "@/views/forms/EmployerLeadForm"
-import Link from "next/link"
-import { ArrowLeft, Loader2 } from "lucide-react"
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import CandidateLeadForm from "@/views/forms/CandidateLeadForm";
+import EmployerLeadForm from "@/views/forms/EmployerLeadForm";
+import CandidateLeadSuccess from "@/views/success-pages/CandidateLeadSuccess";
+import EmployerLeadSuccess from "@/views/success-pages/EmployerLeadSuccess";
+import Link from "next/link";
+import { ArrowLeft, Loader2 } from "lucide-react";
 
 function RegisterContent() {
-  const searchParams = useSearchParams()
-  const type = searchParams.get("type") || "candidate"
-  
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "candidate";
+
+  // State for success pages
+  const [registrationComplete, setRegistrationComplete] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  const handleRegistrationSuccess = (data) => {
+    setUserData(data);
+    setRegistrationComplete(true);
+  };
+
+  const handleBackToHome = () => {
+    if (type === "candidate") {
+      window.location.href = "/student/dashboard";
+    } else {
+      window.location.href = "/employer/dashboard";
+    }
+  };
+
+  // If registration is complete, show success page
+  if (registrationComplete) {
+    return type === "candidate" ? (
+      <CandidateLeadSuccess
+        userData={userData}
+        onBackToHome={handleBackToHome}
+      />
+    ) : (
+      <EmployerLeadSuccess
+        userData={userData}
+        onBackToHome={handleBackToHome}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
       {/* Animated background elements */}
@@ -26,7 +60,11 @@ function RegisterContent() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-11 h-11 rounded-full overflow-hidden shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-all duration-300 group-hover:scale-105 bg-white ring-2 ring-primary/20">
-                <img src="/sabka-logo.png" alt="Sabka Pro" className="w-full h-full object-cover" />
+                <img
+                  src="/sabka-logo.png"
+                  alt="Sabka Pro"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                 Sabka Pro HIRIN
@@ -80,11 +118,15 @@ function RegisterContent() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {type === "candidate" ? <CandidateLeadForm /> : <EmployerLeadForm />}
+          {type === "candidate" ? (
+            <CandidateLeadForm onSuccess={handleRegistrationSuccess} />
+          ) : (
+            <EmployerLeadForm onSuccess={handleRegistrationSuccess} />
+          )}
         </motion.div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function RegisterPage() {
@@ -94,12 +136,14 @@ export default function RegisterPage() {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="w-8 h-8 text-primary animate-spin" />
-            <p className="text-muted-foreground font-medium">Loading registration form...</p>
+            <p className="text-muted-foreground font-medium">
+              Loading registration form...
+            </p>
           </div>
         </div>
       }
     >
       <RegisterContent />
     </Suspense>
-  )
+  );
 }

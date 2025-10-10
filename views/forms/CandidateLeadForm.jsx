@@ -4,23 +4,21 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Upload,
-  CheckCircle,
   Loader2,
   Sparkles,
   Mail,
   Phone,
   User,
   MapPin,
-  FileText,
   Shield,
+  CheckCircle,
 } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
-export default function StudentRegistrationV2() {
-  const [step, setStep] = useState(1); // 1: Basic Info, 2: OTP Verification, 3: Additional Info
+export default function CandidateLeadForm({ onSuccess }) {
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -32,12 +30,10 @@ export default function StudentRegistrationV2() {
     phone: "",
     otp: "",
     termsAccepted: false,
-    experienceType: "fresher", // fresher or experienced
+    experienceType: "fresher",
     location: "",
-
-    // KYC Documents
     kycDocument: null,
-    kycType: "aadhar", // aadhar, pan, passport
+    kycType: "aadhar",
     kycNumber: "",
   });
 
@@ -140,7 +136,6 @@ export default function StudentRegistrationV2() {
     setServerError("");
 
     try {
-      // Mock OTP sending - replace with actual API call
       const response = await fetch(`${API_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -150,7 +145,6 @@ export default function StudentRegistrationV2() {
         }),
       });
 
-      // For demo purposes, if API doesn't exist yet
       if (response.status === 404) {
         console.log("OTP sent (mock):", "123456");
         setOtpSent(true);
@@ -185,7 +179,6 @@ export default function StudentRegistrationV2() {
     setServerError("");
 
     try {
-      // Mock OTP verification - replace with actual API call
       const response = await fetch(`${API_URL}/api/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -195,7 +188,6 @@ export default function StudentRegistrationV2() {
         }),
       });
 
-      // For demo purposes
       if (response.status === 404) {
         console.log("OTP verified (mock)");
         setStep(3);
@@ -225,10 +217,8 @@ export default function StudentRegistrationV2() {
     setLoading(true);
 
     try {
-      // Create a temporary password (you might want to let user set this)
       const tempPassword = `Temp@${Math.random().toString(36).slice(-8)}`;
 
-      // Register user
       const registerResponse = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -247,7 +237,6 @@ export default function StudentRegistrationV2() {
         throw new Error(registerData?.message || "Registration failed");
       }
 
-      // Store token
       if (registerData?.token) {
         try {
           localStorage.setItem("token", registerData.token);
@@ -255,7 +244,6 @@ export default function StudentRegistrationV2() {
         } catch {}
       }
 
-      // Update student profile with additional info
       const profileResponse = await fetch(`${API_URL}/api/student/profile`, {
         method: "PUT",
         headers: {
@@ -270,7 +258,6 @@ export default function StudentRegistrationV2() {
           bio: `${
             formData.experienceType === "fresher" ? "Fresher" : "Experienced"
           } candidate`,
-          // Store KYC info in a custom field or handle file upload separately
           kycInfo: {
             type: formData.kycType,
             number: formData.kycNumber,
@@ -285,7 +272,13 @@ export default function StudentRegistrationV2() {
         console.warn("Profile creation warning:", profileData?.message);
       }
 
-      setSubmitted(true);
+      // Call success callback
+      if (onSuccess) {
+        onSuccess({
+          ...formData,
+          userId: registerData.data?._id || registerData.data?.id,
+        });
+      }
     } catch (err) {
       setServerError(err?.message || "Something went wrong. Please try again.");
     } finally {
@@ -293,7 +286,6 @@ export default function StudentRegistrationV2() {
     }
   };
 
-  // Timer countdown for OTP resend
   useState(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -302,94 +294,6 @@ export default function StudentRegistrationV2() {
       return () => clearInterval(interval);
     }
   }, [timer]);
-
-  if (submitted) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-br from-card via-card to-accent/5 rounded-2xl border border-border shadow-2xl p-8 md:p-12 text-center relative overflow-hidden max-w-2xl mx-auto"
-      >
-        <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
-
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="relative w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/50"
-        >
-          <CheckCircle className="w-10 h-10 text-white" />
-        </motion.div>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-3xl md:text-4xl font-bold text-foreground mb-3"
-        >
-          Registration Successful! 🎉
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="text-muted-foreground text-lg mb-8 max-w-md mx-auto"
-        >
-          Your account has been created. Our team will verify your KYC documents
-          shortly.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-background/80 backdrop-blur-sm rounded-xl p-6 border border-border shadow-inner max-w-md mx-auto"
-        >
-          <div className="space-y-3 text-left">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Name</span>
-              <span className="text-sm font-medium text-foreground">
-                {formData.firstName} {formData.lastName}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Email</span>
-              <span className="text-sm font-medium text-foreground truncate ml-2">
-                {formData.email}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Phone</span>
-              <span className="text-sm font-medium text-foreground">
-                {formData.phone}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Type</span>
-              <span className="text-sm font-medium text-foreground capitalize">
-                {formData.experienceType}
-              </span>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-8"
-        >
-          <button
-            onClick={() => (window.location.href = "/student/dashboard")}
-            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-          >
-            Go to Dashboard
-          </button>
-        </motion.div>
-      </motion.div>
-    );
-  }
 
   return (
     <motion.div

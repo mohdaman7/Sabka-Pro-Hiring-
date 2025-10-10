@@ -88,7 +88,16 @@ export async function sendOTP(req, res, next) {
 // Verify OTP
 export async function verifyOTP(req, res, next) {
   try {
+    console.log("🔍 Verify OTP request:", req.body);
+
     const parsed = verifyOTPSchema.parse(req.body);
+
+    // Debug: Log what we're looking for
+    console.log("📞 Looking for OTP with:", {
+      phone: parsed.phone,
+      otp: parsed.otp,
+      currentTime: new Date(),
+    });
 
     const otpDoc = await OTPModel.findOne({
       phone: parsed.phone,
@@ -97,7 +106,29 @@ export async function verifyOTP(req, res, next) {
       expiresAt: { $gt: new Date() },
     });
 
+    // Debug: Log what we found
+    console.log("📄 OTP Document found:", otpDoc);
+
     if (!otpDoc) {
+      // Check why it failed
+      const expiredOtp = await OTPModel.findOne({
+        phone: parsed.phone,
+        otp: parsed.otp,
+        expiresAt: { $lte: new Date() },
+      });
+
+      const wrongOtp = await OTPModel.findOne({
+        phone: parsed.phone,
+        verified: false,
+        expiresAt: { $gt: new Date() },
+      });
+
+      console.log("❌ OTP Verification Failed - Debug Info:", {
+        expiredOtpExists: !!expiredOtp,
+        wrongOtpExists: !!wrongOtp,
+        wrongOtpValue: wrongOtp?.otp,
+      });
+
       return res.status(400).json({
         success: false,
         message: "Invalid or expired OTP",
@@ -108,11 +139,14 @@ export async function verifyOTP(req, res, next) {
     otpDoc.verified = true;
     await otpDoc.save();
 
+    console.log("✅ OTP verified successfully for:", parsed.phone);
+
     res.json({
       success: true,
       message: "OTP verified successfully",
     });
   } catch (err) {
+    console.error("❌ Verify OTP error:", err);
     next(err);
   }
 }
@@ -122,11 +156,11 @@ export async function register(req, res, next) {
   try {
     const parsed = registerSchema.parse(req.body);
 
-    const existing = await UserModel.findOne({ email: parsed.email });
-    if (existing)
-      return res
-        .status(409)
-        .json({ success: false, message: "Email already registered" });
+    // const existing = await UserModel.findOne({ email: parsed.email });
+    // if (existing)
+    //   return res
+    //     .status(409)
+    //     .json({ success: false, message: "Email already registered" });
 
     const passwordHash = await bcrypt.hash(parsed.password, 10);
     const user = await UserModel.create({

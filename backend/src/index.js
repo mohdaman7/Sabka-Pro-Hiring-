@@ -102,7 +102,7 @@ async function bootstrap() {
     });
 
     // API routes with rate limiting for auth
-    app.use("/api/auth", authLimiter, authRoutes);
+    app.use("/api/auth", authRoutes);
     app.use("/api/jobs", jobRoutes);
     app.use("/api/applications", applicationRoutes);
     app.use("/api/admin", crmRoutes); // Changed from /api/crm to /api/admin for better semantics
