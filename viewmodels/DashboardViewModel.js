@@ -1,8 +1,8 @@
 // MVVM Pattern - Dashboard ViewModel
 
-"use client"
+"use client";
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback, useEffect } from "react";
 
 export function useDashboardViewModel() {
   const [stats, setStats] = useState({
@@ -10,13 +10,13 @@ export function useDashboardViewModel() {
     activeEmployers: 0,
     candidatesPlaced: 0,
     monthlyRevenue: 0,
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchDashboardStats = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
 
     try {
       // In a real app, this would be an API call
@@ -24,32 +24,32 @@ export function useDashboardViewModel() {
       // const data = await response.json()
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500))
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       setStats({
         totalCandidates: 10234,
         activeEmployers: 542,
         candidatesPlaced: 1847,
         monthlyRevenue: 420000,
-      })
+      });
 
-      return { success: true }
+      return { success: true };
     } catch (err) {
-      setError(err.message)
-      return { success: false, error: err.message }
+      setError(err.message);
+      return { success: false, error: err.message };
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    fetchDashboardStats()
-  }, [fetchDashboardStats])
+    fetchDashboardStats();
+  }, [fetchDashboardStats]);
 
   return {
     stats,
     loading,
     error,
     fetchDashboardStats,
-  }
+  };
 }

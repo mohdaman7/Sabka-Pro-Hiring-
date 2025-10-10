@@ -1,29 +1,31 @@
-import { Router } from 'express';
-import { authenticate, authorize } from '../middleware/auth.js';
-import { UserModel } from '../models/User.js';
-import { ApplicationModel } from '../models/Application.js';
+import { Router } from "express";
+import { authenticate, authorize } from "../middleware/auth.js";
+import {
+  getAllUsers,
+  getUserById,
+  updateUserStatus,
+  getPlatformStats,
+  getAllJobsAdmin,
+  getAllApplications,
+} from "../controllers/crmController.js";
 
 const router = Router();
 
-router.get('/registrations', authenticate, authorize(['admin']), async (_req, res, next) => {
-  try {
-    const users = await UserModel.find().sort({ createdAt: -1 }).select('-passwordHash');
-    res.json({ success: true, data: users });
-  } catch (err) {
-    next(err);
-  }
-});
+// All CRM routes require admin authentication
+router.use(authenticate, authorize(["admin"]));
 
-router.get('/registrations/:id', authenticate, authorize(['admin']), async (req, res, next) => {
-  try {
-    const user = await UserModel.findById(req.params.id).select('-passwordHash');
-    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+// User management
+router.get("/users", getAllUsers);
+router.get("/users/:id", getUserById);
+router.patch("/users/:id/status", updateUserStatus);
 
-    const applications = await ApplicationModel.find({ studentId: user._id });
-    res.json({ success: true, data: { user, applications } });
-  } catch (err) {
-    next(err);
-  }
-});
+// Platform statistics
+router.get("/stats", getPlatformStats);
+
+// Job management (admin view)
+router.get("/jobs", getAllJobsAdmin);
+
+// Application management (admin view)
+router.get("/applications", getAllApplications);
 
 export default router;
