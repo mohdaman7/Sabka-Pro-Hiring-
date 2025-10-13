@@ -74,7 +74,7 @@ export default function StudentCourses() {
       category: "it",
       thumbnail: "/programming.jpg",
       progress: 0,
-      totalVideos: 20,
+      totalVideos: 25,
       completedVideos: 0,
       duration: "15 hours",
       instructor: "Sarah Williams",
