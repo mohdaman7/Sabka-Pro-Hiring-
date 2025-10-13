@@ -273,7 +273,7 @@ export async function login(req, res, next) {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       });
     }
 
@@ -296,28 +296,57 @@ export async function login(req, res, next) {
       });
     }
 
+    if (user.status === "inactive") {
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been deactivated. Please contact support.",
+        status: "inactive",
+      });
+    }
+
     const valid = await bcrypt.compare(parsed.password, user.passwordHash);
     if (!valid) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       });
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, env.jwtSecret, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+        email: user.email,
+      },
+      env.jwtSecret,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     // Update last login
     user.lastLogin = new Date();
     await user.save();
 
+    // Get user profile based on role
+    let profile = null;
+    if (user.role === "student") {
+      profile = await StudentModel.findOne({ userId: user._id });
+    } else if (user.role === "employer") {
+      profile = await EmployerModel.findOne({ userId: user._id });
+    }
+
     res.json({
       success: true,
-      data: serializeUser(user),
-      token,
+      message: "Login successful",
+      data: {
+        user: serializeUser(user),
+        profile: profile || null,
+        token,
+      },
     });
   } catch (err) {
+    console.error("❌ Login error:", err);
     next(err);
   }
 }
