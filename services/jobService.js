@@ -49,4 +49,10 @@ export const jobService = {
     const response = await api.patch(`/api/jobs/${jobId}/status`, { status });
     return response.data;
   },
+
+  // Get all jobs (public)
+  getAllJobs: async (params = {}) => {
+    const response = await api.get("/api/jobs", { params });
+    return response.data;
+  },
 };
