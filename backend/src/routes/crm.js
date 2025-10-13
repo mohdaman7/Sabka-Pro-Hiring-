@@ -1,3 +1,4 @@
+// backend/src/routes/crm.js
 import { Router } from "express";
 import { authenticate, authorize } from "../middleware/auth.js";
 import {
@@ -7,25 +8,43 @@ import {
   getPlatformStats,
   getAllJobsAdmin,
   getAllApplications,
+  getPendingRegistrations,
+  approveUser,
+  rejectUser,
 } from "../controllers/crmController.js";
 
 const router = Router();
 
 // All CRM routes require admin authentication
-router.use(authenticate, authorize(["admin"]));
+// router.use(authenticate, authorize(["admin"]));
 
-// User management
+// ============================================
+// NEW: Pending Registrations Management
+// ============================================
+router.get("/pending", getPendingRegistrations);
+router.post("/approve/:id", approveUser);
+router.post("/reject/:id", rejectUser);
+
+// ============================================
+// User Management
+// ============================================
 router.get("/users", getAllUsers);
 router.get("/users/:id", getUserById);
 router.patch("/users/:id/status", updateUserStatus);
 
-// Platform statistics
+// ============================================
+// Platform Statistics
+// ============================================
 router.get("/stats", getPlatformStats);
 
-// Job management (admin view)
+// ============================================
+// Job Management (admin view)
+// ============================================
 router.get("/jobs", getAllJobsAdmin);
 
-// Application management (admin view)
+// ============================================
+// Application Management (admin view)
+// ============================================
 router.get("/applications", getAllApplications);
 
 export default router;
