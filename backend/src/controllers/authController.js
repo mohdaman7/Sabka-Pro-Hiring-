@@ -11,6 +11,7 @@ import {
   sendRegistrationAlert,
   sendOTPEmail,
   sendApprovalEmail,
+  sendRegistrationConfirmation,
 } from "../utils/mailer.js";
 
 // Generate 6-digit OTP
@@ -236,6 +237,11 @@ export async function register(req, res, next) {
       console.log("💼 Employer profile created:", profile._id);
     }
 
+    // Send registration confirmation to user (non-blocking)
+    sendRegistrationConfirmation(user, profile).catch((err) =>
+      console.error("❌ Failed to send registration confirmation:", err)
+    );
+
     // Send email alert to admin (non-blocking)
     sendRegistrationAlert(user, profile).catch((err) =>
       console.error("❌ Failed to send registration alert:", err)
@@ -244,7 +250,7 @@ export async function register(req, res, next) {
     res.status(201).json({
       success: true,
       message:
-        "Registration submitted successfully. Your account is pending approval. You will receive an email once approved.",
+        "Registration submitted successfully. Your account is pending approval. You will receive an email confirmation shortly.",
       data: {
         id: user._id,
         email: user.email,

@@ -20,6 +20,206 @@ transporter.verify((error, success) => {
   }
 });
 
+// Send Registration Confirmation Email to User
+export async function sendRegistrationConfirmation(user, profile) {
+  try {
+    const roleDisplayName = user.role === "student" ? "Candidate" : "Employer";
+    const nextSteps =
+      user.role === "student"
+        ? "Our team will review your profile and you'll be able to start exploring job opportunities once approved."
+        : "Our team will review your company details and you'll be able to start posting jobs once approved.";
+
+    const mailOptions = {
+      from: `"Sabka Pro" <${env.smtpUser}>`,
+      to: user.email,
+      subject: "🎉 Registration Received - Sabka Pro",
+      html: `
+        <div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 0;">
+          <table align="center" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            <!-- Header -->
+            <tr>
+              <td align="center" style="background: linear-gradient(135deg, #803791 0%, #b87bd1 100%); padding: 40px 30px;">
+                <div style="background-color: rgba(255,255,255,0.2); border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                  <span style="font-size: 36px; color: white;">📧</span>
+                </div>
+                <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
+                  Registration Received!
+                </h1>
+                <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">
+                  Welcome to Sabka Pro - Your journey begins here
+                </p>
+              </td>
+            </tr>
+
+            <!-- Main Content -->
+            <tr>
+              <td style="padding: 40px 30px;">
+                <!-- Welcome Message -->
+                <div style="text-align: center; margin-bottom: 30px;">
+                  <h2 style="color: #2d3748; margin: 0 0 15px 0; font-size: 22px;">
+                    Hello ${user.firstName || "there"}! 👋
+                  </h2>
+                  <p style="color: #718096; font-size: 16px; line-height: 1.6; margin: 0;">
+                    Thank you for registering as a <strong>${roleDisplayName}</strong> with Sabka Pro. 
+                    We're excited to have you on board!
+                  </p>
+                </div>
+
+                <!-- Status Card -->
+                <div style="background: linear-gradient(135deg, #fff9f0 0%, #fff0f0 100%); border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 4px solid #803791;">
+                  <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: #803791; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                      <span style="color: white; font-size: 18px;">⏳</span>
+                    </div>
+                    <div>
+                      <h3 style="color: #2d3748; margin: 0 0 5px 0; font-size: 18px;">
+                        Account Under Review
+                      </h3>
+                      <p style="color: #718096; margin: 0; font-size: 14px; line-height: 1.5;">
+                        Your registration is currently pending admin approval. ${nextSteps}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Registration Details -->
+                <div style="background-color: #f8fafc; border-radius: 12px; padding: 25px; margin: 25px 0;">
+                  <h3 style="color: #2d3748; margin: 0 0 20px 0; font-size: 18px; text-align: center;">
+                    📋 Registration Details
+                  </h3>
+                  
+                  <table width="100%" cellpadding="12" cellspacing="0" style="border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                      <td style="font-weight: 600; color: #4a5568; width: 140px;">Name</td>
+                      <td style="color: #2d3748;">${user.firstName || ""} ${
+        user.lastName || ""
+      }</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                      <td style="font-weight: 600; color: #4a5568;">Email</td>
+                      <td style="color: #2d3748;">${user.email}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                      <td style="font-weight: 600; color: #4a5568;">Role</td>
+                      <td style="color: #2d3748;">
+                        <span style="background: #803791; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                          ${roleDisplayName}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                      <td style="font-weight: 600; color: #4a5568;">Status</td>
+                      <td style="color: #2d3748;">
+                        <span style="background: #f59e0b; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                          ⏳ Pending Approval
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight: 600; color: #4a5568;">Registered On</td>
+                      <td style="color: #2d3748;">${new Date(
+                        user.createdAt
+                      ).toLocaleDateString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}</td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- What's Next -->
+                <div style="background-color: #f0fff4; border-radius: 12px; padding: 25px; margin: 25px 0; border: 1px solid #c6f6d5;">
+                  <h3 style="color: #2d3748; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                    <span style="background: #48bb78; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 14px;">✓</span>
+                    What Happens Next?
+                  </h3>
+                  <ul style="color: #718096; margin: 0; padding-left: 20px; line-height: 1.6;">
+                    <li>Our team will review your registration details</li>
+                    <li>You'll receive an approval email within 24-48 hours</li>
+                    <li>Once approved, you can access all platform features</li>
+                    <li>We may contact you for additional verification if needed</li>
+                  </ul>
+                </div>
+
+                <!-- Support Info -->
+                <div style="text-align: center; margin-top: 30px; padding-top: 25px; border-top: 1px solid #e2e8f0;">
+                  <p style="color: #718096; font-size: 14px; margin: 0 0 15px 0;">
+                    Need help or have questions?
+                  </p>
+                  <a href="mailto:${env.smtpUser}" 
+                     style="background: linear-gradient(135deg, #803791 0%, #b87bd1 100%); color: white; text-decoration: none; padding: 12px 30px; border-radius: 8px; font-size: 14px; font-weight: 600; display: inline-block;">
+                    📞 Contact Support
+                  </a>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td align="center" style="background-color: #2d3748; padding: 25px; color: #a0aec0; font-size: 13px;">
+                <p style="margin: 0 0 10px 0;">
+                  © ${new Date().getFullYear()} Sabka Pro. All rights reserved.
+                </p>
+                <p style="margin: 0; font-size: 12px;">
+                  Building better careers, connecting great talent with amazing opportunities.
+                </p>
+                <div style="margin-top: 15px;">
+                  <a href="${
+                    env.corsOrigin || "http://localhost:3000"
+                  }" style="color: #b87bd1; text-decoration: none; margin: 0 10px;">Website</a>
+                  <span style="color: #4a5568;">•</span>
+                  <a href="#" style="color: #b87bd1; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+                  <span style="color: #4a5568;">•</span>
+                  <a href="#" style="color: #b87bd1; text-decoration: none; margin: 0 10px;">Terms of Service</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `,
+      text: `
+Welcome to Sabka Pro!
+
+Hello ${user.firstName || "there"}!
+
+Thank you for registering as a ${roleDisplayName} with Sabka Pro. We're excited to have you on board!
+
+📋 YOUR REGISTRATION DETAILS:
+Name: ${user.firstName || ""} ${user.lastName || ""}
+Email: ${user.email}
+Role: ${roleDisplayName}
+Status: ⏳ Pending Approval
+Registered On: ${new Date(user.createdAt).toLocaleDateString()}
+
+⏳ ACCOUNT STATUS:
+Your registration is currently pending admin approval. ${nextSteps}
+
+📞 WHAT HAPPENS NEXT?
+• Our team will review your registration details
+• You'll receive an approval email within 24-48 hours
+• Once approved, you can access all platform features
+• We may contact you for additional verification if needed
+
+Need help? Contact our support team at: ${env.smtpUser}
+
+© ${new Date().getFullYear()} Sabka Pro. All rights reserved.
+Building better careers, connecting great talent with amazing opportunities.
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Registration confirmation sent to: ${user.email}`);
+  } catch (error) {
+    console.error(
+      "❌ Failed to send registration confirmation:",
+      error.message
+    );
+    throw error;
+  }
+}
+
 // Send Registration Alert Email (Enhanced)
 export async function sendRegistrationAlert(user, profile) {
   try {

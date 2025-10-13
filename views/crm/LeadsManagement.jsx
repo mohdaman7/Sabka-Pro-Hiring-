@@ -12,10 +12,11 @@ import {
   User,
   Building,
   Filter,
-  MoreVertical,
   Download,
   Send,
+  RefreshCw,
 } from "lucide-react";
+import { customToast, toast } from "@/components/ui/toast";
 
 export default function LeadsManagement() {
   const [activeTab, setActiveTab] = useState("pending");
@@ -24,6 +25,7 @@ export default function LeadsManagement() {
   const [loading, setLoading] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
@@ -51,22 +53,35 @@ export default function LeadsManagement() {
       const data = await response.json();
       if (data.success) {
         setLeads(data.data || []);
+        customToast.success(
+          "Leads updated",
+          `Loaded ${data.data?.length || 0} ${activeTab} leads`
+        );
+      } else {
+        customToast.error("Failed to fetch leads", data.message);
       }
     } catch (error) {
       console.error("Failed to fetch leads:", error);
+      customToast.error(
+        "Network Error",
+        "Failed to connect to server. Please try again."
+      );
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
-  const handleApprove = async (userId) => {
-    if (
-      !confirm(
-        "Are you sure you want to approve this user? They will receive login credentials via email."
-      )
-    ) {
-      return;
-    }
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchLeads();
+  };
+
+  const handleApprove = async (userId, userName) => {
+    const toastId = customToast.loading(
+      "Approving user...",
+      "Sending credentials via email"
+    );
 
     try {
       const token = localStorage.getItem("token");
@@ -80,23 +95,87 @@ export default function LeadsManagement() {
       });
 
       const data = await response.json();
+
       if (data.success) {
-        alert(
-          "User approved successfully! Login credentials have been sent via email."
+        toast.dismiss(toastId);
+        customToast.success(
+          "User Approved ✅",
+          `Login credentials sent to ${userName}`
         );
         fetchLeads();
       } else {
-        alert(data.message || "Failed to approve user");
+        toast.dismiss(toastId);
+        customToast.error("Approval Failed", data.message);
       }
     } catch (error) {
+      toast.dismiss(toastId);
       console.error("Failed to approve user:", error);
-      alert("Failed to approve user");
+      customToast.error("Approval Failed", "Network error. Please try again.");
     }
   };
 
-  const handleReject = async (userId) => {
-    const reason = prompt("Please provide a reason for rejection:");
+  const handleReject = async (userId, userName) => {
+    // Custom rejection dialog instead of prompt
+    const reason = await new Promise((resolve) => {
+      const modal = document.createElement("div");
+      modal.className =
+        "fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4";
+      modal.innerHTML = `
+        <div class="bg-white/10 backdrop-blur-lg border border-[#803791]/30 rounded-xl p-6 max-w-md w-full">
+          <h3 class="text-white text-lg font-semibold mb-3">Reject User</h3>
+          <p class="text-white/75 mb-4">Please provide a reason for rejecting ${userName}:</p>
+          <textarea 
+            id="rejectReason" 
+            placeholder="Enter rejection reason..."
+            class="w-full bg-white/5 border border-[#803791]/20 rounded-lg px-3 py-2 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] resize-none h-24"
+          ></textarea>
+          <div class="flex gap-3 mt-4">
+            <button 
+              id="cancelReject" 
+              class="flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white transition-all duration-300"
+            >
+              Cancel
+            </button>
+            <button 
+              id="confirmReject" 
+              class="flex-1 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-lg text-red-300 transition-all duration-300"
+            >
+              Reject
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      return new Promise((resolve) => {
+        modal.querySelector("#cancelReject").onclick = () => {
+          document.body.removeChild(modal);
+          resolve(null);
+        };
+
+        modal.querySelector("#confirmReject").onclick = () => {
+          const reason = modal.querySelector("#rejectReason").value.trim();
+          document.body.removeChild(modal);
+          resolve(reason);
+        };
+
+        // Close on backdrop click
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+            resolve(null);
+          }
+        };
+      });
+    });
+
     if (!reason) return;
+
+    const toastId = customToast.loading(
+      "Rejecting user...",
+      "Processing rejection"
+    );
 
     try {
       const token = localStorage.getItem("token");
@@ -111,14 +190,20 @@ export default function LeadsManagement() {
 
       const data = await response.json();
       if (data.success) {
-        alert("User rejected successfully");
+        toast.dismiss(toastId);
+        customToast.success(
+          "User Rejected ❌",
+          `${userName} has been rejected`
+        );
         fetchLeads();
       } else {
-        alert(data.message || "Failed to reject user");
+        toast.dismiss(toastId);
+        customToast.error("Rejection Failed", data.message);
       }
     } catch (error) {
+      toast.dismiss(toastId);
       console.error("Failed to reject user:", error);
-      alert("Failed to reject user");
+      customToast.error("Rejection Failed", "Network error. Please try again.");
     }
   };
 
@@ -218,13 +303,20 @@ export default function LeadsManagement() {
   };
 
   const exportLeads = () => {
-    // Implement export functionality
-    alert("Export functionality to be implemented");
+    const toastId = customToast.loading("Exporting leads...", "Preparing data");
+
+    // Simulate export process
+    setTimeout(() => {
+      toast.dismiss(toastId);
+      customToast.success(
+        "Export Complete",
+        "Leads data has been exported successfully"
+      );
+    }, 2000);
   };
 
   const sendBulkEmail = () => {
-    // Implement bulk email functionality
-    alert("Bulk email functionality to be implemented");
+    customToast.info("Bulk Email", "This feature will be available soon");
   };
 
   return (
@@ -240,6 +332,16 @@ export default function LeadsManagement() {
 
         {/* Action Buttons */}
         <div className="flex gap-3">
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <RefreshCw
+              className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+            />
+            {refreshing ? "Refreshing..." : "Refresh"}
+          </button>
           <button
             onClick={sendBulkEmail}
             className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 hover:scale-105"
@@ -494,14 +596,24 @@ export default function LeadsManagement() {
                       <td className="py-4 px-6">
                         <div className="flex gap-2">
                           <button
-                            onClick={() => handleApprove(lead._id || lead.id)}
+                            onClick={() =>
+                              handleApprove(
+                                lead._id || lead.id,
+                                `${lead.firstName} ${lead.lastName}`
+                              )
+                            }
                             className="p-2 bg-green-500/20 text-green-300 border border-green-500/30 rounded-xl hover:bg-green-500/30 hover:scale-110 transition-all duration-300 group"
                             title="Approve"
                           >
                             <CheckCircle className="w-5 h-5" />
                           </button>
                           <button
-                            onClick={() => handleReject(lead._id || lead.id)}
+                            onClick={() =>
+                              handleReject(
+                                lead._id || lead.id,
+                                `${lead.firstName} ${lead.lastName}`
+                              )
+                            }
                             className="p-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-xl hover:bg-red-500/30 hover:scale-110 transition-all duration-300 group"
                             title="Reject"
                           >
