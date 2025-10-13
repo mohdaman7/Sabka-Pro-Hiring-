@@ -9,58 +9,44 @@ import Header from "@/views/login/Header";
 import TypeSelector from "@/views/login/TypeSelector";
 import LoginForm from "@/views/login/LoginForm";
 import FooterLinks from "@/views/login/FooterLinks";
+import { authService } from "@/services/authService";
+import { useApi } from "@/hooks/useApi";
 
 function LoginContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const type = searchParams.get("type") || "candidate";
 
-  const [loading, setLoading] = useState(false);
+  const { loading, error, callApi } = useApi();
   const [serverError, setServerError] = useState("");
 
   const handleLogin = async (formData) => {
-    setLoading(true);
-    setServerError("");
-
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const result = await callApi(
+        () => authService.login(formData.email, formData.password, type),
+        {
+          onSuccess: (data) => {
+            // Store token and user data
+            localStorage.setItem("token", data.data.token);
+            localStorage.setItem("user", JSON.stringify(data.data.user));
 
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          role: type,
-        }),
-      });
+            if (formData.rememberMe) {
+              localStorage.setItem("rememberMe", "true");
+            }
 
-      const data = await response.json();
-
-      if (data.success) {
-        // Store token and user data
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem("user", JSON.stringify(data.data.user));
-
-        if (formData.rememberMe) {
-          localStorage.setItem("rememberMe", "true");
+            const redirectPath =
+              type === "candidate" ? "/student" : "/employer";
+            router.push(redirectPath);
+          },
+          onError: (error) => {
+            // Additional error handling if needed
+            console.error("Login error:", error);
+          },
         }
-
-        const redirectPath = type === "candidate" ? "/student" : "/employer";
-        router.push(redirectPath);
-      } else {
-        setServerError(data.message || "Login failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setServerError(
-        "Network error. Please check your connection and try again."
       );
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      // Error is already handled by useApi hook
+      // You can add additional error handling here if needed
     }
   };
 
@@ -83,7 +69,7 @@ function LoginContent() {
             type={type}
             onSubmit={handleLogin}
             loading={loading}
-            serverError={serverError}
+            serverError={error || serverError}
           />
 
           <FooterLinks />

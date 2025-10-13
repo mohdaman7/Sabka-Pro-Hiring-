@@ -351,6 +351,21 @@ export async function login(req, res, next) {
   }
 }
 
+export async function logout(req, res, next) {
+  try {
+    // If you're using token blacklisting, you can implement it here
+    // For now, we'll just return success since JWT is stateless
+
+    res.json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (err) {
+    console.error("❌ Logout error:", err);
+    next(err);
+  }
+}
+
 // Helper function
 function serializeUser(user) {
   return {

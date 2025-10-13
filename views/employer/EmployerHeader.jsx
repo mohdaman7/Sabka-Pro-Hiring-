@@ -1,8 +1,38 @@
 "use client";
 
 import { Bell, Search, Menu } from "lucide-react";
+import ProfilePopup from "@/components/ui/ProfilePopup";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { authService } from "@/services/authService";
 
 export default function EmployerHeader({ onMenuClick }) {
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Get user data from localStorage
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Use Axios through authService
+      await authService.logout();
+    } catch (error) {
+      console.error("Logout API error:", error);
+    } finally {
+      // Always clear local storage and redirect
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("rememberMe");
+      router.push("/login");
+    }
+  };
+
   return (
     <header
       className="sticky top-0 z-30 h-16 flex items-center justify-between px-6 shadow-lg backdrop-blur-md border-b border-white/6"
@@ -51,17 +81,7 @@ export default function EmployerHeader({ onMenuClick }) {
           ></span>
         </button>
 
-        <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg ring-2 transition-all hover:shadow-xl hover:scale-105 cursor-pointer"
-            style={{
-              background: "linear-gradient(135deg,#803791,#b87bd1)",
-              ringColor: "rgba(255,255,255,0.2)",
-            }}
-          >
-            <span className="text-white font-semibold text-sm">TS</span>
-          </div>
-        </div>
+        <ProfilePopup user={user} onLogout={handleLogout} />
       </div>
     </header>
   );

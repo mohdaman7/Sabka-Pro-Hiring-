@@ -2,9 +2,38 @@
 
 import { Bell, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import ProfilePopup from "@/components/ui/ProfilePopup";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { authService } from "@/services/authService";
 
 export default function StudentHeader({ onMenuClick }) {
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Get user data from localStorage
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Use Axios through authService
+      await authService.logout();
+    } catch (error) {
+      console.error("Logout API error:", error);
+    } finally {
+      // Always clear local storage and redirect
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("rememberMe");
+      router.push("/login");
+    }
+  };
+
   return (
     <header
       className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/6 px-6 shadow-sm"
@@ -45,11 +74,7 @@ export default function StudentHeader({ onMenuClick }) {
           <span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-md animate-pulse ring-2 ring-white/20" />
         </Button>
 
-        <Avatar className="h-9 w-9 ring-2 ring-white/8 ring-offset-2 transition-all hover:ring-[#b87bd1] hover:scale-105 cursor-pointer">
-          <AvatarFallback className="bg-gradient-to-br from-[#803791] to-[#b87bd1] text-xs font-semibold text-white shadow-md">
-            AS
-          </AvatarFallback>
-        </Avatar>
+        <ProfilePopup user={user} onLogout={handleLogout} />
       </div>
     </header>
   );
