@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import {
   Search,
-  Filter,
   Phone,
   Mail,
   CheckCircle,
@@ -12,6 +11,10 @@ import {
   Clock,
   User,
   Building,
+  Filter,
+  MoreVertical,
+  Download,
+  Send,
 } from "lucide-react";
 
 export default function LeadsManagement() {
@@ -20,6 +23,7 @@ export default function LeadsManagement() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
@@ -126,27 +130,58 @@ export default function LeadsManagement() {
   );
 
   const tabs = [
-    { id: "pending", label: "Pending Approval", icon: Clock, color: "yellow" },
-    { id: "active", label: "Active Users", icon: CheckCircle, color: "green" },
-    { id: "rejected", label: "Rejected", icon: XCircle, color: "red" },
+    {
+      id: "pending",
+      label: "Pending Approval",
+      icon: Clock,
+      count: filteredLeads.filter((l) => l.status === "pending").length,
+    },
+    {
+      id: "active",
+      label: "Active Users",
+      icon: CheckCircle,
+      count: filteredLeads.filter((l) => l.status === "active").length,
+    },
+    {
+      id: "rejected",
+      label: "Rejected",
+      icon: XCircle,
+      count: filteredLeads.filter((l) => l.status === "rejected").length,
+    },
   ];
 
   const getStatusBadge = (status) => {
     const statusConfig = {
       pending: {
-        bg: "bg-yellow-100",
-        text: "text-yellow-700",
+        bg: "bg-yellow-500/20",
+        text: "text-yellow-300",
+        border: "border-yellow-500/30",
         label: "Pending",
       },
-      active: { bg: "bg-green-100", text: "text-green-700", label: "Active" },
-      rejected: { bg: "bg-red-100", text: "text-red-700", label: "Rejected" },
-      inactive: { bg: "bg-gray-100", text: "text-gray-700", label: "Inactive" },
+      active: {
+        bg: "bg-green-500/20",
+        text: "text-green-300",
+        border: "border-green-500/30",
+        label: "Active",
+      },
+      rejected: {
+        bg: "bg-red-500/20",
+        text: "text-red-300",
+        border: "border-red-500/30",
+        label: "Rejected",
+      },
+      inactive: {
+        bg: "bg-gray-500/20",
+        text: "text-gray-300",
+        border: "border-gray-500/30",
+        label: "Inactive",
+      },
     };
 
     const config = statusConfig[status] || statusConfig.pending;
     return (
       <span
-        className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${config.bg} ${config.text} ${config.border}`}
       >
         {config.label}
       </span>
@@ -155,10 +190,16 @@ export default function LeadsManagement() {
 
   const getRoleBadge = (role) => {
     const roleConfig = {
-      student: { bg: "bg-blue-100", text: "text-blue-700", icon: User },
+      student: {
+        bg: "bg-blue-500/20",
+        text: "text-blue-300",
+        border: "border-blue-500/30",
+        icon: User,
+      },
       employer: {
-        bg: "bg-purple-100",
-        text: "text-purple-700",
+        bg: "bg-purple-500/20",
+        text: "text-purple-300",
+        border: "border-purple-500/30",
         icon: Building,
       },
     };
@@ -168,7 +209,7 @@ export default function LeadsManagement() {
 
     return (
       <span
-        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${config.bg} ${config.text} ${config.border}`}
       >
         <Icon className="w-3 h-3" />
         {role.charAt(0).toUpperCase() + role.slice(1)}
@@ -176,123 +217,209 @@ export default function LeadsManagement() {
     );
   };
 
+  const exportLeads = () => {
+    // Implement export functionality
+    alert("Export functionality to be implemented");
+  };
+
+  const sendBulkEmail = () => {
+    // Implement bulk email functionality
+    alert("Bulk email functionality to be implemented");
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl font-bold text-white mb-2">
             Leads Management
           </h1>
-          <p className="text-slate-600">Review and approve new registrations</p>
+          <p className="text-white/75">Review and approve new registrations</p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <button
+            onClick={sendBulkEmail}
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 hover:scale-105"
+          >
+            <Send className="w-4 h-4" />
+            Bulk Email
+          </button>
+          <button
+            onClick={exportLeads}
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 hover:scale-105"
+          >
+            <Download className="w-4 h-4" />
+            Export
+          </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-slate-200 bg-white rounded-t-xl px-4">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const count = filteredLeads.filter((l) =>
-            tab.id === "pending" ? l.status === "pending" : l.status === tab.id
-          ).length;
-
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-3 font-medium transition-all relative flex items-center gap-2 ${
-                activeTab === tab.id
-                  ? "text-indigo-600 border-b-2 border-indigo-600"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              {tab.label}
-              <span
-                className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${
+      <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-1">
+        <div className="flex gap-1">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-3 px-6 py-3 font-medium transition-all duration-300 rounded-lg flex-1 justify-center ${
                   activeTab === tab.id
-                    ? "bg-indigo-100 text-indigo-600"
-                    : "bg-slate-100 text-slate-600"
+                    ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg"
+                    : "text-white/75 hover:text-white hover:bg-white/5"
                 }`}
               >
-                {count}
-              </span>
-            </button>
-          );
-        })}
+                <Icon className="w-5 h-5" />
+                {tab.label}
+                <span
+                  className={`ml-1 px-2 py-1 rounded-full text-xs font-bold min-w-8 ${
+                    activeTab === tab.id
+                      ? "bg-white/20 text-white"
+                      : "bg-white/10 text-white/75"
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Search */}
+      {/* Search and Filters */}
       <div className="flex gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
           <input
             type="text"
             placeholder="Search by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+            className="w-full pl-12 pr-4 py-3 bg-white/5 border border-[#803791]/20 rounded-xl text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] focus:border-transparent transition-all duration-300"
           />
         </div>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="flex items-center gap-2 px-4 py-3 bg-white/5 hover:bg-white/10 border border-[#803791]/20 rounded-xl text-white transition-all duration-300 hover:scale-105"
+        >
+          <Filter className="w-5 h-5" />
+          Filters
+        </button>
       </div>
 
+      {/* Filters Panel */}
+      {showFilters && (
+        <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-4 animate-in fade-in duration-300">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-white/75 mb-2">
+                Role
+              </label>
+              <select className="w-full bg-white/5 border border-[#803791]/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#b87bd1]">
+                <option value="">All Roles</option>
+                <option value="student">Student</option>
+                <option value="employer">Employer</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white/75 mb-2">
+                Date Range
+              </label>
+              <select className="w-full bg-white/5 border border-[#803791]/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#b87bd1]">
+                <option value="">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white/75 mb-2">
+                Sort By
+              </label>
+              <select className="w-full bg-white/5 border border-[#803791]/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#b87bd1]">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="name">Name A-Z</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Leads Table */}
-      <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-200">
+      <div className="bg-white/5 rounded-xl border border-[#803791]/10 overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
           </div>
         ) : filteredLeads.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-slate-500">No leads found</p>
+            <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
+              <User className="w-10 h-10 text-white/50" />
+            </div>
+            <p className="text-white/75 text-lg">No leads found</p>
+            <p className="text-white/50 text-sm mt-2">
+              {searchTerm
+                ? "Try adjusting your search terms"
+                : "No leads match the current filters"}
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-50 border-b border-slate-200">
+              <thead className="bg-white/5 border-b border-[#803791]/10">
                 <tr>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-white/90">
                     User
                   </th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-white/90">
                     Role
                   </th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-white/90">
                     Contact
                   </th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-white/90">
                     Additional Info
                   </th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-white/90">
                     Status
                   </th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-white/90">
                     Registered
                   </th>
                   {activeTab === "pending" && (
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-white/90">
                       Actions
                     </th>
                   )}
                 </tr>
               </thead>
               <tbody>
-                {filteredLeads.map((lead) => (
+                {filteredLeads.map((lead, index) => (
                   <tr
                     key={lead._id || lead.id}
-                    className="border-t border-slate-100 hover:bg-slate-50 transition-colors"
+                    className="border-t border-[#803791]/10 hover:bg-white/5 transition-all duration-300 group"
                   >
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold shadow-lg transition-transform duration-300 group-hover:scale-110"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, #803791, #b87bd1)",
+                          }}
+                        >
                           {lead.firstName?.charAt(0) || "U"}
                           {lead.lastName?.charAt(0) || "N"}
                         </div>
                         <div>
-                          <div className="font-medium text-slate-900">
+                          <div className="font-medium text-white group-hover:text-[#b87bd1] transition-colors duration-300">
                             {lead.firstName} {lead.lastName}
                           </div>
-                          <div className="text-sm text-slate-500">
+                          <div className="text-sm text-white/75">
                             {lead.email}
                           </div>
                         </div>
@@ -300,10 +427,10 @@ export default function LeadsManagement() {
                     </td>
                     <td className="py-4 px-6">{getRoleBadge(lead.role)}</td>
                     <td className="py-4 px-6">
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col gap-2">
                         <a
                           href={`mailto:${lead.email}`}
-                          className="flex items-center gap-2 text-sm text-slate-600 hover:text-indigo-600 transition-colors"
+                          className="flex items-center gap-2 text-sm text-white/75 hover:text-[#b87bd1] transition-all duration-300 hover:translate-x-1"
                         >
                           <Mail className="w-4 h-4" />
                           Email
@@ -311,7 +438,7 @@ export default function LeadsManagement() {
                         {lead.profile?.phone && (
                           <a
                             href={`tel:${lead.profile.phone}`}
-                            className="flex items-center gap-2 text-sm text-slate-600 hover:text-indigo-600 transition-colors"
+                            className="flex items-center gap-2 text-sm text-white/75 hover:text-[#b87bd1] transition-all duration-300 hover:translate-x-1"
                           >
                             <Phone className="w-4 h-4" />
                             {lead.profile.phone}
@@ -320,15 +447,19 @@ export default function LeadsManagement() {
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <div className="text-sm text-slate-600 space-y-1">
+                      <div className="text-sm text-white/75 space-y-1">
                         {lead.role === "student" && lead.profile && (
                           <>
                             <div>
-                              <span className="font-medium">Experience:</span>{" "}
+                              <span className="font-medium text-white">
+                                Experience:
+                              </span>{" "}
                               {lead.profile.experienceType || "N/A"}
                             </div>
                             <div>
-                              <span className="font-medium">Location:</span>{" "}
+                              <span className="font-medium text-white">
+                                Location:
+                              </span>{" "}
                               {lead.profile.address?.city || "N/A"}
                             </div>
                           </>
@@ -336,11 +467,15 @@ export default function LeadsManagement() {
                         {lead.role === "employer" && lead.profile && (
                           <>
                             <div>
-                              <span className="font-medium">Company:</span>{" "}
+                              <span className="font-medium text-white">
+                                Company:
+                              </span>{" "}
                               {lead.profile.company?.name || "N/A"}
                             </div>
                             <div>
-                              <span className="font-medium">Position:</span>{" "}
+                              <span className="font-medium text-white">
+                                Position:
+                              </span>{" "}
                               {lead.profile.position || "N/A"}
                             </div>
                           </>
@@ -348,25 +483,35 @@ export default function LeadsManagement() {
                       </div>
                     </td>
                     <td className="py-4 px-6">{getStatusBadge(lead.status)}</td>
-                    <td className="py-4 px-6 text-sm text-slate-600">
-                      {new Date(lead.createdAt).toLocaleDateString()}
+                    <td className="py-4 px-6 text-sm text-white/75">
+                      {new Date(lead.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
                     </td>
                     {activeTab === "pending" && (
                       <td className="py-4 px-6">
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleApprove(lead._id || lead.id)}
-                            className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
+                            className="p-2 bg-green-500/20 text-green-300 border border-green-500/30 rounded-xl hover:bg-green-500/30 hover:scale-110 transition-all duration-300 group"
                             title="Approve"
                           >
                             <CheckCircle className="w-5 h-5" />
                           </button>
                           <button
                             onClick={() => handleReject(lead._id || lead.id)}
-                            className="p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                            className="p-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-xl hover:bg-red-500/30 hover:scale-110 transition-all duration-300 group"
                             title="Reject"
                           >
                             <XCircle className="w-5 h-5" />
+                          </button>
+                          <button
+                            className="p-2 bg-white/10 text-white/75 border border-white/20 rounded-xl hover:bg-white/20 hover:scale-110 transition-all duration-300 group"
+                            title="View Details"
+                          >
+                            <Eye className="w-5 h-5" />
                           </button>
                         </div>
                       </td>
@@ -378,6 +523,26 @@ export default function LeadsManagement() {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {filteredLeads.length > 0 && (
+        <div className="flex items-center justify-between py-4 px-6 bg-white/5 rounded-xl border border-[#803791]/10">
+          <div className="text-sm text-white/75">
+            Showing {filteredLeads.length} of {leads.length} leads
+          </div>
+          <div className="flex gap-2">
+            <button className="px-3 py-2 bg-white/5 border border-[#803791]/20 rounded-lg text-white/75 hover:bg-white/10 hover:text-white transition-all duration-300">
+              Previous
+            </button>
+            <button className="px-3 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] border border-[#803791] rounded-lg text-white shadow-lg transition-all duration-300 hover:scale-105">
+              1
+            </button>
+            <button className="px-3 py-2 bg-white/5 border border-[#803791]/20 rounded-lg text-white/75 hover:bg-white/10 hover:text-white transition-all duration-300">
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
