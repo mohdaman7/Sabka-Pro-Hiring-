@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Upload,
   Loader2,
@@ -14,286 +15,144 @@ import {
   CheckCircle,
 } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+// Redux imports
+import {
+  updateCandidateField,
+  updateCandidateFileField,
+  setCandidateErrors,
+  setCandidateStep,
+  setCandidateTimer,
+  decrementCandidateTimer,
+  clearCandidateServerError,
+} from "@/src/store/slices/studentSlice";
+import {
+  sendCandidateOTP,
+  verifyCandidateOTP,
+  registerCandidate,
+} from "@/src/store/slices/studentSlice";
+import {
+  validateCandidateStep1,
+  validateCandidateStep3,
+  validateFile,
+} from "@/src/store/utils/validation";
 
 export default function CandidateLeadForm({ onSuccess }) {
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [timer, setTimer] = useState(0);
+  const dispatch = useDispatch();
+  const candidateState = useSelector((state) => state.candidate);
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    otp: "",
-    termsAccepted: false,
-    experienceType: "fresher",
-    location: "",
-    kycDocument: null,
-    kycType: "aadhar",
-    kycNumber: "",
-  });
+  const {
+    formData,
+    step,
+    loading,
+    serverError,
+    otpSent,
+    timer,
+    errors,
+    isRegistered,
+  } = candidateState;
 
-  const [errors, setErrors] = useState({});
+  // Timer effect
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        dispatch(decrementCandidateTimer());
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timer, dispatch]);
+
+  // Handle success registration
+  useEffect(() => {
+    if (isRegistered && candidateState.registrationResult && onSuccess) {
+      onSuccess(candidateState.registrationResult.formData);
+    }
+  }, [isRegistered, candidateState.registrationResult, onSuccess]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
 
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+    dispatch(
+      updateCandidateField({
+        field: name,
+        value: type === "checkbox" ? checked : value,
+      })
+    );
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const allowedTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "application/pdf",
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        setErrors((prev) => ({
-          ...prev,
-          kycDocument: "Please upload JPG, PNG, or PDF file",
-        }));
+      const fileError = validateFile(file);
+      if (fileError) {
+        dispatch(setCandidateErrors({ ...errors, kycDocument: fileError }));
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        setErrors((prev) => ({
-          ...prev,
-          kycDocument: "File size must be less than 5MB",
-        }));
-        return;
-      }
-      setFormData((prev) => ({ ...prev, kycDocument: file }));
-      setErrors((prev) => ({ ...prev, kycDocument: "" }));
+      dispatch(updateCandidateFileField({ field: "kycDocument", file }));
     }
   };
 
-  const validateStep1 = () => {
-    const newErrors = {};
+  const handleSendOTP = async () => {
+    const step1Errors = validateCandidateStep1(formData);
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
-      newErrors.phone = "Invalid phone number (10 digits required)";
-    }
-
-    if (!formData.termsAccepted) {
-      newErrors.termsAccepted = "You must accept the terms and conditions";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateStep3 = () => {
-    const newErrors = {};
-
-    if (!formData.location.trim()) {
-      newErrors.location = "Location is required";
-    }
-
-    if (!formData.kycNumber.trim()) {
-      newErrors.kycNumber = "KYC document number is required";
-    }
-
-    if (!formData.kycDocument) {
-      newErrors.kycDocument = "KYC document upload is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const sendOTP = async () => {
-    if (!validateStep1()) return;
-
-    setLoading(true);
-    setServerError("");
-
-    try {
-      const response = await fetch(`${API_URL}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: formData.phone,
-          email: formData.email,
-        }),
-      });
-
-      if (response.status === 404) {
-        console.log("OTP sent (mock):", "123456");
-        setOtpSent(true);
-        setStep(2);
-        setTimer(60);
-        return;
-      }
-
-      const data = await response.json();
-
-      if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Failed to send OTP");
-      }
-
-      setOtpSent(true);
-      setStep(2);
-      setTimer(60);
-    } catch (err) {
-      setServerError(err?.message || "Failed to send OTP. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const verifyOTP = async () => {
-    if (!formData.otp.trim() || formData.otp.length !== 6) {
-      setErrors({ otp: "Please enter valid 6-digit OTP" });
+    if (Object.keys(step1Errors).length > 0) {
+      dispatch(setCandidateErrors(step1Errors));
       return;
     }
 
-    setLoading(true);
-    setServerError("");
+    dispatch(
+      sendCandidateOTP({
+        phone: formData.phone,
+        email: formData.email,
+      })
+    );
+  };
 
-    try {
-      const response = await fetch(`${API_URL}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: formData.phone,
-          otp: formData.otp,
-        }),
-      });
-
-      if (response.status === 404) {
-        console.log("OTP verified (mock)");
-        setStep(3);
-        return;
-      }
-
-      const data = await response.json();
-
-      if (!response.ok || !data?.success) {
-        throw new Error(data?.message || "Invalid OTP");
-      }
-
-      setStep(3);
-    } catch (err) {
-      setServerError(err?.message || "Invalid OTP. Please try again.");
-    } finally {
-      setLoading(false);
+  const handleVerifyOTP = async () => {
+    if (!formData.otp.trim() || formData.otp.length !== 6) {
+      dispatch(setCandidateErrors({ otp: "Please enter valid 6-digit OTP" }));
+      return;
     }
+
+    dispatch(
+      verifyCandidateOTP({
+        phone: formData.phone,
+        otp: formData.otp,
+      })
+    );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateStep3()) return;
+    const step3Errors = validateCandidateStep3(formData);
 
-    setServerError("");
-    setLoading(true);
+    if (Object.keys(step3Errors).length > 0) {
+      dispatch(setCandidateErrors(step3Errors));
 
-    try {
-      const tempPassword = `Temp@${Math.random().toString(36).slice(-8)}`;
-
-      const registerResponse = await fetch(`${API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: tempPassword,
-          role: "student",
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        }),
-      });
-
-      const registerData = await registerResponse.json();
-
-      if (!registerResponse.ok || !registerData?.success) {
-        throw new Error(registerData?.message || "Registration failed");
+      // Scroll to the first error if any
+      const firstErrorField = Object.keys(step3Errors)[0];
+      if (firstErrorField) {
+        const element = document.querySelector(`[name="${firstErrorField}"]`);
+        element?.scrollIntoView({ behavior: "smooth", block: "center" });
       }
+      return;
+    }
 
-      if (registerData?.token) {
-        try {
-          localStorage.setItem("token", registerData.token);
-          localStorage.setItem("user", JSON.stringify(registerData.data));
-        } catch {}
-      }
+    dispatch(registerCandidate(formData));
+  };
 
-      const profileResponse = await fetch(`${API_URL}/api/student/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${registerData.token}`,
-        },
-        body: JSON.stringify({
-          phone: formData.phone,
-          address: {
-            city: formData.location,
-          },
-          bio: `${
-            formData.experienceType === "fresher" ? "Fresher" : "Experienced"
-          } candidate`,
-          kycInfo: {
-            type: formData.kycType,
-            number: formData.kycNumber,
-            verified: false,
-          },
-        }),
-      });
-
-      const profileData = await profileResponse.json();
-
-      if (!profileResponse.ok || !profileData?.success) {
-        console.warn("Profile creation warning:", profileData?.message);
-      }
-
-      // Call success callback
-      if (onSuccess) {
-        onSuccess({
-          ...formData,
-          userId: registerData.data?._id || registerData.data?.id,
-        });
-      }
-    } catch (err) {
-      setServerError(err?.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+  const handleBack = () => {
+    if (step > 1) {
+      dispatch(setCandidateStep(step - 1));
+      dispatch(clearCandidateServerError());
     }
   };
 
-  useState(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-      }, 1000);
-      return () => clearInterval(interval);
+  const handleResendOTP = () => {
+    if (timer === 0) {
+      handleSendOTP();
     }
-  }, [timer]);
+  };
 
   return (
     <motion.div
@@ -489,7 +348,7 @@ export default function CandidateLeadForm({ onSuccess }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="button"
-              onClick={sendOTP}
+              onClick={handleSendOTP}
               disabled={loading}
               className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
@@ -542,7 +401,7 @@ export default function CandidateLeadForm({ onSuccess }) {
               ) : (
                 <button
                   type="button"
-                  onClick={sendOTP}
+                  onClick={handleResendOTP}
                   className="text-primary hover:underline"
                 >
                   Resend OTP
@@ -556,7 +415,7 @@ export default function CandidateLeadForm({ onSuccess }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="button"
-              onClick={verifyOTP}
+              onClick={handleVerifyOTP}
               disabled={loading}
               className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
@@ -575,7 +434,7 @@ export default function CandidateLeadForm({ onSuccess }) {
 
             <button
               type="button"
-              onClick={() => setStep(1)}
+              onClick={handleBack}
               className="w-full text-sm text-muted-foreground hover:text-foreground"
             >
               ← Back to Basic Info
@@ -770,7 +629,7 @@ export default function CandidateLeadForm({ onSuccess }) {
 
             <button
               type="button"
-              onClick={() => setStep(2)}
+              onClick={handleBack}
               className="w-full text-sm text-muted-foreground hover:text-foreground"
             >
               ← Back to OTP Verification

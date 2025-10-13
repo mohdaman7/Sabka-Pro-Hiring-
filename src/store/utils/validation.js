@@ -87,3 +87,51 @@ export const validateFile = (file) => {
 
   return null;
 };
+
+export const validateCandidateStep1 = (formData) => {
+  const errors = {};
+
+  if (!formData.firstName.trim()) {
+    errors.firstName = "First name is required";
+  }
+
+  if (!formData.lastName.trim()) {
+    errors.lastName = "Last name is required";
+  }
+
+  if (!formData.email.trim()) {
+    errors.email = "Email is required";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    errors.email = "Invalid email format";
+  }
+
+  if (!formData.phone.trim()) {
+    errors.phone = "Phone number is required";
+  } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
+    errors.phone = "Invalid phone number (10 digits required)";
+  }
+
+  if (!formData.termsAccepted) {
+    errors.termsAccepted = "You must accept the terms and conditions";
+  }
+
+  return errors;
+};
+
+export const validateCandidateStep3 = (formData) => {
+  const errors = {};
+
+  if (!formData.location.trim()) {
+    errors.location = "Location is required";
+  }
+
+  if (!formData.kycNumber.trim()) {
+    errors.kycNumber = "KYC document number is required";
+  }
+
+  if (!formData.kycDocument) {
+    errors.kycDocument = "KYC document upload is required";
+  }
+
+  return errors;
+};
