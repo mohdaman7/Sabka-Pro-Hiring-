@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Briefcase,
   MapPin,
@@ -18,9 +19,14 @@ import {
   ChevronDown,
   X,
   Check,
+  Loader2,
 } from "lucide-react";
+import { jobService } from "@/services/jobService";
+import { customToast } from "@/components/ui/toast";
 
 export default function PostNewJob() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     jobTitle: "",
     department: "",
@@ -77,11 +83,105 @@ export default function PostNewJob() {
     }));
   };
 
-  const handleSubmit = (action) => {
-    console.log("Job posting:", action, formData);
-    alert(
-      `Job ${action === "draft" ? "saved as draft" : "published"} successfully!`
-    );
+  const validateForm = () => {
+    const requiredFields = [
+      "jobTitle",
+      "department",
+      "location",
+      "experience",
+      "education",
+      "salary",
+      "description",
+      "responsibilities",
+    ];
+
+    for (const field of requiredFields) {
+      if (!formData[field]?.trim()) {
+        const fieldName = field.replace(/([A-Z])/g, " $1").toLowerCase();
+        customToast.error("Validation Error", `${fieldName} is required`);
+        return false;
+      }
+    }
+
+    if (formData.skills.length === 0) {
+      customToast.error("Validation Error", "At least one skill is required");
+      return false;
+    }
+
+    if (!formData.deadline) {
+      customToast.error("Validation Error", "Application deadline is required");
+      return false;
+    }
+
+    const deadline = new Date(formData.deadline);
+    if (deadline <= new Date()) {
+      customToast.error("Validation Error", "Deadline must be in the future");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (action) => {
+    if (!validateForm()) return;
+
+    setLoading(true);
+
+    try {
+      const jobData = {
+        title: formData.jobTitle,
+        department: formData.department,
+        location: formData.location,
+        jobType: formData.jobType,
+        workMode: formData.workMode,
+        experience: formData.experience,
+        education: formData.education,
+        salary: formData.salary,
+        vacancies: parseInt(formData.vacancies),
+        deadline: formData.deadline, // Send as string (ISO format from date input)
+        skills: formData.skills,
+        description: formData.description,
+        responsibilities: formData.responsibilities,
+        requirements: formData.requirements,
+        status: action === "draft" ? "draft" : "active",
+      };
+
+      const result = await jobService.createJob(jobData);
+
+      if (result.success) {
+        customToast.success("Success!", result.message);
+
+        if (action === "publish") {
+          router.push("/employer/jobs");
+        } else {
+          // Reset form for draft
+          setFormData({
+            jobTitle: "",
+            department: "",
+            location: "",
+            jobType: "Full-time",
+            workMode: "On-site",
+            experience: "",
+            salary: "",
+            vacancies: "1",
+            deadline: "",
+            education: "",
+            skills: [],
+            description: "",
+            responsibilities: "",
+            requirements: "",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Job posting error:", error);
+      customToast.error(
+        "Error",
+        error.response?.data?.message || "Failed to post job. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const CustomSelect = ({ name, value, options, icon: Icon, label }) => {
@@ -94,9 +194,10 @@ export default function PostNewJob() {
         <button
           type="button"
           onClick={() => setOpenDropdown(isOpen ? null : name)}
-          className="w-full flex items-center justify-between pl-10 pr-4 py-3 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all bg-transparent hover:border-white/20 text-white"
+          className="w-full flex items-center justify-between pl-10 pr-4 py-3 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all bg-transparent hover:border-white/20 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={loading}
         >
-          <Icon className="absolute left-3 top-[2.7rem] w-5 h-5 text-white/70" />
+          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" />
           <span className="text-white">{value}</span>
           <ChevronDown
             className={`w-5 h-5 text-white/70 transition-transform ${
@@ -105,7 +206,7 @@ export default function PostNewJob() {
           />
         </button>
         {isOpen && (
-          <div className="absolute z-10 w-full mt-2 bg-white/5 border border-[#803791]/20 rounded-lg shadow-xl overflow-hidden">
+          <div className="absolute z-10 w-full mt-2 bg-white/5 border border-[#803791]/20 rounded-lg shadow-xl overflow-hidden backdrop-blur-lg">
             {options.map((option) => (
               <button
                 key={option}
@@ -188,7 +289,8 @@ export default function PostNewJob() {
                     value={formData.jobTitle}
                     onChange={handleInputChange}
                     placeholder="e.g. Senior Frontend Developer"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -205,7 +307,8 @@ export default function PostNewJob() {
                     value={formData.department}
                     onChange={handleInputChange}
                     placeholder="e.g. Engineering"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -222,7 +325,8 @@ export default function PostNewJob() {
                     value={formData.location}
                     onChange={handleInputChange}
                     placeholder="e.g. Mumbai, Maharashtra"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -279,7 +383,8 @@ export default function PostNewJob() {
                     value={formData.experience}
                     onChange={handleInputChange}
                     placeholder="e.g. 3-5 years"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -296,7 +401,8 @@ export default function PostNewJob() {
                     value={formData.education}
                     onChange={handleInputChange}
                     placeholder="e.g. Bachelor's in Computer Science"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -313,7 +419,8 @@ export default function PostNewJob() {
                     value={formData.salary}
                     onChange={handleInputChange}
                     placeholder="e.g. ₹8-12 LPA"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -330,7 +437,8 @@ export default function PostNewJob() {
                     value={formData.vacancies}
                     onChange={handleInputChange}
                     min="1"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -346,7 +454,8 @@ export default function PostNewJob() {
                     name="deadline"
                     value={formData.deadline}
                     onChange={handleInputChange}
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent"
+                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -366,13 +475,15 @@ export default function PostNewJob() {
                         e.key === "Enter" && (e.preventDefault(), addSkill())
                       }
                       placeholder="Type a skill and press Enter"
-                      className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent"
+                      className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={loading}
                     />
                   </div>
                   <button
                     type="button"
                     onClick={addSkill}
-                    className="px-8 py-3.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105"
+                    disabled={loading || !currentSkill.trim()}
+                    className="px-8 py-3.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
                   >
                     Add
                   </button>
@@ -388,7 +499,8 @@ export default function PostNewJob() {
                         <button
                           type="button"
                           onClick={() => removeSkill(skill)}
-                          className="w-5 h-5 bg-[#803791]/12 rounded-full flex items-center justify-center text-white hover:bg-[#803791]/20 transition-all group-hover:scale-110"
+                          disabled={loading}
+                          className="w-5 h-5 bg-[#803791]/12 rounded-full flex items-center justify-center text-white hover:bg-[#803791]/20 transition-all group-hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -430,7 +542,8 @@ export default function PostNewJob() {
                   onChange={handleInputChange}
                   rows="6"
                   placeholder="Provide a detailed description of the role, company culture, and what makes this opportunity unique..."
-                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent"
+                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
                 />
               </div>
 
@@ -444,7 +557,8 @@ export default function PostNewJob() {
                   onChange={handleInputChange}
                   rows="6"
                   placeholder="• Responsibility 1&#10;• Responsibility 2&#10;• Responsibility 3"
-                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent"
+                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
                 />
               </div>
 
@@ -458,7 +572,8 @@ export default function PostNewJob() {
                   onChange={handleInputChange}
                   rows="5"
                   placeholder="Any additional requirements, certifications, or nice-to-have qualifications..."
-                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent"
+                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -470,18 +585,28 @@ export default function PostNewJob() {
               <button
                 type="button"
                 onClick={() => handleSubmit("draft")}
-                className="px-8 py-4 bg-transparent border border-white/10 text-white/90 rounded-xl hover:bg-white/6 transition-all font-semibold flex items-center justify-center gap-3 shadow-sm hover:shadow-md hover:scale-105"
+                disabled={loading}
+                className="px-8 py-4 bg-transparent border border-white/10 text-white/90 rounded-xl hover:bg-white/6 transition-all font-semibold flex items-center justify-center gap-3 shadow-sm hover:shadow-md hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
               >
-                <Save className="w-5 h-5 text-white/90" />
-                Save as Draft
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Save className="w-5 h-5 text-white/90" />
+                )}
+                {loading ? "Saving..." : "Save as Draft"}
               </button>
               <button
                 type="button"
                 onClick={() => handleSubmit("publish")}
-                className="px-8 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:scale-105"
+                disabled={loading}
+                className="px-8 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
               >
-                <Send className="w-5 h-5" />
-                Publish Job
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Send className="w-5 h-5" />
+                )}
+                {loading ? "Publishing..." : "Publish Job"}
               </button>
             </div>
           </div>

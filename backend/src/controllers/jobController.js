@@ -3,45 +3,72 @@ import { JobModel } from "../models/Job.js";
 
 // Validation schemas
 export const createJobSchema = z.object({
-  title: z.string().min(2),
-  description: z.string().min(10),
-  location: z.string().optional(),
-  salaryMin: z.number().int().nonnegative().optional(),
-  salaryMax: z.number().int().nonnegative().optional(),
-  requirements: z.array(z.string()).optional(),
-  benefits: z.array(z.string()).optional(),
-  jobType: z
-    .enum(["full-time", "part-time", "contract", "internship", "remote"])
-    .optional(),
-  category: z.string().optional(),
-  applicationDeadline: z.date().optional(),
+  title: z.string().min(2, "Job title must be at least 2 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  department: z.string().min(1, "Department is required"),
+  location: z.string().min(1, "Location is required"),
+  jobType: z.enum([
+    "Full-time",
+    "Part-time",
+    "Contract",
+    "Internship",
+    "Freelance",
+  ]),
+  workMode: z.enum(["On-site", "Remote", "Hybrid"]),
+  experience: z.string().min(1, "Experience is required"),
+  education: z.string().min(1, "Education is required"),
+  salary: z.string().min(1, "Salary is required"),
+  vacancies: z.number().int().positive("Vacancies must be a positive number"),
+  deadline: z.string().min(1, "Deadline is required"), // Keep as string
+  skills: z.array(z.string()).min(1, "At least one skill is required"),
+  responsibilities: z
+    .string()
+    .min(10, "Responsibilities must be at least 10 characters"),
+  requirements: z.string().optional(),
+  status: z.enum(["draft", "active"]).default("draft"),
 });
 
 export const updateJobSchema = z.object({
   title: z.string().min(2).optional(),
   description: z.string().min(10).optional(),
+  department: z.string().optional(),
   location: z.string().optional(),
-  salaryMin: z.number().int().nonnegative().optional(),
-  salaryMax: z.number().int().nonnegative().optional(),
-  requirements: z.array(z.string()).optional(),
-  benefits: z.array(z.string()).optional(),
   jobType: z
-    .enum(["full-time", "part-time", "contract", "internship", "remote"])
+    .enum(["Full-time", "Part-time", "Contract", "Internship", "Freelance"])
     .optional(),
-  category: z.string().optional(),
-  applicationDeadline: z.date().optional(),
-  status: z.enum(["active", "paused", "closed"]).optional(),
+  workMode: z.enum(["On-site", "Remote", "Hybrid"]).optional(),
+  experience: z.string().optional(),
+  education: z.string().optional(),
+  salary: z.string().optional(),
+  vacancies: z.number().int().positive().optional(),
+  deadline: z.string().optional(), // Keep as string
+  skills: z.array(z.string()).optional(),
+  responsibilities: z.string().optional(),
+  requirements: z.string().optional(),
+  status: z.enum(["draft", "active", "paused", "closed"]).optional(),
 });
 
 // Create a new job
 export const createJob = async (req, res, next) => {
   try {
-    const parsed = createJobSchema.parse(req.body);
+    const parsed = createJobSchema.parse({
+      ...req.body,
+      vacancies: parseInt(req.body.vacancies),
+      // Keep deadline as string, let MongoDB handle the date conversion
+    });
+
     const job = await JobModel.create({
       ...parsed,
       employerId: req.user.id,
     });
-    res.status(201).json({ success: true, data: job });
+
+    res.status(201).json({
+      success: true,
+      message: `Job ${
+        parsed.status === "draft" ? "saved as draft" : "published"
+      } successfully`,
+      data: job,
+    });
   } catch (err) {
     next(err);
   }
@@ -56,18 +83,19 @@ export const getAllJobs = async (req, res, next) => {
       search,
       location,
       jobType,
-      category,
+      workMode,
       minSalary,
       maxSalary,
     } = req.query;
 
-    const filter = { status: "active" }; // Only show active jobs by default
+    const filter = { status: "active" };
 
     if (search) {
       filter.$or = [
         { title: new RegExp(search, "i") },
         { description: new RegExp(search, "i") },
-        { category: new RegExp(search, "i") },
+        { department: new RegExp(search, "i") },
+        { skills: { $in: [new RegExp(search, "i")] } },
       ];
     }
 
@@ -79,20 +107,12 @@ export const getAllJobs = async (req, res, next) => {
       filter.jobType = jobType;
     }
 
-    if (category) {
-      filter.category = new RegExp(category, "i");
-    }
-
-    if (minSalary) {
-      filter.salaryMin = { $gte: parseInt(minSalary) };
-    }
-
-    if (maxSalary) {
-      filter.salaryMax = { $lte: parseInt(maxSalary) };
+    if (workMode) {
+      filter.workMode = workMode;
     }
 
     const jobs = await JobModel.find(filter)
-      .populate("employerId", "company name")
+      .populate("employerId", "firstName lastName company")
       .sort({ createdAt: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit);
@@ -118,10 +138,21 @@ export const getAllJobs = async (req, res, next) => {
 // Get employer's jobs
 export const getMyJobs = async (req, res, next) => {
   try {
-    const jobs = await JobModel.find({ employerId: req.user.id })
-      .populate("employerId", "company name")
+    const { status } = req.query;
+    const filter = { employerId: req.user.id };
+
+    if (status) {
+      filter.status = status;
+    }
+
+    const jobs = await JobModel.find(filter)
+      .populate("employerId", "firstName lastName company")
       .sort({ createdAt: -1 });
-    res.json({ success: true, data: jobs });
+
+    res.json({
+      success: true,
+      data: jobs,
+    });
   } catch (err) {
     next(err);
   }
@@ -130,16 +161,21 @@ export const getMyJobs = async (req, res, next) => {
 // Get single job by ID
 export const getJobById = async (req, res, next) => {
   try {
-    const job = await JobModel.findById(req.params.id).populate(
-      "employerId",
-      "company name website size industry"
-    );
+    const job = await JobModel.findById(req.params.id)
+      .populate("employerId", "firstName lastName company website industry")
+      .populate("applications");
 
     if (!job) {
-      return res.status(404).json({ success: false, message: "Job not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
     }
 
-    res.json({ success: true, data: job });
+    res.json({
+      success: true,
+      data: job,
+    });
   } catch (err) {
     next(err);
   }
@@ -148,7 +184,17 @@ export const getJobById = async (req, res, next) => {
 // Update job
 export const updateJob = async (req, res, next) => {
   try {
-    const parsed = updateJobSchema.parse(req.body);
+    const updateData = { ...req.body };
+
+    // Convert string numbers to actual numbers
+    if (updateData.vacancies) {
+      updateData.vacancies = parseInt(updateData.vacancies);
+    }
+    if (updateData.deadline) {
+      updateData.deadline = new Date(updateData.deadline);
+    }
+
+    const parsed = updateJobSchema.parse(updateData);
 
     const job = await JobModel.findOneAndUpdate(
       { _id: req.params.id, employerId: req.user.id },
@@ -217,7 +263,10 @@ export const getJobApplications = async (req, res, next) => {
       .populate("studentId", "firstName lastName email profile")
       .sort({ appliedAt: -1 });
 
-    res.json({ success: true, data: applications });
+    res.json({
+      success: true,
+      data: applications,
+    });
   } catch (err) {
     next(err);
   }
