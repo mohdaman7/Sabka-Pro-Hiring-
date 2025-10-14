@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as authController from "../controllers/authController.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -18,5 +19,11 @@ router.post("/register", authController.register);
 
 router.post("/login", authController.login);
 router.post("/logout", authController.logout);
+
+// Additions to align with frontend services
+router.get("/me", authenticate, authController.me ?? ((req, res) => res.status(501).json({ success: false, message: "Not implemented" })));
+router.put("/profile", authenticate, authController.updateCurrentProfile ?? ((req, res) => res.status(501).json({ success: false, message: "Not implemented" })));
+router.post("/forgot-password", authController.forgotPassword ?? ((req, res) => res.status(501).json({ success: false, message: "Not implemented" })));
+router.post("/reset-password", authController.resetPassword ?? ((req, res) => res.status(501).json({ success: false, message: "Not implemented" })));
 
 export default router;

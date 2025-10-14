@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { userService } from "@/services/userService";
 import {
   User,
   Mail,
@@ -22,7 +23,9 @@ import {
 export default function StudentProfile() {
   const [selectedPlan, setSelectedPlan] = useState("free");
   const [profileImage, setProfileImage] = useState(null);
+  const [profileImageFile, setProfileImageFile] = useState(null);
   const [cvFile, setCvFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -39,14 +42,50 @@ export default function StudentProfile() {
     skills: "",
   });
 
-  const handleImageUpload = (e) => {
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const res = await userService.getProfile();
+        const { user, profile } = res.data || {};
+        if (!mounted) return;
+        setSelectedPlan(profile?.plan || "free");
+        setProfileImage(profile?.profilePicture?.url || null);
+        setFormData((prev) => ({
+          ...prev,
+          email: user?.email || "",
+          whatsapp: profile?.phone || "",
+          location: profile?.address?.city || "",
+          qualification: profile?.highestQualification || "",
+          fieldOfStudy: "",
+          institution: profile?.education?.[0]?.institution || "",
+          yearOfPassing: profile?.education?.[0]?.graduationYear?.toString?.() || "",
+          preferredRole: profile?.jobPreferences?.preferredRoles?.[0] || "",
+          jobType: profile?.jobPreferences?.jobTypes?.[0] || "",
+          preferredLocation: profile?.jobPreferences?.preferredLocations?.[0] || "",
+          skills: (profile?.skills || []).map((s) => s.name).join(", "),
+        }));
+      } catch (_) {
+        // noop
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    setProfileImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setProfileImage(reader.result);
+    reader.readAsDataURL(file);
+    try {
+      await userService.uploadProfilePicture(file);
+    } catch (_) {
+      // ignore upload errors here; UI preview still updates
     }
   };
 
@@ -64,8 +103,44 @@ export default function StudentProfile() {
     });
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted", formData, selectedPlan);
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const skillsArray = formData.skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((name) => ({ name }));
+
+      const educationEntry = formData.institution || formData.fieldOfStudy || formData.yearOfPassing
+        ? [{
+            degree: formData.qualification || "",
+            institution: formData.institution || "",
+            fieldOfStudy: formData.fieldOfStudy || "",
+            graduationYear: Number(formData.yearOfPassing || 0) || new Date().getFullYear(),
+          }]
+        : undefined;
+
+      const payload = {
+        plan: selectedPlan,
+        phone: formData.whatsapp || undefined,
+        address: { city: formData.location || undefined },
+        highestQualification: formData.qualification || undefined,
+        education: educationEntry,
+        jobPreferences: {
+          preferredRoles: formData.preferredRole ? [formData.preferredRole] : undefined,
+          jobTypes: formData.jobType ? [formData.jobType] : undefined,
+          preferredLocations: formData.preferredLocation ? [formData.preferredLocation] : undefined,
+        },
+        skills: skillsArray.length ? skillsArray : undefined,
+      };
+
+      await userService.updateProfile(payload);
+    } catch (_) {
+      // optionally show toast
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

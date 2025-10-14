@@ -88,13 +88,15 @@ export const getMyApplications = async (req, res, next) => {
     }
 
     const sortOptions = {};
-    sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1;
+    const sortField = ["createdAt", "updatedAt", "status"].includes(sortBy)
+      ? sortBy
+      : "createdAt";
+    sortOptions[sortField] = sortOrder === "desc" ? -1 : 1;
 
     const applications = await ApplicationModel.find(filter)
       .populate({
         path: "jobId",
-        select:
-          "title company location salaryMin salaryMax jobType requirements",
+        select: "title company location salary jobType requirements",
         populate: {
           path: "employerId",
           select: "company.name website industry",
@@ -162,10 +164,13 @@ export const getApplicationsForMyJobs = async (req, res, next) => {
     }
 
     const sortOptions = {};
-    sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1;
+    const sortField = ["createdAt", "updatedAt", "status"].includes(sortBy)
+      ? sortBy
+      : "createdAt";
+    sortOptions[sortField] = sortOrder === "desc" ? -1 : 1;
 
     const applications = await ApplicationModel.find(filter)
-      .populate("jobId", "title location salaryMin salaryMax")
+      .populate("jobId", "title location salary")
       .populate(
         "studentId",
         "firstName lastName email profile skills education"

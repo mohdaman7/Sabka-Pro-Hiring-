@@ -8,7 +8,9 @@ import {
   updateJob,
   deleteJob,
   getJobApplications,
+  changeJobStatus,
 } from "../controllers/jobController.js";
+import { limitByPlan } from "../middleware/plan.js";
 
 const router = Router();
 
@@ -17,7 +19,13 @@ router.get("/", getAllJobs);
 router.get("/:id", getJobById);
 
 // Employer routes
-router.post("/", authenticate, authorize(["employer", "admin"]), createJob);
+router.post(
+  "/",
+  authenticate,
+  authorize(["employer", "admin"]),
+  limitByPlan("create_or_activate_job"),
+  createJob
+);
 router.get(
   "/employer/my-jobs",
   authenticate,
@@ -25,6 +33,13 @@ router.get(
   getMyJobs
 );
 router.put("/:id", authenticate, authorize(["employer", "admin"]), updateJob);
+router.patch(
+  "/:id/status",
+  authenticate,
+  authorize(["employer", "admin"]),
+  limitByPlan("create_or_activate_job"),
+  changeJobStatus
+);
 router.delete(
   "/:id",
   authenticate,

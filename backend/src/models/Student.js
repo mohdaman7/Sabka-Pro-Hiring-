@@ -37,6 +37,13 @@ const studentSchema = new Schema(
       required: true,
       unique: true,
     },
+    // Subscription plan
+    plan: {
+      type: String,
+      enum: ["free", "pro"],
+      default: "free",
+      index: true,
+    },
     phone: { type: String },
     phoneVerified: { type: Boolean, default: false },
     dateOfBirth: { type: Date },
@@ -112,6 +119,11 @@ const studentSchema = new Schema(
     },
 
     // Documents
+    profilePicture: {
+      filename: String,
+      url: String,
+      uploadedAt: { type: Date, default: Date.now },
+    },
     resume: {
       filename: String,
       originalName: String,

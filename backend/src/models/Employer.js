@@ -39,6 +39,14 @@ const employerSchema = new Schema(
       unique: true,
     },
 
+    // Subscription plan
+    plan: {
+      type: String,
+      enum: ["free", "pro"],
+      default: "free",
+      index: true,
+    },
+
     // Company Information
     company: companySchema,
 

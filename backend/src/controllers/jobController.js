@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { JobModel } from "../models/Job.js";
+import { ApplicationModel } from "../models/Application.js";
 
 // Validation schemas
 export const createJobSchema = z.object({
@@ -261,12 +262,41 @@ export const getJobApplications = async (req, res, next) => {
 
     const applications = await ApplicationModel.find({ jobId: req.params.id })
       .populate("studentId", "firstName lastName email profile")
-      .sort({ appliedAt: -1 });
+      .sort({ createdAt: -1 });
 
     res.json({
       success: true,
       data: applications,
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Change job status
+import { z } from "zod";
+export const changeJobStatusSchema = z.object({
+  status: z.enum(["draft", "active", "paused", "closed"]),
+});
+
+export const changeJobStatus = async (req, res, next) => {
+  try {
+    const parsed = changeJobStatusSchema.parse(req.body);
+
+    const job = await JobModel.findOneAndUpdate(
+      { _id: req.params.id, employerId: req.user.id },
+      { $set: { status: parsed.status } },
+      { new: true, runValidators: true }
+    );
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found or you are not authorized to update this job",
+      });
+    }
+
+    res.json({ success: true, data: job, message: "Status updated" });
   } catch (err) {
     next(err);
   }
