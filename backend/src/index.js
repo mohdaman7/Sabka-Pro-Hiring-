@@ -3,6 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import path from "path";
+import { fileURLToPath } from "url";
 import { env } from "./config/env.js";
 import { connectToDatabase } from "./config/db.js";
 import { errorHandler } from "./middleware/error.js";
@@ -13,6 +15,7 @@ import applicationRoutes from "./routes/applications.js";
 import crmRoutes from "./routes/crm.js";
 import studentRoutes from "./routes/student.js";
 import employerRoutes from "./routes/employer.js";
+import userRoutes from "./routes/user.js";
 
 // Rate limiting configuration
 const limiter = rateLimit({
@@ -65,7 +68,11 @@ async function bootstrap() {
       })
     );
 
-    // Body parsing middleware
+    // Static and body parsing middleware
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const uploadsDir = path.resolve(__dirname, "..", "uploads");
+    app.use("/uploads", express.static(uploadsDir));
     app.use(express.json({ limit: "10mb" }));
     app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -108,6 +115,7 @@ async function bootstrap() {
     app.use("/api/admin", crmRoutes); // Changed from /api/crm to /api/admin for better semantics
     app.use("/api/student", studentRoutes);
     app.use("/api/employer", employerRoutes);
+    app.use("/api/user", userRoutes);
 
     // API documentation route (you can implement Swagger later)
     app.get("/api/docs", (_req, res) => {
@@ -121,6 +129,7 @@ async function bootstrap() {
           admin: "/api/admin",
           student: "/api/student",
           employer: "/api/employer",
+          user: "/api/user",
         },
       });
     });

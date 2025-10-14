@@ -9,11 +9,18 @@ import {
   withdrawApplication,
   getApplicationStats,
 } from "../controllers/applicationController.js";
+import { limitByPlan } from "../middleware/plan.js";
 
 const router = Router();
 
 // Student routes
-router.post("/apply", authenticate, authorize(["student"]), applyForJob);
+router.post(
+  "/apply",
+  authenticate,
+  authorize(["student"]),
+  limitByPlan("apply_job"),
+  applyForJob
+);
 router.get(
   "/student/my-applications",
   authenticate,

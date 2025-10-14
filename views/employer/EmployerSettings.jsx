@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { userService } from "@/services/userService";
 import {
   User,
   Building,
@@ -22,6 +23,40 @@ export default function EmployerSettings() {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [company, setCompany] = useState({ name: "", website: "", description: "" });
+  const [contact, setContact] = useState({ email: "", phone: "", address: "" });
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await userService.getProfile();
+        const { user, profile } = res.data || {};
+        if (!mounted) return;
+        setCompany({
+          name: profile?.company?.name || "",
+          website: profile?.company?.website || "",
+          description: profile?.company?.description || "",
+        });
+        setContact({
+          email: user?.email || "",
+          phone: profile?.contact?.phone || "",
+          address: [
+            profile?.contact?.address?.street,
+            profile?.contact?.address?.city,
+            profile?.contact?.address?.state,
+            profile?.contact?.address?.country,
+            profile?.contact?.address?.zipCode,
+          ]
+            .filter(Boolean)
+            .join(", ") || "",
+        });
+      } catch (_) {}
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const tabs = [
     { id: "profile", label: "Company Profile", icon: Building },
@@ -164,7 +199,8 @@ export default function EmployerSettings() {
                   </label>
                   <input
                     type="text"
-                    defaultValue="Tech Solutions"
+                    value={company.name}
+                    onChange={(e) => setCompany({ ...company, name: e.target.value })}
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] transition-all"
                   />
                 </div>
@@ -176,7 +212,8 @@ export default function EmployerSettings() {
                   </label>
                   <input
                     type="url"
-                    defaultValue="https://techsolutions.com"
+                    value={company.website}
+                    onChange={(e) => setCompany({ ...company, website: e.target.value })}
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] transition-all"
                   />
                 </div>
@@ -188,7 +225,8 @@ export default function EmployerSettings() {
                   </label>
                   <input
                     type="email"
-                    defaultValue="hr@techsolutions.com"
+                    value={contact.email}
+                    onChange={(e) => setContact({ ...contact, email: e.target.value })}
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] transition-all"
                   />
                 </div>
@@ -200,7 +238,8 @@ export default function EmployerSettings() {
                   </label>
                   <input
                     type="tel"
-                    defaultValue="+91 98765 43210"
+                    value={contact.phone}
+                    onChange={(e) => setContact({ ...contact, phone: e.target.value })}
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] transition-all"
                   />
                 </div>
@@ -213,7 +252,8 @@ export default function EmployerSettings() {
                 </label>
                 <textarea
                   rows={3}
-                  defaultValue="123 Business Park, Mumbai, Maharashtra 400001"
+                  value={contact.address}
+                  onChange={(e) => setContact({ ...contact, address: e.target.value })}
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] transition-all resize-none"
                 />
               </div>
@@ -224,13 +264,21 @@ export default function EmployerSettings() {
                 </label>
                 <textarea
                   rows={4}
-                  defaultValue="Leading technology solutions provider specializing in enterprise software and digital transformation."
+                  value={company.description}
+                  onChange={(e) => setCompany({ ...company, description: e.target.value })}
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] transition-all resize-none"
                 />
               </div>
 
               <button
-                onClick={handleSave}
+                onClick={async () => {
+                  const [street, city, state, country, zip] = contact.address.split(",").map((s) => s.trim());
+                  await userService.updateProfile({
+                    company: { name: company.name, website: company.website, description: company.description },
+                    contact: { phone: contact.phone, address: { street, city, state, country, zipCode: zip } },
+                  });
+                  handleSave();
+                }}
                 className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg transition-transform hover:scale-105 font-medium shadow-lg flex items-center gap-2"
               >
                 <Save className="w-4 h-4" />
