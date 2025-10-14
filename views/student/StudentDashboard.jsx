@@ -14,7 +14,7 @@ export default function StudentDashboard() {
   const stats = [
     {
       label: "Jobs Applied",
-      value: "12",
+      value: "14",
       icon: Briefcase,
       color: "text-blue-600",
       bgColor: "bg-blue-50",
