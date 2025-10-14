@@ -274,7 +274,6 @@ export const getJobApplications = async (req, res, next) => {
 };
 
 // Change job status
-import { z } from "zod";
 export const changeJobStatusSchema = z.object({
   status: z.enum(["draft", "active", "paused", "closed"]),
 });

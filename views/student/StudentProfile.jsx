@@ -18,7 +18,183 @@ import {
   Target,
   TrendingUp,
   Crown,
+  Calendar,
+  Trash2,
+  Plus,
 } from "lucide-react";
+import { customToast } from "@/components/ui/toast";
+
+// Loading Skeleton Component
+const ProfileSkeleton = () => {
+  return (
+    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(128,55,145,0.08)" }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(184,123,209,0.06)" }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
+          style={{ background: "rgba(240,194,238,0.03)" }}
+        />
+      </div>
+
+      {/* Header Skeleton */}
+      <div
+        className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl backdrop-blur-md border border-white/6"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
+          boxShadow: "0 12px 40px rgba(128,55,145,0.12)",
+        }}
+      >
+        <div className="animate-pulse">
+          <div className="h-8 bg-white/20 rounded w-1/3 mb-2"></div>
+          <div className="h-4 bg-white/20 rounded w-1/2"></div>
+        </div>
+      </div>
+
+      {/* Profile Completion Skeleton */}
+      <div
+        className="rounded-xl p-6 shadow-lg"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+          border: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        <div className="animate-pulse">
+          <div className="flex items-center justify-between mb-4">
+            <div className="space-y-2">
+              <div className="h-6 bg-white/20 rounded w-32"></div>
+              <div className="h-4 bg-white/20 rounded w-48"></div>
+            </div>
+            <div className="text-right">
+              <div className="h-8 bg-white/20 rounded w-16 mb-1"></div>
+              <div className="h-3 bg-white/20 rounded w-12"></div>
+            </div>
+          </div>
+          <div className="w-full bg-white/6 rounded-full h-3">
+            <div className="h-3 bg-white/20 rounded-full w-3/4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Left Column Skeleton */}
+        <div className="space-y-6">
+          {/* Profile Picture Skeleton */}
+          <div
+            className="rounded-xl p-6 shadow-md"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <div className="animate-pulse">
+              <div className="h-6 bg-white/20 rounded w-32 mb-4"></div>
+              <div className="flex flex-col items-center">
+                <div className="w-32 h-32 bg-white/20 rounded-full mb-4"></div>
+                <div className="h-4 bg-white/20 rounded w-40"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Plan Selection Skeleton */}
+          <div
+            className="rounded-xl p-6 shadow-md"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <div className="animate-pulse">
+              <div className="h-6 bg-white/20 rounded w-32 mb-4"></div>
+              <div className="space-y-3">
+                <div className="p-4 rounded-xl border border-white/6">
+                  <div className="h-5 bg-white/20 rounded w-24 mb-2"></div>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-white/20 rounded w-full"></div>
+                    <div className="h-4 bg-white/20 rounded w-3/4"></div>
+                  </div>
+                </div>
+                <div className="p-4 rounded-xl border border-white/6">
+                  <div className="h-5 bg-white/20 rounded w-24 mb-2"></div>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-white/20 rounded w-full"></div>
+                    <div className="h-4 bg-white/20 rounded w-3/4"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Stats Skeleton */}
+          <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl p-6 shadow-lg">
+            <div className="animate-pulse">
+              <div className="h-6 bg-white/20 rounded w-32 mb-4"></div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-4 bg-white/20 rounded w-24"></div>
+                  <div className="h-6 bg-white/20 rounded w-8"></div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="h-4 bg-white/20 rounded w-24"></div>
+                  <div className="h-6 bg-white/20 rounded w-8"></div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="h-4 bg-white/20 rounded w-24"></div>
+                  <div className="h-6 bg-white/20 rounded w-8"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column Form Skeleton */}
+        <div
+          className="lg:col-span-2 rounded-xl p-8 shadow-md"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div className="animate-pulse">
+            <div className="h-8 bg-white/20 rounded w-48 mb-6"></div>
+
+            {/* Form Sections Skeleton */}
+            <div className="space-y-8">
+              {[1, 2, 3, 4, 5].map((section) => (
+                <div key={section} className="space-y-4">
+                  <div className="h-6 bg-white/20 rounded w-40 mb-2"></div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {[1, 2, 3, 4].map((field) => (
+                      <div key={field}>
+                        <div className="h-4 bg-white/20 rounded w-24 mb-2"></div>
+                        <div className="h-12 bg-white/20 rounded-xl"></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {/* Submit Button Skeleton */}
+              <div className="h-14 bg-white/20 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function StudentProfile() {
   const [selectedPlan, setSelectedPlan] = useState("free");
@@ -26,118 +202,423 @@ export default function StudentProfile() {
   const [profileImageFile, setProfileImageFile] = useState(null);
   const [cvFile, setCvFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(true);
   const [formData, setFormData] = useState({
-    name: "",
+    // Basic Info
+    firstName: "",
+    lastName: "",
     email: "",
-    whatsapp: "",
-    location: "",
-    qualification: "",
-    fieldOfStudy: "",
-    institution: "",
-    yearOfPassing: "",
-    preferredRole: "",
-    jobType: "",
-    expectedSalary: "",
-    preferredLocation: "",
+    phone: "",
+    dateOfBirth: "",
+
+    // Address
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      country: "India",
+      zipCode: "",
+    },
+
+    // Education
+    education: [
+      {
+        degree: "",
+        institution: "",
+        fieldOfStudy: "",
+        graduationYear: new Date().getFullYear(),
+        currentlyEnrolled: false,
+      },
+    ],
+
+    // Job Preferences
+    jobPreferences: {
+      preferredRoles: [""],
+      preferredLocations: [""],
+      jobTypes: [""],
+      expectedSalary: {
+        min: "",
+        max: "",
+        currency: "INR",
+      },
+      willingToRelocate: false,
+    },
+
+    // Skills
     skills: "",
+
+    // Bio
+    bio: "",
+
+    // Experience
+    experienceType: "fresher",
   });
 
   useEffect(() => {
     let mounted = true;
+
     async function load() {
       try {
+        setDataLoading(true);
         const res = await userService.getProfile();
         const { user, profile } = res.data || {};
         if (!mounted) return;
+
         setSelectedPlan(profile?.plan || "free");
         setProfileImage(profile?.profilePicture?.url || null);
-        setFormData((prev) => ({
-          ...prev,
-          email: user?.email || "",
-          whatsapp: profile?.phone || "",
-          location: profile?.address?.city || "",
-          qualification: profile?.highestQualification || "",
-          fieldOfStudy: "",
-          institution: profile?.education?.[0]?.institution || "",
-          yearOfPassing: profile?.education?.[0]?.graduationYear?.toString?.() || "",
-          preferredRole: profile?.jobPreferences?.preferredRoles?.[0] || "",
-          jobType: profile?.jobPreferences?.jobTypes?.[0] || "",
-          preferredLocation: profile?.jobPreferences?.preferredLocations?.[0] || "",
-          skills: (profile?.skills || []).map((s) => s.name).join(", "),
-        }));
-      } catch (_) {
-        // noop
+
+        // Set form data with proper structure
+        if (user && profile) {
+          setFormData((prev) => ({
+            ...prev,
+            // Basic info
+            firstName: user?.firstName || "",
+            lastName: user?.lastName || "",
+            email: user?.email || "",
+            phone: profile?.phone || "",
+            dateOfBirth: profile?.dateOfBirth
+              ? new Date(profile.dateOfBirth).toISOString().split("T")[0]
+              : "",
+
+            // Address
+            address: {
+              street: profile?.address?.street || "",
+              city: profile?.address?.city || "",
+              state: profile?.address?.state || "",
+              country: profile?.address?.country || "India",
+              zipCode: profile?.address?.zipCode || "",
+            },
+
+            // Education - ensure proper structure
+            education:
+              profile?.education?.length > 0
+                ? profile.education.map((edu) => ({
+                    ...edu,
+                    graduationYear:
+                      edu.graduationYear || new Date().getFullYear(),
+                    currentlyEnrolled: edu.currentlyEnrolled || false,
+                  }))
+                : [
+                    {
+                      degree: "",
+                      institution: "",
+                      fieldOfStudy: "",
+                      graduationYear: new Date().getFullYear(),
+                      currentlyEnrolled: false,
+                    },
+                  ],
+
+            // Job Preferences
+            jobPreferences: {
+              preferredRoles:
+                profile?.jobPreferences?.preferredRoles?.length > 0
+                  ? profile.jobPreferences.preferredRoles
+                  : [""],
+              preferredLocations:
+                profile?.jobPreferences?.preferredLocations?.length > 0
+                  ? profile.jobPreferences.preferredLocations
+                  : [""],
+              jobTypes:
+                profile?.jobPreferences?.jobTypes?.length > 0
+                  ? profile.jobPreferences.jobTypes
+                  : [""],
+              expectedSalary: profile?.jobPreferences?.expectedSalary || {
+                min: "",
+                max: "",
+                currency: "INR",
+              },
+              willingToRelocate:
+                profile?.jobPreferences?.willingToRelocate || false,
+            },
+
+            // Skills
+            skills: (profile?.skills || []).map((s) => s.name).join(", "),
+
+            // Bio
+            bio: profile?.bio || "",
+
+            // Experience
+            experienceType: profile?.experienceType || "fresher",
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to load profile:", error);
+        customToast.error("Error", "Failed to load profile data");
+      } finally {
+        if (mounted) {
+          setDataLoading(false);
+        }
       }
     }
+
     load();
+
     return () => {
       mounted = false;
     };
   }, []);
 
+  // Show skeleton while loading data
+  if (dataLoading) {
+    return <ProfileSkeleton />;
+  }
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Validate file type and size
+    if (!file.type.startsWith("image/")) {
+      customToast.error("Error", "Please upload an image file");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      customToast.error("Error", "Image size should be less than 5MB");
+      return;
+    }
+
     setProfileImageFile(file);
     const reader = new FileReader();
     reader.onloadend = () => setProfileImage(reader.result);
     reader.readAsDataURL(file);
+
     try {
       await userService.uploadProfilePicture(file);
-    } catch (_) {
-      // ignore upload errors here; UI preview still updates
+      customToast.success("Success", "Profile picture updated successfully");
+    } catch (error) {
+      console.error("Failed to upload profile picture:", error);
+      customToast.error("Error", "Failed to upload profile picture");
     }
   };
 
-  const handleCvUpload = (e) => {
+  const handleCvUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setCvFile(file);
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = [".pdf", ".doc", ".docx"];
+    const fileExtension = "." + file.name.split(".").pop().toLowerCase();
+    if (!allowedTypes.includes(fileExtension)) {
+      customToast.error("Error", "Please upload PDF, DOC, or DOCX files only");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      customToast.error("Error", "File size should be less than 5MB");
+      return;
+    }
+
+    setCvFile(file);
+    customToast.info(
+      "Info",
+      "CV upload functionality will be implemented soon"
+    );
+  };
+
+  // Handle basic input changes
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checked,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+  // Handle address changes
+  const handleAddressChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      address: {
+        ...prev.address,
+        [field]: value,
+      },
+    }));
+  };
+
+  // Handle education field changes
+  const handleEducationChange = (index, field, value) => {
+    setFormData((prev) => {
+      const updatedEducation = [...prev.education];
+      updatedEducation[index] = {
+        ...updatedEducation[index],
+        [field]: value,
+      };
+      return {
+        ...prev,
+        education: updatedEducation,
+      };
     });
+  };
+
+  // Handle job preferences changes
+  const handleJobPreferenceChange = (field, value, index = 0) => {
+    setFormData((prev) => {
+      const currentArray = prev.jobPreferences[field] || [""];
+      const updatedArray = [...currentArray];
+      updatedArray[index] = value;
+
+      return {
+        ...prev,
+        jobPreferences: {
+          ...prev.jobPreferences,
+          [field]: updatedArray.filter((item) => item !== ""),
+        },
+      };
+    });
+  };
+
+  // Handle salary range changes
+  const handleSalaryChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      jobPreferences: {
+        ...prev.jobPreferences,
+        expectedSalary: {
+          ...prev.jobPreferences.expectedSalary,
+          [field]: value ? parseInt(value) : "",
+        },
+      },
+    }));
+  };
+
+  // Add new education entry
+  const addEducationEntry = () => {
+    setFormData((prev) => ({
+      ...prev,
+      education: [
+        ...prev.education,
+        {
+          degree: "",
+          institution: "",
+          fieldOfStudy: "",
+          graduationYear: new Date().getFullYear(),
+          currentlyEnrolled: false,
+        },
+      ],
+    }));
+  };
+
+  // Remove education entry
+  const removeEducationEntry = (index) => {
+    if (formData.education.length === 1) {
+      customToast.info("Info", "You need at least one education entry");
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      education: prev.education.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Add new job preference entry
+  const addJobPreferenceEntry = (field) => {
+    setFormData((prev) => ({
+      ...prev,
+      jobPreferences: {
+        ...prev.jobPreferences,
+        [field]: [...prev.jobPreferences[field], ""],
+      },
+    }));
   };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
+
+      // Validate required fields
+      if (!formData.firstName || !formData.lastName || !formData.email) {
+        customToast.error("Error", "Please fill in all required fields");
+        return;
+      }
+
+      // Validate education data - only include if all required fields are filled
+      const educationData = formData.education
+        .filter(
+          (edu) =>
+            edu.degree &&
+            edu.institution &&
+            edu.fieldOfStudy &&
+            edu.graduationYear
+        )
+        .map((edu) => ({
+          degree: edu.degree,
+          institution: edu.institution,
+          fieldOfStudy: edu.fieldOfStudy,
+          graduationYear: parseInt(edu.graduationYear),
+          currentlyEnrolled: edu.currentlyEnrolled,
+        }));
+
+      if (educationData.length === 0) {
+        customToast.error(
+          "Error",
+          "Please fill in at least one education entry completely"
+        );
+        return;
+      }
+
+      // Prepare skills array
       const skillsArray = formData.skills
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean)
-        .map((name) => ({ name }));
+        .map((name) => ({ name, level: "intermediate" }));
 
-      const educationEntry = formData.institution || formData.fieldOfStudy || formData.yearOfPassing
-        ? [{
-            degree: formData.qualification || "",
-            institution: formData.institution || "",
-            fieldOfStudy: formData.fieldOfStudy || "",
-            graduationYear: Number(formData.yearOfPassing || 0) || new Date().getFullYear(),
-          }]
-        : undefined;
-
+      // Prepare the payload
       const payload = {
         plan: selectedPlan,
-        phone: formData.whatsapp || undefined,
-        address: { city: formData.location || undefined },
-        highestQualification: formData.qualification || undefined,
-        education: educationEntry,
+        phone: formData.phone || undefined,
+        dateOfBirth: formData.dateOfBirth || undefined,
+        address: formData.address,
+        bio: formData.bio || undefined,
+        experienceType: formData.experienceType,
+        education: educationData,
+        highestQualification: educationData[0]?.degree || "",
         jobPreferences: {
-          preferredRoles: formData.preferredRole ? [formData.preferredRole] : undefined,
-          jobTypes: formData.jobType ? [formData.jobType] : undefined,
-          preferredLocations: formData.preferredLocation ? [formData.preferredLocation] : undefined,
+          preferredRoles:
+            formData.jobPreferences.preferredRoles.filter(Boolean),
+          preferredLocations:
+            formData.jobPreferences.preferredLocations.filter(Boolean),
+          jobTypes: formData.jobPreferences.jobTypes.filter(Boolean),
+          expectedSalary:
+            formData.jobPreferences.expectedSalary.min ||
+            formData.jobPreferences.expectedSalary.max
+              ? {
+                  min:
+                    parseInt(formData.jobPreferences.expectedSalary.min) || 0,
+                  max:
+                    parseInt(formData.jobPreferences.expectedSalary.max) || 0,
+                  currency: "INR",
+                }
+              : undefined,
+          willingToRelocate: formData.jobPreferences.willingToRelocate,
         },
-        skills: skillsArray.length ? skillsArray : undefined,
+        skills: skillsArray,
       };
 
-      await userService.updateProfile(payload);
-    } catch (_) {
-      // optionally show toast
+      // Remove undefined values
+      const cleanPayload = Object.fromEntries(
+        Object.entries(payload).filter(
+          ([_, v]) => v !== undefined && v !== null && v !== ""
+        )
+      );
+
+      await userService.updateProfile(cleanPayload);
+      customToast.success("Success", "Profile updated successfully");
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to update profile";
+      customToast.error("Error", errorMessage);
     } finally {
       setLoading(false);
     }
@@ -145,7 +626,23 @@ export default function StudentProfile() {
 
   return (
     <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
-      {/* Header - purple glass */}
+      {/* Background Effects */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(128,55,145,0.08)" }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(184,123,209,0.06)" }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
+          style={{ background: "rgba(240,194,238,0.03)" }}
+        />
+      </div>
+
+      {/* Header */}
       <div
         className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl backdrop-blur-md border border-white/6"
         style={{
@@ -166,7 +663,7 @@ export default function StudentProfile() {
         </div>
       </div>
 
-      {/* Profile Completion Status - glass */}
+      {/* Profile Completion Status */}
       <div
         className="rounded-xl p-6 shadow-lg"
         style={{
@@ -231,7 +728,7 @@ export default function StudentProfile() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    "AS"
+                    <User className="w-12 h-12 text-white" />
                   )}
                 </div>
                 <label
@@ -275,7 +772,6 @@ export default function StudentProfile() {
                     ? "border-white/8 bg-white/6 shadow-md"
                     : "border-white/6 hover:border-white/10"
                 }`}
-                style={{ cursor: "pointer" }}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -312,7 +808,6 @@ export default function StudentProfile() {
                     : "border-white/6 hover:border-white/10 text-white"
                 }`}
               >
-                <div className="absolute top-1 right-2"></div>
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 rounded-full border-2 border-white/12 flex items-center justify-center">
@@ -384,7 +879,7 @@ export default function StudentProfile() {
             Personal Information
           </h3>
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Basic Information */}
             <div className="space-y-4">
               <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
@@ -395,18 +890,34 @@ export default function StudentProfile() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-white/90 mb-2">
-                    Full Name <span className="text-red-500">*</span>
+                    First Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    name="name"
-                    value={formData.name}
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleInputChange}
-                    placeholder="Enter your full name"
+                    placeholder="Enter your first name"
                     className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
                   />
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-white/90 mb-2">
+                    Last Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    placeholder="Enter your last name"
+                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-white/90 mb-2">
                     Email Address <span className="text-red-500">*</span>
@@ -423,41 +934,141 @@ export default function StudentProfile() {
                     />
                   </div>
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white/90 mb-2">
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="+91 98765 43210"
+                      className="w-full pl-11 pr-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-white/90 mb-2">
-                    WhatsApp Number <span className="text-red-500">*</span>
+                    Date of Birth
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
                     <input
-                      type="tel"
-                      name="whatsapp"
-                      value={formData.whatsapp}
+                      type="date"
+                      name="dateOfBirth"
+                      value={formData.dateOfBirth}
                       onChange={handleInputChange}
-                      placeholder="+91 98765 43210"
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="w-full pl-11 pr-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-white/90 mb-2">
-                    Location
+                    Experience Type
                   </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleInputChange}
-                      placeholder="City, State"
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    />
-                  </div>
+                  <select
+                    name="experienceType"
+                    value={formData.experienceType}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                  >
+                    <option value="fresher">Fresher</option>
+                    <option value="experienced">Experienced</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/90 mb-2">
+                  Bio
+                </label>
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleInputChange}
+                  rows={3}
+                  placeholder="Tell us about yourself, your career goals, and what you're looking for..."
+                  className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all resize-none"
+                ></textarea>
+              </div>
+            </div>
+
+            {/* Address Information */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
+                <MapPin className="w-5 h-5 text-[#b87bd1]" />
+                Address Information
+              </h4>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/90 mb-2">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.address.city}
+                    onChange={(e) =>
+                      handleAddressChange("city", e.target.value)
+                    }
+                    placeholder="Enter your city"
+                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white/90 mb-2">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.address.state}
+                    onChange={(e) =>
+                      handleAddressChange("state", e.target.value)
+                    }
+                    placeholder="Enter your state"
+                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/90 mb-2">
+                    Country
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.address.country}
+                    onChange={(e) =>
+                      handleAddressChange("country", e.target.value)
+                    }
+                    placeholder="Enter your country"
+                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white/90 mb-2">
+                    ZIP Code
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.address.zipCode}
+                    onChange={(e) =>
+                      handleAddressChange("zipCode", e.target.value)
+                    }
+                    placeholder="Enter ZIP code"
+                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                  />
                 </div>
               </div>
             </div>
@@ -469,70 +1080,132 @@ export default function StudentProfile() {
                 Educational Qualification
               </h4>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Highest Qualification
-                  </label>
-                  <select
-                    name="qualification"
-                    value={formData.qualification}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-fuchsia-900 text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
-                  >
-                    <option value="">Select qualification</option>
-                    <option value="10th">10th Pass</option>
-                    <option value="12th">12th Pass</option>
-                    <option value="diploma">Diploma</option>
-                    <option value="graduate">Graduate</option>
-                    <option value="postgraduate">Post Graduate</option>
-                  </select>
-                </div>
+              {formData.education.map((edu, index) => (
+                <div
+                  key={index}
+                  className="grid md:grid-cols-2 gap-4 p-4 border border-white/6 rounded-xl relative"
+                >
+                  <div>
+                    <label className="block text-sm font-medium text-white/90 mb-2">
+                      Degree <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={edu.degree}
+                      onChange={(e) =>
+                        handleEducationChange(index, "degree", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-fuchsia-900 text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    >
+                      <option value="">Select degree</option>
+                      <option value="High School">High School</option>
+                      <option value="Diploma">Diploma</option>
+                      <option value="Bachelor's Degree">
+                        Bachelor's Degree
+                      </option>
+                      <option value="Master's Degree">Master's Degree</option>
+                      <option value="PhD">PhD</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Field of Study
-                  </label>
-                  <input
-                    type="text"
-                    name="fieldOfStudy"
-                    value={formData.fieldOfStudy}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Computer Science"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
-                  />
-                </div>
-              </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white/90 mb-2">
+                      Institution <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={edu.institution}
+                      onChange={(e) =>
+                        handleEducationChange(
+                          index,
+                          "institution",
+                          e.target.value
+                        )
+                      }
+                      placeholder="University/College name"
+                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    />
+                  </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Institution Name
-                  </label>
-                  <input
-                    type="text"
-                    name="institution"
-                    value={formData.institution}
-                    onChange={handleInputChange}
-                    placeholder="University/College name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white/90 mb-2">
+                      Field of Study <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={edu.fieldOfStudy}
+                      onChange={(e) =>
+                        handleEducationChange(
+                          index,
+                          "fieldOfStudy",
+                          e.target.value
+                        )
+                      }
+                      placeholder="e.g., Computer Science"
+                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Year of Passing
-                  </label>
-                  <input
-                    type="number"
-                    name="yearOfPassing"
-                    value={formData.yearOfPassing}
-                    onChange={handleInputChange}
-                    placeholder="2024"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-white/90 mb-2">
+                      Graduation Year <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      value={edu.graduationYear}
+                      onChange={(e) =>
+                        handleEducationChange(
+                          index,
+                          "graduationYear",
+                          e.target.value
+                        )
+                      }
+                      placeholder="2024"
+                      min="1900"
+                      max="2030"
+                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2 flex items-center justify-between">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={edu.currentlyEnrolled}
+                        onChange={(e) =>
+                          handleEducationChange(
+                            index,
+                            "currentlyEnrolled",
+                            e.target.checked
+                          )
+                        }
+                        className="rounded border-white/8 bg-transparent text-[#b87bd1] focus:ring-[#b87bd1]"
+                      />
+                      <span className="text-white/90">Currently Enrolled</span>
+                    </label>
+
+                    {formData.education.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeEducationEntry(index)}
+                        className="px-3 py-1 text-red-500 border border-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors flex items-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Remove
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
+              ))}
+
+              <button
+                type="button"
+                onClick={addEducationEntry}
+                className="px-4 py-2 border border-dashed border-white/8 rounded-xl text-white/80 hover:text-white hover:border-white/12 transition-colors flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Another Education
+              </button>
             </div>
 
             {/* Job Preferences */}
@@ -545,26 +1218,88 @@ export default function StudentProfile() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-white/90 mb-2">
-                    Preferred Job Role
+                    Preferred Job Roles
                   </label>
-                  <input
-                    type="text"
-                    name="preferredRole"
-                    value={formData.preferredRole}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Frontend Developer"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
-                  />
+                  {formData.jobPreferences.preferredRoles.map((role, index) => (
+                    <div key={index} className="flex gap-2 mb-2">
+                      <input
+                        type="text"
+                        value={role}
+                        onChange={(e) =>
+                          handleJobPreferenceChange(
+                            "preferredRoles",
+                            e.target.value,
+                            index
+                          )
+                        }
+                        placeholder="e.g., Frontend Developer"
+                        className="flex-1 px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      />
+                      {index ===
+                        formData.jobPreferences.preferredRoles.length - 1 && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addJobPreferenceEntry("preferredRoles")
+                          }
+                          className="px-3 py-3 border border-white/8 rounded-xl text-white/80 hover:text-white hover:border-white/12 transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-white/90 mb-2">
-                    Job Type
+                    Preferred Locations
+                  </label>
+                  {formData.jobPreferences.preferredLocations.map(
+                    (location, index) => (
+                      <div key={index} className="flex gap-2 mb-2">
+                        <input
+                          type="text"
+                          value={location}
+                          onChange={(e) =>
+                            handleJobPreferenceChange(
+                              "preferredLocations",
+                              e.target.value,
+                              index
+                            )
+                          }
+                          placeholder="e.g., Mumbai, Remote"
+                          className="flex-1 px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                        />
+                        {index ===
+                          formData.jobPreferences.preferredLocations.length -
+                            1 && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              addJobPreferenceEntry("preferredLocations")
+                            }
+                            className="px-3 py-3 border border-white/8 rounded-xl text-white/80 hover:text-white hover:border-white/12 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/90 mb-2">
+                    Job Types
                   </label>
                   <select
-                    name="jobType"
-                    value={formData.jobType}
-                    onChange={handleInputChange}
+                    value={formData.jobPreferences.jobTypes[0] || ""}
+                    onChange={(e) =>
+                      handleJobPreferenceChange("jobTypes", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
                   >
                     <option value="">Select job type</option>
@@ -572,42 +1307,44 @@ export default function StudentProfile() {
                     <option value="part-time">Part-time</option>
                     <option value="contract">Contract</option>
                     <option value="internship">Internship</option>
+                    <option value="remote">Remote</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Expected Salary (LPA)
-                  </label>
-                  <input
-                    type="text"
-                    name="expectedSalary"
-                    value={formData.expectedSalary}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 5-8 LPA"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Preferred Location
-                  </label>
-                  <input
-                    type="text"
-                    name="preferredLocation"
-                    value={formData.preferredLocation}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Mumbai, Remote"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-sm font-medium text-white/90 mb-2">
+                      Min Salary (LPA)
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.jobPreferences.expectedSalary.min}
+                      onChange={(e) =>
+                        handleSalaryChange("min", e.target.value)
+                      }
+                      placeholder="Min"
+                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white/90 mb-2">
+                      Max Salary (LPA)
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.jobPreferences.expectedSalary.max}
+                      onChange={(e) =>
+                        handleSalaryChange("max", e.target.value)
+                      }
+                      placeholder="Max"
+                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white mb-2">
+                <label className="block text-sm font-medium text-white/90 mb-2">
                   Key Skills
                 </label>
                 <textarea
@@ -615,20 +1352,40 @@ export default function StudentProfile() {
                   value={formData.skills}
                   onChange={handleInputChange}
                   rows={3}
-                  placeholder="List your key skills separated by commas (e.g., React, JavaScript, Node.js)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
+                  placeholder="List your key skills separated by commas (e.g., React, JavaScript, Node.js, Python)"
+                  className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all resize-none"
                 ></textarea>
               </div>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={formData.jobPreferences.willingToRelocate}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      jobPreferences: {
+                        ...prev.jobPreferences,
+                        willingToRelocate: e.target.checked,
+                      },
+                    }))
+                  }
+                  className="rounded border-white/8 bg-transparent text-[#b87bd1] focus:ring-[#b87bd1]"
+                />
+                <span className="text-white/90">
+                  Willing to relocate for job opportunities
+                </span>
+              </label>
             </div>
 
             {/* CV Upload */}
             <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2 pb-2 border-b border-gray-200">
-                <FileText className="w-5 h-5 text-orange-600" />
+              <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
+                <FileText className="w-5 h-5 text-[#b87bd1]" />
                 Upload CV/Resume
               </h4>
 
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-all">
+              <div className="border-2 border-dashed border-white/8 rounded-xl p-8 text-center hover:border-[#b87bd1] transition-all">
                 <input
                   type="file"
                   id="cv-upload"
@@ -637,13 +1394,13 @@ export default function StudentProfile() {
                   onChange={handleCvUpload}
                 />
                 <label htmlFor="cv-upload" className="cursor-pointer">
-                  <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Upload className="w-8 h-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-white/6 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Upload className="w-8 h-8 text-[#b87bd1]" />
                   </div>
-                  <p className="text-gray-900 font-medium mb-1">
+                  <p className="text-white font-medium mb-1">
                     {cvFile ? cvFile.name : "Click to upload or drag and drop"}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-white/60">
                     PDF, DOC, DOCX (Max 5MB)
                   </p>
                 </label>
@@ -651,16 +1408,18 @@ export default function StudentProfile() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 pt-6 border-t border-gray-200">
+            <div className="flex gap-4 pt-6 border-t border-white/6">
               <button
                 onClick={handleSubmit}
-                className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
+                disabled={loading}
+                className="flex-1 px-6 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#703181] hover:to-[#a86bc1] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                <Save className="w-5 h-5" />
-                Save Profile
-              </button>
-              <button className="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-all border border-gray-300">
-                Cancel
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Save className="w-5 h-5" />
+                )}
+                {loading ? "Saving..." : "Save Profile"}
               </button>
             </div>
           </div>
