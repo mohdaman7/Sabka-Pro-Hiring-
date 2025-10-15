@@ -31,9 +31,27 @@ export const adminService = {
     return response.data;
   },
 
-  // Get dashboard stats
+  // Get platform stats
   getDashboardStats: async () => {
-    const response = await api.get("/api/admin/dashboard/stats");
+    const response = await api.get("/api/admin/stats");
+    return response.data;
+  },
+
+  // List candidates (admin view)
+  getCandidates: async (params = {}) => {
+    const response = await api.get("/api/admin/candidates", { params });
+    return response.data;
+  },
+
+  // List employers (admin view)
+  getEmployers: async (params = {}) => {
+    const response = await api.get("/api/admin/employers", { params });
+    return response.data;
+  },
+
+  // List jobs (admin view)
+  getJobs: async (params = {}) => {
+    const response = await api.get("/api/admin/jobs", { params });
     return response.data;
   },
 };

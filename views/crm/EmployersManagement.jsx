@@ -1,69 +1,46 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { adminService } from "@/services/adminService"
 import { Search, Filter, Building2, CheckCircle, XCircle, Eye, MoreVertical } from "lucide-react"
 
 export default function EmployersManagement() {
   const [activeTab, setActiveTab] = useState("all")
 
-  const employers = [
-    {
-      id: 1,
-      companyName: "Tech Solutions Pvt Ltd",
-      contactPerson: "Rajesh Kumar",
-      email: "hr@techsolutions.com",
-      phone: "+91 98765 43210",
-      industry: "Information Technology",
-      companySize: "51-200",
-      isVerified: true,
-      isPremium: true,
-      jobPosts: 12,
-      hires: 8,
-      assignedTo: "Priya Sharma",
-    },
-    {
-      id: 2,
-      companyName: "Global Innovations",
-      contactPerson: "Sneha Patel",
-      email: "contact@globalinnovations.com",
-      phone: "+91 98765 43211",
-      industry: "Manufacturing",
-      companySize: "201-500",
-      isVerified: true,
-      isPremium: false,
-      jobPosts: 3,
-      hires: 2,
-      assignedTo: "Amit Patel",
-    },
-    {
-      id: 3,
-      companyName: "Digital Marketing Pro",
-      contactPerson: "Rahul Verma",
-      email: "hr@digitalmarketingpro.com",
-      phone: "+91 98765 43212",
-      industry: "Marketing & Advertising",
-      companySize: "11-50",
-      isVerified: false,
-      isPremium: false,
-      jobPosts: 0,
-      hires: 0,
-      assignedTo: "Priya Sharma",
-    },
-    {
-      id: 4,
-      companyName: "Finance Corp Ltd",
-      contactPerson: "Anita Desai",
-      email: "careers@financecorp.com",
-      phone: "+91 98765 43213",
-      industry: "Finance & Banking",
-      companySize: "501-1000",
-      isVerified: true,
-      isPremium: true,
-      jobPosts: 25,
-      hires: 15,
-      assignedTo: "Amit Patel",
-    },
-  ]
+  const [employers, setEmployers] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+    async function load() {
+      try {
+        setLoading(true)
+        const res = await adminService.getEmployers()
+        if (!mounted) return
+        const rows = (res?.data || []).map((e) => ({
+          id: e._id,
+          companyName: e?.company?.name || "",
+          contactPerson: `${e?.userId?.firstName || ""} ${e?.userId?.lastName || ""}`.trim(),
+          email: e?.userId?.email,
+          phone: e?.contact?.phone || "",
+          industry: e?.company?.industry || "",
+          companySize: e?.company?.size || "",
+          isVerified: !!e?.isVerified,
+          isPremium: e?.plan === "pro",
+          jobPosts: e?.jobPosts || 0,
+          hires: e?.hires || 0,
+          assignedTo: "",
+        }))
+        setEmployers(rows)
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    }
+    load()
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const tabs = [
     { id: "all", label: "All Employers", count: employers.length },
@@ -118,6 +95,7 @@ export default function EmployersManagement() {
       </div>
 
       {/* Employers Table */}
+      {loading && <div className="text-gray-600">Loading...</div>}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full">

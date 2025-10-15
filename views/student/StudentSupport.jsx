@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Headphones,
   MessageCircle,
@@ -51,6 +51,29 @@ export default function StudentSupport() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("help");
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ subject: "", message: "", category: "technical", priority: "medium" });
+  const [creating, setCreating] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/student/support/tickets`, { headers: { "Content-Type": "application/json" } });
+        const json = await res.json().catch(() => null);
+        if (!mounted) return;
+        setTickets(json?.data || []);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const supportCategories = [
     { id: "all", name: "All Topics", icon: HelpCircle },
@@ -93,32 +116,14 @@ export default function StudentSupport() {
     },
   ];
 
-  const recentTickets = [
-    {
-      id: "TICK-001",
-      subject: "Unable to upload video resume",
-      status: "In Progress",
-      date: "2 hours ago",
-      priority: "High",
-      category: "Technical Support",
-    },
-    {
-      id: "TICK-002",
-      subject: "Payment confirmation pending",
-      status: "Resolved",
-      date: "Yesterday",
-      priority: "Medium",
-      category: "Account Issues",
-    },
-    {
-      id: "TICK-003",
-      subject: "Course access not working",
-      status: "Open",
-      date: "3 days ago",
-      priority: "High",
-      category: "Courses",
-    },
-  ];
+  const recentTickets = tickets.map((t) => ({
+    id: t._id,
+    subject: t.subject,
+    status: t.status === "in_progress" ? "In Progress" : t.status === "resolved" ? "Resolved" : t.status === "closed" ? "Closed" : "Open",
+    date: new Date(t.createdAt).toLocaleString(),
+    priority: t.priority === "high" ? "High" : t.priority === "low" ? "Low" : "Medium",
+    category: t.category,
+  }));
 
   const contactMethods = [
     {
@@ -383,6 +388,7 @@ export default function StudentSupport() {
                     Recent Tickets
                   </h3>
                   <div className="space-y-4">
+                    {loading && <div className="text-white/70">Loading tickets...</div>}
                     {recentTickets.map((ticket) => (
                       <div
                         key={ticket.id}
@@ -473,6 +479,80 @@ export default function StudentSupport() {
                         </button>
                       );
                     })}
+                  </div>
+                </div>
+
+                {/* Create Ticket */}
+                <div
+                  className="rounded-2xl p-6 shadow-xl"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                  }}
+                >
+                  <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-3">
+                    <HelpCircle className="w-6 h-6 text-[#b87bd1]" />
+                    Create Support Ticket
+                  </h3>
+                  <div className="space-y-3">
+                    <input
+                      className="w-full px-4 py-3 rounded-xl bg-white/10 text-white placeholder-white/60 border border-white/12"
+                      placeholder="Subject"
+                      value={form.subject}
+                      onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                    />
+                    <select
+                      className="w-full px-4 py-3 rounded-xl bg-white/10 text-white border border-white/12"
+                      value={form.category}
+                      onChange={(e) => setForm({ ...form, category: e.target.value })}
+                    >
+                      {[
+                        ["technical", "Technical"],
+                        ["jobs", "Jobs"],
+                        ["courses", "Courses"],
+                        ["account", "Account"],
+                        ["billing", "Billing"],
+                        ["other", "Other"],
+                      ].map(([val, label]) => (
+                        <option key={val} value={val}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                    <textarea
+                      rows={4}
+                      className="w-full px-4 py-3 rounded-xl bg-white/10 text-white placeholder-white/60 border border-white/12"
+                      placeholder="Describe your issue..."
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    />
+                    <div className="flex justify-end">
+                      <button
+                        disabled={creating}
+                        onClick={async () => {
+                          if (!form.subject.trim() || !form.message.trim()) return;
+                          try {
+                            setCreating(true);
+                            const res = await fetch(`/api/student/support/tickets`, {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify(form),
+                            });
+                            const json = await res.json();
+                            if (json?.success) {
+                              setTickets((prev) => [json.data, ...prev]);
+                              setForm({ subject: "", message: "", category: "technical", priority: "medium" });
+                            }
+                          } finally {
+                            setCreating(false);
+                          }
+                        }}
+                        className="px-5 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl"
+                      >
+                        {creating ? "Creating..." : "Create Ticket"}
+                      </button>
+                    </div>
                   </div>
                 </div>
 

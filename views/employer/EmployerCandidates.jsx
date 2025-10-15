@@ -1,113 +1,47 @@
 "use client";
 
-import {
-  Users,
-  MapPin,
-  Briefcase,
-  Star,
-  Mail,
-  Phone,
-  Calendar,
-  Download,
-  Filter,
-  Search,
-  ChevronRight,
-} from "lucide-react";
+import { Users, MapPin, Briefcase, Star, Mail, Phone, Calendar, Download, Filter, Search, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import api from "@/lib/axios";
 
 export default function CandidatesPage() {
-  const candidates = [
-    {
-      id: 1,
-      name: "Amit Sharma",
-      position: "Senior Frontend Developer",
-      location: "Mumbai, Maharashtra",
-      experience: "5+ years",
-      skills: ["React", "TypeScript", "Next.js", "Node.js"],
-      matchScore: 95,
-      status: "New",
-      lastActive: "2 hours ago",
-      avatar: "",
-      salary: "₹12-15 LPA",
-      noticePeriod: "30 days",
-      appliedDate: "2024-01-15",
-    },
-    {
-      id: 2,
-      name: "Priya Patel",
-      position: "Backend Developer",
-      location: "Remote",
-      experience: "4+ years",
-      skills: ["Node.js", "Python", "AWS", "MongoDB"],
-      matchScore: 88,
-      status: "Under Review",
-      lastActive: "5 hours ago",
-      avatar: "",
-      salary: "₹10-14 LPA",
-      noticePeriod: "15 days",
-      appliedDate: "2024-01-14",
-    },
-    {
-      id: 3,
-      name: "Rahul Kumar",
-      position: "UI/UX Designer",
-      location: "Bangalore, Karnataka",
-      experience: "3+ years",
-      skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
-      matchScore: 92,
-      status: "Shortlisted",
-      lastActive: "1 day ago",
-      avatar: "",
-      salary: "₹8-12 LPA",
-      noticePeriod: "Immediate",
-      appliedDate: "2024-01-13",
-    },
-    {
-      id: 4,
-      name: "Sneha Desai",
-      position: "Full Stack Developer",
-      location: "Pune, Maharashtra",
-      experience: "6+ years",
-      skills: ["React", "Node.js", "PostgreSQL", "Docker"],
-      matchScore: 85,
-      status: "New",
-      lastActive: "2 days ago",
-      avatar: "",
-      salary: "₹15-20 LPA",
-      noticePeriod: "60 days",
-      appliedDate: "2024-01-12",
-    },
-    {
-      id: 5,
-      name: "Vikram Singh",
-      position: "DevOps Engineer",
-      location: "Hyderabad, Telangana",
-      experience: "4+ years",
-      skills: ["AWS", "Kubernetes", "Terraform", "CI/CD"],
-      matchScore: 90,
-      status: "Under Review",
-      lastActive: "3 hours ago",
-      avatar: "",
-      salary: "₹14-18 LPA",
-      noticePeriod: "30 days",
-      appliedDate: "2024-01-11",
-    },
-    {
-      id: 6,
-      name: "Anjali Mehta",
-      position: "Product Manager",
-      location: "Delhi, NCR",
-      experience: "7+ years",
-      skills: ["Product Strategy", "Agile", "Analytics", "Roadmapping"],
-      matchScore: 87,
-      status: "Shortlisted",
-      lastActive: "1 day ago",
-      avatar: "",
-      salary: "₹18-25 LPA",
-      noticePeriod: "45 days",
-      appliedDate: "2024-01-10",
-    },
-  ];
+  const [candidates, setCandidates] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        const res = await api.get("/api/employer/candidates", { params: { search: query } });
+        if (!mounted) return;
+        const list = (res?.data?.data || []).map((c) => ({
+          id: c._id,
+          name: `${c?.userId?.firstName || ""} ${c?.userId?.lastName || ""}`.trim() || c?.userId?.email,
+          position: (c?.jobPreferences?.preferredRoles || [])[0] || "Candidate",
+          location: c?.address?.city || "",
+          experience: c?.experienceType === "experienced" ? "Experienced" : "Fresher",
+          skills: (c?.skills || []).map((s) => s.name),
+          matchScore: 0,
+          status: c?.isActive ? "Active" : "Inactive",
+          lastActive: new Date(c?.updatedAt || c?.createdAt).toDateString(),
+          avatar: "",
+          salary: c?.jobPreferences?.expectedSalary?.max ? `₹${c.jobPreferences.expectedSalary.max}` : "",
+          noticePeriod: "",
+          appliedDate: new Date(c?.createdAt).toDateString(),
+        }));
+        setCandidates(list);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, [query]);
 
   const filters = [
     "All Candidates",
@@ -171,6 +105,8 @@ export default function CandidatesPage() {
             <input
               type="text"
               placeholder="Search candidates by name, skills, or position..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-transparent text-white placeholder-white/60 border-none focus:outline-none"
             />
           </div>
@@ -207,6 +143,7 @@ export default function CandidatesPage() {
       </div>
 
       {/* Candidates Grid */}
+      {loading && <div className="text-white/70">Loading...</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {candidates.map((candidate) => (
           <div

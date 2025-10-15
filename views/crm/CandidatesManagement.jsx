@@ -1,69 +1,46 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { adminService } from "@/services/adminService"
 import { Search, Filter, Download, Eye, Star, Video, FileText } from "lucide-react"
 
 export default function CandidatesManagement() {
   const [activeTab, setActiveTab] = useState("all")
 
-  const candidates = [
-    {
-      id: 1,
-      name: "Amit Sharma",
-      email: "amit.sharma@email.com",
-      phone: "+91 98765 43210",
-      qualification: "B.Tech Computer Science",
-      experience: "3 years",
-      skills: ["React", "Node.js", "MongoDB"],
-      isPro: true,
-      hasVideoResume: true,
-      status: "Active",
-      assignedTo: "Priya Patel",
-      appliedJobs: 5,
-    },
-    {
-      id: 2,
-      name: "Priya Desai",
-      email: "priya.d@email.com",
-      phone: "+91 98765 43211",
-      qualification: "MBA Marketing",
-      experience: "5 years",
-      skills: ["Digital Marketing", "SEO", "Content Strategy"],
-      isPro: false,
-      hasVideoResume: false,
-      status: "Active",
-      assignedTo: "Rahul Kumar",
-      appliedJobs: 2,
-    },
-    {
-      id: 3,
-      name: "Rahul Verma",
-      email: "rahul.v@email.com",
-      phone: "+91 98765 43212",
-      qualification: "B.Com",
-      experience: "2 years",
-      skills: ["Accounting", "Tally", "Excel"],
-      isPro: true,
-      hasVideoResume: true,
-      status: "Placed",
-      assignedTo: "Priya Patel",
-      appliedJobs: 8,
-    },
-    {
-      id: 4,
-      name: "Sneha Patel",
-      email: "sneha.p@email.com",
-      phone: "+91 98765 43213",
-      qualification: "BCA",
-      experience: "1 year",
-      skills: ["Python", "Django", "SQL"],
-      isPro: false,
-      hasVideoResume: false,
-      status: "Active",
-      assignedTo: "Rahul Kumar",
-      appliedJobs: 3,
-    },
-  ]
+  const [candidates, setCandidates] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+    async function load() {
+      try {
+        setLoading(true)
+        const res = await adminService.getCandidates()
+        if (!mounted) return
+        const list = (res?.data || []).map((c) => ({
+          id: c._id,
+          name: `${c?.userId?.firstName || ""} ${c?.userId?.lastName || ""}`.trim() || c?.userId?.email,
+          email: c?.userId?.email,
+          phone: c?.phone || "",
+          qualification: c?.highestQualification || "",
+          experience: c?.experiences?.length ? `${c.experiences.length} entries` : "",
+          skills: (c?.skills || []).map((s) => s.name),
+          isPro: c?.plan === "pro",
+          hasVideoResume: Boolean(c?.videoResume?.url),
+          status: c?.isActive ? "Active" : "Inactive",
+          assignedTo: "",
+          appliedJobs: c?.applicationsCount || 0,
+        }))
+        setCandidates(list)
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    }
+    load()
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const tabs = [
     { id: "all", label: "All Candidates", count: candidates.length },
@@ -122,6 +99,7 @@ export default function CandidatesManagement() {
       </div>
 
       {/* Candidates Grid */}
+      {loading && <div className="text-gray-600">Loading...</div>}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {candidates.map((candidate) => (
           <div

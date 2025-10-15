@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { adminService } from "@/services/adminService";
 import {
   Search,
   Filter,
@@ -18,53 +19,42 @@ export default function JobPostingsManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredJobs, setFilteredJobs] = useState([]);
 
-  const jobs = [
-    {
-      id: 1,
-      title: "Senior Frontend Developer",
-      company: "Tech Solutions Pvt Ltd",
-      location: "Mumbai, Maharashtra",
-      type: "Full-time",
-      salary: "₹8-12 LPA",
-      experience: "3-5 years",
-      skills: ["React", "TypeScript", "Next.js"],
-      applications: 45,
-      views: 234,
-      status: "Active",
-      postedDate: "2024-01-10",
-      assignedTo: "Priya Sharma",
-    },
-    {
-      id: 2,
-      title: "Backend Developer",
-      company: "Digital Innovations",
-      location: "Remote",
-      type: "Full-time",
-      salary: "₹10-15 LPA",
-      experience: "4-6 years",
-      skills: ["Node.js", "MongoDB", "AWS"],
-      applications: 67,
-      views: 456,
-      status: "Active",
-      postedDate: "2024-01-05",
-      assignedTo: "Amit Patel",
-    },
-    {
-      id: 3,
-      title: "UI/UX Designer",
-      company: "Creative Agency",
-      location: "Bangalore, Karnataka",
-      type: "Contract",
-      salary: "₹6-8 LPA",
-      experience: "2-4 years",
-      skills: ["Figma", "Adobe XD", "Prototyping"],
-      applications: 23,
-      views: 178,
-      status: "Closed",
-      postedDate: "2023-12-20",
-      assignedTo: "Priya Sharma",
-    },
-  ];
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        const jobsRes = await adminService.getJobs().catch(() => null);
+        if (!mounted) return;
+        const data = jobsRes?.data || [];
+        const mapped = data.map((j) => ({
+          id: j._id,
+          title: j.title,
+          company: j.company || j?.employerProfile?.company?.name || "",
+          location: j.location,
+          type: j.jobType,
+          salary: j.salary,
+          experience: j.experience,
+          skills: j.skills || [],
+          applications: j.applications?.length || 0,
+          views: j.views || 0,
+          status: j.status === "active" ? "Active" : j.status === "closed" ? "Closed" : j.status,
+          postedDate: j.createdAt?.slice(0,10) || "",
+          assignedTo: "",
+        }));
+        setJobs(mapped);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const tabs = [
     { id: "all", label: "All Jobs", count: jobs.length },
@@ -149,6 +139,7 @@ export default function JobPostingsManagement() {
       </div>
 
       {/* Jobs Grid */}
+      {loading && <div className="text-slate-600">Loading...</div>}
       <div className="space-y-4">
         {(activeTab === "all"
           ? jobs

@@ -11,6 +11,8 @@ import {
   getPendingRegistrations,
   approveUser,
   rejectUser,
+  getAllCandidatesAdmin,
+  getAllEmployersAdmin,
 } from "../controllers/crmController.js";
 
 const router = Router();
@@ -36,6 +38,12 @@ router.patch("/users/:id/status", updateUserStatus);
 // Platform Statistics
 // ============================================
 router.get("/stats", getPlatformStats);
+
+// ============================================
+// Admin lists for CRM: candidates and employers
+// ============================================
+router.get("/candidates", getAllCandidatesAdmin);
+router.get("/employers", getAllEmployersAdmin);
 
 // ============================================
 // Job Management (admin view)
