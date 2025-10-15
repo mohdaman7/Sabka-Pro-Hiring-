@@ -103,9 +103,12 @@ export default function ApplyJobPage() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.previousCompany) newErrors.previousCompany = "Company is required";
-    if (!formData.previousPosition) newErrors.previousPosition = "Position is required";
-    if (!formData.yearsExperience) newErrors.yearsExperience = "Years of experience is required";
+    if (!formData.previousCompany)
+      newErrors.previousCompany = "Company is required";
+    if (!formData.previousPosition)
+      newErrors.previousPosition = "Position is required";
+    if (!formData.yearsExperience)
+      newErrors.yearsExperience = "Years of experience is required";
     if (!formData.resume) newErrors.resume = "Resume is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -338,7 +341,9 @@ export default function ApplyJobPage() {
                     value={formData.previousCompany}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
-                      errors.previousCompany ? "border-red-500" : "border-white/10"
+                      errors.previousCompany
+                        ? "border-red-500"
+                        : "border-white/10"
                     } text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all`}
                     placeholder="e.g., Acme Corp"
                   />
@@ -360,7 +365,9 @@ export default function ApplyJobPage() {
                     value={formData.previousPosition}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
-                      errors.previousPosition ? "border-red-500" : "border-white/10"
+                      errors.previousPosition
+                        ? "border-red-500"
+                        : "border-white/10"
                     } text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all`}
                     placeholder="e.g., Software Engineer"
                   />
@@ -386,7 +393,9 @@ export default function ApplyJobPage() {
                     value={formData.yearsExperience}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
-                      errors.yearsExperience ? "border-red-500" : "border-white/10"
+                      errors.yearsExperience
+                        ? "border-red-500"
+                        : "border-white/10"
                     } text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all`}
                     placeholder="e.g., 3"
                   />
