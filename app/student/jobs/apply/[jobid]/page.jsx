@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { jobService } from "@/services/jobService";
+import { applicationService } from "@/services/applicationService";
 import {
   Upload,
   FileText,
@@ -20,38 +22,10 @@ import {
 } from "lucide-react";
 import { customToast } from "@/components/ui/toast";
 
-// Mock job data for frontend testing
-const mockJobData = {
-  _id: "mock-job-123",
-  title: "Frontend Developer",
-  description:
-    "We are looking for a skilled Frontend Developer to join our team...",
-  location: "Remote",
-  salary: "$80,000 - $100,000",
-  jobType: "Full-time",
-  workMode: "Remote",
-  employerId: {
-    company: "Tech Solutions Inc",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  createdAt: new Date().toISOString(),
-  skills: ["React", "JavaScript", "TypeScript", "CSS", "HTML"],
-  experience: "3+ years",
-  education: "Bachelor's in Computer Science",
-  department: "Engineering",
-  vacancies: 2,
-  deadline: "2024-12-31",
-  responsibilities:
-    "Develop and maintain web applications using React and modern frontend technologies...",
-  requirements:
-    "Strong knowledge of JavaScript, React, and modern web development practices...",
-};
-
 export default function ApplyJobPage() {
   const params = useParams();
   const router = useRouter();
-  const jobId = params.jobId;
+  const jobId = params.jobid;
 
   const [job, setJob] = useState(null);
   const [formData, setFormData] = useState({
@@ -66,9 +40,9 @@ export default function ApplyJobPage() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [loading, setLoading] = useState(false); // Set to false since we're using mock data
+  const [loading, setLoading] = useState(true);
 
-  // Mock fetch job details - no API call
+  // Fetch job details from backend
   useEffect(() => {
     console.log("Job ID from URL:", jobId);
 
@@ -78,14 +52,21 @@ export default function ApplyJobPage() {
       return;
     }
 
-    // Simulate API call delay
-    const timer = setTimeout(() => {
-      // Use mock data for frontend testing
-      setJob(mockJobData);
-      console.log("Loaded mock job data:", mockJobData);
-    }, 500);
+    const loadJob = async () => {
+      setLoading(true);
+      try {
+        const response = await jobService.getJobById(jobId);
+        setJob(response.data);
+      } catch (err) {
+        const message = err?.response?.data?.message || "Failed to load job";
+        customToast.error("Error", message);
+        router.push("/student/jobs");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    loadJob();
   }, [jobId, router]);
 
   const handleChange = (e) => {
@@ -142,27 +123,21 @@ export default function ApplyJobPage() {
     setIsSubmitting(true);
 
     try {
-      // Mock API call - no actual submission
-      console.log("Form data to be submitted:", {
+      await applicationService.apply({
         jobId,
-        jobTitle: job?.title,
-        ...formData,
+        coverLetter: formData.coverLetter,
       });
-
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       setSubmitSuccess(true);
 
       setTimeout(() => {
-        customToast.success(
-          "Success",
-          "Application submitted successfully! (Demo)"
-        );
+        customToast.success("Success", "Application submitted successfully!");
         router.push("/student/jobs");
-      }, 2000);
+      }, 1200);
     } catch (error) {
-      customToast.error("Error", "Failed to submit application");
+      const message =
+        error?.response?.data?.message || "Failed to submit application";
+      customToast.error("Error", message);
       setIsSubmitting(false);
     }
   };
@@ -222,10 +197,6 @@ export default function ApplyJobPage() {
           </h3>
           <p className="text-white/70 mb-6">
             We'll review your application and get back to you soon.
-            <br />
-            <span className="text-sm text-yellow-400">
-              (This is a demo submission)
-            </span>
           </p>
           <button
             onClick={() => router.push("/student/jobs")}
@@ -252,15 +223,7 @@ export default function ApplyJobPage() {
         />
       </div>
 
-      {/* Demo Banner */}
-      <div className="max-w-4xl mx-auto mb-4">
-        <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 text-center">
-          <p className="text-yellow-300 text-sm">
-            🚀 <strong>Demo Mode:</strong> Using mock data for UI testing. No
-            actual API calls are being made.
-          </p>
-        </div>
-      </div>
+      
 
       {/* Header */}
       <div className="max-w-4xl mx-auto">
@@ -540,7 +503,7 @@ export default function ApplyJobPage() {
                     Submitting Application...
                   </span>
                 ) : (
-                  "Submit Application (Demo)"
+                  "Submit Application"
                 )}
               </button>
               <button
