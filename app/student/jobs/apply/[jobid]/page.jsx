@@ -10,10 +10,6 @@ import {
   Upload,
   FileText,
   Briefcase,
-  Mail,
-  Phone,
-  Linkedin,
-  Github,
   CheckCircle,
   AlertCircle,
   ArrowLeft,
@@ -32,13 +28,11 @@ export default function ApplyJobPage() {
 
   const [job, setJob] = useState(null);
   const [formData, setFormData] = useState({
-    coverLetter: "",
     resume: null,
-    email: "",
-    phone: "",
-    linkedinUrl: "",
-    githubUrl: "",
-    portfolio: "",
+    previousCompany: "",
+    previousPosition: "",
+    yearsExperience: "",
+    languages: "",
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -109,25 +103,10 @@ export default function ApplyJobPage() {
 
   const validateForm = () => {
     const newErrors = {};
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-    }
-
-    if (!formData.phone) {
-      newErrors.phone = "Phone number is required";
-    }
-
-    if (!formData.coverLetter || formData.coverLetter.length < 50) {
-      newErrors.coverLetter = "Cover letter must be at least 50 characters";
-    }
-
-    if (!formData.resume) {
-      newErrors.resume = "Resume is required";
-    }
-
+    if (!formData.previousCompany) newErrors.previousCompany = "Company is required";
+    if (!formData.previousPosition) newErrors.previousPosition = "Position is required";
+    if (!formData.yearsExperience) newErrors.yearsExperience = "Years of experience is required";
+    if (!formData.resume) newErrors.resume = "Resume is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -157,7 +136,10 @@ export default function ApplyJobPage() {
       await applicationService.apply({
         jobId,
         resumeUrl,
-        coverLetter: formData.coverLetter,
+        previousCompany: formData.previousCompany,
+        previousPosition: formData.previousPosition,
+        yearsExperience: formData.yearsExperience,
+        languages: formData.languages,
       });
 
       setSubmitSuccess(true);
@@ -340,109 +322,97 @@ export default function ApplyJobPage() {
           }}
         >
           <div className="space-y-8">
-            {/* Contact Information */}
+            {/* Experience Summary */}
             <div className="space-y-6">
               <h3 className="text-xl font-semibold text-white flex items-center gap-3">
-                <Mail className="w-6 h-6 text-[#b87bd1]" />
-                Contact Information
+                <Briefcase className="w-6 h-6 text-[#b87bd1]" />
+                Experience Summary
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-3">
-                    Email Address *
+                    Previous Company *
                   </label>
                   <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    type="text"
+                    name="previousCompany"
+                    value={formData.previousCompany}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
-                      errors.email ? "border-red-500" : "border-white/10"
+                      errors.previousCompany ? "border-red-500" : "border-white/10"
                     } text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all`}
-                    placeholder="your.email@example.com"
+                    placeholder="e.g., Acme Corp"
                   />
-                  {errors.email && (
+                  {errors.previousCompany && (
                     <p className="text-red-400 text-sm mt-2 flex items-center gap-2">
                       <AlertCircle className="w-4 h-4" />
-                      {errors.email}
+                      {errors.previousCompany}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-3">
-                    Phone Number *
+                    Position *
                   </label>
                   <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
+                    type="text"
+                    name="previousPosition"
+                    value={formData.previousPosition}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
-                      errors.phone ? "border-red-500" : "border-white/10"
+                      errors.previousPosition ? "border-red-500" : "border-white/10"
                     } text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all`}
-                    placeholder="+1 (555) 000-0000"
+                    placeholder="e.g., Software Engineer"
                   />
-                  {errors.phone && (
+                  {errors.previousPosition && (
                     <p className="text-red-400 text-sm mt-2 flex items-center gap-2">
                       <AlertCircle className="w-4 h-4" />
-                      {errors.phone}
+                      {errors.previousPosition}
                     </p>
                   )}
                 </div>
               </div>
-            </div>
-
-            {/* Professional Links */}
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-white flex items-center gap-3">
-                <Linkedin className="w-6 h-6 text-[#b87bd1]" />
-                Professional Links
-              </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-3">
-                    LinkedIn Profile
+                    Years of Experience *
                   </label>
                   <input
-                    type="url"
-                    name="linkedinUrl"
-                    value={formData.linkedinUrl}
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    name="yearsExperience"
+                    value={formData.yearsExperience}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all"
-                    placeholder="linkedin.com/in/yourprofile"
+                    className={`w-full px-4 py-3 rounded-lg bg-white/5 border ${
+                      errors.yearsExperience ? "border-red-500" : "border-white/10"
+                    } text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all`}
+                    placeholder="e.g., 3"
                   />
+                  {errors.yearsExperience && (
+                    <p className="text-red-400 text-sm mt-2 flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.yearsExperience}
+                    </p>
+                  )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-3">
-                    GitHub Profile
+                    Languages
                   </label>
                   <input
-                    type="url"
-                    name="githubUrl"
-                    value={formData.githubUrl}
+                    type="text"
+                    name="languages"
+                    value={formData.languages}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all"
-                    placeholder="github.com/yourusername"
+                    placeholder="e.g., English, Hindi"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-white/80 mb-3">
-                  Portfolio Website
-                </label>
-                <input
-                  type="url"
-                  name="portfolio"
-                  value={formData.portfolio}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all"
-                  placeholder="https://yourportfolio.com"
-                />
               </div>
             </div>
 
@@ -488,41 +458,7 @@ export default function ApplyJobPage() {
               </div>
             </div>
 
-            {/* Cover Letter */}
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-white flex items-center gap-3">
-                <FileText className="w-6 h-6 text-[#b87bd1]" />
-                Cover Letter *
-              </h3>
-
-              <div>
-                <textarea
-                  name="coverLetter"
-                  value={formData.coverLetter}
-                  onChange={handleChange}
-                  rows={8}
-                  className={`w-full px-4 py-4 rounded-lg bg-white/5 border ${
-                    errors.coverLetter ? "border-red-500" : "border-white/10"
-                  } text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all resize-none`}
-                  placeholder="Tell us why you're a great fit for this position..."
-                />
-                <div className="flex justify-between items-center mt-3">
-                  {errors.coverLetter ? (
-                    <p className="text-red-400 text-sm flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.coverLetter}
-                    </p>
-                  ) : (
-                    <p className="text-white/50 text-sm">
-                      Minimum 50 characters
-                    </p>
-                  )}
-                  <p className="text-white/50 text-sm">
-                    {formData.coverLetter.length} characters
-                  </p>
-                </div>
-              </div>
-            </div>
+            {/* Removed Cover Letter */}
 
             {/* Submit Button */}
             <div className="flex gap-4 pt-6">
