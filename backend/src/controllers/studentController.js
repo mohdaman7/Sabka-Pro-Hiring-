@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { StudentModel } from "../models/Student.js";
+import { SupportTicketModel } from "../models/SupportTicket.js";
 import { UserModel } from "../models/User.js";
 
 const updateStudentSchema = z.object({
@@ -119,6 +120,75 @@ export async function updateProfile(req, res, next) {
       data: student,
       message: "Profile updated successfully",
     });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// =============================
+// Support Tickets
+// =============================
+
+export async function createSupportTicket(req, res, next) {
+  try {
+    const { subject, description, category = "other", priority = "medium" } = req.body;
+
+    if (!subject || !description) {
+      return res.status(400).json({ success: false, message: "Subject and description are required" });
+    }
+
+    const ticket = await SupportTicketModel.create({
+      studentId: req.user.id,
+      subject,
+      description,
+      category,
+      priority,
+    });
+
+    res.status(201).json({ success: true, data: ticket, message: "Support ticket created" });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function listMySupportTickets(req, res, next) {
+  try {
+    const { page = 1, limit = 10, status, category } = req.query;
+    const filter = { studentId: req.user.id };
+    if (status) filter.status = status;
+    if (category) filter.category = category;
+
+    const tickets = await SupportTicketModel.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    const total = await SupportTicketModel.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: tickets,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalTickets: total,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getMySupportTicketById(req, res, next) {
+  try {
+    const { id } = req.params;
+    const ticket = await SupportTicketModel.findOne({ _id: id, studentId: req.user.id });
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: "Ticket not found" });
+    }
+    res.json({ success: true, data: ticket });
   } catch (err) {
     next(err);
   }

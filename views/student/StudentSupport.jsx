@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Headphones,
   MessageCircle,
@@ -51,6 +51,28 @@ export default function StudentSupport() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("help");
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({ subject: "", description: "", category: "account", priority: "medium" });
+
+  async function loadTickets() {
+    try {
+      setLoading(true);
+      setError("");
+      const { supportService } = await import("@/services/supportService");
+      const res = await supportService.listMyTickets();
+      setTickets(res?.data || []);
+    } catch (e) {
+      setError(e?.response?.data?.message || e?.message || "Failed to load tickets");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadTickets();
+  }, []);
 
   const supportCategories = [
     { id: "all", name: "All Topics", icon: HelpCircle },
@@ -93,32 +115,7 @@ export default function StudentSupport() {
     },
   ];
 
-  const recentTickets = [
-    {
-      id: "TICK-001",
-      subject: "Unable to upload video resume",
-      status: "In Progress",
-      date: "2 hours ago",
-      priority: "High",
-      category: "Technical Support",
-    },
-    {
-      id: "TICK-002",
-      subject: "Payment confirmation pending",
-      status: "Resolved",
-      date: "Yesterday",
-      priority: "Medium",
-      category: "Account Issues",
-    },
-    {
-      id: "TICK-003",
-      subject: "Course access not working",
-      status: "Open",
-      date: "3 days ago",
-      priority: "High",
-      category: "Courses",
-    },
-  ];
+  const recentTickets = tickets.slice(0, 5);
 
   const contactMethods = [
     {
@@ -385,7 +382,7 @@ export default function StudentSupport() {
                   <div className="space-y-4">
                     {recentTickets.map((ticket) => (
                       <div
-                        key={ticket.id}
+                        key={ticket._id}
                         className="p-4 rounded-xl transition-all duration-300 cursor-pointer group hover:-translate-y-0.5"
                         style={{
                           background: "rgba(255,255,255,0.02)",
@@ -394,13 +391,13 @@ export default function StudentSupport() {
                       >
                         <div className="flex items-start justify-between mb-3">
                           <span className="text-sm font-mono text-white/70 font-semibold">
-                            {ticket.id}
+                            {ticket._id}
                           </span>
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              ticket.status === "Resolved"
+                              ticket.status === "resolved"
                                 ? "bg-green-500/10 text-green-400 border border-green-500/20"
-                                : ticket.status === "In Progress"
+                                : ticket.status === "in_progress"
                                 ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                                 : "bg-orange-500/10 text-orange-400 border border-orange-500/20"
                             }`}
@@ -417,11 +414,11 @@ export default function StudentSupport() {
                         <div className="flex items-center justify-between text-sm text-white/70">
                           <span className="flex items-center gap-2">
                             <Clock className="w-4 h-4" />
-                            {ticket.date}
+                            {new Date(ticket.createdAt).toLocaleString()}
                           </span>
                           <span
                             className={`font-semibold px-2 py-1 rounded-lg ${
-                              ticket.priority === "High"
+                              ticket.priority === "high"
                                 ? "bg-red-500/10 text-red-400 border border-red-500/20"
                                 : "bg-white/6 text-white/80 border border-white/12"
                             }`}
@@ -523,9 +520,9 @@ export default function StudentSupport() {
               My Support Tickets
             </h2>
             <div className="space-y-4">
-              {recentTickets.map((ticket) => (
+              {tickets.map((ticket) => (
                 <div
-                  key={ticket.id}
+                  key={ticket._id}
                   className="p-6 rounded-xl transition-all duration-300 hover:-translate-y-1"
                   style={{
                     background: "rgba(255,255,255,0.02)",
@@ -536,22 +533,22 @@ export default function StudentSupport() {
                     <div className="flex items-center gap-4">
                       <div
                         className={`w-3 h-3 rounded-full ${
-                          ticket.status === "Resolved"
+                          ticket.status === "resolved"
                             ? "bg-green-400"
-                            : ticket.status === "In Progress"
+                            : ticket.status === "in_progress"
                             ? "bg-blue-400"
                             : "bg-orange-400"
                         }`}
                       ></div>
                       <span className="font-mono text-sm font-semibold text-white/80">
-                        {ticket.id}
+                        {ticket._id}
                       </span>
                     </div>
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        ticket.status === "Resolved"
+                        ticket.status === "resolved"
                           ? "bg-green-500/10 text-green-400"
-                          : ticket.status === "In Progress"
+                          : ticket.status === "in_progress"
                           ? "bg-blue-500/10 text-blue-400"
                           : "bg-orange-500/10 text-orange-400"
                       }`}
@@ -566,14 +563,10 @@ export default function StudentSupport() {
                   <div className="flex items-center justify-between text-sm text-white/70">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
-                      Created {ticket.date}
+                      Created {new Date(ticket.createdAt).toLocaleString()}
                     </span>
                     <span
-                      className={`font-semibold ${
-                        ticket.priority === "High"
-                          ? "text-red-400"
-                          : "text-white/80"
-                      }`}
+                      className={`font-semibold ${ticket.priority === "high" ? "text-red-400" : "text-white/80"}`}
                     >
                       {ticket.priority} Priority
                     </span>
@@ -583,6 +576,77 @@ export default function StudentSupport() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Create Ticket Form */}
+      <div
+        className="rounded-2xl p-6 shadow-xl mt-6"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+          border: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        <h3 className="text-xl font-bold text-white mb-4">Create Support Ticket</h3>
+        {error && <div className="text-red-300 mb-2">{error}</div>}
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            try {
+              const { supportService } = await import("@/services/supportService");
+              await supportService.createTicket(form);
+              setForm({ subject: "", description: "", category: "account", priority: "medium" });
+              await loadTickets();
+              setActiveTab("tickets");
+            } catch (e) {
+              setError(e?.response?.data?.message || e?.message || "Failed to create ticket");
+            }
+          }}
+          className="grid gap-3 md:grid-cols-2"
+        >
+          <input
+            value={form.subject}
+            onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
+            placeholder="Subject"
+            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20"
+            required
+          />
+          <select
+            value={form.category}
+            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20"
+          >
+            <option value="account">Account</option>
+            <option value="jobs">Job Applications</option>
+            <option value="courses">Courses</option>
+            <option value="technical">Technical</option>
+            <option value="billing">Billing</option>
+            <option value="other">Other</option>
+          </select>
+          <select
+            value={form.priority}
+            onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
+            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20"
+          >
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <textarea
+            value={form.description}
+            onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+            placeholder="Describe your issue..."
+            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20 md:col-span-2"
+            rows={4}
+            required
+          />
+          <button
+            type="submit"
+            className="px-5 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg font-semibold"
+          >
+            Submit Ticket
+          </button>
+        </form>
       </div>
     </>
   );

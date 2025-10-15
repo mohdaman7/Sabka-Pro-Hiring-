@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Users,
   MapPin,
@@ -14,100 +15,33 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { applicationService } from "@/services/applicationService";
 
 export default function CandidatesPage() {
-  const candidates = [
-    {
-      id: 1,
-      name: "Amit Sharma",
-      position: "Senior Frontend Developer",
-      location: "Mumbai, Maharashtra",
-      experience: "5+ years",
-      skills: ["React", "TypeScript", "Next.js", "Node.js"],
-      matchScore: 95,
-      status: "New",
-      lastActive: "2 hours ago",
-      avatar: "",
-      salary: "₹12-15 LPA",
-      noticePeriod: "30 days",
-      appliedDate: "2024-01-15",
-    },
-    {
-      id: 2,
-      name: "Priya Patel",
-      position: "Backend Developer",
-      location: "Remote",
-      experience: "4+ years",
-      skills: ["Node.js", "Python", "AWS", "MongoDB"],
-      matchScore: 88,
-      status: "Under Review",
-      lastActive: "5 hours ago",
-      avatar: "",
-      salary: "₹10-14 LPA",
-      noticePeriod: "15 days",
-      appliedDate: "2024-01-14",
-    },
-    {
-      id: 3,
-      name: "Rahul Kumar",
-      position: "UI/UX Designer",
-      location: "Bangalore, Karnataka",
-      experience: "3+ years",
-      skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
-      matchScore: 92,
-      status: "Shortlisted",
-      lastActive: "1 day ago",
-      avatar: "",
-      salary: "₹8-12 LPA",
-      noticePeriod: "Immediate",
-      appliedDate: "2024-01-13",
-    },
-    {
-      id: 4,
-      name: "Sneha Desai",
-      position: "Full Stack Developer",
-      location: "Pune, Maharashtra",
-      experience: "6+ years",
-      skills: ["React", "Node.js", "PostgreSQL", "Docker"],
-      matchScore: 85,
-      status: "New",
-      lastActive: "2 days ago",
-      avatar: "",
-      salary: "₹15-20 LPA",
-      noticePeriod: "60 days",
-      appliedDate: "2024-01-12",
-    },
-    {
-      id: 5,
-      name: "Vikram Singh",
-      position: "DevOps Engineer",
-      location: "Hyderabad, Telangana",
-      experience: "4+ years",
-      skills: ["AWS", "Kubernetes", "Terraform", "CI/CD"],
-      matchScore: 90,
-      status: "Under Review",
-      lastActive: "3 hours ago",
-      avatar: "",
-      salary: "₹14-18 LPA",
-      noticePeriod: "30 days",
-      appliedDate: "2024-01-11",
-    },
-    {
-      id: 6,
-      name: "Anjali Mehta",
-      position: "Product Manager",
-      location: "Delhi, NCR",
-      experience: "7+ years",
-      skills: ["Product Strategy", "Agile", "Analytics", "Roadmapping"],
-      matchScore: 87,
-      status: "Shortlisted",
-      lastActive: "1 day ago",
-      avatar: "",
-      salary: "₹18-25 LPA",
-      noticePeriod: "45 days",
-      appliedDate: "2024-01-10",
-    },
-  ];
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await applicationService.employerMyApplications();
+        if (!mounted) return;
+        setApplications(res?.data || []);
+      } catch (e) {
+        setError(e?.response?.data?.message || e?.message || "Failed to load applications");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const filters = [
     "All Candidates",
@@ -183,9 +117,7 @@ export default function CandidatesPage() {
             border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
-          <div className="text-2xl font-bold text-white">
-            {candidates.length}
-          </div>
+          <div className="text-2xl font-bold text-white">{applications.length}</div>
           <div className="text-sm text-white/80">Total Candidates</div>
         </div>
       </div>
@@ -207,10 +139,15 @@ export default function CandidatesPage() {
       </div>
 
       {/* Candidates Grid */}
+      {error && <div className="text-red-300">{error}</div>}
+      {loading && <div className="text-white/80">Loading...</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {candidates.map((candidate) => (
+        {applications.map((app) => {
+          const candidate = app?.studentId || {};
+          const name = `${candidate.firstName || ""} ${candidate.lastName || ""}`.trim() || "Candidate";
+          return (
           <div
-            key={candidate.id}
+            key={app._id}
             className="rounded-xl p-6 hover:shadow-2xl transition-all hover:-translate-y-1 group cursor-pointer"
             style={{
               background:
@@ -227,34 +164,28 @@ export default function CandidatesPage() {
                     background: "linear-gradient(135deg,#803791,#b87bd1)",
                   }}
                 >
-                  <span className="text-white font-semibold text-sm">
-                    {candidate.name.charAt(0)}
-                  </span>
+                  <span className="text-white font-semibold text-sm">{(name || "?").charAt(0)}</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#b87bd1] transition-colors">
-                    {candidate.name}
-                  </h3>
-                  <p className="text-sm text-white/80">{candidate.position}</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#b87bd1] transition-colors">{name}</h3>
+                  <p className="text-sm text-white/80">{app?.jobId?.title || "Applied role"}</p>
                 </div>
               </div>
               <div className="flex flex-col items-end gap-2">
                 <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/6">
                   <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                  <span className="text-xs font-semibold text-white">
-                    {candidate.matchScore}%
-                  </span>
+                  <span className="text-xs font-semibold text-white">{""}</span>
                 </div>
                 <span
                   className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    candidate.status === "New"
+                    app.status === "applied"
                       ? "bg-blue-500/20 text-blue-400"
-                      : candidate.status === "Shortlisted"
+                      : app.status === "interview"
                       ? "bg-emerald-500/20 text-emerald-400"
                       : "bg-purple-500/20 text-purple-400"
                   }`}
                 >
-                  {candidate.status}
+                  {app.status}
                 </span>
               </div>
             </div>
@@ -263,22 +194,22 @@ export default function CandidatesPage() {
             <div className="space-y-3 mb-4">
               <div className="flex items-center gap-2 text-sm text-white/80">
                 <MapPin className="w-4 h-4 text-white/80" />
-                {candidate.location}
+                {candidate.address?.city || "-"}
               </div>
               <div className="flex items-center gap-2 text-sm text-white/80">
                 <Briefcase className="w-4 h-4 text-white/80" />
-                {candidate.experience} • {candidate.salary}
+                {candidate.experience || "-"}
               </div>
               <div className="flex items-center gap-2 text-sm text-white/80">
                 <Calendar className="w-4 h-4 text-white/80" />
-                Notice: {candidate.noticePeriod}
+                Applied {new Date(app.createdAt).toLocaleDateString()}
               </div>
             </div>
 
             {/* Skills */}
             <div className="mb-4">
               <div className="flex flex-wrap gap-1">
-                {candidate.skills.slice(0, 3).map((skill, index) => (
+                {(candidate.skills || []).slice(0, 3).map((skill, index) => (
                   <span
                     key={index}
                     className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80"
@@ -286,10 +217,8 @@ export default function CandidatesPage() {
                     {skill}
                   </span>
                 ))}
-                {candidate.skills.length > 3 && (
-                  <span className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80">
-                    +{candidate.skills.length - 3}
-                  </span>
+                {Array.isArray(candidate.skills) && candidate.skills.length > 3 && (
+                  <span className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80">+{candidate.skills.length - 3}</span>
                 )}
               </div>
             </div>
@@ -297,7 +226,7 @@ export default function CandidatesPage() {
             {/* Actions */}
             <div className="flex items-center justify-between pt-4 border-t border-white/10">
               <div className="text-xs text-white/60">
-                Applied {candidate.appliedDate}
+                Applied {new Date(app.createdAt).toLocaleDateString()}
               </div>
               <div className="flex gap-2">
                 <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
@@ -313,7 +242,7 @@ export default function CandidatesPage() {
               </div>
             </div>
           </div>
-        ))}
+        )})}
       </div>
 
       {/* Load More */}

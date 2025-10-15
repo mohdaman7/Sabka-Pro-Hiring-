@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { EmployerModel } from "../models/Employer.js";
+import { JobModel } from "../models/Job.js";
+import { ApplicationModel } from "../models/Application.js";
 import { UserModel } from "../models/User.js";
 
 // Validation schema for profile completion (required fields)
@@ -261,14 +263,24 @@ export const getEmployerDashboard = async (req, res, next) => {
         .json({ success: false, message: "Employer profile not found" });
     }
 
-    // TODO: Add actual stats from your job and application models
+    // Aggregate actual stats
+    const [jobsPosted, activeJobsCount, applicationsCount, newApplicationsCount] = await Promise.all([
+      JobModel.countDocuments({ employerId: req.user.id }),
+      JobModel.countDocuments({ employerId: req.user.id, status: "active" }),
+      ApplicationModel.countDocuments({ employerId: req.user.id }),
+      ApplicationModel.countDocuments({
+        employerId: req.user.id,
+        createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+      }),
+    ]);
+
     const dashboardStats = {
       profileCompletion: employer.profileCompletion,
       company: employer.company,
-      totalJobsPosted: 0, // Replace with actual count
-      totalApplications: 0, // Replace with actual count
-      activeJobs: 0, // Replace with actual count
-      newApplications: 0, // Replace with actual count
+      totalJobsPosted: jobsPosted,
+      totalApplications: applicationsCount,
+      activeJobs: activeJobsCount,
+      newApplications: newApplicationsCount,
     };
 
     res.json({
