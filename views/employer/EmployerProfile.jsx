@@ -35,70 +35,9 @@ import {
   Rocket,
 } from "lucide-react";
 
-// Mock toast function
-const customToast = {
-  success: (title, message) => console.log("Success:", title, message),
-  error: (title, message) => console.error("Error:", title, message),
-};
+import { customToast } from "@/components/ui/toast";
 
-// Mock user service
-const userService = {
-  getProfile: async () => ({
-    data: {
-      profile: {
-        company: {
-          name: "TechCorp Solutions",
-          description: "Leading provider of innovative technology solutions",
-          industry: "Technology",
-          size: "201-500",
-          website: "https://techcorp.com",
-          foundedYear: 2015,
-          logo: { url: null },
-        },
-        contact: {
-          phone: "+91 98765 43210",
-          address: {
-            street: "123 Tech Park",
-            city: "Bangalore",
-            state: "Karnataka",
-            country: "India",
-            zipCode: "560001",
-          },
-        },
-        position: "HR Manager",
-        department: "Human Resources",
-        hiringNeeds: {
-          typesOfRoles: ["Software Engineer", "Product Manager"],
-          locations: ["Bangalore", "Remote"],
-          typicalSalaryRanges: [
-            {
-              role: "Software Engineer",
-              min: "800000",
-              max: "1500000",
-              currency: "INR",
-            },
-          ],
-        },
-        bio: "Passionate about building great teams",
-        hiringGoals:
-          "Looking for talented individuals to join our growing team",
-        socialLinks: {
-          linkedin: "https://linkedin.com/company/techcorp",
-          twitter: "https://twitter.com/techcorp",
-          facebook: "",
-        },
-      },
-    },
-  }),
-  updateProfile: async (data) => {
-    console.log("Updating profile:", data);
-    return { success: true };
-  },
-  uploadProfilePicture: async (file) => {
-    console.log("Uploading file:", file);
-    return { success: true };
-  },
-};
+import { userService } from "@/services/userService";
 
 // Enhanced Loading Skeleton Component
 const CompanyProfileSkeleton = () => {

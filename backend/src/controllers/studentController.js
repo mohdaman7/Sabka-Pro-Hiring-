@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { StudentModel } from "../models/Student.js";
+import { SupportTicketModel } from "../models/SupportTicket.js";
 import { UserModel } from "../models/User.js";
 
 const updateStudentSchema = z.object({
@@ -118,6 +119,62 @@ export async function updateProfile(req, res, next) {
       success: true,
       data: student,
       message: "Profile updated successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Support ticket validation
+export const createTicketSchema = z.object({
+  subject: z.string().min(3),
+  message: z.string().min(10),
+  category: z
+    .enum(["account", "jobs", "courses", "technical", "billing", "other"]) 
+    .default("other"),
+  priority: z.enum(["low", "medium", "high"]).default("medium"),
+});
+
+// Create a support ticket (student)
+export async function createSupportTicket(req, res, next) {
+  try {
+    const parsed = createTicketSchema.parse(req.body);
+    const ticket = await SupportTicketModel.create({
+      ...parsed,
+      userId: req.user.id,
+      role: "student",
+      status: "open",
+    });
+    res.status(201).json({ success: true, data: ticket });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// List student's tickets
+export async function getMyTickets(req, res, next) {
+  try {
+    const { page = 1, limit = 10, status, category } = req.query;
+    const filter = { userId: req.user.id };
+    if (status) filter.status = status;
+    if (category) filter.category = category;
+
+    const tickets = await SupportTicketModel.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+    const total = await SupportTicketModel.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: tickets,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalTickets: total,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
     });
   } catch (err) {
     next(err);

@@ -20,4 +20,18 @@ router.put(
   studentController.updateProfile
 );
 
+// Support tickets
+router.post(
+  "/support/tickets",
+  authenticate,
+  authorize(["student"]),
+  studentController.createSupportTicket
+);
+router.get(
+  "/support/tickets",
+  authenticate,
+  authorize(["student"]),
+  studentController.getMyTickets
+);
+
 export default router;

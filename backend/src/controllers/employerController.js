@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { EmployerModel } from "../models/Employer.js";
+import { StudentModel } from "../models/Student.js";
 import { UserModel } from "../models/User.js";
 
 // Validation schema for profile completion (required fields)
@@ -344,6 +345,85 @@ export const getAllEmployers = async (req, res, next) => {
         hasPrev: page > 1,
       },
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Browse candidates (for employers)
+export const getCandidatesForEmployer = async (req, res, next) => {
+  try {
+    const {
+      page = 1,
+      limit = 12,
+      search,
+      location,
+      skill,
+      experienceType,
+      plan,
+    } = req.query;
+
+    const filter = { isActive: true };
+    if (experienceType) filter.experienceType = experienceType;
+    if (plan) filter.plan = plan;
+    if (location) filter["address.city"] = new RegExp(location, "i");
+
+    const andClauses = [];
+    if (search) {
+      andClauses.push({
+        $or: [
+          { highestQualification: new RegExp(search, "i") },
+          { bio: new RegExp(search, "i") },
+          { "jobPreferences.preferredRoles": new RegExp(search, "i") },
+          { "skills.name": new RegExp(search, "i") },
+        ],
+      });
+    }
+    if (skill) {
+      const skills = Array.isArray(skill) ? skill : String(skill).split(",");
+      andClauses.push({ "skills.name": { $in: skills.map((s) => new RegExp(s.trim(), "i")) } });
+    }
+
+    const mongoFilter = andClauses.length ? { $and: [filter, ...andClauses] } : filter;
+
+    const candidates = await StudentModel.find(mongoFilter)
+      .populate("userId", "firstName lastName email")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+
+    const total = await StudentModel.countDocuments(mongoFilter);
+
+    res.json({
+      success: true,
+      data: candidates,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalCandidates: total,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Get specific candidate profile (for employer)
+export const getCandidateByIdForEmployer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const candidate = await StudentModel.findById(id).populate(
+      "userId",
+      "firstName lastName email"
+    );
+    if (!candidate) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Candidate not found" });
+    }
+    res.json({ success: true, data: candidate });
   } catch (err) {
     next(err);
   }

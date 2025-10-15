@@ -21,4 +21,16 @@ router.put("/hiring-preferences", employerController.updateHiringPreferences);
 router.get("/public/:id", employerController.getEmployerById);
 router.get("/public", employerController.getAllEmployers);
 
+// Candidate browsing routes for employers
+router.get(
+  "/candidates",
+  authorize(["employer", "admin"]),
+  employerController.getCandidatesForEmployer
+);
+router.get(
+  "/candidates/:id",
+  authorize(["employer", "admin"]),
+  employerController.getCandidateByIdForEmployer
+);
+
 export default router;

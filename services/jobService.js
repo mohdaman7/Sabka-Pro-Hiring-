@@ -50,9 +50,5 @@ export const jobService = {
     return response.data;
   },
 
-  // Get all jobs (public)
-  getAllJobs: async (params = {}) => {
-    const response = await api.get("/api/jobs", { params });
-    return response.data;
-  },
+  // Duplicate removed
 };

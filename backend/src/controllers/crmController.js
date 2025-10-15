@@ -377,13 +377,127 @@ export const getAllJobsAdmin = async (req, res, next) => {
 
     const total = await JobModel.countDocuments(filter);
 
+    // Attach employer company info when available
+    const employerUserIds = jobs
+      .map((j) => (j.employerId && j.employerId._id ? j.employerId._id.toString() : j.employerId?.toString?.()))
+      .filter(Boolean);
+    let employersByUserId = new Map();
+    if (employerUserIds.length > 0) {
+      const employerProfiles = await EmployerModel.find({
+        userId: { $in: employerUserIds },
+      }).select("userId company.name company.website company.industry");
+      employersByUserId = new Map(
+        employerProfiles.map((e) => [e.userId.toString(), e])
+      );
+    }
+    const jobsWithCompany = jobs.map((j) => {
+      const employerUserId =
+        j.employerId && j.employerId._id
+          ? j.employerId._id.toString()
+          : j.employerId?.toString?.();
+      const employerProfile = employerUserId
+        ? employersByUserId.get(employerUserId)
+        : undefined;
+      return {
+        ...j.toObject(),
+        company: employerProfile?.company?.name || null,
+        employerProfile: employerProfile || null,
+      };
+    });
+
     res.json({
       success: true,
-      data: jobs,
+      data: jobsWithCompany,
       pagination: {
         currentPage: parseInt(page),
         totalPages: Math.ceil(total / limit),
         totalJobs: total,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Admin: Candidates listing with profile info
+// ============================================
+export const getAllCandidatesAdmin = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 12, search, plan, isActive } = req.query;
+
+    const filter = {};
+    if (plan) filter.plan = plan;
+    if (isActive !== undefined) filter.isActive = isActive === "true";
+
+    if (search) {
+      filter.$or = [
+        { highestQualification: new RegExp(search, "i") },
+        { "skills.name": new RegExp(search, "i") },
+      ];
+    }
+
+    const candidates = await StudentModel.find(filter)
+      .populate("userId", "firstName lastName email status createdAt")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+
+    const total = await StudentModel.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: candidates,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalCandidates: total,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Admin: Employers listing with company info
+// ============================================
+export const getAllEmployersAdmin = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 12, industry, companySize, search, verified } =
+      req.query;
+
+    const filter = {};
+    if (industry) filter["company.industry"] = new RegExp(industry, "i");
+    if (companySize) filter["company.size"] = companySize;
+    if (verified !== undefined) filter.isVerified = verified === "true";
+    if (search) {
+      filter.$or = [
+        { "company.name": new RegExp(search, "i") },
+        { "company.description": new RegExp(search, "i") },
+        { position: new RegExp(search, "i") },
+      ];
+    }
+
+    const employers = await EmployerModel.find(filter)
+      .populate("userId", "firstName lastName email status createdAt")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+
+    const total = await EmployerModel.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: employers,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalEmployers: total,
         hasNext: page < Math.ceil(total / limit),
         hasPrev: page > 1,
       },
