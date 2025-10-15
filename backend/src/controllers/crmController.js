@@ -5,6 +5,8 @@ import { StudentModel } from "../models/Student.js";
 import { EmployerModel } from "../models/Employer.js";
 import { ApplicationModel } from "../models/Application.js";
 import { JobModel } from "../models/Job.js";
+import { CompanyModel } from "../models/Company.js";
+import { SupportTicketModel } from "../models/SupportTicket.js";
 import { sendApprovalEmail } from "../utils/mailer.js";
 
 // Generate random password
@@ -323,6 +325,7 @@ export const getPlatformStats = async (req, res, next) => {
       totalApplications,
       activeJobs,
       recentRegistrations,
+      openSupportTickets,
     ] = await Promise.all([
       UserModel.countDocuments({ status: { $ne: "rejected" } }),
       UserModel.countDocuments({ role: "student", status: "active" }),
@@ -332,6 +335,7 @@ export const getPlatformStats = async (req, res, next) => {
       ApplicationModel.countDocuments(),
       JobModel.countDocuments({ status: "active" }),
       UserModel.find().sort({ createdAt: -1 }).limit(5).select("-passwordHash"),
+      SupportTicketModel.countDocuments({ status: { $in: ["open", "in_progress"] } }),
     ]);
 
     res.json({
@@ -345,6 +349,7 @@ export const getPlatformStats = async (req, res, next) => {
           jobs: totalJobs,
           applications: totalApplications,
           activeJobs,
+          supportOpen: openSupportTickets,
         },
         recentRegistrations,
       },
@@ -435,6 +440,90 @@ export const getAllApplications = async (req, res, next) => {
         hasPrev: page > 1,
       },
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Company Management (Admin)
+// ============================================
+export const createCompany = async (req, res, next) => {
+  try {
+    const payload = req.body || {};
+    if (!payload.name) {
+      return res.status(400).json({ success: false, message: "Company name is required" });
+    }
+    const company = await CompanyModel.create(payload);
+    res.status(201).json({ success: true, data: company, message: "Company created" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const listCompanies = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 10, search, industry } = req.query;
+    const filter = {};
+    if (search) filter.name = new RegExp(search, "i");
+    if (industry) filter.industry = new RegExp(industry, "i");
+
+    const companies = await CompanyModel.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+    const total = await CompanyModel.countDocuments(filter);
+    res.json({
+      success: true,
+      data: companies,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalCompanies: total,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCompanyById = async (req, res, next) => {
+  try {
+    const company = await CompanyModel.findById(req.params.id);
+    if (!company) {
+      return res.status(404).json({ success: false, message: "Company not found" });
+    }
+    res.json({ success: true, data: company });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateCompany = async (req, res, next) => {
+  try {
+    const company = await CompanyModel.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+    if (!company) {
+      return res.status(404).json({ success: false, message: "Company not found" });
+    }
+    res.json({ success: true, data: company, message: "Company updated" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteCompany = async (req, res, next) => {
+  try {
+    const company = await CompanyModel.findByIdAndDelete(req.params.id);
+    if (!company) {
+      return res.status(404).json({ success: false, message: "Company not found" });
+    }
+    res.json({ success: true, message: "Company deleted" });
   } catch (err) {
     next(err);
   }

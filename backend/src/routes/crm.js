@@ -11,6 +11,11 @@ import {
   getPendingRegistrations,
   approveUser,
   rejectUser,
+  createCompany,
+  listCompanies,
+  getCompanyById,
+  updateCompany,
+  deleteCompany,
 } from "../controllers/crmController.js";
 
 const router = Router();
@@ -35,7 +40,7 @@ router.patch("/users/:id/status", updateUserStatus);
 // ============================================
 // Platform Statistics
 // ============================================
-router.get("/stats", getPlatformStats);
+router.get("/dashboard/stats", getPlatformStats);
 
 // ============================================
 // Job Management (admin view)
@@ -46,5 +51,14 @@ router.get("/jobs", getAllJobsAdmin);
 // Application Management (admin view)
 // ============================================
 router.get("/applications", getAllApplications);
+
+// ============================================
+// Company Management
+// ============================================
+router.get("/companies", listCompanies);
+router.post("/companies", createCompany);
+router.get("/companies/:id", getCompanyById);
+router.put("/companies/:id", updateCompany);
+router.delete("/companies/:id", deleteCompany);
 
 export default router;
