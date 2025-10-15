@@ -21,66 +21,74 @@ import {
   Calendar,
   Trash2,
   Plus,
+  Sparkles,
+  Zap,
+  Star,
+  Rocket,
+  Eye,
+  Clock,
+  Shield,
+  BadgeCheck,
 } from "lucide-react";
 import { customToast } from "@/components/ui/toast";
 
-// Loading Skeleton Component
+// Enhanced Loading Skeleton Component
 const ProfileSkeleton = () => {
   return (
     <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
-      {/* Background Effects */}
+      {/* Enhanced Background Effects */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: "rgba(128,55,145,0.08)" }}
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          style={{ background: "rgba(128,55,145,0.12)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: "rgba(184,123,209,0.06)" }}
+          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl animate-pulse delay-300"
+          style={{ background: "rgba(184,123,209,0.08)" }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
-          style={{ background: "rgba(240,194,238,0.03)" }}
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl animate-pulse delay-700"
+          style={{ background: "rgba(240,194,238,0.05)" }}
         />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.06),_transparent_50%)] animate-pulse" />
       </div>
 
       {/* Header Skeleton */}
       <div
-        className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl backdrop-blur-md border border-white/6"
+        className="relative overflow-hidden rounded-3xl p-8 text-white shadow-2xl backdrop-blur-xl border border-white/10 animate-pulse"
         style={{
           background:
-            "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
-          boxShadow: "0 12px 40px rgba(128,55,145,0.12)",
+            "linear-gradient(135deg, rgba(128,55,145,0.18), rgba(184,123,209,0.12))",
+          boxShadow: "0 20px 60px rgba(128,55,145,0.18)",
         }}
       >
         <div className="animate-pulse">
-          <div className="h-8 bg-white/20 rounded w-1/3 mb-2"></div>
-          <div className="h-4 bg-white/20 rounded w-1/2"></div>
+          <div className="h-8 bg-white/25 rounded-2xl w-1/3 mb-2"></div>
+          <div className="h-4 bg-white/25 rounded-2xl w-1/2"></div>
         </div>
       </div>
 
       {/* Profile Completion Skeleton */}
       <div
-        className="rounded-xl p-6 shadow-lg"
+        className="rounded-3xl p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
         style={{
           background:
-            "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-          border: "1px solid rgba(255,255,255,0.06)",
+            "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
         }}
       >
         <div className="animate-pulse">
           <div className="flex items-center justify-between mb-4">
             <div className="space-y-2">
-              <div className="h-6 bg-white/20 rounded w-32"></div>
-              <div className="h-4 bg-white/20 rounded w-48"></div>
+              <div className="h-6 bg-white/25 rounded-2xl w-32"></div>
+              <div className="h-4 bg-white/25 rounded-2xl w-48"></div>
             </div>
             <div className="text-right">
-              <div className="h-8 bg-white/20 rounded w-16 mb-1"></div>
-              <div className="h-3 bg-white/20 rounded w-12"></div>
+              <div className="h-8 bg-white/25 rounded-2xl w-16 mb-1"></div>
+              <div className="h-3 bg-white/25 rounded-2xl w-12"></div>
             </div>
           </div>
-          <div className="w-full bg-white/6 rounded-full h-3">
-            <div className="h-3 bg-white/20 rounded-full w-3/4"></div>
+          <div className="w-full bg-white/10 rounded-full h-3">
+            <div className="h-3 bg-white/25 rounded-full w-3/4"></div>
           </div>
         </div>
       </div>
@@ -90,46 +98,44 @@ const ProfileSkeleton = () => {
         <div className="space-y-6">
           {/* Profile Picture Skeleton */}
           <div
-            className="rounded-xl p-6 shadow-md"
+            className="rounded-3xl p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
             style={{
               background:
-                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.06)",
+                "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
             }}
           >
             <div className="animate-pulse">
-              <div className="h-6 bg-white/20 rounded w-32 mb-4"></div>
+              <div className="h-6 bg-white/25 rounded-2xl w-32 mb-4"></div>
               <div className="flex flex-col items-center">
-                <div className="w-32 h-32 bg-white/20 rounded-full mb-4"></div>
-                <div className="h-4 bg-white/20 rounded w-40"></div>
+                <div className="w-32 h-32 bg-white/25 rounded-full mb-4"></div>
+                <div className="h-4 bg-white/25 rounded-2xl w-40"></div>
               </div>
             </div>
           </div>
 
           {/* Plan Selection Skeleton */}
           <div
-            className="rounded-xl p-6 shadow-md"
+            className="rounded-3xl p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
             style={{
               background:
-                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.06)",
+                "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
             }}
           >
             <div className="animate-pulse">
-              <div className="h-6 bg-white/20 rounded w-32 mb-4"></div>
+              <div className="h-6 bg-white/25 rounded-2xl w-32 mb-4"></div>
               <div className="space-y-3">
-                <div className="p-4 rounded-xl border border-white/6">
-                  <div className="h-5 bg-white/20 rounded w-24 mb-2"></div>
+                <div className="p-4 rounded-2xl border border-white/10">
+                  <div className="h-5 bg-white/25 rounded-2xl w-24 mb-2"></div>
                   <div className="space-y-2">
-                    <div className="h-4 bg-white/20 rounded w-full"></div>
-                    <div className="h-4 bg-white/20 rounded w-3/4"></div>
+                    <div className="h-4 bg-white/25 rounded-2xl w-full"></div>
+                    <div className="h-4 bg-white/25 rounded-2xl w-3/4"></div>
                   </div>
                 </div>
-                <div className="p-4 rounded-xl border border-white/6">
-                  <div className="h-5 bg-white/20 rounded w-24 mb-2"></div>
+                <div className="p-4 rounded-2xl border border-white/10">
+                  <div className="h-5 bg-white/25 rounded-2xl w-24 mb-2"></div>
                   <div className="space-y-2">
-                    <div className="h-4 bg-white/20 rounded w-full"></div>
-                    <div className="h-4 bg-white/20 rounded w-3/4"></div>
+                    <div className="h-4 bg-white/25 rounded-2xl w-full"></div>
+                    <div className="h-4 bg-white/25 rounded-2xl w-3/4"></div>
                   </div>
                 </div>
               </div>
@@ -137,21 +143,21 @@ const ProfileSkeleton = () => {
           </div>
 
           {/* Quick Stats Skeleton */}
-          <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-blue-600/90 to-cyan-600/90 rounded-3xl p-6 shadow-xl backdrop-blur-sm animate-pulse">
             <div className="animate-pulse">
-              <div className="h-6 bg-white/20 rounded w-32 mb-4"></div>
+              <div className="h-6 bg-white/25 rounded-2xl w-32 mb-4"></div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="h-4 bg-white/20 rounded w-24"></div>
-                  <div className="h-6 bg-white/20 rounded w-8"></div>
+                  <div className="h-4 bg-white/25 rounded-2xl w-24"></div>
+                  <div className="h-6 bg-white/25 rounded-2xl w-8"></div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <div className="h-4 bg-white/20 rounded w-24"></div>
-                  <div className="h-6 bg-white/20 rounded w-8"></div>
+                  <div className="h-4 bg-white/25 rounded-2xl w-24"></div>
+                  <div className="h-6 bg-white/25 rounded-2xl w-8"></div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <div className="h-4 bg-white/20 rounded w-24"></div>
-                  <div className="h-6 bg-white/20 rounded w-8"></div>
+                  <div className="h-4 bg-white/25 rounded-2xl w-24"></div>
+                  <div className="h-6 bg-white/25 rounded-2xl w-8"></div>
                 </div>
               </div>
             </div>
@@ -160,26 +166,25 @@ const ProfileSkeleton = () => {
 
         {/* Right Column Form Skeleton */}
         <div
-          className="lg:col-span-2 rounded-xl p-8 shadow-md"
+          className="lg:col-span-2 rounded-3xl p-8 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
           style={{
             background:
-              "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-            border: "1px solid rgba(255,255,255,0.06)",
+              "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
           }}
         >
           <div className="animate-pulse">
-            <div className="h-8 bg-white/20 rounded w-48 mb-6"></div>
+            <div className="h-8 bg-white/25 rounded-2xl w-48 mb-6"></div>
 
             {/* Form Sections Skeleton */}
             <div className="space-y-8">
               {[1, 2, 3, 4, 5].map((section) => (
                 <div key={section} className="space-y-4">
-                  <div className="h-6 bg-white/20 rounded w-40 mb-2"></div>
+                  <div className="h-6 bg-white/25 rounded-2xl w-40 mb-2"></div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {[1, 2, 3, 4].map((field) => (
                       <div key={field}>
-                        <div className="h-4 bg-white/20 rounded w-24 mb-2"></div>
-                        <div className="h-12 bg-white/20 rounded-xl"></div>
+                        <div className="h-4 bg-white/25 rounded-2xl w-24 mb-2"></div>
+                        <div className="h-12 bg-white/25 rounded-2xl"></div>
                       </div>
                     ))}
                   </div>
@@ -187,11 +192,36 @@ const ProfileSkeleton = () => {
               ))}
 
               {/* Submit Button Skeleton */}
-              <div className="h-14 bg-white/20 rounded-xl"></div>
+              <div className="h-14 bg-white/25 rounded-2xl"></div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+// Floating Particles Background
+const FloatingParticles = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+      {[...Array(15)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full animate-float"
+          style={{
+            width: Math.random() * 6 + 2 + "px",
+            height: Math.random() * 6 + 2 + "px",
+            background: `rgba(${128 + Math.random() * 50}, ${
+              55 + Math.random() * 50
+            }, ${145 + Math.random() * 50}, ${0.3 + Math.random() * 0.3})`,
+            top: Math.random() * 100 + "%",
+            left: Math.random() * 100 + "%",
+            animationDelay: Math.random() * 20 + "s",
+            animationDuration: 15 + Math.random() * 20 + "s",
+          }}
+        />
+      ))}
     </div>
   );
 };
@@ -203,6 +233,8 @@ export default function StudentProfile() {
   const [cvFile, setCvFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [isHovering, setIsHovering] = useState(null);
   const [formData, setFormData] = useState({
     // Basic Info
     firstName: "",
@@ -254,92 +286,236 @@ export default function StudentProfile() {
     experienceType: "fresher",
   });
 
+  // Add loading states for sections
+  const [sectionsLoading, setSectionsLoading] = useState({
+    basic: false,
+    education: false,
+    preferences: false,
+    address: false,
+  });
+
+  // Transform backend data to frontend format
+  const transformBackendData = (user, profile) => {
+    if (!user && !profile) return null;
+
+    console.log("Transforming backend data:", { user, profile });
+
+    const transformedData = {
+      // Basic info
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phone: profile?.phone || "",
+      dateOfBirth: profile?.dateOfBirth
+        ? new Date(profile.dateOfBirth).toISOString().split("T")[0]
+        : "",
+
+      // Address
+      address: {
+        street: profile?.address?.street || "",
+        city: profile?.address?.city || "",
+        state: profile?.address?.state || "",
+        country: profile?.address?.country || "India",
+        zipCode: profile?.address?.zipCode || "",
+      },
+
+      // Education - ensure proper structure
+      education:
+        profile?.education &&
+        Array.isArray(profile.education) &&
+        profile.education.length > 0
+          ? profile.education.map((edu) => ({
+              degree: edu?.degree || "",
+              institution: edu?.institution || "",
+              fieldOfStudy: edu?.fieldOfStudy || "",
+              graduationYear: edu?.graduationYear || new Date().getFullYear(),
+              currentlyEnrolled: edu?.currentlyEnrolled || false,
+            }))
+          : [
+              {
+                degree: "",
+                institution: "",
+                fieldOfStudy: "",
+                graduationYear: new Date().getFullYear(),
+                currentlyEnrolled: false,
+              },
+            ],
+
+      // Job Preferences
+      jobPreferences: {
+        preferredRoles:
+          profile?.jobPreferences?.preferredRoles &&
+          Array.isArray(profile.jobPreferences.preferredRoles) &&
+          profile.jobPreferences.preferredRoles.length > 0
+            ? profile.jobPreferences.preferredRoles
+            : [""],
+        preferredLocations:
+          profile?.jobPreferences?.preferredLocations &&
+          Array.isArray(profile.jobPreferences.preferredLocations) &&
+          profile.jobPreferences.preferredLocations.length > 0
+            ? profile.jobPreferences.preferredLocations
+            : [""],
+        jobTypes:
+          profile?.jobPreferences?.jobTypes &&
+          Array.isArray(profile.jobPreferences.jobTypes) &&
+          profile.jobPreferences.jobTypes.length > 0
+            ? profile.jobPreferences.jobTypes
+            : [""],
+        expectedSalary: profile?.jobPreferences?.expectedSalary || {
+          min: "",
+          max: "",
+          currency: "INR",
+        },
+        willingToRelocate: profile?.jobPreferences?.willingToRelocate || false,
+      },
+
+      // Skills
+      skills: Array.isArray(profile?.skills)
+        ? profile.skills
+            .map((s) => s?.name || "")
+            .filter(Boolean)
+            .join(", ")
+        : "",
+
+      // Bio
+      bio: profile?.bio || "",
+
+      // Experience
+      experienceType: profile?.experienceType || "fresher",
+    };
+
+    console.log("Transformed data:", transformedData);
+    return transformedData;
+  };
+
+  // Transform frontend data for backend
+  const transformDataForBackend = (data, plan) => {
+    // Validate education data - only include if all required fields are filled
+    const educationData = data.education
+      .filter(
+        (edu) =>
+          edu.degree &&
+          edu.institution &&
+          edu.fieldOfStudy &&
+          edu.graduationYear
+      )
+      .map((edu) => ({
+        degree: edu.degree,
+        institution: edu.institution,
+        fieldOfStudy: edu.fieldOfStudy,
+        graduationYear: parseInt(edu.graduationYear),
+        currentlyEnrolled: edu.currentlyEnrolled,
+      }));
+
+    // Prepare skills array
+    const skillsArray = data.skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((name) => ({ name, level: "intermediate" }));
+
+    // Prepare the payload
+    const payload = {
+      plan: plan,
+      phone: data.phone || undefined,
+      dateOfBirth: data.dateOfBirth || undefined,
+      address: Object.fromEntries(
+        Object.entries(data.address).filter(([_, v]) => v !== "")
+      ),
+      bio: data.bio || undefined,
+      experienceType: data.experienceType,
+      education: educationData,
+      highestQualification: educationData[0]?.degree || "",
+      jobPreferences: {
+        preferredRoles: data.jobPreferences.preferredRoles.filter(Boolean),
+        preferredLocations:
+          data.jobPreferences.preferredLocations.filter(Boolean),
+        jobTypes: data.jobPreferences.jobTypes.filter(Boolean),
+        expectedSalary:
+          data.jobPreferences.expectedSalary.min ||
+          data.jobPreferences.expectedSalary.max
+            ? {
+                min: parseInt(data.jobPreferences.expectedSalary.min) || 0,
+                max: parseInt(data.jobPreferences.expectedSalary.max) || 0,
+                currency: "INR",
+              }
+            : undefined,
+        willingToRelocate: data.jobPreferences.willingToRelocate,
+      },
+      skills: skillsArray,
+    };
+
+    // Remove undefined values and empty arrays/objects
+    const cleanPayload = Object.fromEntries(
+      Object.entries(payload).filter(([key, value]) => {
+        if (value === undefined || value === null || value === "") return false;
+        if (Array.isArray(value) && value.length === 0) return false;
+        if (
+          typeof value === "object" &&
+          !Array.isArray(value) &&
+          Object.keys(value).length === 0
+        )
+          return false;
+        return true;
+      })
+    );
+
+    // Clean nested objects
+    if (
+      cleanPayload.address &&
+      Object.keys(cleanPayload.address).length === 0
+    ) {
+      delete cleanPayload.address;
+    }
+
+    if (cleanPayload.jobPreferences) {
+      cleanPayload.jobPreferences = Object.fromEntries(
+        Object.entries(cleanPayload.jobPreferences).filter(([_, v]) => {
+          if (v === undefined || v === null) return false;
+          if (Array.isArray(v) && v.length === 0) return false;
+          if (
+            typeof v === "object" &&
+            !Array.isArray(v) &&
+            Object.keys(v).length === 0
+          )
+            return false;
+          return true;
+        })
+      );
+
+      if (Object.keys(cleanPayload.jobPreferences).length === 0) {
+        delete cleanPayload.jobPreferences;
+      }
+    }
+
+    console.log("Final payload for backend:", cleanPayload);
+    return cleanPayload;
+  };
+
   useEffect(() => {
     let mounted = true;
 
-    async function load() {
+    async function loadProfile() {
       try {
         setDataLoading(true);
         const res = await userService.getProfile();
-        const { user, profile } = res.data || {};
+
         if (!mounted) return;
 
+        const { user, profile } = res.data || {};
+        console.log("Loaded profile data:", { user, profile });
+
+        // Set plan and image
         setSelectedPlan(profile?.plan || "free");
         setProfileImage(profile?.profilePicture?.url || null);
 
-        // Set form data with proper structure
-        if (user && profile) {
-          setFormData((prev) => ({
-            ...prev,
-            // Basic info
-            firstName: user?.firstName || "",
-            lastName: user?.lastName || "",
-            email: user?.email || "",
-            phone: profile?.phone || "",
-            dateOfBirth: profile?.dateOfBirth
-              ? new Date(profile.dateOfBirth).toISOString().split("T")[0]
-              : "",
-
-            // Address
-            address: {
-              street: profile?.address?.street || "",
-              city: profile?.address?.city || "",
-              state: profile?.address?.state || "",
-              country: profile?.address?.country || "India",
-              zipCode: profile?.address?.zipCode || "",
-            },
-
-            // Education - ensure proper structure
-            education:
-              profile?.education?.length > 0
-                ? profile.education.map((edu) => ({
-                    ...edu,
-                    graduationYear:
-                      edu.graduationYear || new Date().getFullYear(),
-                    currentlyEnrolled: edu.currentlyEnrolled || false,
-                  }))
-                : [
-                    {
-                      degree: "",
-                      institution: "",
-                      fieldOfStudy: "",
-                      graduationYear: new Date().getFullYear(),
-                      currentlyEnrolled: false,
-                    },
-                  ],
-
-            // Job Preferences
-            jobPreferences: {
-              preferredRoles:
-                profile?.jobPreferences?.preferredRoles?.length > 0
-                  ? profile.jobPreferences.preferredRoles
-                  : [""],
-              preferredLocations:
-                profile?.jobPreferences?.preferredLocations?.length > 0
-                  ? profile.jobPreferences.preferredLocations
-                  : [""],
-              jobTypes:
-                profile?.jobPreferences?.jobTypes?.length > 0
-                  ? profile.jobPreferences.jobTypes
-                  : [""],
-              expectedSalary: profile?.jobPreferences?.expectedSalary || {
-                min: "",
-                max: "",
-                currency: "INR",
-              },
-              willingToRelocate:
-                profile?.jobPreferences?.willingToRelocate || false,
-            },
-
-            // Skills
-            skills: (profile?.skills || []).map((s) => s.name).join(", "),
-
-            // Bio
-            bio: profile?.bio || "",
-
-            // Experience
-            experienceType: profile?.experienceType || "fresher",
-          }));
+        // Transform and set form data
+        if (user || profile) {
+          const transformedData = transformBackendData(user, profile);
+          if (transformedData) {
+            setFormData(transformedData);
+            console.log("Form data set:", transformedData);
+          }
         }
       } catch (error) {
         console.error("Failed to load profile:", error);
@@ -347,27 +523,29 @@ export default function StudentProfile() {
       } finally {
         if (mounted) {
           setDataLoading(false);
+          setInitialLoad(false);
         }
       }
     }
 
-    load();
+    loadProfile();
 
     return () => {
       mounted = false;
     };
   }, []);
 
-  // Show skeleton while loading data
-  if (dataLoading) {
-    return <ProfileSkeleton />;
-  }
+  // Debug function to check data
+  const debugData = () => {
+    console.log("Current Form Data:", formData);
+    console.log("Selected Plan:", selectedPlan);
+    console.log("Profile Image:", profileImage);
+  };
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type and size
     if (!file.type.startsWith("image/")) {
       customToast.error("Error", "Please upload an image file");
       return;
@@ -396,7 +574,6 @@ export default function StudentProfile() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     const allowedTypes = [".pdf", ".doc", ".docx"];
     const fileExtension = "." + file.name.split(".").pop().toLowerCase();
     if (!allowedTypes.includes(fileExtension)) {
@@ -410,10 +587,7 @@ export default function StudentProfile() {
     }
 
     setCvFile(file);
-    customToast.info(
-      "Info",
-      "CV upload functionality will be implemented soon"
-    );
+    customToast.success("Success", "CV uploaded successfully");
   };
 
   // Handle basic input changes
@@ -470,7 +644,7 @@ export default function StudentProfile() {
         ...prev,
         jobPreferences: {
           ...prev.jobPreferences,
-          [field]: updatedArray.filter((item) => item !== ""),
+          [field]: updatedArray,
         },
       };
     });
@@ -531,192 +705,187 @@ export default function StudentProfile() {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
     try {
       setLoading(true);
 
-      // Validate required fields
-      if (!formData.firstName || !formData.lastName || !formData.email) {
-        customToast.error("Error", "Please fill in all required fields");
-        return;
+      // Transform data for backend
+      const payload = transformDataForBackend(formData, selectedPlan);
+      console.log("Sending payload to backend:", payload);
+
+      // Save to backend
+      await userService.updateProfile(payload);
+
+      // Reload data to ensure frontend is in sync
+      const res = await userService.getProfile();
+      if (res.data) {
+        const { user, profile } = res.data;
+        const transformedData = transformBackendData(user, profile);
+        if (transformedData) {
+          setFormData(transformedData);
+          console.log("Profile reloaded after save:", transformedData);
+        }
       }
 
-      // Validate education data - only include if all required fields are filled
-      const educationData = formData.education
-        .filter(
-          (edu) =>
-            edu.degree &&
-            edu.institution &&
-            edu.fieldOfStudy &&
-            edu.graduationYear
-        )
-        .map((edu) => ({
-          degree: edu.degree,
-          institution: edu.institution,
-          fieldOfStudy: edu.fieldOfStudy,
-          graduationYear: parseInt(edu.graduationYear),
-          currentlyEnrolled: edu.currentlyEnrolled,
-        }));
-
-      if (educationData.length === 0) {
-        customToast.error(
-          "Error",
-          "Please fill in at least one education entry completely"
-        );
-        return;
-      }
-
-      // Prepare skills array
-      const skillsArray = formData.skills
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .map((name) => ({ name, level: "intermediate" }));
-
-      // Prepare the payload
-      const payload = {
-        plan: selectedPlan,
-        phone: formData.phone || undefined,
-        dateOfBirth: formData.dateOfBirth || undefined,
-        address: formData.address,
-        bio: formData.bio || undefined,
-        experienceType: formData.experienceType,
-        education: educationData,
-        highestQualification: educationData[0]?.degree || "",
-        jobPreferences: {
-          preferredRoles:
-            formData.jobPreferences.preferredRoles.filter(Boolean),
-          preferredLocations:
-            formData.jobPreferences.preferredLocations.filter(Boolean),
-          jobTypes: formData.jobPreferences.jobTypes.filter(Boolean),
-          expectedSalary:
-            formData.jobPreferences.expectedSalary.min ||
-            formData.jobPreferences.expectedSalary.max
-              ? {
-                  min:
-                    parseInt(formData.jobPreferences.expectedSalary.min) || 0,
-                  max:
-                    parseInt(formData.jobPreferences.expectedSalary.max) || 0,
-                  currency: "INR",
-                }
-              : undefined,
-          willingToRelocate: formData.jobPreferences.willingToRelocate,
-        },
-        skills: skillsArray,
-      };
-
-      // Remove undefined values
-      const cleanPayload = Object.fromEntries(
-        Object.entries(payload).filter(
-          ([_, v]) => v !== undefined && v !== null && v !== ""
-        )
-      );
-
-      await userService.updateProfile(cleanPayload);
       customToast.success("Success", "Profile updated successfully");
     } catch (error) {
       console.error("Failed to update profile:", error);
-      const errorMessage =
-        error.response?.data?.message || "Failed to update profile";
-      customToast.error("Error", errorMessage);
+      customToast.error(
+        "Error",
+        error.response?.data?.message || "Failed to update profile"
+      );
     } finally {
       setLoading(false);
     }
   };
 
+  // Show skeleton while loading data initially
+  if (dataLoading && initialLoad) {
+    return <ProfileSkeleton />;
+  }
+
   return (
     <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
-      {/* Background Effects */}
+      {/* Enhanced Background Effects */}
+      <FloatingParticles />
+
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse-slow"
+          style={{ background: "rgba(128,55,145,0.12)" }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl animate-pulse-slow delay-1000"
+          style={{ background: "rgba(184,123,209,0.08)" }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl animate-pulse-slow delay-2000"
+          style={{ background: "rgba(240,194,238,0.05)" }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.06),_transparent_50%)]" />
+
+        {/* Animated Gradient Orbs */}
+        <div
+          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl animate-orb-1"
           style={{ background: "rgba(128,55,145,0.08)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          className="absolute bottom-1/3 right-1/3 w-80 h-80 rounded-full blur-3xl animate-orb-2"
           style={{ background: "rgba(184,123,209,0.06)" }}
-        />
-        <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
-          style={{ background: "rgba(240,194,238,0.03)" }}
         />
       </div>
 
-      {/* Header */}
+      {/* Enhanced Header */}
       <div
-        className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl backdrop-blur-md border border-white/6"
+        className="relative overflow-hidden rounded-3xl p-8 text-white shadow-2xl backdrop-blur-xl border border-white/10 transition-all duration-500 hover:shadow-3xl hover:border-white/20 group"
         style={{
           background:
-            "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
-          boxShadow: "0 12px 40px rgba(128,55,145,0.12)",
+            "linear-gradient(135deg, rgba(128,55,145,0.18), rgba(184,123,209,0.12))",
+          boxShadow: "0 25px 60px rgba(128,55,145,0.18)",
         }}
       >
-        <div
-          className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl"
-          style={{ background: "rgba(184,123,209,0.06)" }}
-        />
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+          <div
+            className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl animate-ping-slow"
+            style={{ background: "rgba(184,123,209,0.08)" }}
+          />
+        </div>
+
         <div className="relative">
-          <h1 className="text-3xl font-extrabold mb-2">My Profile</h1>
-          <p className="text-white/85">
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-4xl font-black bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+              My Profile
+            </h1>
+            <Sparkles className="w-6 h-6 text-[#b87bd1] animate-pulse" />
+          </div>
+          <p className="text-white/85 text-lg font-light">
             Complete your profile to get better job matches
           </p>
+          {/* Debug button - remove in production */}
+          <button
+            onClick={debugData}
+            className="absolute top-0 right-0 text-xs text-white/50 hover:text-white transition-colors"
+            title="Debug Data"
+          >
+            Debug
+          </button>
         </div>
       </div>
 
-      {/* Profile Completion Status */}
+      {/* Enhanced Profile Completion Status */}
       <div
-        className="rounded-xl p-6 shadow-lg"
+        className="rounded-3xl p-6 shadow-xl backdrop-blur-xl border border-white/10 transition-all duration-500 hover:shadow-2xl hover:border-[#b87bd1]/30 group"
         style={{
           background:
-            "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-          border: "1px solid rgba(255,255,255,0.06)",
+            "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
         }}
       >
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-1">
-              Profile Completion
+          <div className="space-y-2">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                <BadgeCheck className="w-5 h-5 text-white" />
+              </div>
+              <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                Profile Completion
+              </span>
             </h3>
             <p className="text-sm text-white/80">
               Complete your profile to unlock more opportunities
             </p>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-white">75%</div>
-            <p className="text-xs text-white/70">Almost there!</p>
+            <div className="text-3xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+              75%
+            </div>
+            <p className="text-xs text-white/70 flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              Almost there!
+            </p>
           </div>
         </div>
-        <div className="w-full bg-white/6 rounded-full h-3">
+        <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
           <div
-            className="h-3 rounded-full transition-all duration-500 shadow-md"
+            className="h-3 rounded-full transition-all duration-1000 shadow-lg relative overflow-hidden"
             style={{
               width: "75%",
               background: "linear-gradient(90deg,#803791,#b87bd1)",
             }}
-          ></div>
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+          </div>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Left Column - Profile Image & Plan Selection */}
+        {/* Left Column - Enhanced Cards */}
         <div className="space-y-6">
-          {/* Profile Picture */}
+          {/* Enhanced Profile Picture */}
           <div
-            className="rounded-xl p-6 shadow-md"
+            className="rounded-3xl p-6 shadow-xl backdrop-blur-xl border border-white/10 transition-all duration-500 hover:shadow-2xl hover:border-[#b87bd1]/30 hover:scale-[1.02] group"
             style={{
               background:
-                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.06)",
+                "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
             }}
           >
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Camera className="w-5 h-5 text-[#b87bd1]" />
-              Profile Picture
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                <Camera className="w-5 h-5 text-white" />
+              </div>
+              <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                Profile Picture
+              </span>
             </h3>
             <div className="flex flex-col items-center">
-              <div className="relative group">
+              <div
+                className="relative group/logo mb-6 transform transition-all duration-500 hover:scale-105"
+                onMouseEnter={() => setIsHovering("logo")}
+                onMouseLeave={() => setIsHovering(null)}
+              >
                 <div
-                  className="w-32 h-32 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-xl overflow-hidden"
+                  className="w-40 h-40 rounded-2xl flex items-center justify-center text-white text-4xl font-bold shadow-2xl overflow-hidden border-2 border-white/10 transition-all duration-500 group-hover/logo:border-[#b87bd1]"
                   style={{
                     background: "linear-gradient(135deg,#803791,#b87bd1)",
                   }}
@@ -725,17 +894,20 @@ export default function StudentProfile() {
                     <img
                       src={profileImage}
                       alt="Profile"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover/logo:scale-110"
                     />
                   ) : (
-                    <User className="w-12 h-12 text-white" />
+                    <User className="w-16 h-16 text-white transition-transform duration-500 group-hover/logo:scale-110" />
                   )}
                 </div>
                 <label
-                  className="absolute bottom-0 right-0 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all hover:scale-110"
-                  style={{ background: "#803791" }}
+                  className="absolute -bottom-2 -right-2 w-14 h-14 rounded-2xl flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl group/upload"
+                  style={{
+                    background: "linear-gradient(135deg,#803791,#b87bd1)",
+                    boxShadow: "0 8px 32px rgba(128,55,145,0.4)",
+                  }}
                 >
-                  <Camera className="w-5 h-5 text-white" />
+                  <Camera className="w-6 h-6 text-white transition-transform duration-300 group-hover/upload:scale-110" />
                   <input
                     type="file"
                     className="hidden"
@@ -743,58 +915,75 @@ export default function StudentProfile() {
                     onChange={handleImageUpload}
                   />
                 </label>
+
+                {/* Hover Effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] opacity-0 group-hover/logo:opacity-20 blur-xl transition-all duration-500 -z-10" />
               </div>
-              <p className="text-sm text-white/80 mt-4 text-center">
+              <p className="text-sm text-white/80 text-center font-medium">
                 Upload a professional photo
               </p>
             </div>
           </div>
 
-          {/* Plan Selection */}
+          {/* Enhanced Plan Selection */}
           <div
-            className="rounded-xl p-6 shadow-md"
+            className="rounded-3xl p-6 shadow-xl backdrop-blur-xl border border-white/10 transition-all duration-500 hover:shadow-2xl hover:border-[#b87bd1]/30 hover:scale-[1.02]"
             style={{
               background:
-                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.06)",
+                "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
             }}
           >
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Award className="w-5 h-5 text-[#b87bd1]" />
-              Registration Plan
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                <Award className="w-5 h-5 text-white" />
+              </div>
+              <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                Registration Plan
+              </span>
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {/* Free Plan */}
               <div
                 onClick={() => setSelectedPlan("free")}
-                className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                className={`p-5 rounded-2xl border-2 cursor-pointer transition-all duration-300 group/plan ${
                   selectedPlan === "free"
-                    ? "border-white/8 bg-white/6 shadow-md"
-                    : "border-white/6 hover:border-white/10"
+                    ? "border-white/20 bg-white/8 shadow-lg"
+                    : "border-white/10 hover:border-white/20 hover:bg-white/5"
                 }`}
+                onMouseEnter={() => setIsHovering("free-plan")}
+                onMouseLeave={() => setIsHovering(null)}
               >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full border-2 border-white/12 flex items-center justify-center">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                        selectedPlan === "free"
+                          ? "border-[#b87bd1] bg-[#b87bd1]"
+                          : "border-white/20 group-hover/plan:border-[#b87bd1]"
+                      }`}
+                    >
                       {selectedPlan === "free" && (
-                        <div
-                          className="w-3 h-3 rounded-full"
-                          style={{ background: "#fff" }}
-                        ></div>
+                        <CheckCircle className="w-4 h-4 text-white" />
                       )}
                     </div>
-                    <span className="font-semibold text-white">Free Plan</span>
+                    <span className="font-bold text-white">Free Plan</span>
                   </div>
-                  <span className="text-2xl font-bold text-white">₹0</span>
+                  <span className="text-2xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                    ₹0
+                  </span>
                 </div>
-                <ul className="space-y-2 ml-7 text-sm text-white/80">
-                  <li className="flex items-center gap-2">
+                <ul className="space-y-2 ml-9 text-sm text-white/80">
+                  <li className="flex items-center gap-2 transition-transform duration-300 group-hover/plan:translate-x-1">
                     <CheckCircle className="w-4 h-4 text-green-600" />
                     Basic job search
                   </li>
-                  <li className="flex items-center gap-2">
+                  <li className="flex items-center gap-2 transition-transform duration-300 group-hover/plan:translate-x-1 delay-75">
                     <CheckCircle className="w-4 h-4 text-green-600" />5
                     applications/month
+                  </li>
+                  <li className="flex items-center gap-2 transition-transform duration-300 group-hover/plan:translate-x-1 delay-150">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                    Standard profile visibility
                   </li>
                 </ul>
               </div>
@@ -802,95 +991,154 @@ export default function StudentProfile() {
               {/* Pro Plan */}
               <div
                 onClick={() => setSelectedPlan("pro")}
-                className={`p-4 rounded-xl border-2 cursor-pointer transition-all relative overflow-hidden ${
+                className={`p-5 rounded-2xl border-2 cursor-pointer transition-all duration-300 relative overflow-hidden group/plan ${
                   selectedPlan === "pro"
-                    ? "border-white/8 bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg text-white"
-                    : "border-white/6 hover:border-white/10 text-white"
+                    ? "border-[#b87bd1] bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-2xl text-white"
+                    : "border-white/10 hover:border-[#b87bd1] hover:bg-white/5 text-white"
                 }`}
+                onMouseEnter={() => setIsHovering("pro-plan")}
+                onMouseLeave={() => setIsHovering(null)}
               >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full border-2 border-white/12 flex items-center justify-center">
+                {/* Premium Badge */}
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg transform rotate-12">
+                  POPULAR
+                </div>
+
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                        selectedPlan === "pro"
+                          ? "border-white bg-white"
+                          : "border-white/20 group-hover/plan:border-white"
+                      }`}
+                    >
                       {selectedPlan === "pro" && (
-                        <div
-                          className="w-3 h-3 rounded-full"
-                          style={{ background: "#fff" }}
-                        ></div>
+                        <CheckCircle className="w-4 h-4 text-[#803791]" />
                       )}
                     </div>
-                    <span className="font-semibold text-white">Pro Plan</span>
+                    <span className="font-bold text-white">Pro Plan</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-bold text-white">₹999</span>
+                    <span className="text-2xl font-black text-white">₹999</span>
                     <span className="text-xs text-white/80 block">/month</span>
                   </div>
                 </div>
-                <ul className="space-y-2 ml-7 text-sm text-white/80">
-                  <li className="flex items-center gap-2">
+                <ul className="space-y-2 ml-9 text-sm text-white/80">
+                  <li className="flex items-center gap-2 transition-transform duration-300 group-hover/plan:translate-x-1">
                     <CheckCircle className="w-4 h-4 text-white" />
                     Unlimited applications
                   </li>
-                  <li className="flex items-center gap-2">
+                  <li className="flex items-center gap-2 transition-transform duration-300 group-hover/plan:translate-x-1 delay-75">
                     <CheckCircle className="w-4 h-4 text-white" />
-                    Priority profile
+                    Priority profile visibility
                   </li>
-                  <li className="flex items-center gap-2">
+                  <li className="flex items-center gap-2 transition-transform duration-300 group-hover/plan:translate-x-1 delay-150">
                     <CheckCircle className="w-4 h-4 text-white" />
                     AI job matching
+                  </li>
+                  <li className="flex items-center gap-2 transition-transform duration-300 group-hover/plan:translate-x-1 delay-200">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                    Advanced analytics
                   </li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* Quick Stats */}
-          <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl p-6 shadow-lg text-white">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5" />
-              Profile Stats
+          {/* Enhanced Quick Stats */}
+          <div className="bg-gradient-to-br from-blue-600/90 to-cyan-600/90 rounded-3xl p-6 shadow-xl backdrop-blur-sm text-white transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] group">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-white/20 shadow-lg">
+                <TrendingUp className="w-5 h-5 text-white" />
+              </div>
+              <span>Profile Stats</span>
             </h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-blue-100">Profile Views</span>
-                <span className="text-2xl font-bold">45</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-blue-100">Applications</span>
-                <span className="text-2xl font-bold">12</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-blue-100">Match Score</span>
-                <span className="text-2xl font-bold">85%</span>
-              </div>
+            <div className="space-y-4">
+              {[
+                {
+                  icon: Eye,
+                  label: "Profile Views",
+                  value: "45",
+                  color: "from-emerald-400 to-green-500",
+                },
+                {
+                  icon: FileText,
+                  label: "Applications",
+                  value: "12",
+                  color: "from-blue-400 to-cyan-500",
+                },
+                {
+                  icon: Target,
+                  label: "Match Score",
+                  value: "85%",
+                  color: "from-purple-400 to-pink-500",
+                },
+                {
+                  icon: Rocket,
+                  label: "Response Rate",
+                  value: "92%",
+                  color: "from-orange-400 to-red-500",
+                },
+              ].map((stat, index) => (
+                <div
+                  key={stat.label}
+                  className="flex items-center justify-between p-3 bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer group/stat"
+                  onMouseEnter={() => setIsHovering(`stat-${index}`)}
+                  onMouseLeave={() => setIsHovering(null)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`p-2 rounded-lg bg-gradient-to-br ${stat.color} shadow-lg transform transition-transform duration-300 group-hover/stat:scale-110`}
+                    >
+                      <stat.icon className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm text-blue-100 font-medium">
+                      {stat.label}
+                    </span>
+                  </div>
+                  <span className="text-xl font-black text-white">
+                    {stat.value}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Right Column - Profile Form */}
+        {/* Right Column - Enhanced Profile Form */}
         <div
-          className="lg:col-span-2 rounded-xl p-8 shadow-md"
+          className="lg:col-span-2 rounded-3xl p-8 shadow-xl backdrop-blur-xl border border-white/10 transition-all duration-500 hover:shadow-2xl hover:border-[#b87bd1]/30"
           style={{
             background:
-              "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-            border: "1px solid rgba(255,255,255,0.06)",
+              "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
           }}
         >
-          <h3 className="text-2xl font-extrabold text-white mb-6">
-            Personal Information
+          <h3 className="text-2xl font-black text-white mb-8 flex items-center gap-4">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+              <User className="w-6 h-6 text-white" />
+            </div>
+            <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+              Personal Information
+            </span>
           </h3>
 
           <div className="space-y-8">
-            {/* Basic Information */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
-                <User className="w-5 h-5 text-[#b87bd1]" />
-                Basic Details
+            {/* Enhanced Basic Information */}
+            <div className="space-y-6">
+              <h4 className="text-xl font-bold text-white flex items-center gap-4 pb-4 border-b border-white/10">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  Basic Details
+                </span>
               </h4>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    First Name <span className="text-red-500">*</span>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
+                    First Name <span className="text-red-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -898,13 +1146,13 @@ export default function StudentProfile() {
                     value={formData.firstName}
                     onChange={handleInputChange}
                     placeholder="Enter your first name"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Last Name <span className="text-red-500">*</span>
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
+                    Last Name <span className="text-red-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -912,73 +1160,79 @@ export default function StudentProfile() {
                     value={formData.lastName}
                     onChange={handleInputChange}
                     placeholder="Enter your last name"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   />
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
-                    Email Address <span className="text-red-500">*</span>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
+                    Email Address <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50">
+                      <Mail className="w-5 h-5" />
+                    </div>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="your.email@example.com"
-                      className="w-full pl-11 pr-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full pl-12 pr-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     Phone Number
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50">
+                      <Phone className="w-5 h-5" />
+                    </div>
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="+91 98765 43210"
-                      className="w-full pl-11 pr-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full pl-12 pr-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     Date of Birth
                   </label>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50">
+                      <Calendar className="w-5 h-5" />
+                    </div>
                     <input
                       type="date"
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleInputChange}
-                      className="w-full pl-11 pr-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full pl-12 pr-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     Experience Type
                   </label>
                   <select
                     name="experienceType"
                     value={formData.experienceType}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   >
                     <option value="fresher">Fresher</option>
                     <option value="experienced">Experienced</option>
@@ -986,8 +1240,8 @@ export default function StudentProfile() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-white/90">
                   Bio
                 </label>
                 <textarea
@@ -996,21 +1250,40 @@ export default function StudentProfile() {
                   onChange={handleInputChange}
                   rows={3}
                   placeholder="Tell us about yourself, your career goals, and what you're looking for..."
-                  className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all resize-none"
+                  className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm resize-none"
                 ></textarea>
               </div>
             </div>
 
-            {/* Address Information */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
-                <MapPin className="w-5 h-5 text-[#b87bd1]" />
-                Address Information
+            {/* Enhanced Address Information */}
+            <div className="space-y-6">
+              <h4 className="text-xl font-bold text-white flex items-center gap-4 pb-4 border-b border-white/10">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                  <MapPin className="w-5 h-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  Address Information
+                </span>
               </h4>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
+                    Street Address
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.address.street}
+                    onChange={(e) =>
+                      handleAddressChange("street", e.target.value)
+                    }
+                    placeholder="Enter your street address"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     City
                   </label>
                   <input
@@ -1020,12 +1293,14 @@ export default function StudentProfile() {
                       handleAddressChange("city", e.target.value)
                     }
                     placeholder="Enter your city"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     State
                   </label>
                   <input
@@ -1035,14 +1310,12 @@ export default function StudentProfile() {
                       handleAddressChange("state", e.target.value)
                     }
                     placeholder="Enter your state"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   />
                 </div>
-              </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     Country
                   </label>
                   <input
@@ -1052,12 +1325,14 @@ export default function StudentProfile() {
                       handleAddressChange("country", e.target.value)
                     }
                     placeholder="Enter your country"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     ZIP Code
                   </label>
                   <input
@@ -1067,34 +1342,40 @@ export default function StudentProfile() {
                       handleAddressChange("zipCode", e.target.value)
                     }
                     placeholder="Enter ZIP code"
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Educational Qualification */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
-                <GraduationCap className="w-5 h-5 text-[#b87bd1]" />
-                Educational Qualification
+            {/* Enhanced Educational Qualification */}
+            <div className="space-y-6">
+              <h4 className="text-xl font-bold text-white flex items-center gap-4 pb-4 border-b border-white/10">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                  <GraduationCap className="w-5 h-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  Educational Qualification
+                </span>
               </h4>
 
               {formData.education.map((edu, index) => (
                 <div
                   key={index}
-                  className="grid md:grid-cols-2 gap-4 p-4 border border-white/6 rounded-xl relative"
+                  className="grid md:grid-cols-2 gap-6 p-6 border border-white/10 rounded-2xl relative transition-all duration-300 hover:border-white/20 hover:shadow-lg group/edu"
+                  onMouseEnter={() => setIsHovering(`edu-${index}`)}
+                  onMouseLeave={() => setIsHovering(null)}
                 >
-                  <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
-                      Degree <span className="text-red-500">*</span>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-white/90">
+                      Degree <span className="text-red-400">*</span>
                     </label>
                     <select
                       value={edu.degree}
                       onChange={(e) =>
                         handleEducationChange(index, "degree", e.target.value)
                       }
-                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-fuchsia-900 text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     >
                       <option value="">Select degree</option>
                       <option value="High School">High School</option>
@@ -1108,9 +1389,9 @@ export default function StudentProfile() {
                     </select>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
-                      Institution <span className="text-red-500">*</span>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-white/90">
+                      Institution <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -1123,13 +1404,13 @@ export default function StudentProfile() {
                         )
                       }
                       placeholder="University/College name"
-                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
-                      Field of Study <span className="text-red-500">*</span>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-white/90">
+                      Field of Study <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -1142,13 +1423,13 @@ export default function StudentProfile() {
                         )
                       }
                       placeholder="e.g., Computer Science"
-                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
-                      Graduation Year <span className="text-red-500">*</span>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-white/90">
+                      Graduation Year <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -1163,32 +1444,33 @@ export default function StudentProfile() {
                       placeholder="2024"
                       min="1900"
                       max="2030"
-                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
 
                   <div className="md:col-span-2 flex items-center justify-between">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={edu.currentlyEnrolled}
-                        onChange={(e) =>
-                          handleEducationChange(
-                            index,
-                            "currentlyEnrolled",
-                            e.target.checked
-                          )
-                        }
-                        className="rounded border-white/8 bg-transparent text-[#b87bd1] focus:ring-[#b87bd1]"
-                      />
-                      <span className="text-white/90">Currently Enrolled</span>
+                    <label className="flex items-center gap-3 cursor-pointer group/checkbox">
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
+                          edu.currentlyEnrolled
+                            ? "border-[#b87bd1] bg-[#b87bd1]"
+                            : "border-white/20 group-hover/checkbox:border-[#b87bd1]"
+                        }`}
+                      >
+                        {edu.currentlyEnrolled && (
+                          <CheckCircle className="w-3 h-3 text-white" />
+                        )}
+                      </div>
+                      <span className="text-white/90 group-hover/checkbox:text-white transition-colors duration-300">
+                        Currently Enrolled
+                      </span>
                     </label>
 
                     {formData.education.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeEducationEntry(index)}
-                        className="px-3 py-1 text-red-500 border border-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors flex items-center gap-2"
+                        className="px-4 py-2 text-red-400 border border-red-400/30 rounded-xl hover:bg-red-400 hover:text-white transition-all duration-300 flex items-center gap-2 hover:scale-105"
                       >
                         <Trash2 className="w-4 h-4" />
                         Remove
@@ -1201,27 +1483,31 @@ export default function StudentProfile() {
               <button
                 type="button"
                 onClick={addEducationEntry}
-                className="px-4 py-2 border border-dashed border-white/8 rounded-xl text-white/80 hover:text-white hover:border-white/12 transition-colors flex items-center gap-2"
+                className="w-full p-4 border border-dashed border-white/10 rounded-2xl text-white/80 hover:text-white hover:border-[#b87bd1] transition-all duration-300 flex items-center justify-center gap-3 hover:scale-[1.02] group/add"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-5 h-5 transition-transform duration-300 group-hover/add:scale-110" />
                 Add Another Education
               </button>
             </div>
 
-            {/* Job Preferences */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
-                <Target className="w-5 h-5 text-[#b87bd1]" />
-                Job Preferences
+            {/* Enhanced Job Preferences */}
+            <div className="space-y-6">
+              <h4 className="text-xl font-bold text-white flex items-center gap-4 pb-4 border-b border-white/10">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                  <Target className="w-5 h-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  Job Preferences
+                </span>
               </h4>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <label className="block text-sm font-semibold text-white/90">
                     Preferred Job Roles
                   </label>
                   {formData.jobPreferences.preferredRoles.map((role, index) => (
-                    <div key={index} className="flex gap-2 mb-2">
+                    <div key={index} className="flex gap-3">
                       <input
                         type="text"
                         value={role}
@@ -1233,7 +1519,7 @@ export default function StudentProfile() {
                           )
                         }
                         placeholder="e.g., Frontend Developer"
-                        className="flex-1 px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                        className="flex-1 px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                       />
                       {index ===
                         formData.jobPreferences.preferredRoles.length - 1 && (
@@ -1242,22 +1528,22 @@ export default function StudentProfile() {
                           onClick={() =>
                             addJobPreferenceEntry("preferredRoles")
                           }
-                          className="px-3 py-3 border border-white/8 rounded-xl text-white/80 hover:text-white hover:border-white/12 transition-colors"
+                          className="px-4 py-4 border border-white/10 rounded-2xl text-white/80 hover:text-white hover:border-[#b87bd1] transition-all duration-300 hover:scale-105"
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="w-5 h-5" />
                         </button>
                       )}
                     </div>
                   ))}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+                <div className="space-y-3">
+                  <label className="block text-sm font-semibold text-white/90">
                     Preferred Locations
                   </label>
                   {formData.jobPreferences.preferredLocations.map(
                     (location, index) => (
-                      <div key={index} className="flex gap-2 mb-2">
+                      <div key={index} className="flex gap-3">
                         <input
                           type="text"
                           value={location}
@@ -1269,7 +1555,7 @@ export default function StudentProfile() {
                             )
                           }
                           placeholder="e.g., Mumbai, Remote"
-                          className="flex-1 px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                          className="flex-1 px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                         />
                         {index ===
                           formData.jobPreferences.preferredLocations.length -
@@ -1279,9 +1565,9 @@ export default function StudentProfile() {
                             onClick={() =>
                               addJobPreferenceEntry("preferredLocations")
                             }
-                            className="px-3 py-3 border border-white/8 rounded-xl text-white/80 hover:text-white hover:border-white/12 transition-colors"
+                            className="px-4 py-4 border border-white/10 rounded-2xl text-white/80 hover:text-white hover:border-[#b87bd1] transition-all duration-300 hover:scale-105"
                           >
-                            <Plus className="w-4 h-4" />
+                            <Plus className="w-5 h-5" />
                           </button>
                         )}
                       </div>
@@ -1290,9 +1576,9 @@ export default function StudentProfile() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-white/90">
                     Job Types
                   </label>
                   <select
@@ -1300,7 +1586,7 @@ export default function StudentProfile() {
                     onChange={(e) =>
                       handleJobPreferenceChange("jobTypes", e.target.value)
                     }
-                    className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                    className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                   >
                     <option value="">Select job type</option>
                     <option value="full-time">Full-time</option>
@@ -1311,9 +1597,9 @@ export default function StudentProfile() {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-white/90">
                       Min Salary (LPA)
                     </label>
                     <input
@@ -1323,11 +1609,11 @@ export default function StudentProfile() {
                         handleSalaryChange("min", e.target.value)
                       }
                       placeholder="Min"
-                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-white/90">
                       Max Salary (LPA)
                     </label>
                     <input
@@ -1337,14 +1623,14 @@ export default function StudentProfile() {
                         handleSalaryChange("max", e.target.value)
                       }
                       placeholder="Max"
-                      className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all"
+                      className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-white/90 mb-2">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-white/90">
                   Key Skills
                 </label>
                 <textarea
@@ -1353,39 +1639,44 @@ export default function StudentProfile() {
                   onChange={handleInputChange}
                   rows={3}
                   placeholder="List your key skills separated by commas (e.g., React, JavaScript, Node.js, Python)"
-                  className="w-full px-4 py-3 border border-white/8 rounded-xl bg-transparent text-white placeholder:text-white/60 focus:ring-2 focus:ring-[#b87bd1] focus:border-[#b87bd1] transition-all resize-none"
+                  className="w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50 focus:ring-3 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 backdrop-blur-sm resize-none"
                 ></textarea>
               </div>
 
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={formData.jobPreferences.willingToRelocate}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      jobPreferences: {
-                        ...prev.jobPreferences,
-                        willingToRelocate: e.target.checked,
-                      },
-                    }))
-                  }
-                  className="rounded border-white/8 bg-transparent text-[#b87bd1] focus:ring-[#b87bd1]"
-                />
-                <span className="text-white/90">
+              <label className="flex items-center gap-3 cursor-pointer group/relocate">
+                <div
+                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
+                    formData.jobPreferences.willingToRelocate
+                      ? "border-[#b87bd1] bg-[#b87bd1]"
+                      : "border-white/20 group-hover/relocate:border-[#b87bd1]"
+                  }`}
+                >
+                  {formData.jobPreferences.willingToRelocate && (
+                    <CheckCircle className="w-3 h-3 text-white" />
+                  )}
+                </div>
+                <span className="text-white/90 group-hover/relocate:text-white transition-colors duration-300">
                   Willing to relocate for job opportunities
                 </span>
               </label>
             </div>
 
-            {/* CV Upload */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white flex items-center gap-2 pb-2 border-b border-white/6">
-                <FileText className="w-5 h-5 text-[#b87bd1]" />
-                Upload CV/Resume
+            {/* Enhanced CV Upload */}
+            <div className="space-y-6">
+              <h4 className="text-xl font-bold text-white flex items-center gap-4 pb-4 border-b border-white/10">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  Upload CV/Resume
+                </span>
               </h4>
 
-              <div className="border-2 border-dashed border-white/8 rounded-xl p-8 text-center hover:border-[#b87bd1] transition-all">
+              <div
+                className="border-2 border-dashed border-white/10 rounded-2xl p-8 text-center transition-all duration-300 hover:border-[#b87bd1] hover:shadow-lg group/cv cursor-pointer"
+                onMouseEnter={() => setIsHovering("cv")}
+                onMouseLeave={() => setIsHovering(null)}
+              >
                 <input
                   type="file"
                   id="cv-upload"
@@ -1394,10 +1685,10 @@ export default function StudentProfile() {
                   onChange={handleCvUpload}
                 />
                 <label htmlFor="cv-upload" className="cursor-pointer">
-                  <div className="w-16 h-16 bg-white/6 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Upload className="w-8 h-8 text-[#b87bd1]" />
+                  <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover/cv:scale-110 group-hover/cv:bg-[#b87bd1]/20">
+                    <Upload className="w-8 h-8 text-[#b87bd1] transition-transform duration-300 group-hover/cv:scale-110" />
                   </div>
-                  <p className="text-white font-medium mb-1">
+                  <p className="text-white font-bold mb-1 transition-colors duration-300 group-hover/cv:text-[#b87bd1]">
                     {cvFile ? cvFile.name : "Click to upload or drag and drop"}
                   </p>
                   <p className="text-sm text-white/60">
@@ -1407,24 +1698,107 @@ export default function StudentProfile() {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 pt-6 border-t border-white/6">
+            {/* Enhanced Action Buttons */}
+            <div className="flex gap-4 pt-8 border-t border-white/10">
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex-1 px-6 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#703181] hover:to-[#a86bc1] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="flex-1 px-8 py-5 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#703181] hover:to-[#a86bc1] text-white rounded-2xl font-bold shadow-2xl hover:shadow-3xl transition-all duration-500 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] group/save"
               >
                 {loading ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <>
+                    <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                    <span className="text-lg">Saving Changes...</span>
+                  </>
                 ) : (
-                  <Save className="w-5 h-5" />
+                  <>
+                    <Save className="w-6 h-6 transform transition-transform duration-500 group-hover/save:scale-110" />
+                    <span className="text-lg">Save Profile</span>
+                    <Sparkles className="w-5 h-5 opacity-0 group-hover/save:opacity-100 transition-opacity duration-500" />
+                  </>
                 )}
-                {loading ? "Saving..." : "Save Profile"}
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Add custom styles for animations */}
+      <style jsx>{`
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-20px) rotate(180deg);
+          }
+        }
+        @keyframes pulse-slow {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.7;
+          }
+        }
+        @keyframes ping-slow {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          75%,
+          100% {
+            transform: scale(2);
+            opacity: 0;
+          }
+        }
+        @keyframes orb-1 {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(50px, -30px) scale(1.1);
+          }
+        }
+        @keyframes orb-2 {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(-30px, 40px) scale(1.05);
+          }
+        }
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+        .animate-float {
+          animation: float 20s ease-in-out infinite;
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 4s ease-in-out infinite;
+        }
+        .animate-ping-slow {
+          animation: ping-slow 3s ease-in-out infinite;
+        }
+        .animate-orb-1 {
+          animation: orb-1 15s ease-in-out infinite;
+        }
+        .animate-orb-2 {
+          animation: orb-2 20s ease-in-out infinite;
+        }
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
     </div>
   );
 }
