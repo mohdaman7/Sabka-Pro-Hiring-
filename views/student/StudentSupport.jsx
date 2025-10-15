@@ -23,56 +23,44 @@ import {
   Calendar,
   Users,
 } from "lucide-react";
-
-// Custom scrollbar styles
-// const scrollbarStyles = `
-//   ::-webkit-scrollbar {
-//     width: 8px;
-//     height: 8px;
-//   }
-//   ::-webkit-scrollbar-track {
-//     background: rgba(255, 255, 255, 0.03);
-//     border-radius: 10px;
-//   }
-//   ::-webkit-scrollbar-thumb {
-//     background: linear-gradient(180deg, #803791, #b87bd1);
-//     border-radius: 10px;
-//   }
-//   ::-webkit-scrollbar-thumb:hover {
-//     background: linear-gradient(180deg, #903fa1, #c88be1);
-//   }
-//   * {
-//     scrollbar-width: thin;
-//     scrollbar-color: #803791 rgba(255, 255, 255, 0.03);
-//   }
-// `;
+import { supportService } from "@/services/supportService";
 
 export default function StudentSupport() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("help");
+
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [form, setForm] = useState({ subject: "", description: "", category: "account", priority: "medium" });
-
-  async function loadTickets() {
-    try {
-      setLoading(true);
-      setError("");
-      const { supportService } = await import("@/services/supportService");
-      const res = await supportService.listMyTickets();
-      setTickets(res?.data || []);
-    } catch (e) {
-      setError(e?.response?.data?.message || e?.message || "Failed to load tickets");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [form, setForm] = useState({
+    subject: "",
+    description: "",
+    category: "other",
+    priority: "medium",
+  });
 
   useEffect(() => {
-    loadTickets();
-  }, []);
+    if (activeTab !== "tickets") return;
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await supportService.listMyTickets();
+        if (!mounted) return;
+        setTickets(res?.data || []);
+      } catch (e) {
+        setError(e?.response?.data?.message || e?.message || "Failed to load tickets");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, [activeTab]);
 
   const supportCategories = [
     { id: "all", name: "All Topics", icon: HelpCircle },
@@ -115,8 +103,6 @@ export default function StudentSupport() {
     },
   ];
 
-  const recentTickets = tickets.slice(0, 5);
-
   const contactMethods = [
     {
       icon: Mail,
@@ -149,8 +135,7 @@ export default function StudentSupport() {
   ];
 
   const filteredFaqs = faqs.filter((faq) => {
-    const matchesCategory =
-      selectedCategory === "all" || faq.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || faq.category === selectedCategory;
     const matchesSearch =
       faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
@@ -183,25 +168,20 @@ export default function StudentSupport() {
         <div
           className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl backdrop-blur-md border border-white/6"
           style={{
-            background:
-              "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
+            background: "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
             boxShadow: "0 12px 40px rgba(128,55,145,0.12)",
           }}
         >
           <div className="flex items-center gap-6">
             <div
               className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg"
-              style={{
-                background: "linear-gradient(135deg,#803791,#b87bd1)",
-              }}
+              style={{ background: "linear-gradient(135deg,#803791,#b87bd1)" }}
             >
               <Headphones className="w-10 h-10 text-white" />
             </div>
             <div>
               <h1 className="text-4xl font-extrabold mb-2">Support Center</h1>
-              <p className="text-white/90 text-lg">
-                We're here to help you succeed in your career journey
-              </p>
+              <p className="text-white/90 text-lg">We're here to help you succeed in your career journey</p>
             </div>
           </div>
         </div>
@@ -210,8 +190,7 @@ export default function StudentSupport() {
         <div
           className="p-2 rounded-2xl shadow-lg"
           style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
             border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
@@ -246,29 +225,20 @@ export default function StudentSupport() {
                   key={index}
                   className="group rounded-2xl p-6 shadow-xl transition-all hover:-translate-y-2 cursor-pointer relative overflow-hidden"
                   style={{
-                    background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
                   <div className="relative">
                     <div
                       className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform"
-                      style={{
-                        background: "linear-gradient(135deg,#803791,#b87bd1)",
-                      }}
+                      style={{ background: "linear-gradient(135deg,#803791,#b87bd1)" }}
                     >
                       <method.icon className="w-7 h-7 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {method.title}
-                    </h3>
-                    <p className="text-lg font-semibold text-white/90 mb-2">
-                      {method.description}
-                    </p>
-                    <p className="text-sm text-white/70 mb-5">
-                      {method.subtitle}
-                    </p>
+                    <h3 className="text-xl font-bold text-white mb-2">{method.title}</h3>
+                    <p className="text-lg font-semibold text-white/90 mb-2">{method.description}</p>
+                    <p className="text-sm text-white/70 mb-5">{method.subtitle}</p>
                     <button className="w-full px-5 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold text-sm hover:opacity-95 transition-all flex items-center justify-center gap-2">
                       {method.action}
                       <ExternalLink className="w-4 h-4" />
@@ -285,8 +255,7 @@ export default function StudentSupport() {
                 <div
                   className="rounded-2xl p-6 shadow-xl"
                   style={{
-                    background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
@@ -325,8 +294,7 @@ export default function StudentSupport() {
                 <div
                   className="rounded-2xl p-6 shadow-xl"
                   style={{
-                    background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
@@ -355,9 +323,7 @@ export default function StudentSupport() {
                     {filteredFaqs.length === 0 && (
                       <div className="text-center py-12">
                         <HelpCircle className="w-16 h-16 text-white/30 mx-auto mb-4" />
-                        <p className="text-white/70 text-lg">
-                          No FAQs found. Try a different search or category.
-                        </p>
+                        <p className="text-white/70 text-lg">No FAQs found. Try a different search or category.</p>
                       </div>
                     )}
                   </div>
@@ -370,19 +336,18 @@ export default function StudentSupport() {
                 <div
                   className="rounded-2xl p-6 shadow-xl"
                   style={{
-                    background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
                   <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-3">
                     <FileText className="w-6 h-6 text-[#b87bd1]" />
-                    Recent Tickets
+                    Quick Links
                   </h3>
                   <div className="space-y-4">
-                    {recentTickets.map((ticket) => (
+                    {[{ id: "guide", subject: "User Guide", status: "info", date: "" }].map((item) => (
                       <div
-                        key={ticket._id}
+                        key={item.id}
                         className="p-4 rounded-xl transition-all duration-300 cursor-pointer group hover:-translate-y-0.5"
                         style={{
                           background: "rgba(255,255,255,0.02)",
@@ -390,57 +355,25 @@ export default function StudentSupport() {
                         }}
                       >
                         <div className="flex items-start justify-between mb-3">
-                          <span className="text-sm font-mono text-white/70 font-semibold">
-                            {ticket._id}
-                          </span>
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              ticket.status === "resolved"
-                                ? "bg-green-500/10 text-green-400 border border-green-500/20"
-                                : ticket.status === "in_progress"
-                                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                                : "bg-orange-500/10 text-orange-400 border border-orange-500/20"
-                            }`}
-                          >
-                            {ticket.status}
+                          <span className="text-sm font-mono text-white/70 font-semibold">HELP-001</span>
+                          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            Info
                           </span>
                         </div>
                         <h4 className="font-semibold text-white text-base mb-2 group-hover:text-[#b87bd1] transition-colors">
-                          {ticket.subject}
+                          Getting Started
                         </h4>
-                        <p className="text-sm text-white/70 mb-3">
-                          {ticket.category}
-                        </p>
-                        <div className="flex items-center justify-between text-sm text-white/70">
-                          <span className="flex items-center gap-2">
-                            <Clock className="w-4 h-4" />
-                            {new Date(ticket.createdAt).toLocaleString()}
-                          </span>
-                          <span
-                            className={`font-semibold px-2 py-1 rounded-lg ${
-                              ticket.priority === "high"
-                                ? "bg-red-500/10 text-red-400 border border-red-500/20"
-                                : "bg-white/6 text-white/80 border border-white/12"
-                            }`}
-                          >
-                            {ticket.priority}
-                          </span>
-                        </div>
+                        <p className="text-sm text-white/70">Read the user guide to get oriented.</p>
                       </div>
                     ))}
                   </div>
-                  <button className="w-full mt-6 px-5 py-3 bg-white/6 hover:bg-white/10 text-white rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 border border-white/12">
-                    View All Tickets
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
                 </div>
 
                 {/* Help Resources */}
                 <div
                   className="rounded-2xl p-6 shadow-xl relative overflow-hidden"
                   style={{
-                    background:
-                      "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
+                    background: "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
@@ -460,9 +393,7 @@ export default function StudentSupport() {
                           key={index}
                           className="w-full px-5 py-4 bg-white/10 hover:bg-white/15 backdrop-blur-sm rounded-xl text-left transition-all border border-white/12 hover:border-white/20 flex items-center justify-between group"
                         >
-                          <span className="font-semibold text-white">
-                            {resource.name}
-                          </span>
+                          <span className="font-semibold text-white">{resource.name}</span>
                           <div className="flex items-center gap-2">
                             <IconComponent className="w-4 h-4 text-white/70" />
                             <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
@@ -477,27 +408,21 @@ export default function StudentSupport() {
                 <div
                   className="rounded-2xl p-6 shadow-xl"
                   style={{
-                    background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
                   <div className="flex items-start gap-4">
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md"
-                      style={{
-                        background: "linear-gradient(135deg,#803791,#b87bd1)",
-                      }}
+                      style={{ background: "linear-gradient(135deg,#803791,#b87bd1)" }}
                     >
                       <Zap className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-lg mb-2">
-                        Quick Tip
-                      </h4>
+                      <h4 className="font-bold text-white text-lg mb-2">Quick Tip</h4>
                       <p className="text-white/80">
-                        Pro members get priority support with faster response
-                        times and dedicated assistance.
+                        Pro members get priority support with faster response times and dedicated assistance.
                       </p>
                     </div>
                   </div>
@@ -511,142 +436,113 @@ export default function StudentSupport() {
           <div
             className="rounded-2xl p-6 shadow-xl"
             style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
+              background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
               border: "1px solid rgba(255,255,255,0.06)",
             }}
           >
-            <h2 className="text-2xl font-bold text-white mb-6">
-              My Support Tickets
-            </h2>
+            <h2 className="text-2xl font-bold text-white mb-6">My Support Tickets</h2>
+            {error && <div className="text-red-400">{error}</div>}
+            {loading && <div className="text-white/80">Loading...</div>}
             <div className="space-y-4">
               {tickets.map((ticket) => (
                 <div
                   key={ticket._id}
                   className="p-6 rounded-xl transition-all duration-300 hover:-translate-y-1"
-                  style={{
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}
+                  style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-3 h-3 rounded-full ${
-                          ticket.status === "resolved"
-                            ? "bg-green-400"
-                            : ticket.status === "in_progress"
-                            ? "bg-blue-400"
-                            : "bg-orange-400"
-                        }`}
-                      ></div>
-                      <span className="font-mono text-sm font-semibold text-white/80">
-                        {ticket._id}
-                      </span>
-                    </div>
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-sm font-mono text-white/70 font-semibold">{ticket._id}</span>
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
                         ticket.status === "resolved"
-                          ? "bg-green-500/10 text-green-400"
+                          ? "bg-green-500/10 text-green-400 border border-green-500/20"
                           : ticket.status === "in_progress"
-                          ? "bg-blue-500/10 text-blue-400"
-                          : "bg-orange-500/10 text-orange-400"
+                          ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                          : "bg-orange-500/10 text-orange-400 border border-orange-500/20"
                       }`}
                     >
                       {ticket.status}
                     </span>
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {ticket.subject}
-                  </h3>
-                  <p className="text-white/70 mb-4">{ticket.category}</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">{ticket.subject}</h3>
+                  <p className="text-sm text-white/70 mb-3">{ticket.category}</p>
                   <div className="flex items-center justify-between text-sm text-white/70">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       Created {new Date(ticket.createdAt).toLocaleString()}
                     </span>
-                    <span
-                      className={`font-semibold ${ticket.priority === "high" ? "text-red-400" : "text-white/80"}`}
-                    >
-                      {ticket.priority} Priority
-                    </span>
+                    <span className="font-semibold text-white/80">{ticket.priority} Priority</span>
                   </div>
                 </div>
               ))}
+
+              {tickets.length === 0 && !loading && (
+                <div className="text-white/70">No tickets yet. Create your first ticket below.</div>
+              )}
+            </div>
+
+            {/* Create Ticket */}
+            <div className="mt-8 p-6 rounded-xl border border-white/10 bg-white/5">
+              <h3 className="text-xl font-bold text-white mb-4">Create a Ticket</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <input
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/60"
+                  placeholder="Subject"
+                  value={form.subject}
+                  onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                />
+                <select
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white"
+                  value={form.category}
+                  onChange={(e) => setForm({ ...form, category: e.target.value })}
+                >
+                  <option value="other">Other</option>
+                  <option value="account">Account</option>
+                  <option value="jobs">Jobs</option>
+                  <option value="courses">Courses</option>
+                  <option value="technical">Technical</option>
+                  <option value="billing">Billing</option>
+                </select>
+                <select
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white"
+                  value={form.priority}
+                  onChange={(e) => setForm({ ...form, priority: e.target.value })}
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+                <textarea
+                  rows={4}
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/60 md:col-span-2"
+                  placeholder="Describe your issue..."
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                />
+              </div>
+              <button
+                onClick={async () => {
+                  try {
+                    if (!form.subject.trim() || !form.description.trim()) return;
+                    setLoading(true);
+                    setError("");
+                    await supportService.createTicket(form);
+                    const res = await supportService.listMyTickets();
+                    setTickets(res?.data || []);
+                    setForm({ subject: "", description: "", category: "other", priority: "medium" });
+                  } catch (e) {
+                    setError(e?.response?.data?.message || e?.message || "Failed to create ticket");
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                className="mt-4 px-5 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold text-sm hover:opacity-95"
+              >
+                Submit Ticket
+              </button>
             </div>
           </div>
         )}
-      </div>
-
-      {/* Create Ticket Form */}
-      <div
-        className="rounded-2xl p-6 shadow-xl mt-6"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
-          border: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        <h3 className="text-xl font-bold text-white mb-4">Create Support Ticket</h3>
-        {error && <div className="text-red-300 mb-2">{error}</div>}
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            try {
-              const { supportService } = await import("@/services/supportService");
-              await supportService.createTicket(form);
-              setForm({ subject: "", description: "", category: "account", priority: "medium" });
-              await loadTickets();
-              setActiveTab("tickets");
-            } catch (e) {
-              setError(e?.response?.data?.message || e?.message || "Failed to create ticket");
-            }
-          }}
-          className="grid gap-3 md:grid-cols-2"
-        >
-          <input
-            value={form.subject}
-            onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
-            placeholder="Subject"
-            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20"
-            required
-          />
-          <select
-            value={form.category}
-            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
-            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20"
-          >
-            <option value="account">Account</option>
-            <option value="jobs">Job Applications</option>
-            <option value="courses">Courses</option>
-            <option value="technical">Technical</option>
-            <option value="billing">Billing</option>
-            <option value="other">Other</option>
-          </select>
-          <select
-            value={form.priority}
-            onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
-            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20"
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-          <textarea
-            value={form.description}
-            onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-            placeholder="Describe your issue..."
-            className="px-4 py-2 rounded bg-white/10 text-white border border-white/20 md:col-span-2"
-            rows={4}
-            required
-          />
-          <button
-            type="submit"
-            className="px-5 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg font-semibold"
-          >
-            Submit Ticket
-          </button>
-        </form>
       </div>
     </>
   );

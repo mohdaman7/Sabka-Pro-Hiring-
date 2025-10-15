@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  Users,
   MapPin,
   Briefcase,
   Star,
@@ -14,11 +13,12 @@ import {
   Search,
   ChevronRight,
 } from "lucide-react";
-import Link from "next/link";
 import { applicationService } from "@/services/applicationService";
 
 export default function CandidatesPage() {
   const [applications, setApplications] = useState([]);
+  const [search, setSearch] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All Candidates");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,13 +43,17 @@ export default function CandidatesPage() {
     };
   }, []);
 
-  const filters = [
-    "All Candidates",
-    "New Applications",
-    "Shortlisted",
-    "Under Review",
-    "Rejected",
-  ];
+  const filters = ["All Candidates", "applied", "reviewed", "interview", "rejected", "hired"]; 
+
+  const filtered = useMemo(() => {
+    const term = search.toLowerCase();
+    return (applications || [])
+      .filter((a) => (activeFilter === "All Candidates" ? true : a.status === activeFilter))
+      .filter((a) => {
+        const s = `${a?.studentId?.firstName || ""} ${a?.studentId?.lastName || ""} ${a?.jobId?.title || ""}`.toLowerCase();
+        return s.includes(term);
+      });
+  }, [applications, search, activeFilter]);
 
   return (
     <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
@@ -74,9 +78,7 @@ export default function CandidatesPage() {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Candidates</h1>
-          <p className="text-white/80">
-            Browse and manage candidate applications
-          </p>
+          <p className="text-white/80">Browse and manage candidate applications</p>
         </div>
         <div className="flex gap-3">
           <button className="flex items-center gap-2 px-4 py-2 bg-white/6 hover:bg-white/10 text-white rounded-lg transition-colors border border-white/12">
@@ -95,8 +97,7 @@ export default function CandidatesPage() {
         <div
           className="lg:col-span-3 rounded-xl p-4"
           style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
             border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
@@ -104,7 +105,9 @@ export default function CandidatesPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
             <input
               type="text"
-              placeholder="Search candidates by name, skills, or position..."
+              placeholder="Search candidates by name, job title..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-transparent text-white placeholder-white/60 border-none focus:outline-none"
             />
           </div>
@@ -112,8 +115,7 @@ export default function CandidatesPage() {
         <div
           className="rounded-xl p-4 text-center"
           style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
             border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
@@ -127,8 +129,9 @@ export default function CandidatesPage() {
         {filters.map((filter, index) => (
           <button
             key={index}
+            onClick={() => setActiveFilter(filter)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              index === 0
+              filter === activeFilter
                 ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white"
                 : "bg-white/6 hover:bg-white/10 text-white/80"
             }`}
@@ -139,19 +142,13 @@ export default function CandidatesPage() {
       </div>
 
       {/* Candidates Grid */}
-      {error && <div className="text-red-300">{error}</div>}
-      {loading && <div className="text-white/80">Loading...</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {applications.map((app) => {
-          const candidate = app?.studentId || {};
-          const name = `${candidate.firstName || ""} ${candidate.lastName || ""}`.trim() || "Candidate";
-          return (
+        {filtered.map((application) => (
           <div
-            key={app._id}
+            key={application._id}
             className="rounded-xl p-6 hover:shadow-2xl transition-all hover:-translate-y-1 group cursor-pointer"
             style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+              background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
               border: "1px solid rgba(255,255,255,0.06)",
             }}
           >
@@ -160,32 +157,38 @@ export default function CandidatesPage() {
               <div className="flex items-center gap-3">
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
-                  style={{
-                    background: "linear-gradient(135deg,#803791,#b87bd1)",
-                  }}
+                  style={{ background: "linear-gradient(135deg,#803791,#b87bd1)" }}
                 >
-                  <span className="text-white font-semibold text-sm">{(name || "?").charAt(0)}</span>
+                  <span className="text-white font-semibold text-sm">
+                    {(application?.studentId?.firstName || "?").charAt(0)}
+                  </span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#b87bd1] transition-colors">{name}</h3>
-                  <p className="text-sm text-white/80">{app?.jobId?.title || "Applied role"}</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#b87bd1] transition-colors">
+                    {application?.studentId?.firstName} {application?.studentId?.lastName}
+                  </h3>
+                  <p className="text-sm text-white/80">{application?.jobId?.title}</p>
                 </div>
               </div>
               <div className="flex flex-col items-end gap-2">
                 <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/6">
                   <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                  <span className="text-xs font-semibold text-white">{""}</span>
+                  <span className="text-xs font-semibold text-white">85%</span>
                 </div>
                 <span
                   className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    app.status === "applied"
+                    application.status === "applied"
                       ? "bg-blue-500/20 text-blue-400"
-                      : app.status === "interview"
+                      : application.status === "interview"
                       ? "bg-emerald-500/20 text-emerald-400"
-                      : "bg-purple-500/20 text-purple-400"
+                      : application.status === "reviewed"
+                      ? "bg-purple-500/20 text-purple-400"
+                      : application.status === "hired"
+                      ? "bg-green-500/20 text-green-400"
+                      : "bg-red-500/20 text-red-400"
                   }`}
                 >
-                  {app.status}
+                  {application.status}
                 </span>
               </div>
             </div>
@@ -194,40 +197,33 @@ export default function CandidatesPage() {
             <div className="space-y-3 mb-4">
               <div className="flex items-center gap-2 text-sm text-white/80">
                 <MapPin className="w-4 h-4 text-white/80" />
-                {candidate.address?.city || "-"}
+                {/* City is not available from user document; show dash */}
+                {application?.studentId?.address?.city || "-"}
               </div>
               <div className="flex items-center gap-2 text-sm text-white/80">
                 <Briefcase className="w-4 h-4 text-white/80" />
-                {candidate.experience || "-"}
+                fresher
               </div>
               <div className="flex items-center gap-2 text-sm text-white/80">
                 <Calendar className="w-4 h-4 text-white/80" />
-                Applied {new Date(app.createdAt).toLocaleDateString()}
+                Applied: {new Date(application?.createdAt || Date.now()).toLocaleDateString()}
               </div>
             </div>
 
             {/* Skills */}
             <div className="mb-4">
               <div className="flex flex-wrap gap-1">
-                {(candidate.skills || []).slice(0, 3).map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80"
-                  >
-                    {skill}
+                {(application?.studentId?.skills || []).slice(0, 3).map((skill, index) => (
+                  <span key={index} className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80">
+                    {skill?.name || skill}
                   </span>
                 ))}
-                {Array.isArray(candidate.skills) && candidate.skills.length > 3 && (
-                  <span className="px-2 py-1 text-xs rounded-md bg-white/6 text-white/80">+{candidate.skills.length - 3}</span>
-                )}
               </div>
             </div>
 
             {/* Actions */}
             <div className="flex items-center justify-between pt-4 border-t border-white/10">
-              <div className="text-xs text-white/60">
-                Applied {new Date(app.createdAt).toLocaleDateString()}
-              </div>
+              <div className="text-xs text-white/60">Application ID {application._id}</div>
               <div className="flex gap-2">
                 <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
                   <Mail className="w-4 h-4 text-white/80" />
@@ -242,21 +238,11 @@ export default function CandidatesPage() {
               </div>
             </div>
           </div>
-        )})}
+        ))}
       </div>
 
-      {/* Load More */}
-      <div className="flex justify-center">
-        <button
-          className="px-6 py-3 rounded-lg border border-white/12 hover:bg-white/10 text-white/80 transition-colors"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-          }}
-        >
-          Load More Candidates
-        </button>
-      </div>
+      {error && <div className="text-red-400">{error}</div>}
+      {loading && <div className="text-white/80">Loading...</div>}
     </div>
   );
 }
