@@ -239,8 +239,6 @@ export default function ApplyJobPage() {
         />
       </div>
 
-      {/* */}
-
       {/* Header */}
       <div className="max-w-4xl mx-auto">
         <button
@@ -457,8 +455,6 @@ export default function ApplyJobPage() {
                 )}
               </div>
             </div>
-
-            {/* Removed Cover Letter */}
 
             {/* Submit Button */}
             <div className="flex gap-4 pt-6">

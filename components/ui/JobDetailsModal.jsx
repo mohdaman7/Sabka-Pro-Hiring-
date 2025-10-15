@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   X,
   MapPin,
@@ -29,6 +30,7 @@ export default function JobDetailsModal({
   onToggleSave,
 }) {
   const [activeTab, setActiveTab] = useState("description");
+  const router = useRouter();
 
   if (!isOpen || !job) return null;
 
