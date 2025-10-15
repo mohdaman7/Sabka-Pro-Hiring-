@@ -116,3 +116,64 @@ export async function uploadProfilePicture(req, res, next) {
     next(err);
   }
 }
+
+export async function uploadResume(req, res, next) {
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
+    }
+
+    // Basic server-side validation for resume file types
+    const allowedMimeTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+    if (!allowedMimeTypes.includes(req.file.mimetype)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload PDF, DOC, or DOCX files only",
+      });
+    }
+
+    const fileUrl = `/uploads/${req.file.filename}`;
+
+    // Only students can upload resumes for now
+    if (req.user.role !== "student") {
+      return res
+        .status(403)
+        .json({ success: false, message: "Only students can upload resumes" });
+    }
+
+    const updated = await StudentModel.findOneAndUpdate(
+      { userId: req.user.id },
+      {
+        $set: {
+          resume: {
+            filename: req.file.filename,
+            originalName: req.file.originalname,
+            url: fileUrl,
+            uploadedAt: new Date(),
+          },
+        },
+      },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Student profile not found" });
+    }
+
+    return res.json({
+      success: true,
+      data: { url: fileUrl },
+      message: "Resume uploaded successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+}

@@ -5,7 +5,7 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { authenticate } from "../middleware/auth.js";
-import { getProfile, updateProfile, changePassword, uploadProfilePicture } from "../controllers/userController.js";
+import { getProfile, updateProfile, changePassword, uploadProfilePicture, uploadResume } from "../controllers/userController.js";
 
 const router = Router();
 
@@ -32,5 +32,6 @@ router.get("/profile", getProfile);
 router.put("/profile", updateProfile);
 router.put("/change-password", changePassword);
 router.post("/upload-profile-picture", upload.single("profilePicture"), uploadProfilePicture);
+router.post("/upload-resume", upload.single("resume"), uploadResume);
 
 export default router;

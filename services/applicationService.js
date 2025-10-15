@@ -2,12 +2,9 @@ import api from "@/lib/axios";
 
 export const applicationService = {
   // Student
-  apply: async ({ jobId, resumeUrl, coverLetter }) => {
-    const response = await api.post("/api/applications/apply", {
-      jobId,
-      resumeUrl,
-      coverLetter,
-    });
+  apply: async (payload) => {
+    // payload may include jobId, resumeUrl, previousCompany, previousPosition, yearsExperience, languages
+    const response = await api.post("/api/applications/apply", payload);
     return response.data;
   },
   studentMyApplications: async (params = {}) => {

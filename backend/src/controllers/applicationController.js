@@ -6,7 +6,11 @@ import { JobModel } from "../models/Job.js";
 export const applySchema = z.object({
   jobId: z.string().min(1),
   resumeUrl: z.string().url().optional(),
-  coverLetter: z.string().max(5000).optional(),
+  // New optional structured fields from the UI redesign
+  previousCompany: z.string().max(200).optional(),
+  previousPosition: z.string().max(200).optional(),
+  yearsExperience: z.union([z.string(), z.number()]).optional(),
+  languages: z.string().max(500).optional(),
 });
 
 export const updateApplicationStatusSchema = z.object({
@@ -53,7 +57,13 @@ export const applyForJob = async (req, res, next) => {
       studentId: req.user.id,
       employerId: job.employerId,
       resumeUrl: parsed.resumeUrl,
-      coverLetter: parsed.coverLetter,
+      // Persist extra metadata if provided
+      meta: {
+        ...(parsed.previousCompany && { previousCompany: parsed.previousCompany }),
+        ...(parsed.previousPosition && { previousPosition: parsed.previousPosition }),
+        ...(parsed.yearsExperience && { yearsExperience: parsed.yearsExperience }),
+        ...(parsed.languages && { languages: parsed.languages }),
+      },
       status: "applied",
     });
 

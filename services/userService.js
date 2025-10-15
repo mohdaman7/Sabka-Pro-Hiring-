@@ -39,4 +39,15 @@ export const userService = {
     );
     return response.data;
   },
+
+  // Upload resume (student)
+  uploadResume: async (file) => {
+    const formData = new FormData();
+    formData.append("resume", file);
+
+    const response = await api.post("/api/user/upload-resume", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  },
 };
