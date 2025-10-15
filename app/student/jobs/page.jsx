@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Search,
@@ -31,10 +31,15 @@ import {
   selectSavedJobs,
   clearError,
 } from "@/src/store/slices/studentSlice/jobsSlice";
+import { useRouter } from "next/navigation";
 import { customToast } from "@/components/ui/toast";
+import ApplyNowModal from "@/components/ui/ApplyNowModal";
+import JobDetailsModal from "@/components/ui/JobDetailsModal";
 
 export default function JobListingsPage() {
+  const router = useRouter();
   const dispatch = useDispatch();
+  ApplyNowModal;
   const jobs = useSelector(selectFilteredJobs);
   const loading = useSelector(selectJobsLoading);
   const error = useSelector(selectJobsError);
@@ -48,6 +53,11 @@ export default function JobListingsPage() {
     Remote: false,
     Hybrid: false,
   });
+
+  // Modal states
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   // Fetch jobs on component mount
   useEffect(() => {
@@ -85,73 +95,64 @@ export default function JobListingsPage() {
     }
   }, [error, dispatch]);
 
-  const handleSearch = useCallback(
-    (query) => {
-      dispatch(setSearchQuery(query));
-    },
-    [dispatch]
-  );
+  const handleSearch = (query) => {
+    dispatch(setSearchQuery(query));
+  };
 
-  const handleTypeChange = useCallback(
-    (type) => {
-      dispatch(setSelectedType(type));
-    },
-    [dispatch]
-  );
+  const handleTypeChange = (type) => {
+    dispatch(setSelectedType(type));
+  };
 
-  const handleWorkModeChange = useCallback(
-    (mode) => {
-      const updatedFilters = {
-        ...workModeFilters,
-        [mode]: !workModeFilters[mode],
-      };
-      setWorkModeFilters(updatedFilters);
+  const handleWorkModeChange = (mode) => {
+    const updatedFilters = {
+      ...workModeFilters,
+      [mode]: !workModeFilters[mode],
+    };
+    setWorkModeFilters(updatedFilters);
 
-      const selectedModes = Object.keys(updatedFilters).filter(
-        (mode) => updatedFilters[mode]
-      );
-      dispatch(setWorkModeFilter(selectedModes));
-    },
-    [workModeFilters, dispatch]
-  );
+    const selectedModes = Object.keys(updatedFilters).filter(
+      (mode) => updatedFilters[mode]
+    );
+    dispatch(setWorkModeFilter(selectedModes));
+  };
 
-  const handleSaveJob = useCallback(
-    async (jobId) => {
-      try {
-        // Optimistic update
-        dispatch(toggleSaveJob(jobId));
+  const handleSaveJob = async (jobId) => {
+    try {
+      // Optimistic update
+      dispatch(toggleSaveJob(jobId));
 
-        const isCurrentlySaved = savedJobs.includes(jobId);
+      const isCurrentlySaved = savedJobs.includes(jobId);
 
-        if (isCurrentlySaved) {
-          await dispatch(unsaveJob(jobId)).unwrap();
-        } else {
-          await dispatch(saveJob(jobId)).unwrap();
-        }
-      } catch (error) {
-        // Revert optimistic update on error
-        dispatch(toggleSaveJob(jobId));
-        customToast.error("Error", "Failed to update saved jobs");
+      if (isCurrentlySaved) {
+        await dispatch(unsaveJob(jobId)).unwrap();
+      } else {
+        await dispatch(saveJob(jobId)).unwrap();
       }
-    },
-    [dispatch, savedJobs]
-  );
+    } catch (error) {
+      // Revert optimistic update on error
+      dispatch(toggleSaveJob(jobId));
+      customToast.error("Error", "Failed to update saved jobs");
+    }
+  };
 
-  const handleApply = useCallback((jobId) => {
-    customToast.info(
-      "Application",
-      "Apply functionality will be implemented soon"
-    );
-  }, []);
+  const handleApply = (jobId) => {
+    router.push(`/student/jobs/apply/${jobId}`);
+  };
 
-  const handleViewDetails = useCallback((jobId) => {
-    customToast.info(
-      "Details",
-      "View details functionality will be implemented soon"
-    );
-  }, []);
+  const handleViewDetails = (jobId) => {
+    const job = jobs.find((j) => j._id === jobId);
+    setSelectedJob(job);
+    setShowDetailsModal(true);
+  };
 
-  const getJobTypeColor = useCallback((jobType) => {
+  const handleApplicationSubmit = (formData) => {
+    console.log("Application submitted:", formData);
+    // TODO: Make API call to submit application
+    // dispatch(submitApplication({ jobId: selectedJob._id, ...formData }));
+    customToast.success("Success", "Application submitted successfully!");
+  };
+
+  const getJobTypeColor = (jobType) => {
     const colors = {
       "Full-time": "bg-green-500/20 text-green-300",
       "Part-time": "bg-blue-500/20 text-blue-300",
@@ -160,9 +161,9 @@ export default function JobListingsPage() {
       Freelance: "bg-pink-500/20 text-pink-300",
     };
     return colors[jobType] || "bg-gray-500/20 text-gray-300";
-  }, []);
+  };
 
-  const getInitials = useCallback((name) => {
+  const getInitials = (name) => {
     return name
       ? name
           .split(" ")
@@ -171,9 +172,9 @@ export default function JobListingsPage() {
           .toUpperCase()
           .slice(0, 2)
       : "CO";
-  }, []);
+  };
 
-  const formatDate = useCallback((dateString) => {
+  const formatDate = (dateString) => {
     if (!dateString) return "Recently";
 
     const date = new Date(dateString);
@@ -185,7 +186,7 @@ export default function JobListingsPage() {
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
     return `${Math.ceil(diffDays / 30)} months ago`;
-  }, []);
+  };
 
   return (
     <div className="relative min-h-screen p-6 overflow-hidden">
@@ -559,6 +560,37 @@ export default function JobListingsPage() {
           )}
         </div>
       </div>
+
+      {/* Apply Now Modal */}
+      <ApplyNowModal
+        job={selectedJob}
+        isOpen={showApplyModal}
+        onClose={() => {
+          setShowApplyModal(false);
+          setSelectedJob(null);
+        }}
+        onSubmit={handleApplicationSubmit}
+      />
+
+      {/* Job Details Modal */}
+      <JobDetailsModal
+        job={selectedJob}
+        isOpen={showDetailsModal}
+        onClose={() => {
+          setShowDetailsModal(false);
+          setSelectedJob(null);
+        }}
+        onApply={() => {
+          setShowDetailsModal(false);
+          setShowApplyModal(true);
+        }}
+        isSaved={selectedJob ? savedJobs.includes(selectedJob._id) : false}
+        onToggleSave={() => {
+          if (selectedJob) {
+            handleSaveJob(selectedJob._id);
+          }
+        }}
+      />
     </div>
   );
 }
