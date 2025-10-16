@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { jobService } from "@/services/jobService";
 import { applicationService } from "@/services/applicationService";
@@ -24,6 +24,9 @@ import {
   X,
   Sparkles,
   CheckCircle2,
+  User,
+  ArrowRight,
+  ArrowLeft as ArrowLeftIcon,
 } from "lucide-react";
 import { customToast } from "@/components/ui/toast";
 
@@ -33,6 +36,7 @@ export default function ApplyJobPage() {
   const jobId = params?.jobid || params?.jobId;
 
   const [job, setJob] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     resume: null,
     previousCompany: "",
@@ -44,6 +48,13 @@ export default function ApplyJobPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const steps = [
+    { number: 1, title: "Personal Info", icon: User },
+    { number: 2, title: "Experience", icon: Briefcase },
+    { number: 3, title: "Resume", icon: FileText },
+    { number: 4, title: "Review", icon: CheckCircle },
+  ];
 
   useEffect(() => {
     let mounted = true;
@@ -110,21 +121,41 @@ export default function ApplyJobPage() {
     setFormData((prev) => ({ ...prev, resume: null }));
   };
 
-  const validateForm = () => {
+  const validateStep = (step) => {
     const newErrors = {};
-    if (!formData.previousCompany)
-      newErrors.previousCompany = "Company is required";
-    if (!formData.previousPosition)
-      newErrors.previousPosition = "Position is required";
-    if (!formData.yearsExperience)
-      newErrors.yearsExperience = "Years of experience is required";
-    if (!formData.resume) newErrors.resume = "Resume is required";
+
+    if (step === 1) {
+      if (!formData.previousCompany)
+        newErrors.previousCompany = "Company is required";
+      if (!formData.previousPosition)
+        newErrors.previousPosition = "Position is required";
+    }
+
+    if (step === 2) {
+      if (!formData.yearsExperience)
+        newErrors.yearsExperience = "Years of experience is required";
+    }
+
+    if (step === 3) {
+      if (!formData.resume) newErrors.resume = "Resume is required";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const nextStep = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep((prev) => Math.min(prev + 1, steps.length));
+    }
+  };
+
+  const prevStep = () => {
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
+  };
+
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    if (!validateStep(3)) return;
 
     if (!jobId) {
       customToast.error("Error", "No job specified");
@@ -203,10 +234,402 @@ export default function ApplyJobPage() {
     return `${Math.ceil(diffDays / 30)} months ago`;
   };
 
+  // Step Components - Defined as useCallback to prevent re-renders
+  const Step1PersonalInfo = useCallback(
+    () => (
+      <div className="space-y-8 animate-fadeIn">
+        <div className="flex items-center gap-4">
+          <div
+            className="p-3 rounded-2xl shadow-lg"
+            style={{
+              background: "linear-gradient(135deg,#803791,#b87bd1)",
+            }}
+          >
+            <User className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-white">
+              Personal Information
+            </h3>
+            <p className="text-white/70 text-sm">
+              Tell us about your professional background
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-white/80 flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-[#b87bd1]" />
+              Previous Company <span className="text-red-400">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                name="previousCompany"
+                value={formData.previousCompany}
+                onChange={handleChange}
+                className={`w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border ${
+                  errors.previousCompany
+                    ? "border-red-500/50 focus:border-red-500"
+                    : "border-white/10 focus:border-[#b87bd1]"
+                } text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]`}
+                placeholder="Enter company name"
+              />
+              {formData.previousCompany && (
+                <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+              )}
+            </div>
+            {errors.previousCompany && (
+              <p className="text-red-400 text-sm flex items-center gap-2 animate-shake">
+                <AlertCircle className="w-4 h-4" />
+                {errors.previousCompany}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-white/80 flex items-center gap-2">
+              <Award className="w-4 h-4 text-[#b87bd1]" />
+              Position <span className="text-red-400">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                name="previousPosition"
+                value={formData.previousPosition}
+                onChange={handleChange}
+                className={`w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border ${
+                  errors.previousPosition
+                    ? "border-red-500/50 focus:border-red-500"
+                    : "border-white/10 focus:border-[#b87bd1]"
+                } text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]`}
+                placeholder="e.g., Software Engineer"
+              />
+              {formData.previousPosition && (
+                <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+              )}
+            </div>
+            {errors.previousPosition && (
+              <p className="text-red-400 text-sm flex items-center gap-2 animate-shake">
+                <AlertCircle className="w-4 h-4" />
+                {errors.previousPosition}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    ),
+    [
+      formData.previousCompany,
+      formData.previousPosition,
+      errors.previousCompany,
+      errors.previousPosition,
+    ]
+  );
+
+  const Step2Experience = useCallback(
+    () => (
+      <div className="space-y-8 animate-fadeIn">
+        <div className="flex items-center gap-4">
+          <div
+            className="p-3 rounded-2xl shadow-lg"
+            style={{
+              background: "linear-gradient(135deg,#803791,#b87bd1)",
+            }}
+          >
+            <Briefcase className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-white">
+              Experience Details
+            </h3>
+            <p className="text-white/70 text-sm">
+              Share your experience level and language skills
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-white/80 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#b87bd1]" />
+              Years of Experience <span className="text-red-400">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                min="0"
+                step="0.5"
+                name="yearsExperience"
+                value={formData.yearsExperience}
+                onChange={handleChange}
+                className={`w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border ${
+                  errors.yearsExperience
+                    ? "border-red-500/50 focus:border-red-500"
+                    : "border-white/10 focus:border-[#b87bd1]"
+                } text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]`}
+                placeholder="e.g., 3"
+              />
+              {formData.yearsExperience && (
+                <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+              )}
+            </div>
+            {errors.yearsExperience && (
+              <p className="text-red-400 text-sm flex items-center gap-2 animate-shake">
+                <AlertCircle className="w-4 h-4" />
+                {errors.yearsExperience}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-white/80 flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#b87bd1]" />
+              Languages
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                name="languages"
+                value={formData.languages}
+                onChange={handleChange}
+                className="w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]"
+                placeholder="e.g., English, Hindi, Spanish"
+              />
+              {formData.languages && (
+                <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    [formData.yearsExperience, formData.languages, errors.yearsExperience]
+  );
+
+  const Step3Resume = useCallback(
+    () => (
+      <div className="space-y-8 animate-fadeIn">
+        <div className="flex items-center gap-4">
+          <div
+            className="p-3 rounded-2xl shadow-lg"
+            style={{
+              background: "linear-gradient(135deg,#803791,#b87bd1)",
+            }}
+          >
+            <FileText className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+              Upload Resume <span className="text-red-400">*</span>
+            </h3>
+            <p className="text-white/70 text-sm">
+              Upload your latest resume (PDF, DOC, DOCX)
+            </p>
+          </div>
+        </div>
+
+        {!formData.resume ? (
+          <div className="relative">
+            <input
+              type="file"
+              id="resume"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <label
+              htmlFor="resume"
+              className={`group flex flex-col items-center justify-center w-full px-8 py-14 rounded-2xl border-2 border-dashed ${
+                errors.resume
+                  ? "border-red-500/50 bg-red-500/5"
+                  : "border-white/20 bg-white/5"
+              } hover:bg-white/10 hover:border-[#b87bd1]/50 cursor-pointer transition-all duration-300`}
+            >
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] blur-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                <div
+                  className="relative p-5 rounded-2xl border border-[#803791]/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300"
+                  style={{
+                    background: "linear-gradient(135deg,#803791,#b87bd1)",
+                  }}
+                >
+                  <Upload className="w-10 h-10 text-white" />
+                </div>
+              </div>
+              <p className="text-white font-semibold text-xl mb-2 group-hover:text-[#b87bd1] transition-colors duration-300">
+                Click to upload your resume
+              </p>
+              <p className="text-white/60 text-sm">
+                PDF, DOC, or DOCX • Maximum file size 5MB
+              </p>
+            </label>
+            {errors.resume && (
+              <p className="text-red-400 text-sm mt-4 flex items-center gap-2 animate-shake">
+                <AlertCircle className="w-4 h-4" />
+                {errors.resume}
+              </p>
+            )}
+          </div>
+        ) : (
+          <div
+            className="group relative flex items-center justify-between p-5 rounded-2xl border border-white/10 hover:border-[#b87bd1]/30 transition-all duration-300"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(128,55,145,0.10), rgba(184,123,209,0.05))",
+            }}
+          >
+            <div className="flex items-center gap-5 relative z-10">
+              <div
+                className="p-4 rounded-xl shadow-lg"
+                style={{
+                  background: "linear-gradient(135deg,#803791,#b87bd1)",
+                }}
+              >
+                <FileText className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-medium text-lg">
+                  {formData.resume.name}
+                </p>
+                <p className="text-white/70 text-sm flex items-center gap-2">
+                  <span>
+                    {(formData.resume.size / 1024 / 1024).toFixed(2)} MB
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-white/50"></span>
+                  <span className="text-emerald-400 flex items-center gap-1">
+                    <CheckCircle2 className="w-4 h-4" />
+                    Ready to upload
+                  </span>
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={removeFile}
+              className="relative z-10 p-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all duration-300 border border-red-500/20 hover:border-red-500/40 group/remove"
+            >
+              <X className="w-5 h-5 group-hover/remove:rotate-90 transition-transform duration-300" />
+            </button>
+          </div>
+        )}
+      </div>
+    ),
+    [formData.resume, errors.resume]
+  );
+
+  const Step4Review = useCallback(
+    () => (
+      <div className="space-y-8 animate-fadeIn">
+        <div className="flex items-center gap-4">
+          <div
+            className="p-3 rounded-2xl shadow-lg"
+            style={{
+              background: "linear-gradient(135deg,#803791,#b87bd1)",
+            }}
+          >
+            <CheckCircle className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-white">
+              Review Application
+            </h3>
+            <p className="text-white/70 text-sm">
+              Please review your information before submitting
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <h4 className="text-lg font-semibold text-white border-b border-white/10 pb-2">
+              Personal Information
+            </h4>
+            <div className="space-y-4">
+              <div>
+                <p className="text-white/60 text-sm">Previous Company</p>
+                <p className="text-white font-medium">
+                  {formData.previousCompany || "Not provided"}
+                </p>
+              </div>
+              <div>
+                <p className="text-white/60 text-sm">Position</p>
+                <p className="text-white font-medium">
+                  {formData.previousPosition || "Not provided"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h4 className="text-lg font-semibold text-white border-b border-white/10 pb-2">
+              Experience Details
+            </h4>
+            <div className="space-y-4">
+              <div>
+                <p className="text-white/60 text-sm">Years of Experience</p>
+                <p className="text-white font-medium">
+                  {formData.yearsExperience || "Not provided"}
+                </p>
+              </div>
+              <div>
+                <p className="text-white/60 text-sm">Languages</p>
+                <p className="text-white font-medium">
+                  {formData.languages || "Not provided"}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-white border-b border-white/10 pb-2">
+            Resume
+          </h4>
+          <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+            <FileText className="w-8 h-8 text-[#b87bd1]" />
+            <div>
+              <p className="text-white font-medium">
+                {formData.resume ? formData.resume.name : "No resume uploaded"}
+              </p>
+              {formData.resume && (
+                <p className="text-white/60 text-sm">
+                  {(formData.resume.size / 1024 / 1024).toFixed(2)} MB
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    [
+      formData.previousCompany,
+      formData.previousPosition,
+      formData.yearsExperience,
+      formData.languages,
+      formData.resume,
+    ]
+  );
+
+  // Render current step component
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return <Step1PersonalInfo />;
+      case 2:
+        return <Step2Experience />;
+      case 3:
+        return <Step3Resume />;
+      case 4:
+        return <Step4Review />;
+      default:
+        return <Step1PersonalInfo />;
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        {/* Background matching dashboard */}
         <div className="absolute inset-0 pointer-events-none -z-10">
           <div
             className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
@@ -217,13 +640,8 @@ export default function ApplyJobPage() {
             style={{ background: "rgba(184,123,209,0.06)" }}
           />
         </div>
-
         <div className="relative">
           <div className="w-16 h-16 border-4 border-[#803791]/20 border-t-[#803791] rounded-full animate-spin"></div>
-          <div
-            className="absolute inset-0 w-16 h-16 border-4 border-[#b87bd1]/20 border-t-[#b87bd1] rounded-full animate-spin"
-            style={{ animationDirection: "reverse", animationDuration: "1s" }}
-          ></div>
           <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-[#b87bd1] animate-pulse" />
         </div>
       </div>
@@ -233,7 +651,6 @@ export default function ApplyJobPage() {
   if (submitSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
-        {/* Background matching dashboard */}
         <div className="absolute inset-0 pointer-events-none -z-10">
           <div
             className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
@@ -243,9 +660,7 @@ export default function ApplyJobPage() {
             className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
             style={{ background: "rgba(184,123,209,0.06)" }}
           />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
         </div>
-
         <div className="text-center max-w-lg relative z-10">
           <div className="relative mb-8 inline-block">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 blur-3xl opacity-30 rounded-full animate-pulse"></div>
@@ -253,36 +668,21 @@ export default function ApplyJobPage() {
               <CheckCircle className="w-14 h-14 text-white drop-shadow-lg" />
             </div>
           </div>
-
           <h3 className="text-4xl font-bold text-white mb-4">
             Application Submitted Successfully!
           </h3>
-
           <p className="text-white/70 mb-10 text-lg leading-relaxed">
             Your application has been received and is under review.
-            <br />
-            We'll get back to you soon with updates.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => router.push("/student/jobs")}
-              className="group relative px-8 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-0.5"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <span className="relative flex items-center justify-center gap-2">
-                <Briefcase className="w-5 h-5" />
-                Browse More Jobs
-              </span>
-            </button>
-
-            <button
-              onClick={() => router.push("/student/applications")}
-              className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold border border-white/10 hover:border-[#b87bd1]/30 transition-all duration-300 backdrop-blur-sm"
-            >
-              View My Applications
-            </button>
-          </div>
+          <button
+            onClick={() => router.push("/student/jobs")}
+            className="group relative px-8 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-0.5"
+          >
+            <span className="relative flex items-center justify-center gap-2">
+              <Briefcase className="w-5 h-5" />
+              Browse More Jobs
+            </span>
+          </button>
         </div>
       </div>
     );
@@ -290,7 +690,6 @@ export default function ApplyJobPage() {
 
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8 relative overflow-hidden">
-      {/* Background matching dashboard */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
           className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
@@ -300,14 +699,9 @@ export default function ApplyJobPage() {
           className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
           style={{ background: "rgba(184,123,209,0.06)" }}
         />
-        <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
-          style={{ background: "rgba(240,194,238,0.03)" }}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
       </div>
 
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto relative z-10">
         {/* Back Button */}
         <button
           onClick={() => router.push("/student/jobs")}
@@ -319,95 +713,92 @@ export default function ApplyJobPage() {
           <span className="font-medium">Back to Jobs</span>
         </button>
 
-        {/* Job Header Card */}
+        {/* Job Header */}
         <div
-          className="group relative mb-10 overflow-hidden rounded-3xl backdrop-blur-md shadow-2xl border border-white/6 transition-all duration-500 hover:shadow-[0_12px_40px_rgba(128,55,145,0.18)]"
+          className="group relative mb-8 overflow-hidden rounded-3xl backdrop-blur-md shadow-2xl border border-white/6 transition-all duration-500"
           style={{
             background:
               "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
           }}
         >
-          {/* Hover Effect Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#803791]/0 to-[#b87bd1]/0 group-hover:from-[#803791]/5 group-hover:to-[#b87bd1]/5 transition-all duration-500"></div>
-
-          <div className="relative p-6 sm:p-10">
-            <div className="flex flex-col sm:flex-row items-start gap-8">
-              {/* Company Logo */}
-              <div className="relative group/logo">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#803791] to-[#b87bd1] rounded-3xl blur-xl opacity-40 group-hover/logo:opacity-60 transition-opacity duration-300"></div>
-                <div
-                  className="relative w-24 h-24 rounded-3xl flex items-center justify-center shadow-2xl transform group-hover/logo:scale-105 transition-transform duration-300"
-                  style={{
-                    background: "linear-gradient(135deg,#803791,#b87bd1)",
-                  }}
-                >
-                  {job?.employerId?.company ? (
-                    <span className="text-white font-bold text-3xl drop-shadow-lg">
-                      {getInitials(job.employerId.company)}
-                    </span>
-                  ) : (
-                    <Building2 className="w-12 h-12 text-white drop-shadow-lg" />
-                  )}
-                </div>
+          <div className="relative p-6 sm:p-8">
+            <div className="flex items-start gap-6">
+              <div
+                className="w-20 h-20 rounded-3xl flex items-center justify-center shadow-2xl"
+                style={{
+                  background: "linear-gradient(135deg,#803791,#b87bd1)",
+                }}
+              >
+                {job?.employerId?.company ? (
+                  <span className="text-white font-bold text-2xl">
+                    {getInitials(job.employerId.company)}
+                  </span>
+                ) : (
+                  <Building2 className="w-10 h-10 text-white" />
+                )}
               </div>
-
-              {/* Job Info */}
-              <div className="flex-1 space-y-5">
-                <div>
-                  <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-3 leading-tight">
-                    {job?.title || "Position"}
-                  </h1>
-                  <p className="text-[#b87bd1] font-semibold text-xl flex items-center gap-2">
-                    <Building2 className="w-5 h-5" />
-                    {job?.employerId?.company || "Demo Company"}
-                  </p>
-                </div>
-
-                {/* Job Details Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="flex items-center gap-3 text-white/80 group/item">
-                    <div className="p-2.5 rounded-xl bg-white/5 group-hover/item:bg-white/10 border border-white/10 transition-all duration-300">
-                      <MapPin className="w-4 h-4 text-[#b87bd1]" />
-                    </div>
-                    <span className="text-sm font-medium">
-                      {job?.location || "Remote"}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-white/80 group/item">
-                    <div className="p-2.5 rounded-xl bg-white/5 group-hover/item:bg-emerald-500/10 border border-white/10 transition-all duration-300">
-                      <DollarSign className="w-4 h-4 text-emerald-400" />
-                    </div>
-                    <span className="text-sm font-semibold text-white">
-                      {job?.salary || "Competitive"}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-white/80 group/item">
-                    <div className="p-2.5 rounded-xl bg-white/5 group-hover/item:bg-blue-500/10 border border-white/10 transition-all duration-300">
-                      <Clock className="w-4 h-4 text-blue-400" />
-                    </div>
-                    <span className="text-sm">
-                      {formatDate(job?.createdAt)}
-                    </span>
-                  </div>
-
-                  {job?.jobType && (
-                    <div
-                      className={`flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold backdrop-blur-sm ${getJobTypeColor(
-                        job.jobType
-                      )} hover:scale-105 transition-transform duration-300 cursor-default`}
-                    >
-                      {job.jobType}
-                    </div>
-                  )}
-                </div>
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  {job?.title || "Position"}
+                </h1>
+                <p className="text-[#b87bd1] font-semibold text-lg">
+                  {job?.employerId?.company || "Demo Company"}
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Application Form */}
+        {/* Progress Steps */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isCompleted = currentStep > step.number;
+              const isCurrent = currentStep === step.number;
+
+              return (
+                <div key={step.number} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        isCompleted
+                          ? "bg-emerald-500 text-white"
+                          : isCurrent
+                          ? "bg-[#b87bd1] text-white shadow-lg"
+                          : "bg-white/10 text-white/50"
+                      }`}
+                    >
+                      {isCompleted ? (
+                        <CheckCircle className="w-6 h-6" />
+                      ) : (
+                        <Icon className="w-6 h-6" />
+                      )}
+                    </div>
+                    <span
+                      className={`text-sm font-medium mt-2 transition-colors duration-300 ${
+                        isCompleted || isCurrent
+                          ? "text-white"
+                          : "text-white/50"
+                      }`}
+                    >
+                      {step.title}
+                    </span>
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div
+                      className={`flex-1 h-1 mx-4 transition-colors duration-300 ${
+                        isCompleted ? "bg-emerald-500" : "bg-white/10"
+                      }`}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Form Content */}
         <div
           className="rounded-3xl backdrop-blur-md shadow-2xl border border-white/6 overflow-hidden"
           style={{
@@ -415,358 +806,69 @@ export default function ApplyJobPage() {
               "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))",
           }}
         >
-          <div className="p-6 sm:p-10 space-y-10">
-            {/* Form Header */}
-            <div className="flex items-center justify-between pb-8 border-b border-white/10">
-              <div>
-                <h2 className="text-3xl font-bold text-white mb-2">
-                  Submit Your Application
-                </h2>
-                <p className="text-white/70 text-lg">
-                  Complete the form below to apply for this position
-                </p>
-              </div>
-              <div className="hidden sm:block p-4 rounded-2xl bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/20 border border-[#803791]/30">
-                <Send className="w-7 h-7 text-[#b87bd1]" />
-              </div>
-            </div>
+          <div className="p-6 sm:p-8">
+            {/* Step Content */}
+            {renderStepContent()}
 
-            {/* Professional Experience Section */}
-            <div className="space-y-8">
-              <div className="flex items-center gap-4">
-                <div
-                  className="p-3 rounded-2xl shadow-lg"
-                  style={{
-                    background: "linear-gradient(135deg,#803791,#b87bd1)",
-                  }}
-                >
-                  <Briefcase className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-white">
-                    Professional Experience
-                  </h3>
-                  <p className="text-white/70 text-sm">
-                    Share your work history and expertise
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Previous Company */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-semibold text-white/80 flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-[#b87bd1]" />
-                    Previous Company <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      name="previousCompany"
-                      value={formData.previousCompany}
-                      onChange={handleChange}
-                      className={`w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border ${
-                        errors.previousCompany
-                          ? "border-red-500/50 focus:border-red-500"
-                          : "border-white/10 focus:border-[#b87bd1]"
-                      } text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]`}
-                      placeholder="Enter company name"
-                    />
-                    {formData.previousCompany && (
-                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
-                    )}
-                  </div>
-                  {errors.previousCompany && (
-                    <p className="text-red-400 text-sm flex items-center gap-2 animate-shake">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.previousCompany}
-                    </p>
-                  )}
-                </div>
-
-                {/* Previous Position */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-semibold text-white/80 flex items-center gap-2">
-                    <Award className="w-4 h-4 text-[#b87bd1]" />
-                    Position <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      name="previousPosition"
-                      value={formData.previousPosition}
-                      onChange={handleChange}
-                      className={`w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border ${
-                        errors.previousPosition
-                          ? "border-red-500/50 focus:border-red-500"
-                          : "border-white/10 focus:border-[#b87bd1]"
-                      } text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]`}
-                      placeholder="e.g., Software Engineer"
-                    />
-                    {formData.previousPosition && (
-                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
-                    )}
-                  </div>
-                  {errors.previousPosition && (
-                    <p className="text-red-400 text-sm flex items-center gap-2 animate-shake">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.previousPosition}
-                    </p>
-                  )}
-                </div>
-
-                {/* Years of Experience */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-semibold text-white/80 flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#b87bd1]" />
-                    Years of Experience <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.5"
-                      name="yearsExperience"
-                      value={formData.yearsExperience}
-                      onChange={handleChange}
-                      className={`w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border ${
-                        errors.yearsExperience
-                          ? "border-red-500/50 focus:border-red-500"
-                          : "border-white/10 focus:border-[#b87bd1]"
-                      } text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]`}
-                      placeholder="e.g., 3"
-                    />
-                    {formData.yearsExperience && (
-                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
-                    )}
-                  </div>
-                  {errors.yearsExperience && (
-                    <p className="text-red-400 text-sm flex items-center gap-2 animate-shake">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.yearsExperience}
-                    </p>
-                  )}
-                </div>
-
-                {/* Languages */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-semibold text-white/80 flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-[#b87bd1]" />
-                    Languages
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      name="languages"
-                      value={formData.languages}
-                      onChange={handleChange}
-                      className="w-full pl-5 pr-4 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:border-[#b87bd1] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/20 transition-all duration-300 hover:bg-white/[0.07]"
-                      placeholder="e.g., English, Hindi, Spanish"
-                    />
-                    {formData.languages && (
-                      <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Resume Upload Section */}
-            <div className="space-y-8">
-              <div className="flex items-center gap-4">
-                <div
-                  className="p-3 rounded-2xl shadow-lg"
-                  style={{
-                    background: "linear-gradient(135deg,#803791,#b87bd1)",
-                  }}
-                >
-                  <FileText className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-white flex items-center gap-2">
-                    Resume <span className="text-red-400">*</span>
-                  </h3>
-                  <p className="text-white/70 text-sm">
-                    Upload your latest resume (PDF, DOC, DOCX)
-                  </p>
-                </div>
-              </div>
-
-              {!formData.resume ? (
-                <div className="relative">
-                  <input
-                    type="file"
-                    id="resume"
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="resume"
-                    className={`group flex flex-col items-center justify-center w-full px-8 py-14 rounded-2xl border-2 border-dashed ${
-                      errors.resume
-                        ? "border-red-500/50 bg-red-500/5"
-                        : "border-white/20 bg-white/5"
-                    } hover:bg-white/10 hover:border-[#b87bd1]/50 cursor-pointer transition-all duration-300`}
-                  >
-                    <div className="relative mb-6">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] blur-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <div
-                        className="relative p-5 rounded-2xl border border-[#803791]/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300"
-                        style={{
-                          background: "linear-gradient(135deg,#803791,#b87bd1)",
-                        }}
-                      >
-                        <Upload className="w-10 h-10 text-white" />
-                      </div>
-                    </div>
-                    <p className="text-white font-semibold text-xl mb-2 group-hover:text-[#b87bd1] transition-colors duration-300">
-                      Click to upload your resume
-                    </p>
-                    <p className="text-white/60 text-sm">
-                      PDF, DOC, or DOCX • Maximum file size 5MB
-                    </p>
-                  </label>
-                  {errors.resume && (
-                    <p className="text-red-400 text-sm mt-4 flex items-center gap-2 animate-shake">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.resume}
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <div
-                  className="group relative flex items-center justify-between p-5 rounded-2xl border border-white/10 hover:border-[#b87bd1]/30 transition-all duration-300"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, rgba(128,55,145,0.10), rgba(184,123,209,0.05))",
-                  }}
-                >
-                  <div className="flex items-center gap-5 relative z-10">
-                    <div
-                      className="p-4 rounded-xl shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg,#803791,#b87bd1)",
-                      }}
-                    >
-                      <FileText className="w-7 h-7 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-white/70 text-sm flex items-center gap-2">
-                        <span>
-                          {(formData.resume.size / 1024 / 1024).toFixed(2)} MB
-                        </span>
-                        <span className="w-1 h-1 rounded-full bg-white/50"></span>
-                        <span className="text-emerald-400 flex items-center gap-1">
-                          <CheckCircle2 className="w-4 h-4" />
-                          Ready to upload
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={removeFile}
-                    className="relative z-10 p-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all duration-300 border border-red-500/20 hover:border-red-500/40 group/remove"
-                  >
-                    <X className="w-5 h-5 group-hover/remove:rotate-90 transition-transform duration-300" />
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-5 pt-8 border-t border-white/10">
+            {/* Navigation Buttons */}
+            <div className="flex justify-between pt-8 mt-8 border-t border-white/10">
               <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="group relative flex-1 px-10 py-5 rounded-2xl font-bold text-lg text-white shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-1 disabled:transform-none"
+                onClick={prevStep}
+                disabled={currentStep === 1}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
-                <div
-                  className="absolute inset-0 transition-transform group-hover:scale-105 duration-300"
-                  style={{
-                    background: "linear-gradient(135deg,#803791,#b87bd1)",
-                  }}
-                ></div>
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: "linear-gradient(135deg,#b87bd1,#803791)",
-                  }}
-                ></div>
-                <div className="relative flex items-center justify-center gap-3">
+                <ArrowLeftIcon className="w-4 h-4" />
+                Previous
+              </button>
+
+              {currentStep < steps.length ? (
+                <button
+                  onClick={nextStep}
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                >
+                  Next
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   {isSubmitting ? (
                     <>
-                      <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Submitting Application...</span>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Submitting...
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                      <span>Submit Application</span>
+                      <Send className="w-5 h-5" />
+                      Submit Application
                     </>
                   )}
-                </div>
-              </button>
-
-              <button
-                onClick={() => router.push("/student/jobs")}
-                className="px-10 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-bold text-lg border border-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-sm transform hover:-translate-y-1"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Tips Section */}
-        <div
-          className="mt-8 p-6 rounded-2xl backdrop-blur-sm border border-white/10 shadow-lg"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-          }}
-        >
-          <div className="flex items-start gap-4">
-            <div
-              className="p-3 rounded-xl shadow-md"
-              style={{
-                background: "linear-gradient(135deg,#803791,#b87bd1)",
-              }}
-            >
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-2">
-                Application Tips
-              </h4>
-              <ul className="space-y-2 text-white/70 text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#b87bd1] mt-1">•</span>
-                  <span>
-                    Ensure your resume is up-to-date with your latest experience
-                    and skills
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#b87bd1] mt-1">•</span>
-                  <span>
-                    Double-check all information for accuracy before submitting
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#b87bd1] mt-1">•</span>
-                  <span>
-                    Highlight relevant experience that matches the job
-                    requirements
-                  </span>
-                </li>
-              </ul>
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-out;
+        }
+
         @keyframes shake {
           0%,
           100% {
@@ -782,16 +884,6 @@ export default function ApplyJobPage() {
 
         .animate-shake {
           animation: shake 0.3s ease-in-out;
-        }
-
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
-
-        input[type="number"] {
-          -moz-appearance: textfield;
         }
       `}</style>
     </div>
