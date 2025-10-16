@@ -50,29 +50,67 @@ export default function EmployerApplications() {
         setApplications(res?.data || []);
         setStats(res?.stats || {});
       } catch (e) {
-        setError(e?.response?.data?.message || e?.message || "Failed to load applications");
+        setError(
+          e?.response?.data?.message ||
+            e?.message ||
+            "Failed to load applications"
+        );
       } finally {
         if (mounted) setLoading(false);
       }
     }
     load();
-    return () => { mounted = false };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const stages = [
-    { value: "all", label: "All Applications", color: "slate", count: stats.totalApplications || applications.length || 0 },
-    { value: "applied", label: "New", color: "blue", count: stats.applied || 0 },
-    { value: "reviewed", label: "Reviewed", color: "cyan", count: stats.reviewed || 0 },
-    { value: "interview", label: "Interview", color: "indigo", count: stats.interview || 0 },
-    { value: "hired", label: "Hired", color: "emerald", count: stats.hired || 0 },
-    { value: "rejected", label: "Rejected", color: "rose", count: stats.rejected || 0 },
+    {
+      value: "all",
+      label: "All Applications",
+      color: "slate",
+      count: stats.totalApplications || applications.length || 0,
+    },
+    {
+      value: "applied",
+      label: "New",
+      color: "blue",
+      count: stats.applied || 0,
+    },
+    {
+      value: "reviewed",
+      label: "Reviewed",
+      color: "cyan",
+      count: stats.reviewed || 0,
+    },
+    {
+      value: "interview",
+      label: "Interview",
+      color: "indigo",
+      count: stats.interview || 0,
+    },
+    {
+      value: "hired",
+      label: "Hired",
+      color: "emerald",
+      count: stats.hired || 0,
+    },
+    {
+      value: "rejected",
+      label: "Rejected",
+      color: "rose",
+      count: stats.rejected || 0,
+    },
   ];
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     const sorted = [...applications].sort((a, b) => {
-      if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
-      if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+      if (sortBy === "newest")
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sortBy === "oldest")
+        return new Date(a.createdAt) - new Date(b.createdAt);
       return 0;
     });
     return sorted.filter((a) => {
@@ -263,7 +301,9 @@ export default function EmployerApplications() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-xl font-bold text-white">
-                          {`${app.studentId?.firstName || ""} ${app.studentId?.lastName || ""}`.trim() || "Candidate"}
+                          {`${app.studentId?.firstName || ""} ${
+                            app.studentId?.lastName || ""
+                          }`.trim() || "Candidate"}
                         </h3>
                         <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/20 rounded-full border border-emerald-500/30">
                           <Star className="w-3 h-3 text-emerald-400 fill-emerald-400" />
@@ -297,14 +337,18 @@ export default function EmployerApplications() {
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        {(app.studentId?.skills || []).slice(0, 5).map((skill) => (
-                          <span
-                            key={typeof skill === "string" ? skill : skill.name}
-                            className="px-3 py-1 text-sm rounded-lg bg-white/10 text-white/80 border border-white/10"
-                          >
-                            {typeof skill === "string" ? skill : skill.name}
-                          </span>
-                        ))}
+                        {(app.studentId?.skills || [])
+                          .slice(0, 5)
+                          .map((skill) => (
+                            <span
+                              key={
+                                typeof skill === "string" ? skill : skill.name
+                              }
+                              className="px-3 py-1 text-sm rounded-lg bg-white/10 text-white/80 border border-white/10"
+                            >
+                              {typeof skill === "string" ? skill : skill.name}
+                            </span>
+                          ))}
                       </div>
                     </div>
                   </div>
@@ -351,7 +395,7 @@ export default function EmployerApplications() {
                               "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                           }}
                         >
-                      <Mail className="w-5 h-5 text-white/60" />
+                          <Mail className="w-5 h-5 text-white/60" />
                           <div>
                             <div className="text-sm font-medium text-white">
                               Email
@@ -436,7 +480,12 @@ export default function EmployerApplications() {
                       </h4>
                       <p className="text-white/60 text-sm">{""}</p>
                       <div className="flex items-center justify-between mt-3 text-xs text-white/60">
-                        <span>Last activity: {new Date(app.updatedAt || app.createdAt).toLocaleString()}</span>
+                        <span>
+                          Last activity:{" "}
+                          {new Date(
+                            app.updatedAt || app.createdAt
+                          ).toLocaleString()}
+                        </span>
                         <button className="text-[#b87bd1] hover:text-[#803791] font-medium">
                           Add Note
                         </button>
