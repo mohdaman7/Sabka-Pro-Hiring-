@@ -59,9 +59,15 @@ export const applyForJob = async (req, res, next) => {
       resumeUrl: parsed.resumeUrl,
       // Persist extra metadata if provided
       meta: {
-        ...(parsed.previousCompany && { previousCompany: parsed.previousCompany }),
-        ...(parsed.previousPosition && { previousPosition: parsed.previousPosition }),
-        ...(parsed.yearsExperience && { yearsExperience: parsed.yearsExperience }),
+        ...(parsed.previousCompany && {
+          previousCompany: parsed.previousCompany,
+        }),
+        ...(parsed.previousPosition && {
+          previousPosition: parsed.previousPosition,
+        }),
+        ...(parsed.yearsExperience && {
+          yearsExperience: parsed.yearsExperience,
+        }),
         ...(parsed.languages && { languages: parsed.languages }),
       },
       status: "applied",
@@ -179,15 +185,18 @@ export const getApplicationsForMyJobs = async (req, res, next) => {
       : "createdAt";
     sortOptions[sortField] = sortOrder === "desc" ? -1 : 1;
 
+    // Updated populate to match the actual schema structure
     const applications = await ApplicationModel.find(filter)
-      .populate("jobId", "title location salary")
-      .populate(
-        "studentId",
-        "firstName lastName email profile skills education"
-      )
+      .populate({
+        path: "studentId",
+        select:
+          "firstName lastName email phone experience skills address bio education languages previousCompany previousPosition yearsExperience",
+      })
+      .populate("jobId", "title location salary deadlineDate")
       .sort(sortOptions)
       .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .skip((page - 1) * limit)
+      .lean();
 
     const total = await ApplicationModel.countDocuments(filter);
 
@@ -208,24 +217,26 @@ export const getApplicationsForMyJobs = async (req, res, next) => {
     });
 
     // Get unique job list for filter
-    const employerJobs = await JobModel.find({ employerId: req.user.id })
-      .select("title _id")
-      .sort({ title: 1 });
+    const filterOptions = {
+      jobs: await JobModel.find({ employerId: req.user.id })
+        .select("title _id deadlineDate")
+        .sort({ title: 1 }),
+    };
 
-    res.json({
+    const pagination = {
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalApplications: total,
+      hasNext: page < Math.ceil(total / limit),
+      hasPrev: page > 1,
+    };
+
+    return res.json({
       success: true,
       data: applications,
       stats: statusStats,
-      filterOptions: {
-        jobs: employerJobs,
-      },
-      pagination: {
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(total / limit),
-        totalApplications: total,
-        hasNext: page < Math.ceil(total / limit),
-        hasPrev: page > 1,
-      },
+      filterOptions,
+      pagination,
     });
   } catch (err) {
     next(err);

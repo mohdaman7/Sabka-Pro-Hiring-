@@ -10,9 +10,6 @@ import {
   CheckCircle,
   XCircle,
   User,
-  Mail,
-  Phone,
-  Briefcase,
   GraduationCap,
   MapPin,
   Calendar,
@@ -26,6 +23,10 @@ import {
   Plus,
   Users,
   ArrowRight,
+  Mail,
+  Phone,
+  Briefcase,
+  ChevronUp,
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
 
@@ -38,6 +39,28 @@ export default function EmployerApplications() {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleStatusUpdate = async (applicationId, newStatus) => {
+    try {
+      setLoading(true);
+      await applicationService.updateApplicationStatus(
+        applicationId,
+        newStatus
+      );
+      // Update the local state to reflect the change
+      setApplications(
+        applications.map((app) =>
+          app._id === applicationId ? { ...app, status: newStatus } : app
+        )
+      );
+    } catch (e) {
+      setError(
+        e?.response?.data?.message || e?.message || "Failed to update status"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -276,221 +299,147 @@ export default function EmployerApplications() {
       <div className="space-y-4">
         {filtered.map((app) => {
           const isOpen = expandedId === app._id;
+
           return (
             <div
               key={app._id}
-              className="rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-                border: "1px solid rgba(255,255,255,0.06)",
-              }}
+              className="bg-white/5 backdrop-blur-lg rounded-xl p-4 space-y-4"
             >
-              {/* Application Header */}
-              <div className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div
-                      className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #803791, #b87bd1)",
-                      }}
-                    >
-                      {(app.studentId?.firstName || "").charAt(0)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-white">
-                          {`${app.studentId?.firstName || ""} ${
-                            app.studentId?.lastName || ""
-                          }`.trim() || "Candidate"}
-                        </h3>
-                        <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/20 rounded-full border border-emerald-500/30">
-                          <Star className="w-3 h-3 text-emerald-400 fill-emerald-400" />
-                          <span className="text-xs font-semibold text-emerald-400">
-                            {""}
-                          </span>
-                        </div>
-                        <StageBadge value={app.stage} />
-                      </div>
-                      <p className="text-lg text-white/80 mb-3">
-                        {app.jobId?.title || "Applied role"}
-                      </p>
-
-                      <div className="flex flex-wrap gap-3 text-sm text-white/60 mb-4">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          {app.studentId?.address?.city || "-"}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Briefcase className="w-4 h-4" />
-                          {app.studentId?.experience || "-"}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <GraduationCap className="w-4 h-4" />
-                          {app.studentId?.highestQualification || "-"}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          Applied {new Date(app.createdAt).toLocaleDateString()}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {(app.studentId?.skills || [])
-                          .slice(0, 5)
-                          .map((skill) => (
-                            <span
-                              key={
-                                typeof skill === "string" ? skill : skill.name
-                              }
-                              className="px-3 py-1 text-sm rounded-lg bg-white/10 text-white/80 border border-white/10"
-                            >
-                              {typeof skill === "string" ? skill : skill.name}
-                            </span>
-                          ))}
-                      </div>
-                    </div>
+              {/* Header Section */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-semibold text-white">
+                      {app.studentId?.firstName} {app.studentId?.lastName}
+                    </h3>
+                    <StageBadge value={app.status} />
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <button className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => setExpandedId(isOpen ? null : app.id)}
-                      className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white/80 hover:bg-white/20 hover:text-white rounded-lg transition-colors border border-white/10"
-                    >
-                      {isOpen ? (
-                        <>
-                          <ChevronDown className="w-4 h-4" />
-                          Less
-                        </>
-                      ) : (
-                        <>
-                          <ChevronRight className="w-4 h-4" />
-                          More
-                        </>
-                      )}
-                    </button>
+                  <p className="text-white/60 mb-2">{app.jobId?.title}</p>
+
+                  {/* Basic Details */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-white/80">
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4" />
+                      {app.studentId?.email}
+                    </div>
+                    {app.studentId?.phone && (
+                      <div className="flex items-center gap-2">
+                        <Phone className="w-4 h-4" />
+                        {app.studentId?.phone}
+                      </div>
+                    )}
+                    {app.studentId?.address?.city && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4" />
+                        {app.studentId?.address.city},{" "}
+                        {app.studentId?.address.state}
+                      </div>
+                    )}
+                    {app.meta?.yearsExperience && (
+                      <div className="flex items-center gap-2">
+                        <Briefcase className="w-4 h-4" />
+                        {app.meta.yearsExperience} Years Experience
+                      </div>
+                    )}
                   </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {/* Resume button */}
+                  {app.resumeUrl && (
+                    <a
+                      href={app.resumeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-white/80 hover:text-white transition-colors"
+                    >
+                      <FileText className="w-4 h-4" />
+                      Resume
+                    </a>
+                  )}
+
+                  {/* Expand/Collapse button */}
+                  <button
+                    onClick={() => setExpandedId(isOpen ? null : app._id)}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-white/80 hover:text-white transition-colors"
+                  >
+                    {isOpen ? (
+                      <>
+                        <ChevronUp className="w-4 h-4" /> Less
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="w-4 h-4" /> More
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
 
-              {/* Expandable Details */}
+              {/* Expanded Details */}
               {isOpen && (
-                <div className="border-t border-white/10 bg-white/5">
-                  <div className="p-6 grid lg:grid-cols-3 gap-6">
-                    {/* Contact Information */}
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-white flex items-center gap-2">
-                        <User className="w-5 h-5 text-[#b87bd1]" />
-                        Contact Information
+                <div className="mt-4 space-y-4 border-t border-white/10 pt-4">
+                  {/* Previous Experience */}
+                  {(app.meta?.previousCompany ||
+                    app.meta?.previousPosition) && (
+                    <div>
+                      <h4 className="text-sm font-medium text-white/80 mb-2">
+                        Previous Experience
                       </h4>
-                      <div className="space-y-3">
-                        <div
-                          className="flex items-center gap-3 p-3 rounded-xl border border-white/10"
-                          style={{
-                            background:
-                              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-                          }}
-                        >
-                          <Mail className="w-5 h-5 text-white/60" />
-                          <div>
-                            <div className="text-sm font-medium text-white">
-                              Email
-                            </div>
-                            <div className="text-sm text-white/60">
-                              {app.studentId?.email}
-                            </div>
+                      <div className="text-white/60">
+                        {app.meta.previousPosition && (
+                          <p>Position: {app.meta.previousPosition}</p>
+                        )}
+                        {app.meta.previousCompany && (
+                          <p>Company: {app.meta.previousCompany}</p>
+                        )}
+                        {app.meta.yearsExperience && (
+                          <p>Experience: {app.meta.yearsExperience} Years</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Education */}
+                  {app.studentId?.education?.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-medium text-white/80 mb-2">
+                        Education
+                      </h4>
+                      <div className="space-y-2">
+                        {app.studentId.education.map((edu, index) => (
+                          <div key={index} className="text-white/60">
+                            <p>
+                              {edu.degree} in {edu.fieldOfStudy}
+                            </p>
+                            <p className="text-sm">
+                              {edu.institution} - {edu.graduationYear}
+                            </p>
                           </div>
-                        </div>
-                        <div
-                          className="flex items-center gap-3 p-3 rounded-xl border border-white/10"
-                          style={{
-                            background:
-                              "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-                          }}
-                        >
-                          <Phone className="w-5 h-5 text-white/60" />
-                          <div>
-                            <div className="text-sm font-medium text-white">
-                              Phone
-                            </div>
-                            <div className="text-sm text-white/60">
-                              {app.studentId?.phone}
-                            </div>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
+                  )}
 
-                    {/* Documents & Actions */}
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-white flex items-center gap-2">
-                        <FileText className="w-5 h-5 text-[#b87bd1]" />
-                        Documents & Actions
+                  {/* Languages */}
+                  {app.meta?.languages && (
+                    <div>
+                      <h4 className="text-sm font-medium text-white/80 mb-2">
+                        Languages
                       </h4>
-                      <div className="space-y-3">
-                        <button className="w-full flex items-center justify-start px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg transition-transform transform hover:-translate-y-0.5 font-medium">
-                          <FileText className="w-5 h-5 mr-3" />
-                          View Resume & Cover Letter
-                        </button>
-                        <button className="w-full flex items-center justify-start px-4 py-3 bg-white/10 text-white/80 hover:bg-white/20 hover:text-white rounded-lg transition-colors border border-white/10">
-                          <Eye className="w-5 h-5 mr-3" />
-                          View Full Profile
-                        </button>
-                      </div>
+                      <p className="text-white/60">{app.meta.languages}</p>
                     </div>
+                  )}
 
-                    {/* Quick Actions */}
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-white flex items-center gap-2">
-                        <Send className="w-5 h-5 text-[#b87bd1]" />
-                        Quick Actions
-                      </h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button className="flex items-center justify-center px-4 py-3 bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 rounded-lg transition-colors border border-emerald-500/30">
-                          <CheckCircle className="w-5 h-5 mr-2" />
-                          Shortlist
-                        </button>
-                        <button className="flex items-center justify-center px-4 py-3 bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 rounded-lg transition-colors border border-rose-500/30">
-                          <XCircle className="w-5 h-5 mr-2" />
-                          Reject
-                        </button>
-                        <button className="flex items-center justify-center px-4 py-3 bg-white/10 text-white/80 hover:bg-white/20 hover:text-white rounded-lg transition-colors border border-white/10 col-span-2">
-                          <MessageSquare className="w-5 h-5 mr-2" />
-                          Schedule Interview
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Notes Section */}
-                  <div className="px-6 pb-6">
-                    <div
-                      className="p-4 rounded-xl border border-white/10"
-                      style={{
-                        background:
-                          "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-                      }}
-                    >
-                      <h4 className="font-semibold text-white mb-2">
-                        Internal Notes
-                      </h4>
-                      <p className="text-white/60 text-sm">{""}</p>
-                      <div className="flex items-center justify-between mt-3 text-xs text-white/60">
-                        <span>
-                          Last activity:{" "}
-                          {new Date(
-                            app.updatedAt || app.createdAt
-                          ).toLocaleString()}
-                        </span>
-                        <button className="text-[#b87bd1] hover:text-[#803791] font-medium">
-                          Add Note
-                        </button>
-                      </div>
-                    </div>
+                  {/* Application Status Controls */}
+                  <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-white/10">
+                    <StatusUpdateButtons
+                      currentStatus={app.status}
+                      onUpdateStatus={(newStatus) =>
+                        handleStatusUpdate(app._id, newStatus)
+                      }
+                    />
                   </div>
                 </div>
               )}
@@ -529,6 +478,34 @@ export default function EmployerApplications() {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+function StatusUpdateButtons({ currentStatus, onUpdateStatus }) {
+  const statusButtons = [
+    { status: "applied", label: "Mark as New", icon: Clock },
+    { status: "reviewed", label: "Mark as Reviewed", icon: Eye },
+    { status: "interview", label: "Schedule Interview", icon: Calendar },
+    { status: "hired", label: "Mark as Hired", icon: CheckCircle },
+    { status: "rejected", label: "Reject", icon: XCircle },
+  ];
+
+  return (
+    <div className="flex items-center gap-2">
+      {statusButtons.map(({ status, label, icon: Icon }) => {
+        if (status === currentStatus) return null;
+        return (
+          <button
+            key={status}
+            onClick={() => onUpdateStatus(status)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-white/80 hover:text-white transition-colors"
+          >
+            <Icon className="w-4 h-4" />
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }
