@@ -3,6 +3,7 @@ import { EmployerModel } from "../models/Employer.js";
 import { JobModel } from "../models/Job.js";
 import { ApplicationModel } from "../models/Application.js";
 import { UserModel } from "../models/User.js";
+import mongoose from "mongoose";
 
 // Validation schema for profile completion (required fields)
 export const completeEmployerProfileSchema = z.object({
@@ -354,6 +355,196 @@ export const getAllEmployers = async (req, res, next) => {
         totalEmployers: total,
         hasNext: page < Math.ceil(total / limit),
         hasPrev: page > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Update employer subscription plan (free|pro)
+export const updateEmployerPlanSchema = z.object({
+  plan: z.enum(["free", "pro"]),
+});
+
+export const updateEmployerPlan = async (req, res, next) => {
+  try {
+    const parsed = updateEmployerPlanSchema.parse(req.body);
+
+    const employer = await EmployerModel.findOneAndUpdate(
+      { userId: req.user.id },
+      { $set: { plan: parsed.plan } },
+      { new: true, runValidators: true }
+    );
+
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+
+    res.json({
+      success: true,
+      data: { plan: employer.plan },
+      message: `Plan updated to ${employer.plan}`,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Employer analytics (applications-focused)
+export const getEmployerAnalytics = async (req, res, next) => {
+  try {
+    const employerId = req.user.id;
+
+    // Status stats and total
+    const statsAgg = await ApplicationModel.aggregate([
+      { $match: { employerId: new mongoose.Types.ObjectId(employerId) } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+
+    const statusStats = statsAgg.reduce((acc, cur) => {
+      acc[cur._id] = cur.count;
+      return acc;
+    }, {});
+
+    const totalApplications = await ApplicationModel.countDocuments({
+      employerId,
+    });
+
+    // Average time to hire (days)
+    const avgTimeToHireAgg = await ApplicationModel.aggregate([
+      { $match: { employerId: new ApplicationModel.db.Types.ObjectId(employerId), status: "hired" } },
+      { $project: { diffMs: { $subtract: ["$updatedAt", "$createdAt"] } } },
+      { $group: { _id: null, avgMs: { $avg: "$diffMs" } } },
+    ]);
+    const averageTimeToHireDays = avgTimeToHireAgg.length
+      ? Math.round((avgTimeToHireAgg[0].avgMs / (1000 * 60 * 60 * 24)) * 10) / 10
+      : null;
+
+    // Monthly stats for last 6 months
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1);
+
+    const monthlyAgg = await ApplicationModel.aggregate([
+      {
+        $match: {
+          employerId: new mongoose.Types.ObjectId(employerId),
+          createdAt: { $gte: sixMonthsAgo },
+        },
+      },
+      {
+        $group: {
+          _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
+          applications: { $sum: 1 },
+          hires: { $sum: { $cond: [{ $eq: ["$status", "hired"] }, 1, 0] } },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
+    ]);
+
+    // Normalize to last 6 calendar months
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthlyStats = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const found = monthlyAgg.find((x) => x._id.year === y && x._id.month === m);
+      monthlyStats.push({
+        month: monthNames[m - 1],
+        applications: found?.applications || 0,
+        hires: found?.hires || 0,
+      });
+    }
+
+    // Job performance (applications and hires per job)
+    const jobPerfAgg = await ApplicationModel.aggregate([
+      { $match: { employerId: new mongoose.Types.ObjectId(employerId) } },
+      {
+        $group: {
+          _id: "$jobId",
+          applications: { $sum: 1 },
+          hires: { $sum: { $cond: [{ $eq: ["$status", "hired"] }, 1, 0] } },
+        },
+      },
+      {
+        $lookup: {
+          from: "jobs",
+          localField: "_id",
+          foreignField: "_id",
+          as: "job",
+        },
+      },
+      { $unwind: { path: "$job", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 0,
+          jobId: "$job._id",
+          title: "$job.title",
+          status: "$job.status",
+          applications: 1,
+          hires: 1,
+          conversion: {
+            $cond: [
+              { $gt: ["$applications", 0] },
+              { $multiply: [{ $divide: ["$hires", "$applications"] }, 100] },
+              0,
+            ],
+          },
+        },
+      },
+      { $sort: { applications: -1 } },
+    ]);
+
+    // Top locations of applicants
+    const topLocationsAgg = await ApplicationModel.aggregate([
+      { $match: { employerId: new mongoose.Types.ObjectId(employerId) } },
+      {
+        $lookup: {
+          from: "students",
+          localField: "studentId",
+          foreignField: "userId",
+          as: "student",
+        },
+      },
+      { $unwind: { path: "$student", preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: { $ifNull: ["$student.address.city", "Unknown"] },
+          applicants: { $sum: 1 },
+        },
+      },
+      { $sort: { applicants: -1 } },
+      { $limit: 5 },
+      { $project: { _id: 0, location: "$_id", applicants: 1 } },
+    ]);
+
+    // Recent activity (latest 5 applications)
+    const recentActivity = await ApplicationModel.find({ employerId })
+      .populate("jobId", "title")
+      .populate("studentId", "firstName lastName")
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    res.json({
+      success: true,
+      data: {
+        overview: {
+          totalApplications,
+          conversionRate: totalApplications
+            ? Math.round(((statusStats.hired || 0) / totalApplications) * 1000) / 10
+            : 0,
+          averageTimeToHireDays: averageTimeToHireDays,
+        },
+        status: statusStats,
+        monthlyStats,
+        jobPerformance: jobPerfAgg,
+        topLocations: topLocationsAgg,
+        recentActivity,
       },
     });
   } catch (err) {

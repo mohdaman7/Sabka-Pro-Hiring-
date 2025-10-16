@@ -16,85 +16,49 @@ import {
   Filter,
   ArrowRight,
 } from "lucide-react";
-import { useState } from "react";
-
-// Mock data for analytics
-const analyticsData = {
-  overview: {
-    totalViews: 12457,
-    totalApplications: 342,
-    conversionRate: 2.74,
-    averageTimeToHire: 18,
-  },
-  monthlyStats: [
-    { month: "Jan", applications: 45, views: 1200, hires: 3 },
-    { month: "Feb", applications: 67, views: 1450, hires: 5 },
-    { month: "Mar", applications: 89, views: 1670, hires: 7 },
-    { month: "Apr", applications: 56, views: 1320, hires: 4 },
-    { month: "May", applications: 78, views: 1890, hires: 6 },
-    { month: "Jun", applications: 94, views: 2100, hires: 8 },
-  ],
-  jobPerformance: [
-    {
-      id: 1,
-      title: "Senior Frontend Developer",
-      views: 2340,
-      applications: 67,
-      conversion: 2.86,
-      status: "Active",
-    },
-    {
-      id: 2,
-      title: "Backend Developer",
-      views: 1890,
-      applications: 45,
-      conversion: 2.38,
-      status: "Active",
-    },
-    {
-      id: 3,
-      title: "UI/UX Designer",
-      views: 1560,
-      applications: 34,
-      conversion: 2.18,
-      status: "Active",
-    },
-    {
-      id: 4,
-      title: "DevOps Engineer",
-      views: 980,
-      applications: 23,
-      conversion: 2.35,
-      status: "Closed",
-    },
-  ],
-  candidateSources: [
-    { source: "LinkedIn", count: 124, percentage: 36 },
-    { source: "Indeed", count: 89, percentage: 26 },
-    { source: "Company Website", count: 67, percentage: 20 },
-    { source: "Referrals", count: 45, percentage: 13 },
-    { source: "Other", count: 17, percentage: 5 },
-  ],
-  applicationStatus: {
-    new: 45,
-    reviewed: 89,
-    shortlisted: 34,
-    interviewed: 23,
-    rejected: 123,
-    hired: 8,
-  },
-  topLocations: [
-    { location: "Mumbai", applicants: 67 },
-    { location: "Bangalore", applicants: 89 },
-    { location: "Delhi", applicants: 56 },
-    { location: "Hyderabad", applicants: 34 },
-    { location: "Pune", applicants: 45 },
-  ],
-};
+import { useEffect, useState } from "react";
+import { employerService } from "@/services/employerService";
 
 export default function EmployerAnalytics() {
   const [timeRange, setTimeRange] = useState("30d");
   const [activeTab, setActiveTab] = useState("overview");
+  const [analyticsData, setAnalyticsData] = useState({
+    overview: { totalApplications: 0, conversionRate: 0, averageTimeToHireDays: 0 },
+    monthlyStats: [],
+    jobPerformance: [],
+    topLocations: [],
+    status: {},
+    recentActivity: [],
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await employerService.getAnalytics();
+        if (!mounted) return;
+        setAnalyticsData(res?.data || {});
+      } catch (e) {
+        setError(e?.response?.data?.message || e?.message || "Failed to load analytics");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (error) {
+    return (
+      <div className="p-6 text-red-300">{error}</div>
+    );
+  }
 
   const StatCard = ({ icon: Icon, label, value, change, color = "purple" }) => {
     return (
@@ -231,31 +195,25 @@ export default function EmployerAnalytics() {
         <div className="space-y-6">
           {/* Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              icon={Eye}
-              label="Total Job Views"
-              value="12,457"
-              change="+12%"
-              color="purple"
-            />
+            {/* Removed mock views, keep two real metrics and time-to-hire */}
             <StatCard
               icon={FileText}
               label="Total Applications"
-              value="342"
+              value={String(analyticsData?.overview?.totalApplications || 0)}
               change="+8%"
               color="purple"
             />
             <StatCard
               icon={MousePointer}
               label="Conversion Rate"
-              value="2.74%"
+              value={`${analyticsData?.overview?.conversionRate ?? 0}%`}
               change="+0.3%"
               color="purple"
             />
             <StatCard
               icon={Clock}
               label="Avg. Time to Hire"
-              value="18 days"
+              value={`${analyticsData?.overview?.averageTimeToHireDays ?? 0} days`}
               change="-2 days"
               color="purple"
             />
@@ -287,10 +245,10 @@ export default function EmployerAnalytics() {
                     <div className="flex-1 mx-4">
                       <div className="flex items-center justify-between text-xs text-white/50 mb-1">
                         <span>{month.applications} applications</span>
-                        <span>{month.views} views</span>
+                        <span>{month.hires} hires</span>
                       </div>
                       <ProgressBar
-                        percentage={(month.applications / 100) * 100}
+                        percentage={Math.min(100, month.applications)}
                         color="purple"
                       />
                     </div>
@@ -318,24 +276,22 @@ export default function EmployerAnalytics() {
                 {[
                   {
                     stage: "Applied",
-                    count:
-                      analyticsData.applicationStatus.new +
-                      analyticsData.applicationStatus.reviewed,
+                    count: (analyticsData.status?.applied || 0) + (analyticsData.status?.reviewed || 0),
                     color: "purple",
                   },
                   {
                     stage: "Shortlisted",
-                    count: analyticsData.applicationStatus.shortlisted,
+                    count: analyticsData.status?.shortlisted || 0,
                     color: "green",
                   },
                   {
                     stage: "Interviewed",
-                    count: analyticsData.applicationStatus.interviewed,
+                    count: analyticsData.status?.interview || 0,
                     color: "indigo",
                   },
                   {
                     stage: "Hired",
-                    count: analyticsData.applicationStatus.hired,
+                    count: analyticsData.status?.hired || 0,
                     color: "cyan",
                   },
                 ].map((stage, index) => (
@@ -349,10 +305,10 @@ export default function EmployerAnalytics() {
                     <div className="flex-1 mx-4">
                       <div className="flex justify-between text-xs text-white/50 mb-1">
                         <span>{stage.count} candidates</span>
-                        <span>{Math.round((stage.count / 342) * 100)}%</span>
+                        <span>{analyticsData.overview?.totalApplications ? Math.round((stage.count / analyticsData.overview.totalApplications) * 100) : 0}%</span>
                       </div>
                       <ProgressBar
-                        percentage={(stage.count / 342) * 100}
+                        percentage={analyticsData.overview?.totalApplications ? (stage.count / analyticsData.overview.totalApplications) * 100 : 0}
                         color={stage.color}
                       />
                     </div>
@@ -493,32 +449,32 @@ export default function EmployerAnalytics() {
                 <tbody>
                   {analyticsData.jobPerformance.map((job) => (
                     <tr
-                      key={job.id}
+                      key={String(job.jobId || job.title)}
                       className="border-b border-white/5 hover:bg-white/5"
                     >
                       <td className="py-4">
                         <div className="font-medium text-white">
-                          {job.title}
+                          {job.title || "-"}
                         </div>
                       </td>
                       <td className="py-4 text-sm text-white/60">
-                        {job.views.toLocaleString()}
+                        {job.views?.toLocaleString?.() || "-"}
                       </td>
                       <td className="py-4 text-sm text-white/60">
                         {job.applications}
                       </td>
                       <td className="py-4 text-sm text-white/60">
-                        {job.conversion}%
+                        {Math.round((job.conversion || 0) * 10) / 10}%
                       </td>
                       <td className="py-4">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            job.status === "Active"
+                            job.status === "active"
                               ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                               : "bg-white/10 text-white/60 border border-white/10"
                           }`}
                         >
-                          {job.status}
+                          {job.status || "-"}
                         </span>
                       </td>
                     </tr>
