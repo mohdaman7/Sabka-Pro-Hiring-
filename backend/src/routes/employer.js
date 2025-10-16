@@ -17,6 +17,10 @@ router.post("/complete-profile", employerController.completeEmployerProfile); //
 router.put("/profile", employerController.updateEmployerProfile); // For partial updates
 router.put("/hiring-preferences", employerController.updateHiringPreferences);
 
+// Plan & Analytics
+router.put("/plan", authorize(["employer", "admin"]), employerController.updateEmployerPlan);
+router.get("/analytics", authorize(["employer", "admin"]), employerController.getEmployerAnalytics);
+
 // Public routes (optional) - remove authentication for these
 router.get("/public/:id", employerController.getEmployerById);
 router.get("/public", employerController.getAllEmployers);

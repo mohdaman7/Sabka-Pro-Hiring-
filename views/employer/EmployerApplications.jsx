@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Search,
   Download,
@@ -27,124 +27,71 @@ import {
   Users,
   ArrowRight,
 } from "lucide-react";
+import { applicationService } from "@/services/applicationService";
 
 export default function EmployerApplications() {
   const [search, setSearch] = useState("");
   const [stage, setStage] = useState("all");
   const [expandedId, setExpandedId] = useState(null);
   const [sortBy, setSortBy] = useState("newest");
+  const [applications, setApplications] = useState([]);
+  const [stats, setStats] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await applicationService.employerMyApplications();
+        if (!mounted) return;
+        setApplications(res?.data || []);
+        setStats(res?.stats || {});
+      } catch (e) {
+        setError(e?.response?.data?.message || e?.message || "Failed to load applications");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => { mounted = false };
+  }, []);
 
   const stages = [
-    { value: "all", label: "All Applications", color: "slate", count: 47 },
-    { value: "new", label: "New", color: "blue", count: 12 },
-    { value: "screening", label: "Screening", color: "cyan", count: 8 },
-    { value: "interview", label: "Interview", color: "indigo", count: 6 },
-    { value: "shortlisted", label: "Shortlisted", color: "emerald", count: 15 },
-    { value: "rejected", label: "Rejected", color: "rose", count: 6 },
-  ];
-
-  // Demo data; replace with real data from your API
-  const applications = [
-    {
-      id: 1,
-      candidate: "Amit Sharma",
-      initials: "AS",
-      email: "amit.sharma@email.com",
-      phone: "+91 98765 43210",
-      position: "Senior Frontend Developer",
-      appliedDate: "2024-01-20",
-      experience: "5 years",
-      location: "Mumbai, Maharashtra",
-      education: "B.Tech Computer Science",
-      stage: "new",
-      skills: ["React", "Next.js", "TypeScript", "Tailwind"],
-      matchScore: 95,
-      lastActivity: "2 hours ago",
-      notes: "Strong portfolio with modern tech stack",
-    },
-    {
-      id: 2,
-      candidate: "Neha Verma",
-      initials: "NV",
-      email: "neha.verma@email.com",
-      phone: "+91 99876 54321",
-      position: "UI/UX Designer",
-      appliedDate: "2024-01-18",
-      experience: "3 years",
-      location: "Pune, Maharashtra",
-      education: "B.Des Design",
-      stage: "screening",
-      skills: ["Figma", "Prototyping", "User Research", "Accessibility"],
-      matchScore: 88,
-      lastActivity: "Yesterday",
-      notes: "Excellent design portfolio",
-    },
-    {
-      id: 3,
-      candidate: "Rahul Gupta",
-      initials: "RG",
-      email: "rahul.gupta@email.com",
-      phone: "+91 91234 56780",
-      position: "Backend Engineer",
-      appliedDate: "2024-01-15",
-      experience: "6 years",
-      location: "Remote",
-      education: "M.Tech Computer Science",
-      stage: "interview",
-      skills: ["Node.js", "PostgreSQL", "AWS", "Docker", "Redis"],
-      matchScore: 92,
-      lastActivity: "Today",
-      notes: "Scheduled for technical interview tomorrow",
-    },
-    {
-      id: 4,
-      candidate: "Priya Nair",
-      initials: "PN",
-      email: "priya.nair@email.com",
-      phone: "+91 90909 10101",
-      position: "Data Analyst",
-      appliedDate: "2024-01-12",
-      experience: "2 years",
-      location: "Bengaluru, Karnataka",
-      education: "B.Sc Statistics",
-      stage: "shortlisted",
-      skills: ["SQL", "Python", "Power BI", "Tableau", "Excel"],
-      matchScore: 85,
-      lastActivity: "2 days ago",
-      notes: "Strong analytical skills",
-    },
-    {
-      id: 5,
-      candidate: "Vikram Singh",
-      initials: "VS",
-      email: "vikram.singh@email.com",
-      phone: "+91 90000 22222",
-      position: "Recruiter",
-      appliedDate: "2024-01-10",
-      experience: "4 years",
-      location: "Delhi",
-      education: "MBA HR",
-      stage: "rejected",
-      skills: ["Sourcing", "ATS", "Screening", "Interviewing"],
-      matchScore: 78,
-      lastActivity: "1 week ago",
-      notes: "Not enough tech recruitment experience",
-    },
+    { value: "all", label: "All Applications", color: "slate", count: stats.totalApplications || applications.length || 0 },
+    { value: "applied", label: "New", color: "blue", count: stats.applied || 0 },
+    { value: "reviewed", label: "Reviewed", color: "cyan", count: stats.reviewed || 0 },
+    { value: "interview", label: "Interview", color: "indigo", count: stats.interview || 0 },
+    { value: "hired", label: "Hired", color: "emerald", count: stats.hired || 0 },
+    { value: "rejected", label: "Rejected", color: "rose", count: stats.rejected || 0 },
   ];
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return applications.filter((a) => {
-      const matchesStage = stage === "all" || a.stage === stage;
-      const matchesQuery =
-        !q ||
-        a.candidate.toLowerCase().includes(q) ||
-        a.position.toLowerCase().includes(q) ||
-        a.location.toLowerCase().includes(q) ||
-        a.skills.join(" ").toLowerCase().includes(q);
+    const sorted = [...applications].sort((a, b) => {
+      if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+      return 0;
+    });
+    return sorted.filter((a) => {
+      const statusValue = a.status || "applied";
+      const candidate = a.studentId || {};
+      const job = a.jobId || {};
+      const matchesStage = stage === "all" || statusValue === stage;
+      const haystack = [
+        `${candidate.firstName || ""} ${candidate.lastName || ""}`,
+        job.title || "",
+        candidate.address?.city || "",
+        ...(Array.isArray(candidate.skills) ? candidate.skills : []),
+      ]
+        .join(" ")
+        .toLowerCase();
+      const matchesQuery = !q || haystack.includes(q);
       return matchesStage && matchesQuery;
     });
-  }, [applications, search, stage]);
+  }, [applications, search, stage, sortBy]);
 
   return (
     <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
@@ -290,10 +237,10 @@ export default function EmployerApplications() {
       {/* Applications List */}
       <div className="space-y-4">
         {filtered.map((app) => {
-          const isOpen = expandedId === app.id;
+          const isOpen = expandedId === app._id;
           return (
             <div
-              key={app.id}
+              key={app._id}
               className="rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
               style={{
                 background:
@@ -311,52 +258,51 @@ export default function EmployerApplications() {
                         background: "linear-gradient(135deg, #803791, #b87bd1)",
                       }}
                     >
-                      {app.initials}
+                      {(app.studentId?.firstName || "").charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-xl font-bold text-white">
-                          {app.candidate}
+                          {`${app.studentId?.firstName || ""} ${app.studentId?.lastName || ""}`.trim() || "Candidate"}
                         </h3>
                         <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/20 rounded-full border border-emerald-500/30">
                           <Star className="w-3 h-3 text-emerald-400 fill-emerald-400" />
                           <span className="text-xs font-semibold text-emerald-400">
-                            {app.matchScore}% Match
+                            {""}
                           </span>
                         </div>
                         <StageBadge value={app.stage} />
                       </div>
                       <p className="text-lg text-white/80 mb-3">
-                        {app.position}
+                        {app.jobId?.title || "Applied role"}
                       </p>
 
                       <div className="flex flex-wrap gap-3 text-sm text-white/60 mb-4">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
-                          {app.location}
+                          {app.studentId?.address?.city || "-"}
                         </div>
                         <div className="flex items-center gap-1">
                           <Briefcase className="w-4 h-4" />
-                          {app.experience}
+                          {app.studentId?.experience || "-"}
                         </div>
                         <div className="flex items-center gap-1">
                           <GraduationCap className="w-4 h-4" />
-                          {app.education}
+                          {app.studentId?.highestQualification || "-"}
                         </div>
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          Applied{" "}
-                          {new Date(app.appliedDate).toLocaleDateString()}
+                          Applied {new Date(app.createdAt).toLocaleDateString()}
                         </div>
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        {app.skills.map((skill) => (
+                        {(app.studentId?.skills || []).slice(0, 5).map((skill) => (
                           <span
-                            key={skill}
+                            key={typeof skill === "string" ? skill : skill.name}
                             className="px-3 py-1 text-sm rounded-lg bg-white/10 text-white/80 border border-white/10"
                           >
-                            {skill}
+                            {typeof skill === "string" ? skill : skill.name}
                           </span>
                         ))}
                       </div>
@@ -405,13 +351,13 @@ export default function EmployerApplications() {
                               "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                           }}
                         >
-                          <Mail className="w-5 h-5 text-white/60" />
+                      <Mail className="w-5 h-5 text-white/60" />
                           <div>
                             <div className="text-sm font-medium text-white">
                               Email
                             </div>
                             <div className="text-sm text-white/60">
-                              {app.email}
+                              {app.studentId?.email}
                             </div>
                           </div>
                         </div>
@@ -428,7 +374,7 @@ export default function EmployerApplications() {
                               Phone
                             </div>
                             <div className="text-sm text-white/60">
-                              {app.phone}
+                              {app.studentId?.phone}
                             </div>
                           </div>
                         </div>
@@ -488,9 +434,9 @@ export default function EmployerApplications() {
                       <h4 className="font-semibold text-white mb-2">
                         Internal Notes
                       </h4>
-                      <p className="text-white/60 text-sm">{app.notes}</p>
+                      <p className="text-white/60 text-sm">{""}</p>
                       <div className="flex items-center justify-between mt-3 text-xs text-white/60">
-                        <span>Last activity: {app.lastActivity}</span>
+                        <span>Last activity: {new Date(app.updatedAt || app.createdAt).toLocaleString()}</span>
                         <button className="text-[#b87bd1] hover:text-[#803791] font-medium">
                           Add Note
                         </button>
