@@ -837,7 +837,7 @@ export default function StudentProfile() {
             </p>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+            <div className="text-3xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text">
               75%
             </div>
             <p className="text-xs text-white/70 flex items-center gap-1">
@@ -968,7 +968,7 @@ export default function StudentProfile() {
                     </div>
                     <span className="font-bold text-white">Free Plan</span>
                   </div>
-                  <span className="text-2xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  <span className="text-2xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text">
                     ₹0
                   </span>
                 </div>
