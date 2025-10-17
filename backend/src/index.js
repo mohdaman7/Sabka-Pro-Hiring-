@@ -16,6 +16,8 @@ import crmRoutes from "./routes/crm.js";
 import studentRoutes from "./routes/student.js";
 import employerRoutes from "./routes/employer.js";
 import userRoutes from "./routes/user.js";
+import courseRoutes from "./routes/courses.js";
+import adminCourseRoutes from "./routes/adminCourses.js";
 
 // Rate limiting configuration
 const limiter = rateLimit({
@@ -113,9 +115,11 @@ async function bootstrap() {
     app.use("/api/jobs", jobRoutes);
     app.use("/api/applications", applicationRoutes);
     app.use("/api/admin", crmRoutes); // Changed from /api/crm to /api/admin for better semantics
+    app.use("/api/admin/courses", adminCourseRoutes); // Admin course management
     app.use("/api/student", studentRoutes);
     app.use("/api/employer", employerRoutes);
     app.use("/api/user", userRoutes);
+    app.use("/api/courses", courseRoutes); // Public and student course routes
 
     // API documentation route (you can implement Swagger later)
     app.get("/api/docs", (_req, res) => {
@@ -127,9 +131,11 @@ async function bootstrap() {
           jobs: "/api/jobs",
           applications: "/api/applications",
           admin: "/api/admin",
+          "admin-courses": "/api/admin/courses",
           student: "/api/student",
           employer: "/api/employer",
           user: "/api/user",
+          courses: "/api/courses",
         },
       });
     });

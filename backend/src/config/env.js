@@ -17,6 +17,14 @@ const envSchema = z.object({
   SMTP_USER: z.string().min(1, "SMTP_USER is required"),
   SMTP_PASS: z.string().min(1, "SMTP_PASS is required"),
   ADMIN_EMAIL: z.string().email(),
+  // Vimeo API Configuration
+  VIMEO_CLIENT_ID: z.string().optional(),
+  VIMEO_CLIENT_SECRET: z.string().optional(),
+  VIMEO_ACCESS_TOKEN: z.string().optional(),
+  // Cloudinary Configuration
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional(),
 });
 
 console.log(process.env.MONGODB_URI);
@@ -43,4 +51,12 @@ export const env = {
   smtpUser: parsed.data.SMTP_USER,
   smtpPass: parsed.data.SMTP_PASS,
   adminEmail: parsed.data.ADMIN_EMAIL,
+  // Vimeo API Configuration
+  vimeoClientId: parsed.data.VIMEO_CLIENT_ID,
+  vimeoClientSecret: parsed.data.VIMEO_CLIENT_SECRET,
+  vimeoAccessToken: parsed.data.VIMEO_ACCESS_TOKEN,
+  // Cloudinary Configuration
+  cloudinaryCloudName: parsed.data.CLOUDINARY_CLOUD_NAME,
+  cloudinaryApiKey: parsed.data.CLOUDINARY_API_KEY,
+  cloudinaryApiSecret: parsed.data.CLOUDINARY_API_SECRET,
 };
