@@ -16,13 +16,25 @@ import {
   Trash2,
   MoreVertical,
   ArrowUp,
-  Zap,
   Target,
+  Clock,
+  Star,
+  Share2,
+  Sparkles,
+  Filter,
+  Download,
+  RefreshCw,
+  BarChart3,
+  Activity,
+  Award,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function EmployerJobs() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredStat, setHoveredStat] = useState(null);
 
   const jobs = [
     {
@@ -37,6 +49,8 @@ export default function EmployerJobs() {
       postedDate: "2024-01-15",
       expiryDate: "2024-02-15",
       status: "Active",
+      priority: "High",
+      featured: true,
     },
     {
       id: 2,
@@ -50,6 +64,8 @@ export default function EmployerJobs() {
       postedDate: "2024-01-10",
       expiryDate: "2024-02-10",
       status: "Active",
+      priority: "Medium",
+      featured: false,
     },
     {
       id: 3,
@@ -63,6 +79,8 @@ export default function EmployerJobs() {
       postedDate: "2024-01-20",
       expiryDate: "2024-02-20",
       status: "Active",
+      priority: "Low",
+      featured: true,
     },
     {
       id: 4,
@@ -76,6 +94,8 @@ export default function EmployerJobs() {
       postedDate: "2024-01-05",
       expiryDate: "2024-01-25",
       status: "Expiring Soon",
+      priority: "High",
+      featured: false,
     },
     {
       id: 5,
@@ -89,6 +109,8 @@ export default function EmployerJobs() {
       postedDate: "2023-12-20",
       expiryDate: "2024-01-05",
       status: "Expired",
+      priority: "Low",
+      featured: false,
     },
   ];
 
@@ -98,28 +120,40 @@ export default function EmployerJobs() {
       value: jobs.length,
       icon: Briefcase,
       change: "+2 this week",
+      changePercent: "+15%",
       changePositive: true,
+      gradient: "from-blue-500 to-cyan-500",
+      bgColor: "bg-blue-500/10",
     },
     {
       label: "Active Jobs",
       value: jobs.filter((j) => j.status === "Active").length,
       icon: TrendingUp,
       change: "75% of total",
+      changePercent: "+8%",
       changePositive: true,
+      gradient: "from-emerald-500 to-teal-500",
+      bgColor: "bg-emerald-500/10",
     },
     {
       label: "Total Applications",
       value: jobs.reduce((sum, j) => sum + j.applications, 0),
       icon: Users,
       change: "+23 new",
+      changePercent: "+12%",
       changePositive: true,
+      gradient: "from-purple-500 to-pink-500",
+      bgColor: "bg-purple-500/10",
     },
     {
       label: "Total Views",
       value: jobs.reduce((sum, j) => sum + j.views, 0),
       icon: Eye,
       change: "+156 this week",
+      changePercent: "+18%",
       changePositive: true,
+      gradient: "from-orange-500 to-amber-500",
+      bgColor: "bg-orange-500/10",
     },
   ];
 
@@ -134,359 +168,642 @@ export default function EmployerJobs() {
     return matchesSearch && matchesFilter;
   });
 
-  const statusBadgeClasses = (status) => {
+  const statusBadgeConfig = (status) => {
     switch (status) {
       case "Active":
-        return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
+        return {
+          class: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+          gradient: "from-emerald-500 to-teal-500",
+          icon: CheckCircle2,
+        };
       case "Expiring Soon":
-        return "bg-orange-500/20 text-orange-400 border-orange-500/30";
+        return {
+          class: "bg-orange-500/15 text-orange-400 border-orange-500/30",
+          gradient: "from-orange-500 to-amber-500",
+          icon: Clock,
+        };
       case "Expired":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return {
+          class: "bg-gray-500/15 text-gray-400 border-gray-500/30",
+          gradient: "from-gray-500 to-slate-500",
+          icon: AlertCircle,
+        };
       default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return {
+          class: "bg-gray-500/15 text-gray-400 border-gray-500/30",
+          gradient: "from-gray-500 to-slate-500",
+          icon: AlertCircle,
+        };
     }
   };
 
-  const getJobCardStyle = (status) => {
-    switch (status) {
-      case "Active":
-        return "border-emerald-500/20 hover:border-emerald-500/40";
-      case "Expiring Soon":
-        return "border-orange-500/20 hover:border-orange-500/40";
-      case "Expired":
-        return "border-gray-500/20 hover:border-gray-500/40";
+  const priorityBadgeConfig = (priority) => {
+    switch (priority) {
+      case "High":
+        return "bg-red-500/15 text-red-400 border-red-500/30";
+      case "Medium":
+        return "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
+      case "Low":
+        return "bg-blue-500/15 text-blue-400 border-blue-500/30";
       default:
-        return "border-white/10 hover:border-white/20";
+        return "bg-gray-500/15 text-gray-400 border-gray-500/30";
     }
   };
 
   return (
     <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
-      {/* Decorative background orbs matching theme */}
+      {/* Enhanced Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: "rgba(128,55,145,0.08)" }}
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse-slow"
+          style={{ background: "rgba(128,55,145,0.12)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: "rgba(184,123,209,0.06)" }}
+          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl animate-pulse-slower"
+          style={{ background: "rgba(184,123,209,0.10)" }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
-          style={{ background: "rgba(240,194,238,0.03)" }}
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl animate-float"
+          style={{ background: "rgba(240,194,238,0.06)" }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_30%)]" />
       </div>
 
-      {/* Header */}
+      {/* Premium Header */}
       <div
-        className="rounded-2xl p-8 text-white shadow-2xl backdrop-blur-md border border-white/6"
+        className="group relative overflow-hidden rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(128,55,145,0.3)]"
         style={{
           background:
-            "linear-gradient(90deg, rgba(128,55,145,0.14), rgba(184,123,209,0.08))",
+            "linear-gradient(135deg, rgba(128,55,145,0.16), rgba(184,123,209,0.12))",
         }}
       >
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Job Postings</h1>
-            <p className="text-white/80">
-              Manage and track all your job postings
-            </p>
-          </div>
-          <button
-            className="px-6 py-3 text-white rounded-lg transition-all font-medium shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
-            style={{
-              background: "linear-gradient(135deg,#803791,#b87bd1)",
-            }}
-          >
-            <Plus className="w-5 h-5" />
-            Post New Job
-          </button>
-        </div>
-      </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-      {/* Stats Grid - Enhanced UI */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, i) => (
-          <div
-            key={i}
-            className="rounded-xl p-6 shadow-xl transition-all hover:-translate-y-1 group"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.06)",
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
               <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300"
+                className="relative p-4 rounded-3xl shadow-2xl"
                 style={{
                   background: "linear-gradient(135deg,#803791,#b87bd1)",
                 }}
               >
-                <stat.icon className="w-6 h-6 text-white" />
+                <Briefcase className="w-8 h-8 text-white" />
               </div>
-              {stat.changePositive && (
-                <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  <ArrowUp className="w-3 h-3" />
-                  <span>Live</span>
-                </div>
-              )}
             </div>
 
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-white/80 uppercase tracking-wide">
-                {stat.label}
+            <div>
+              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent mb-2">
+                Job Postings
+              </h1>
+              <p className="text-white/70 text-lg">
+                Manage and track all your job postings with advanced analytics
               </p>
-              <p className="text-4xl font-bold text-white">
-                {stat.value.toLocaleString()}
-              </p>
-              <p className="text-sm text-[#b87bd1] font-medium">
-                {stat.change}
-              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button className="group/btn relative px-6 py-3 rounded-xl font-semibold text-white border border-white/20 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl">
+              <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-colors duration-300"></div>
+              <span className="relative flex items-center gap-2">
+                <Download className="w-5 h-5 group-hover/btn:translate-y-1 transition-transform duration-300" />
+                Export
+              </span>
+            </button>
+
+            <button className="group/btn relative px-8 py-3 rounded-xl font-bold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+              <div
+                className="absolute inset-0 transition-transform group-hover/btn:scale-105 duration-300"
+                style={{
+                  background: "linear-gradient(135deg,#803791,#b87bd1)",
+                }}
+              ></div>
+              <div
+                className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: "linear-gradient(135deg,#b87bd1,#803791)",
+                }}
+              ></div>
+              <span className="relative flex items-center gap-2">
+                <Plus className="w-5 h-5 group-hover/btn:rotate-90 transition-transform duration-300" />
+                Post New Job
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Premium Stats Grid */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="group relative rounded-3xl p-6 shadow-xl transition-all duration-500 cursor-pointer hover:scale-105 hover:shadow-2xl"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+              border: "1px solid rgba(255,255,255,0.12)",
+              animationDelay: `${index * 100}ms`,
+            }}
+            onMouseEnter={() => setHoveredStat(index)}
+            onMouseLeave={() => setHoveredStat(null)}
+          >
+            <div
+              className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+            ></div>
+
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500"></div>
+
+            <div className="relative">
+              <div className="flex items-start justify-between mb-6">
+                <div
+                  className={`p-4 rounded-2xl shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 bg-gradient-to-br ${stat.gradient}`}
+                >
+                  <stat.icon className="w-7 h-7 text-white" />
+                </div>
+
+                <div
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${stat.bgColor} border border-white/10 group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <ArrowUp className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">{stat.changePercent}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-bold text-white/70 uppercase tracking-wide">
+                  {stat.label}
+                </p>
+                <p className="text-4xl font-black text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
+                  {stat.value.toLocaleString()}
+                </p>
+                <p className="text-sm text-[#b87bd1] font-semibold flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  {stat.change}
+                </p>
+              </div>
+
+              <div className="mt-4 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className={`h-full bg-gradient-to-r ${
+                    stat.gradient
+                  } transform origin-left transition-transform duration-1000 ${
+                    hoveredStat === index ? "scale-x-100" : "scale-x-0"
+                  }`}
+                ></div>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Search and Filters */}
+      {/* Premium Search Section */}
       <div
-        className="rounded-xl p-6 shadow-xl"
+        className="rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10"
         style={{
           background:
-            "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-          border: "1px solid rgba(255,255,255,0.06)",
+            "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
         }}
       >
-        <div className="flex flex-col gap-4 md:flex-row">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 z-10" />
-            <input
-              placeholder="Search by job title or department..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 rounded-lg transition-all text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#b87bd1] focus:shadow-xl backdrop-blur-sm"
-              style={{
-                background: "rgba(255,255,255,0.08)",
-                border: "1px solid rgba(255,255,255,0.1)",
-              }}
-            />
+        <div className="flex flex-col gap-6 md:flex-row md:items-center">
+          <div className="relative flex-1 group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-focus-within:opacity-20 blur transition-opacity duration-500"></div>
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 group-focus-within:text-[#b87bd1] transition-colors duration-300 z-10" />
+              <input
+                placeholder="Search by job title, department, location..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 rounded-2xl transition-all text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] hover:bg-white/[0.1] bg-white/5 border border-white/10"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+                >
+                  <AlertCircle className="w-5 h-5" />
+                </button>
+              )}
+            </div>
           </div>
-          <div className="flex gap-3">
+
+          <div className="flex items-center gap-3">
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-3.5 rounded-lg transition-all text-white focus:outline-none focus:ring-2 focus:ring-[#b87bd1] focus:shadow-xl backdrop-blur-sm appearance-none cursor-pointer"
-              style={{
-                background: "rgba(255,255,255,0.08)",
-                border: "1px solid rgba(255,255,255,0.1)",
-              }}
+              className="px-6 py-4 rounded-2xl transition-all text-white focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] hover:bg-white/[0.1] cursor-pointer bg-white/5 border border-white/10"
             >
               <option value="all" className="bg-slate-800">
-                All Status
+                📋 All Status
               </option>
               <option value="active" className="bg-slate-800">
-                Active
+                ✅ Active
               </option>
               <option value="expiring soon" className="bg-slate-800">
-                Expiring Soon
+                ⏰ Expiring Soon
               </option>
               <option value="expired" className="bg-slate-800">
-                Expired
+                ❌ Expired
               </option>
             </select>
+
+            <button className="p-4 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:rotate-180">
+              <RefreshCw className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-6 mt-6 pt-6 border-t border-white/10">
+          <div className="flex items-center gap-3 text-white/70">
+            <BarChart3 className="w-5 h-5 text-[#b87bd1]" />
+            <span className="text-sm font-semibold">
+              Showing {filteredJobs.length} of {jobs.length} jobs
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-white/70">
+            <Activity className="w-5 h-5 text-emerald-400" />
+            <span className="text-sm font-semibold">
+              {jobs.filter((j) => j.status === "Active").length} Active
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-white/70">
+            <Clock className="w-5 h-5 text-orange-400" />
+            <span className="text-sm font-semibold">
+              {jobs.filter((j) => j.status === "Expiring Soon").length} Expiring
+            </span>
           </div>
         </div>
       </div>
 
       {/* Jobs List */}
-      <div className="space-y-4">
-        {filteredJobs.map((job) => (
-          <div
-            key={job.id}
-            className={`group rounded-xl p-6 shadow-xl transition-all hover:shadow-2xl hover:-translate-y-1 ${getJobCardStyle(
-              job.status
-            )}`}
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.06)",
-            }}
-          >
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-xl font-semibold text-white group-hover:text-[#b87bd1] transition-colors">
-                    {job.title}
-                  </h3>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold border ${statusBadgeClasses(
-                      job.status
-                    )}`}
-                  >
-                    {job.status}
-                  </span>
-                </div>
-                <p className="text-white/80 mb-4 font-medium">
-                  {job.department}
-                </p>
+      <div className="space-y-5">
+        {filteredJobs.map((job, index) => {
+          const statusConfig = statusBadgeConfig(job.status);
+          const StatusIcon = statusConfig.icon;
 
-                <div className="flex flex-wrap items-center gap-4 text-sm text-white/80 mb-6">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-white/60" />
-                    <span>{job.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-white/60" />
-                    <span>{job.type}</span>
-                  </div>
-                  <div className="flex items-center gap-2 font-semibold text-[#b87bd1]">
-                    <DollarSign className="w-4 h-4" />
-                    <span>{job.salary}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-white/60" />
-                    <span>
-                      Posted: {new Date(job.postedDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+          return (
+            <div
+              key={job.id}
+              className="group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))",
+                border: "1px solid rgba(255,255,255,0.12)",
+                animationDelay: `${index * 50}ms`,
+              }}
+              onMouseEnter={() => setHoveredCard(job.id)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-3xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500"></div>
 
-                <div className="flex items-center gap-6">
-                  <div
-                    className="flex items-center gap-4 px-4 py-3 rounded-xl transition-all hover:scale-105 hover:shadow-lg"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                    }}
-                  >
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg,#803791,#b87bd1)",
-                      }}
-                    >
-                      <Users className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-white">
-                        {job.applications}
-                      </p>
-                      <p className="text-xs text-white/70">Applications</p>
-                    </div>
-                  </div>
-                  <div
-                    className="flex items-center gap-4 px-4 py-3 rounded-xl transition-all hover:scale-105 hover:shadow-lg"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                    }}
-                  >
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg,#803791,#b87bd1)",
-                      }}
-                    >
-                      <Eye className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-white">
-                        {job.views}
-                      </p>
-                      <p className="text-xs text-white/70">Views</p>
+              {job.featured && (
+                <div className="absolute top-4 right-4 z-10">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl blur-md opacity-50 animate-pulse"></div>
+                    <div className="relative px-4 py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center gap-2 shadow-lg">
+                      <Star className="w-4 h-4 text-white fill-white" />
+                      <span className="text-xs font-bold text-white">
+                        FEATURED
+                      </span>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2 ml-4">
-                <button
-                  className="p-3 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
-                  style={{
-                    background: "rgba(59, 130, 246, 0.1)",
-                    border: "1px solid rgba(59, 130, 246, 0.2)",
-                  }}
-                >
-                  <Edit2 className="w-5 h-5 text-blue-400" />
-                </button>
-                <button
-                  className="p-3 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
-                  style={{
-                    background: "rgba(239, 68, 68, 0.1)",
-                    border: "1px solid rgba(239, 68, 68, 0.2)",
-                  }}
-                >
-                  <Trash2 className="w-5 h-5 text-red-400" />
-                </button>
-                <button
-                  className="p-3 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                  }}
-                >
-                  <MoreVertical className="w-5 h-5 text-white/80" />
-                </button>
+              <div className="relative backdrop-blur-xl p-8">
+                <div className="flex items-start justify-between gap-8">
+                  <div className="flex-1">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="relative group/icon">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl blur-md opacity-50 group-hover/icon:opacity-75 transition-opacity duration-300"></div>
+                        <div
+                          className="relative w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-300"
+                          style={{
+                            background:
+                              "linear-gradient(135deg,#803791,#b87bd1)",
+                          }}
+                        >
+                          <Briefcase className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-2xl font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
+                            {job.title}
+                          </h3>
+                          <div
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 ${statusConfig.class} group-hover:scale-105 transition-transform duration-300`}
+                          >
+                            <StatusIcon className="w-4 h-4" />
+                            {job.status}
+                          </div>
+                          <div
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${priorityBadgeConfig(
+                              job.priority
+                            )}`}
+                          >
+                            {job.priority}
+                          </div>
+                        </div>
+
+                        <p className="text-[#b87bd1] font-bold text-lg mb-4 flex items-center gap-2">
+                          <Award className="w-5 h-5" />
+                          {job.department}
+                        </p>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
+                            <div className="p-2.5 rounded-xl bg-white/5 group-hover/detail:bg-white/10 group-hover/detail:scale-110 transition-all duration-300">
+                              <MapPin className="w-5 h-5 text-[#b87bd1]" />
+                            </div>
+                            <span className="text-sm font-semibold">
+                              {job.location}
+                            </span>
+                          </div>
+
+                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
+                            <div className="p-2.5 rounded-xl bg-white/5 group-hover/detail:bg-white/10 group-hover/detail:scale-110 transition-all duration-300">
+                              <Clock className="w-5 h-5 text-emerald-400" />
+                            </div>
+                            <span className="text-sm font-semibold">
+                              {job.type}
+                            </span>
+                          </div>
+
+                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
+                            <div className="p-2.5 rounded-xl bg-white/5 group-hover/detail:bg-white/10 group-hover/detail:scale-110 transition-all duration-300">
+                              <DollarSign className="w-5 h-5 text-yellow-400" />
+                            </div>
+                            <span className="text-sm font-bold text-[#b87bd1]">
+                              {job.salary}
+                            </span>
+                          </div>
+
+                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
+                            <div className="p-2.5 rounded-xl bg-white/5 group-hover/detail:bg-white/10 group-hover/detail:scale-110 transition-all duration-300">
+                              <Calendar className="w-5 h-5 text-blue-400" />
+                            </div>
+                            <span className="text-sm font-semibold">
+                              {new Date(job.postedDate).toLocaleDateString(
+                                "en-US",
+                                { month: "short", day: "numeric" }
+                              )}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
+                            <div
+                              className="p-3 rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300"
+                              style={{
+                                background:
+                                  "linear-gradient(135deg, #10b981, #06b6d4)",
+                              }}
+                            >
+                              <Users className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                              <p className="text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
+                                {job.applications}
+                              </p>
+                              <p className="text-xs text-white/60 font-semibold">
+                                Applications
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
+                            <div
+                              className="p-3 rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300"
+                              style={{
+                                background:
+                                  "linear-gradient(135deg, #f59e0b, #ef4444)",
+                              }}
+                            >
+                              <Eye className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                              <p className="text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
+                                {job.views}
+                              </p>
+                              <p className="text-xs text-white/60 font-semibold">
+                                Views
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                      <div className="absolute inset-0 bg-blue-500/10 group-hover/btn:bg-blue-500/20 transition-colors duration-300"></div>
+                      <Edit2 className="w-5 h-5 text-blue-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
+                    </button>
+
+                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                      <div className="absolute inset-0 bg-emerald-500/10 group-hover/btn:bg-emerald-500/20 transition-colors duration-300"></div>
+                      <Share2 className="w-5 h-5 text-emerald-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
+                    </button>
+
+                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                      <div className="absolute inset-0 bg-red-500/10 group-hover/btn:bg-red-500/20 transition-colors duration-300"></div>
+                      <Trash2 className="w-5 h-5 text-red-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
+                    </button>
+
+                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                      <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-colors duration-300"></div>
+                      <MoreVertical className="w-5 h-5 text-white/80 relative z-10 group-hover/btn:scale-125 transition-transform duration-300" />
+                    </button>
+                  </div>
+                </div>
+
+                {job.status === "Expiring Soon" && (
+                  <div className="mt-6 relative overflow-hidden rounded-2xl">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 animate-pulse"></div>
+                    <div className="relative flex items-center gap-4 p-5 border-2 border-orange-500/30 bg-orange-500/10 backdrop-blur-sm">
+                      <div className="p-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg">
+                        <AlertCircle className="w-6 h-6 text-white animate-bounce-subtle" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-orange-300 mb-1">
+                          ⚠️ Expiring Soon
+                        </p>
+                        <p className="text-sm text-orange-400/90">
+                          This job expires on{" "}
+                          <span className="font-bold">
+                            {new Date(job.expiryDate).toLocaleDateString()}
+                          </span>
+                          . Renew now to keep it active and visible.
+                        </p>
+                      </div>
+                      <button className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 transition-transform duration-300 shadow-lg">
+                        Renew Now
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-
-            {job.status === "Expiring Soon" && (
-              <div
-                className="flex items-center gap-3 p-4 rounded-xl mt-4 border border-orange-500/30"
-                style={{
-                  background: "rgba(249, 115, 22, 0.1)",
-                }}
-              >
-                <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
-                <p className="text-sm text-orange-400 font-semibold">
-                  This job expires on{" "}
-                  {new Date(job.expiryDate).toLocaleDateString()}. Renew to keep
-                  it active.
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
 
         {filteredJobs.length === 0 && (
-          <div
-            className="rounded-xl p-16 text-center shadow-2xl"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-              border: "1px solid rgba(255,255,255,0.06)",
-            }}
-          >
+          <div className="relative overflow-hidden rounded-3xl shadow-2xl">
             <div
-              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+              className="absolute inset-0"
               style={{
-                background: "linear-gradient(135deg,#803791,#b87bd1)",
+                background:
+                  "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
               }}
-            >
-              <Target className="w-10 h-10 text-white" />
+            ></div>
+
+            <div className="relative p-20 text-center backdrop-blur-xl border border-white/10">
+              <div className="relative inline-block mb-8">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-3xl blur-3xl opacity-30 animate-pulse"></div>
+                <div
+                  className="relative w-32 h-32 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-6 transition-all duration-500"
+                  style={{
+                    background: "linear-gradient(135deg,#803791,#b87bd1)",
+                  }}
+                >
+                  <Target className="w-16 h-16 text-white" />
+                </div>
+              </div>
+
+              <h3 className="text-3xl font-extrabold text-white mb-4">
+                No jobs found
+              </h3>
+              <p className="text-white/60 text-lg mb-10 max-w-md mx-auto leading-relaxed">
+                Try adjusting your search criteria or create a new job posting
+                to attract top talent to your organization
+              </p>
+
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setFilterStatus("all");
+                  }}
+                  className="px-8 py-4 rounded-xl font-bold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105"
+                >
+                  Clear Filters
+                </button>
+
+                <button className="group relative px-8 py-4 rounded-xl font-bold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                  <div
+                    className="absolute inset-0 transition-transform group-hover:scale-105 duration-300"
+                    style={{
+                      background: "linear-gradient(135deg,#803791,#b87bd1)",
+                    }}
+                  ></div>
+                  <span className="relative flex items-center gap-2">
+                    <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                    Post Your First Job
+                  </span>
+                </button>
+              </div>
             </div>
-            <h3 className="text-2xl font-semibold text-white mb-3">
-              No jobs found
-            </h3>
-            <p className="text-white/70 mb-8 max-w-md mx-auto">
-              Try adjusting your search criteria or create a new job posting to
-              attract top talent
-            </p>
-            <button
-              className="px-8 py-3 text-white rounded-xl transition-all font-semibold shadow-xl hover:shadow-2xl hover:scale-105 inline-flex items-center gap-3"
-              style={{
-                background: "linear-gradient(135deg,#803791,#b87bd1)",
-              }}
-            >
-              <Plus className="w-5 h-5" />
-              Post Your First Job
-            </button>
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes pulse-slow {
+          0%,
+          100% {
+            opacity: 0.12;
+          }
+          50% {
+            opacity: 0.18;
+          }
+        }
+
+        @keyframes pulse-slower {
+          0%,
+          100% {
+            opacity: 0.1;
+          }
+          50% {
+            opacity: 0.16;
+          }
+        }
+
+        @keyframes float {
+          0%,
+          100% {
+            transform: translate(0, 0) rotate(0deg);
+          }
+          33% {
+            transform: translate(30px, -30px) rotate(5deg);
+          }
+          66% {
+            transform: translate(-20px, 20px) rotate(-5deg);
+          }
+        }
+
+        @keyframes bounce-subtle {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        .animate-pulse-slow {
+          animation: pulse-slow 4s ease-in-out infinite;
+        }
+
+        .animate-pulse-slower {
+          animation: pulse-slower 5s ease-in-out infinite;
+        }
+
+        .animate-float {
+          animation: float 8s ease-in-out infinite;
+        }
+
+        .animate-bounce-subtle {
+          animation: bounce-subtle 2s ease-in-out infinite;
+        }
+
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+
+        ::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #803791, #b87bd1);
+          border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(135deg, #b87bd1, #803791);
+        }
+      `}</style>
     </div>
   );
 }
