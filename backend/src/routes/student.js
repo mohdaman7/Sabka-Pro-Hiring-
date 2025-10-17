@@ -1,24 +1,25 @@
+// routes/student.js (updated)
 import { Router } from "express";
 import { authenticate, authorize } from "../middleware/auth.js";
 import * as studentController from "../controllers/studentController.js";
+import {
+  uploadProfilePicture,
+  uploadResume,
+} from "../controllers/uploadController.js";
 
 const router = Router();
 
 // Get student profile
-router.get(
-  "/profile",
-  authenticate,
-  authorize(["student"]),
-  studentController.getProfile
-);
+router.get("/profile", authenticate, studentController.getProfile);
 
 // Update student profile
-router.put(
-  "/profile",
-  authenticate,
-  authorize(["student"]),
-  studentController.updateProfile
-);
+router.put("/profile", authenticate, studentController.updateProfile);
+
+// Upload profile picture
+router.post("/upload-profile-picture", authenticate, uploadProfilePicture);
+
+// Upload resume
+router.post("/upload-resume", authenticate, uploadResume);
 
 // Support tickets
 router.get(

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { userService } from "@/services/userService";
+import { studentService } from "@/services/studentService";
 import {
   User,
   Mail,
@@ -286,45 +286,40 @@ export default function StudentProfile() {
     experienceType: "fresher",
   });
 
-  // Add loading states for sections
-  const [sectionsLoading, setSectionsLoading] = useState({
-    basic: false,
-    education: false,
-    preferences: false,
-    address: false,
-  });
-
   // Transform backend data to frontend format
-  const transformBackendData = (user, profile) => {
-    if (!user && !profile) return null;
+  const transformBackendData = (studentData) => {
+    if (!studentData) return null;
 
-    console.log("Transforming backend data:", { user, profile });
+    console.log("Transforming student data:", studentData);
+
+    // Extract user data from student if populated, otherwise use student data directly
+    const userData = studentData.userId || {};
 
     const transformedData = {
-      // Basic info
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      email: user?.email || "",
-      phone: profile?.phone || "",
-      dateOfBirth: profile?.dateOfBirth
-        ? new Date(profile.dateOfBirth).toISOString().split("T")[0]
+      // Basic info - get from userData if populated, otherwise from studentData
+      firstName: userData.firstName || studentData.firstName || "",
+      lastName: userData.lastName || studentData.lastName || "",
+      email: userData.email || studentData.email || "",
+      phone: studentData?.phone || "",
+      dateOfBirth: studentData?.dateOfBirth
+        ? new Date(studentData.dateOfBirth).toISOString().split("T")[0]
         : "",
 
       // Address
       address: {
-        street: profile?.address?.street || "",
-        city: profile?.address?.city || "",
-        state: profile?.address?.state || "",
-        country: profile?.address?.country || "India",
-        zipCode: profile?.address?.zipCode || "",
+        street: studentData?.address?.street || "",
+        city: studentData?.address?.city || "",
+        state: studentData?.address?.state || "",
+        country: studentData?.address?.country || "India",
+        zipCode: studentData?.address?.zipCode || "",
       },
 
-      // Education - ensure proper structure
+      // Education
       education:
-        profile?.education &&
-        Array.isArray(profile.education) &&
-        profile.education.length > 0
-          ? profile.education.map((edu) => ({
+        studentData?.education &&
+        Array.isArray(studentData.education) &&
+        studentData.education.length > 0
+          ? studentData.education.map((edu) => ({
               degree: edu?.degree || "",
               institution: edu?.institution || "",
               fieldOfStudy: edu?.fieldOfStudy || "",
@@ -344,47 +339,48 @@ export default function StudentProfile() {
       // Job Preferences
       jobPreferences: {
         preferredRoles:
-          profile?.jobPreferences?.preferredRoles &&
-          Array.isArray(profile.jobPreferences.preferredRoles) &&
-          profile.jobPreferences.preferredRoles.length > 0
-            ? profile.jobPreferences.preferredRoles
+          studentData?.jobPreferences?.preferredRoles &&
+          Array.isArray(studentData.jobPreferences.preferredRoles) &&
+          studentData.jobPreferences.preferredRoles.length > 0
+            ? studentData.jobPreferences.preferredRoles
             : [""],
         preferredLocations:
-          profile?.jobPreferences?.preferredLocations &&
-          Array.isArray(profile.jobPreferences.preferredLocations) &&
-          profile.jobPreferences.preferredLocations.length > 0
-            ? profile.jobPreferences.preferredLocations
+          studentData?.jobPreferences?.preferredLocations &&
+          Array.isArray(studentData.jobPreferences.preferredLocations) &&
+          studentData.jobPreferences.preferredLocations.length > 0
+            ? studentData.jobPreferences.preferredLocations
             : [""],
         jobTypes:
-          profile?.jobPreferences?.jobTypes &&
-          Array.isArray(profile.jobPreferences.jobTypes) &&
-          profile.jobPreferences.jobTypes.length > 0
-            ? profile.jobPreferences.jobTypes
+          studentData?.jobPreferences?.jobTypes &&
+          Array.isArray(studentData.jobPreferences.jobTypes) &&
+          studentData.jobPreferences.jobTypes.length > 0
+            ? studentData.jobPreferences.jobTypes
             : [""],
-        expectedSalary: profile?.jobPreferences?.expectedSalary || {
+        expectedSalary: studentData?.jobPreferences?.expectedSalary || {
           min: "",
           max: "",
           currency: "INR",
         },
-        willingToRelocate: profile?.jobPreferences?.willingToRelocate || false,
+        willingToRelocate:
+          studentData?.jobPreferences?.willingToRelocate || false,
       },
 
       // Skills
-      skills: Array.isArray(profile?.skills)
-        ? profile.skills
+      skills: Array.isArray(studentData?.skills)
+        ? studentData.skills
             .map((s) => s?.name || "")
             .filter(Boolean)
             .join(", ")
         : "",
 
       // Bio
-      bio: profile?.bio || "",
+      bio: studentData?.bio || "",
 
       // Experience
-      experienceType: profile?.experienceType || "fresher",
+      experienceType: studentData?.experienceType || "fresher",
     };
 
-    console.log("Transformed data:", transformedData);
+    console.log("Transformed student data:", transformedData);
     return transformedData;
   };
 
@@ -498,27 +494,28 @@ export default function StudentProfile() {
     async function loadProfile() {
       try {
         setDataLoading(true);
-        const res = await userService.getProfile();
+        // Use studentService instead of userService
+        const res = await studentService.getProfile();
 
         if (!mounted) return;
 
-        const { user, profile } = res.data || {};
-        console.log("Loaded profile data:", { user, profile });
+        const studentData = res.data || {};
+        console.log("Loaded student profile data:", studentData);
 
         // Set plan and image
-        setSelectedPlan(profile?.plan || "free");
-        setProfileImage(profile?.profilePicture?.url || null);
+        setSelectedPlan(studentData?.plan || "free");
+        setProfileImage(studentData?.profilePicture?.url || null);
 
         // Transform and set form data
-        if (user || profile) {
-          const transformedData = transformBackendData(user, profile);
+        if (studentData) {
+          const transformedData = transformBackendData(studentData);
           if (transformedData) {
             setFormData(transformedData);
             console.log("Form data set:", transformedData);
           }
         }
       } catch (error) {
-        console.error("Failed to load profile:", error);
+        console.error("Failed to load student profile:", error);
         customToast.error("Error", "Failed to load profile data");
       } finally {
         if (mounted) {
@@ -562,7 +559,8 @@ export default function StudentProfile() {
     reader.readAsDataURL(file);
 
     try {
-      await userService.uploadProfilePicture(file);
+      // Use studentService instead of userService
+      await studentService.uploadProfilePicture(file);
       customToast.success("Success", "Profile picture updated successfully");
     } catch (error) {
       console.error("Failed to upload profile picture:", error);
@@ -587,7 +585,15 @@ export default function StudentProfile() {
     }
 
     setCvFile(file);
-    customToast.success("Success", "CV uploaded successfully");
+
+    try {
+      // Use studentService instead of userService
+      await studentService.uploadResume(file);
+      customToast.success("Success", "CV uploaded successfully");
+    } catch (error) {
+      console.error("Failed to upload CV:", error);
+      customToast.error("Error", "Failed to upload CV");
+    }
   };
 
   // Handle basic input changes
@@ -712,25 +718,24 @@ export default function StudentProfile() {
 
       // Transform data for backend
       const payload = transformDataForBackend(formData, selectedPlan);
-      console.log("Sending payload to backend:", payload);
+      console.log("Sending student payload to backend:", payload);
 
-      // Save to backend
-      await userService.updateProfile(payload);
+      // Use studentService instead of userService
+      await studentService.updateProfile(payload);
 
       // Reload data to ensure frontend is in sync
-      const res = await userService.getProfile();
+      const res = await studentService.getProfile();
       if (res.data) {
-        const { user, profile } = res.data;
-        const transformedData = transformBackendData(user, profile);
+        const transformedData = transformBackendData(res.data);
         if (transformedData) {
           setFormData(transformedData);
-          console.log("Profile reloaded after save:", transformedData);
+          console.log("Student profile reloaded after save:", transformedData);
         }
       }
 
       customToast.success("Success", "Profile updated successfully");
     } catch (error) {
-      console.error("Failed to update profile:", error);
+      console.error("Failed to update student profile:", error);
       customToast.error(
         "Error",
         error.response?.data?.message || "Failed to update profile"
