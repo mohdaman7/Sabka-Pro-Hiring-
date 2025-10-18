@@ -15,6 +15,12 @@ export const adminService = {
     return response.data;
   },
 
+  // Get user by id with profile/jobs
+  getUserById: async (userId) => {
+    const response = await api.get(`/api/admin/users/${userId}`);
+    return response.data;
+  },
+
   // Approve user
   approveUser: async (userId, sendCredentials = true) => {
     const response = await api.post(`/api/admin/approve/${userId}`, {
@@ -43,6 +49,12 @@ export const adminService = {
     return response.data;
   },
 
+  // Moderate a job (approve/reject/close)
+  moderateJob: async (jobId, action) => {
+    const response = await api.post(`/api/admin/jobs/${jobId}/moderate`, { action });
+    return response.data;
+  },
+
   // Companies CRUD
   listCompanies: async (params = {}) => {
     const response = await api.get("/api/admin/companies", { params });
@@ -62,6 +74,25 @@ export const adminService = {
   },
   deleteCompany: async (id) => {
     const response = await api.delete(`/api/admin/companies/${id}`);
+    return response.data;
+  },
+
+  // Employer documents
+  listEmployerDocuments: async (employerUserId) => {
+    const response = await api.get(`/api/admin/employers/${employerUserId}/documents`);
+    return response.data;
+  },
+  reviewEmployerDocument: async (employerUserId, docId, action, reason) => {
+    const response = await api.post(
+      `/api/admin/employers/${employerUserId}/documents/${docId}/review`,
+      { action, reason }
+    );
+    return response.data;
+  },
+
+  // Employer plan management
+  updateEmployerPlan: async (employerUserId, plan) => {
+    const response = await api.post(`/api/admin/employers/${employerUserId}/plan`, { plan });
     return response.data;
   },
 };

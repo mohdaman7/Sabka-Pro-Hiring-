@@ -11,6 +11,10 @@ import {
   getPendingRegistrations,
   approveUser,
   rejectUser,
+  listEmployerDocuments,
+  reviewEmployerDocument,
+  adminUpdateEmployerPlan,
+  adminModerateJob,
   createCompany,
   listCompanies,
   getCompanyById,
@@ -30,6 +34,13 @@ router.get("/pending", getPendingRegistrations);
 router.post("/approve/:id", approveUser);
 router.post("/reject/:id", rejectUser);
 
+// Employer document verification
+router.get("/employers/:id/documents", listEmployerDocuments);
+router.post("/employers/:id/documents/:docId/review", reviewEmployerDocument);
+
+// Employer plan management
+router.post("/employers/:id/plan", adminUpdateEmployerPlan);
+
 // ============================================
 // User Management
 // ============================================
@@ -46,6 +57,7 @@ router.get("/dashboard/stats", getPlatformStats);
 // Job Management (admin view)
 // ============================================
 router.get("/jobs", getAllJobsAdmin);
+router.post("/jobs/:id/moderate", adminModerateJob);
 
 // ============================================
 // Application Management (admin view)
