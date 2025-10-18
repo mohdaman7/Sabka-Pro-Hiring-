@@ -17,6 +17,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { customToast, toast } from "@/components/ui/toast";
+import api from "@/lib/axios";
 
 export default function LeadsManagement() {
   const [activeTab, setActiveTab] = useState("pending");
@@ -27,8 +28,6 @@ export default function LeadsManagement() {
   const [showFilters, setShowFilters] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-
   useEffect(() => {
     fetchLeads();
   }, [activeTab]);
@@ -36,7 +35,6 @@ export default function LeadsManagement() {
   const fetchLeads = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
       const endpoint =
         activeTab === "pending" ? "/api/admin/pending" : "/api/admin/users";
       const params = new URLSearchParams();
@@ -44,13 +42,9 @@ export default function LeadsManagement() {
         params.append("status", activeTab);
       }
 
-      const response = await fetch(`${API_URL}${endpoint}?${params}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
+      const response = await api.get(`${endpoint}?${params}`);
+      const data = response.data;
+      
       if (data.success) {
         setLeads(data.data || []);
         customToast.success(
@@ -84,17 +78,11 @@ export default function LeadsManagement() {
     );
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/admin/approve/${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ sendCredentials: true }),
+      const response = await api.post(`/api/admin/approve/${userId}`, {
+        sendCredentials: true,
       });
 
-      const data = await response.json();
+      const data = response.data;
 
       if (data.success) {
         toast.dismiss(toastId);
@@ -178,17 +166,11 @@ export default function LeadsManagement() {
     );
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/api/admin/reject/${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ reason }),
+      const response = await api.post(`/api/admin/reject/${userId}`, {
+        reason,
       });
 
-      const data = await response.json();
+      const data = response.data;
       if (data.success) {
         toast.dismiss(toastId);
         customToast.success(

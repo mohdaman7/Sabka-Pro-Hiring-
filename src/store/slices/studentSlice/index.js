@@ -1,32 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "@/lib/axios";
 
 // Async thunks for API calls
 export const sendCandidateOTP = createAsyncThunk(
   "candidate/sendOTP",
   async ({ phone, email }, { rejectWithValue }) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const response = await fetch(`${API_URL}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, email }),
-      });
+      const response = await api.post("/api/auth/send-otp", { phone, email });
 
       if (response.status === 404) {
         // Mock response for development
         return { success: true, message: "OTP sent successfully" };
       }
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (!response.ok || !data?.success) {
+      if (!data?.success) {
         return rejectWithValue(data?.message || "Failed to send OTP");
       }
 
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to send OTP");
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to send OTP");
     }
   }
 );
@@ -35,28 +30,22 @@ export const verifyCandidateOTP = createAsyncThunk(
   "candidate/verifyOTP",
   async ({ phone, otp }, { rejectWithValue }) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const response = await fetch(`${API_URL}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp }),
-      });
+      const response = await api.post("/api/auth/verify-otp", { phone, otp });
 
       if (response.status === 404) {
         // Mock response for development
         return { success: true, message: "OTP verified successfully" };
       }
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (!response.ok || !data?.success) {
+      if (!data?.success) {
         return rejectWithValue(data?.message || "Invalid OTP");
       }
 
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to verify OTP");
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to verify OTP");
     }
   }
 );
@@ -65,38 +54,27 @@ export const registerCandidate = createAsyncThunk(
   "candidate/register",
   async (formData, { rejectWithValue }) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const tempPassword = `Temp@${Math.random().toString(36).slice(-8)}`;
 
       // Registration request
-      const registerResponse = await fetch(`${API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: tempPassword,
-          role: "student",
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        }),
+      const registerResponse = await api.post("/api/auth/register", {
+        email: formData.email,
+        password: tempPassword,
+        role: "student",
+        firstName: formData.firstName,
+        lastName: formData.lastName,
       });
 
-      const registerData = await registerResponse.json();
+      const registerData = registerResponse.data;
 
-      if (!registerResponse.ok || !registerData?.success) {
+      if (!registerData?.success) {
         return rejectWithValue(registerData?.message || "Registration failed");
       }
 
       // Update profile after registration
       if (registerData.token) {
-        const profileResponse = await fetch(`${API_URL}/api/student/profile`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${registerData.token}`,
-          },
-          body: JSON.stringify({
+        try {
+          const profileResponse = await api.put("/api/student/profile", {
             phone: formData.phone,
             address: {
               city: formData.location,
@@ -109,13 +87,15 @@ export const registerCandidate = createAsyncThunk(
               number: formData.kycNumber,
               verified: false,
             },
-          }),
-        });
+          });
 
-        const profileData = await profileResponse.json();
+          const profileData = profileResponse.data;
 
-        if (!profileResponse.ok || !profileData?.success) {
-          console.warn("Profile update warning:", profileData?.message);
+          if (!profileData?.success) {
+            console.warn("Profile update warning:", profileData?.message);
+          }
+        } catch (profileError) {
+          console.warn("Profile update warning:", profileError.response?.data?.message || profileError.message);
         }
       }
 
@@ -128,7 +108,7 @@ export const registerCandidate = createAsyncThunk(
         },
       };
     } catch (error) {
-      return rejectWithValue(error.message || "Registration failed");
+      return rejectWithValue(error.response?.data?.message || error.message || "Registration failed");
     }
   }
 );

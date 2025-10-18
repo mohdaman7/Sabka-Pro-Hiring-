@@ -1,4 +1,5 @@
 import { CourseModel, CourseCategoryModel, VideoModel, CourseProgressModel } from "@/models/CourseModel"
+import api from "@/lib/axios"
 
 // Course ViewModel - Handles business logic for course management
 export class CourseViewModel {
@@ -16,9 +17,8 @@ export class CourseViewModel {
     this.error = null
 
     try {
-      // Mock API call - replace with actual API endpoint
-      const response = await fetch("/api/courses?" + new URLSearchParams(filters))
-      const data = await response.json()
+      const response = await api.get("/api/courses?" + new URLSearchParams(filters))
+      const data = response.data
 
       this.courses = data.courses.map((course) => CourseModel.fromJSON(course))
       return this.courses
@@ -37,8 +37,8 @@ export class CourseViewModel {
     this.error = null
 
     try {
-      const response = await fetch("/api/courses/categories")
-      const data = await response.json()
+      const response = await api.get("/api/courses/categories")
+      const data = response.data
 
       this.categories = data.categories.map((cat) => CourseCategoryModel.fromJSON(cat))
       return this.categories
@@ -65,26 +65,16 @@ export class CourseViewModel {
     this.error = null
 
     try {
-      const response = await fetch("/api/courses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(course.toJSON()),
-      })
+      const response = await api.post("/api/courses", course.toJSON())
+      const data = response.data
 
-      const data = await response.json()
-
-      if (response.ok) {
-        const newCourse = CourseModel.fromJSON(data.course)
-        this.courses.push(newCourse)
-        return { success: true, course: newCourse }
-      } else {
-        this.error = data.message
-        return { success: false, errors: [data.message] }
-      }
+      const newCourse = CourseModel.fromJSON(data.course)
+      this.courses.push(newCourse)
+      return { success: true, course: newCourse }
     } catch (error) {
-      this.error = error.message
+      this.error = error.response?.data?.message || error.message
       console.error("Error creating course:", error)
-      return { success: false, errors: [error.message] }
+      return { success: false, errors: [error.response?.data?.message || error.message] }
     } finally {
       this.loading = false
     }
@@ -96,29 +86,19 @@ export class CourseViewModel {
     this.error = null
 
     try {
-      const response = await fetch(`/api/courses/${courseId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updates),
-      })
+      const response = await api.put(`/api/courses/${courseId}`, updates)
+      const data = response.data
 
-      const data = await response.json()
-
-      if (response.ok) {
-        const updatedCourse = CourseModel.fromJSON(data.course)
-        const index = this.courses.findIndex((c) => c.id === courseId)
-        if (index !== -1) {
-          this.courses[index] = updatedCourse
-        }
-        return { success: true, course: updatedCourse }
-      } else {
-        this.error = data.message
-        return { success: false, errors: [data.message] }
+      const updatedCourse = CourseModel.fromJSON(data.course)
+      const index = this.courses.findIndex((c) => c.id === courseId)
+      if (index !== -1) {
+        this.courses[index] = updatedCourse
       }
+      return { success: true, course: updatedCourse }
     } catch (error) {
-      this.error = error.message
+      this.error = error.response?.data?.message || error.message
       console.error("Error updating course:", error)
-      return { success: false, errors: [error.message] }
+      return { success: false, errors: [error.response?.data?.message || error.message] }
     } finally {
       this.loading = false
     }
@@ -130,22 +110,13 @@ export class CourseViewModel {
     this.error = null
 
     try {
-      const response = await fetch(`/api/courses/${courseId}`, {
-        method: "DELETE",
-      })
-
-      if (response.ok) {
-        this.courses = this.courses.filter((c) => c.id !== courseId)
-        return { success: true }
-      } else {
-        const data = await response.json()
-        this.error = data.message
-        return { success: false, errors: [data.message] }
-      }
+      await api.delete(`/api/courses/${courseId}`)
+      this.courses = this.courses.filter((c) => c.id !== courseId)
+      return { success: true }
     } catch (error) {
-      this.error = error.message
+      this.error = error.response?.data?.message || error.message
       console.error("Error deleting course:", error)
-      return { success: false, errors: [error.message] }
+      return { success: false, errors: [error.response?.data?.message || error.message] }
     } finally {
       this.loading = false
     }
@@ -157,8 +128,8 @@ export class CourseViewModel {
     this.error = null
 
     try {
-      const response = await fetch(`/api/courses/${courseId}/videos`)
-      const data = await response.json()
+      const response = await api.get(`/api/courses/${courseId}/videos`)
+      const data = response.data
 
       this.videos = data.videos.map((video) => VideoModel.fromJSON(video))
       return this.videos
@@ -185,26 +156,16 @@ export class CourseViewModel {
     this.error = null
 
     try {
-      const response = await fetch("/api/videos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(video.toJSON()),
-      })
+      const response = await api.post("/api/videos", video.toJSON())
+      const data = response.data
 
-      const data = await response.json()
-
-      if (response.ok) {
-        const newVideo = VideoModel.fromJSON(data.video)
-        this.videos.push(newVideo)
-        return { success: true, video: newVideo }
-      } else {
-        this.error = data.message
-        return { success: false, errors: [data.message] }
-      }
+      const newVideo = VideoModel.fromJSON(data.video)
+      this.videos.push(newVideo)
+      return { success: true, video: newVideo }
     } catch (error) {
-      this.error = error.message
+      this.error = error.response?.data?.message || error.message
       console.error("Error adding video:", error)
-      return { success: false, errors: [error.message] }
+      return { success: false, errors: [error.response?.data?.message || error.message] }
     } finally {
       this.loading = false
     }
@@ -213,18 +174,14 @@ export class CourseViewModel {
   // Track video progress
   async updateProgress(candidateId, courseId, videoId) {
     try {
-      const response = await fetch("/api/courses/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          candidate_id: candidateId,
-          course_id: courseId,
-          video_id: videoId,
-        }),
+      const response = await api.post("/api/courses/progress", {
+        candidate_id: candidateId,
+        course_id: courseId,
+        video_id: videoId,
       })
 
-      const data = await response.json()
-      return { success: response.ok, progress: data.progress }
+      const data = response.data
+      return { success: true, progress: data.progress }
     } catch (error) {
       console.error("Error updating progress:", error)
       return { success: false }
@@ -234,8 +191,8 @@ export class CourseViewModel {
   // Get candidate's course progress
   async getCandidateProgress(candidateId, courseId) {
     try {
-      const response = await fetch(`/api/courses/progress?candidate_id=${candidateId}&course_id=${courseId}`)
-      const data = await response.json()
+      const response = await api.get(`/api/courses/progress?candidate_id=${candidateId}&course_id=${courseId}`)
+      const data = response.data
 
       return CourseProgressModel.fromJSON(data.progress)
     } catch (error) {
