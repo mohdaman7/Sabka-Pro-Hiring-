@@ -199,7 +199,7 @@ export default function StudentCourses() {
               <GraduationCap className="w-12 h-12 text-white" />
             </div>
             <div className="flex-1">
-              <h1 className="text-4xl md:text-4xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+              <h1 className="text-3xl md:text-4xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
                 My Learning Journey
               </h1>
               <p className="text-white/90 text-lg font-medium flex items-center gap-2">
