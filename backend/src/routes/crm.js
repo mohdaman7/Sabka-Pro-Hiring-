@@ -11,6 +11,10 @@ import {
   getPendingRegistrations,
   approveUser,
   rejectUser,
+  updateEmployerVerification,
+  updateEmployerPlanAdmin,
+  updateEmployerDocumentStatus,
+  changeJobStatusAdmin,
   createCompany,
   listCompanies,
   getCompanyById,
@@ -46,6 +50,7 @@ router.get("/dashboard/stats", getPlatformStats);
 // Job Management (admin view)
 // ============================================
 router.get("/jobs", getAllJobsAdmin);
+router.patch("/jobs/:jobId/status", changeJobStatusAdmin);
 
 // ============================================
 // Application Management (admin view)
@@ -60,5 +65,12 @@ router.post("/companies", createCompany);
 router.get("/companies/:id", getCompanyById);
 router.put("/companies/:id", updateCompany);
 router.delete("/companies/:id", deleteCompany);
+
+// ============================================
+// Employer Admin Actions
+// ============================================
+router.patch("/employers/:id/verify", updateEmployerVerification);
+router.patch("/employers/:id/plan", updateEmployerPlanAdmin);
+router.patch("/employers/:id/documents/:docId", updateEmployerDocumentStatus);
 
 export default router;

@@ -15,6 +15,12 @@ export const adminService = {
     return response.data;
   },
 
+  // Get user with profile/details
+  getUserById: async (id) => {
+    const response = await api.get(`/api/admin/users/${id}`);
+    return response.data;
+  },
+
   // Approve user
   approveUser: async (userId, sendCredentials = true) => {
     const response = await api.post(`/api/admin/approve/${userId}`, {
@@ -43,6 +49,12 @@ export const adminService = {
     return response.data;
   },
 
+  // Change job status (admin moderation)
+  changeJobStatus: async (jobId, status) => {
+    const response = await api.patch(`/api/admin/jobs/${jobId}/status`, { status });
+    return response.data;
+  },
+
   // Companies CRUD
   listCompanies: async (params = {}) => {
     const response = await api.get("/api/admin/companies", { params });
@@ -62,6 +74,22 @@ export const adminService = {
   },
   deleteCompany: async (id) => {
     const response = await api.delete(`/api/admin/companies/${id}`);
+    return response.data;
+  },
+
+  // Employer admin actions
+  setEmployerVerification: async (userId, isVerified) => {
+    const response = await api.patch(`/api/admin/employers/${userId}/verify`, { isVerified });
+    return response.data;
+  },
+
+  updateEmployerPlan: async (userId, plan) => {
+    const response = await api.patch(`/api/admin/employers/${userId}/plan`, { plan });
+    return response.data;
+  },
+
+  updateEmployerDocumentStatus: async (userId, docId, payload) => {
+    const response = await api.patch(`/api/admin/employers/${userId}/documents/${docId}`, payload);
     return response.data;
   },
 };
