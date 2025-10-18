@@ -1,24 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "@/lib/axios";
 
 // Async thunks for API calls
 export const sendOTP = createAsyncThunk(
   "employer/sendOTP",
   async ({ phone, email }, { rejectWithValue }) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const response = await fetch(`${API_URL}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, email }),
-      });
+      const response = await api.post("/api/auth/send-otp", { phone, email });
 
       if (response.status === 404) {
         // Mock response for development
         return { success: true, message: "OTP sent successfully" };
       }
 
-      const data = await response.json();
+      const data = response.data;
 
       if (!response.ok || !data?.success) {
         return rejectWithValue(data?.message || "Failed to send OTP");
@@ -35,20 +30,14 @@ export const verifyOTP = createAsyncThunk(
   "employer/verifyOTP",
   async ({ phone, otp }, { rejectWithValue }) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const response = await fetch(`${API_URL}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp }),
-      });
+      const response = await api.post("/api/auth/verify-otp", { phone, otp });
 
       if (response.status === 404) {
         // Mock response for development
         return { success: true, message: "OTP verified successfully" };
       }
 
-      const data = await response.json();
+      const data = response.data;
 
       if (!response.ok || !data?.success) {
         return rejectWithValue(data?.message || "Invalid OTP");
@@ -65,33 +54,27 @@ export const registerEmployer = createAsyncThunk(
   "employer/register",
   async (formData, { rejectWithValue }) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const tempPassword = `Temp@${Math.random().toString(36).slice(-8)}`;
 
       // Registration request
-      const registerResponse = await fetch(`${API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: tempPassword,
-          role: "employer",
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
-          position: formData.position,
-          company: {
-            name: formData.companyName,
-            description: formData.companyDescription,
-            industry: formData.companyIndustry,
-            size: formData.companySize,
-            website: formData.companyWebsite,
-          },
-        }),
+      const registerResponse = await api.post("/api/auth/register", {
+        email: formData.email,
+        password: tempPassword,
+        role: "employer",
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        position: formData.position,
+        company: {
+          name: formData.companyName,
+          description: formData.companyDescription,
+          industry: formData.companyIndustry,
+          size: formData.companySize,
+          website: formData.companyWebsite,
+        },
       });
 
-      const registerData = await registerResponse.json();
+      const registerData = registerResponse.data;
 
       if (!registerResponse.ok || !registerData?.success) {
         return rejectWithValue(registerData?.message || "Registration failed");
@@ -99,37 +82,34 @@ export const registerEmployer = createAsyncThunk(
 
       // Update profile after registration
       if (registerData.token) {
-        const profileResponse = await fetch(`${API_URL}/api/employer/profile`, {
-          method: "PUT",
+        const profileResponse = await api.put("/api/employer/profile", {
+          contact: {
+            phone: formData.phone,
+            address: {
+              city: formData.location,
+              country: "India",
+            },
+          },
+          verificationDocuments: [
+            {
+              type: "other",
+              filename: formData.kycDocument?.name || "kyc_document",
+              url: "pending_upload",
+            },
+          ],
+          hiringNeeds: {
+            typesOfRoles: [],
+            locations: [formData.location],
+          },
+          bio: formData.companyDescription || `Registered via lead form`,
+          hiringGoals: "Looking to hire talented professionals",
+        }, {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${registerData.token}`,
           },
-          body: JSON.stringify({
-            contact: {
-              phone: formData.phone,
-              address: {
-                city: formData.location,
-                country: "India",
-              },
-            },
-            verificationDocuments: [
-              {
-                type: "other",
-                filename: formData.kycDocument?.name || "kyc_document",
-                url: "pending_upload",
-              },
-            ],
-            hiringNeeds: {
-              typesOfRoles: [],
-              locations: [formData.location],
-            },
-            bio: formData.companyDescription || `Registered via lead form`,
-            hiringGoals: "Looking to hire talented professionals",
-          }),
         });
 
-        const profileData = await profileResponse.json();
+        const profileData = profileResponse.data;
 
         if (!profileResponse.ok || !profileData?.success) {
           console.warn("Profile update warning:", profileData?.message);
