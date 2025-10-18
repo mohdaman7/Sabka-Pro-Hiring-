@@ -6,6 +6,7 @@ import { EmployerModel } from "../models/Employer.js";
 import { ApplicationModel } from "../models/Application.js";
 import { JobModel } from "../models/Job.js";
 import { CompanyModel } from "../models/Company.js";
+import mongoose from "mongoose";
 import { SupportTicketModel } from "../models/SupportTicket.js";
 import { sendApprovalEmail } from "../utils/mailer.js";
 
@@ -440,6 +441,131 @@ export const getAllApplications = async (req, res, next) => {
         hasPrev: page > 1,
       },
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Employer Document Verification (Admin)
+// ============================================
+
+export const listEmployerDocuments = async (req, res, next) => {
+  try {
+    const { id } = req.params; // employer userId
+    const employer = await EmployerModel.findOne({ userId: id }).select(
+      "verificationDocuments isVerified"
+    );
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+    res.json({ success: true, data: employer.verificationDocuments });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const reviewEmployerDocument = async (req, res, next) => {
+  try {
+    const { id, docId } = req.params; // employer userId and document subdoc id
+    const { action, reason } = req.body; // action: 'verify' | 'reject'
+    if (!["verify", "reject"].includes(action)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid action" });
+    }
+
+    const employer = await EmployerModel.findOne({ userId: id });
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+
+    const document = employer.verificationDocuments.id(docId);
+    if (!document) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Document not found" });
+    }
+
+    if (action === "verify") {
+      document.status = "verified";
+      document.rejectionReason = undefined;
+    } else if (action === "reject") {
+      document.status = "rejected";
+      document.rejectionReason = reason || "Unclear or invalid document";
+    }
+    document.reviewedBy = req.user?._id || null;
+    document.reviewedAt = new Date();
+
+    // If all docs verified, mark employer verified
+    const allVerified = employer.verificationDocuments.every(
+      (d) => (d._id.equals(document._id) ? document.status === "verified" : d.status === "verified")
+    );
+    employer.isVerified = allVerified;
+
+    await employer.save();
+    res.json({ success: true, data: document, isVerified: employer.isVerified });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Employer Plan Management (Admin)
+// ============================================
+
+export const adminUpdateEmployerPlan = async (req, res, next) => {
+  try {
+    const { id } = req.params; // employer userId
+    const { plan } = req.body; // 'free' | 'pro'
+    if (!plan || !["free", "pro"].includes(plan)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid plan" });
+    }
+    const employer = await EmployerModel.findOneAndUpdate(
+      { userId: id },
+      { $set: { plan } },
+      { new: true }
+    );
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+    res.json({ success: true, data: { plan: employer.plan } });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Job Moderation (Admin - approve/reject)
+// ============================================
+
+export const adminModerateJob = async (req, res, next) => {
+  try {
+    const { id } = req.params; // job id
+    const { action } = req.body; // 'approve' | 'reject' | 'close'
+    const job = await JobModel.findById(id);
+    if (!job) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+    if (action === "approve") {
+      job.status = "active";
+    } else if (action === "reject") {
+      job.status = "draft";
+    } else if (action === "close") {
+      job.status = "closed";
+    } else {
+      return res.status(400).json({ success: false, message: "Invalid action" });
+    }
+    await job.save();
+    res.json({ success: true, data: job });
   } catch (err) {
     next(err);
   }

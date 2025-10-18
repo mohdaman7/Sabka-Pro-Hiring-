@@ -81,11 +81,26 @@ const employerSchema = new Schema(
       {
         type: {
           type: String,
-          enum: ["business_license", "tax_certificate", "other"],
+          enum: [
+            "business_license",
+            "tax_certificate",
+            "company_registration",
+            "gst",
+            "pan",
+            "other",
+          ],
         },
         filename: String,
         url: String,
         uploadedAt: { type: Date, default: Date.now },
+        status: {
+          type: String,
+          enum: ["uploaded", "verified", "rejected"],
+          default: "uploaded",
+        },
+        rejectionReason: { type: String },
+        reviewedBy: { type: Schema.Types.ObjectId, ref: "User" },
+        reviewedAt: { type: Date },
       },
     ],
 
