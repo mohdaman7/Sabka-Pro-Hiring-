@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { customToast, toast } from "@/components/ui/toast";
 import { useLeadViewModel } from "@/viewmodels/LeadViewModel";
+import { adminService } from "@/services/adminService";
 
 export default function LeadsManagement() {
   const {
@@ -74,10 +75,21 @@ export default function LeadsManagement() {
     sortOrder: "desc",
   });
 
+  // Registration approvals state
+  const [registrationTab, setRegistrationTab] = useState("pending"); // 'pending' | 'accepted' | 'rejected'
+  const [registrationUsers, setRegistrationUsers] = useState([]);
+  const [registrationLoading, setRegistrationLoading] = useState(false);
+  const [registrationPagination, setRegistrationPagination] = useState(null);
+
   useEffect(() => {
     fetchLeadsData();
     fetchStats();
   }, [activeTab, filters]);
+
+  useEffect(() => {
+    // Load registration approvals when tab changes
+    loadRegistrations();
+  }, [registrationTab]);
 
   const fetchLeadsData = async () => {
     const queryFilters = { ...filters };
@@ -95,6 +107,61 @@ export default function LeadsManagement() {
       }
     } catch (error) {
       console.error("Failed to fetch stats:", error);
+    }
+  };
+
+  const loadRegistrations = async () => {
+    setRegistrationLoading(true);
+    try {
+      let response;
+      if (registrationTab === "pending") {
+        response = await adminService.getPendingUsers();
+      } else {
+        const status = registrationTab === "accepted" ? "active" : "rejected";
+        response = await adminService.getUsers(status);
+      }
+
+      if (response?.success) {
+        setRegistrationUsers(response.data || []);
+        setRegistrationPagination(response.pagination || null);
+      } else {
+        setRegistrationUsers(response?.data || []);
+        setRegistrationPagination(response?.pagination || null);
+      }
+    } catch (err) {
+      const message = err?.response?.data?.message || err?.message || "Failed to load registrations";
+      customToast.error("Error", message);
+    } finally {
+      setRegistrationLoading(false);
+    }
+  };
+
+  const handleApproveUserReg = async (userId) => {
+    const toastId = customToast.loading("Approving user...");
+    try {
+      await adminService.approveUser(userId, true);
+      customToast.success("Approved", "User approved successfully");
+      await loadRegistrations();
+    } catch (err) {
+      const message = err?.response?.data?.message || err?.message || "Failed to approve user";
+      customToast.error("Approval Failed", message);
+    } finally {
+      toast.dismiss(toastId);
+    }
+  };
+
+  const handleRejectUserReg = async (userId) => {
+    const reason = window.prompt("Enter rejection reason (optional):", "") || "";
+    const toastId = customToast.loading("Rejecting user...");
+    try {
+      await adminService.rejectUser(userId, reason);
+      customToast.success("Rejected", "User rejected successfully");
+      await loadRegistrations();
+    } catch (err) {
+      const message = err?.response?.data?.message || err?.message || "Failed to reject user";
+      customToast.error("Rejection Failed", message);
+    } finally {
+      toast.dismiss(toastId);
     }
   };
 
@@ -675,6 +742,119 @@ export default function LeadsManagement() {
           </div>
         </div>
       )}
+
+      {/* Registration Approvals */}
+      <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-white text-lg font-semibold">Registration Approvals</h2>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setRegistrationTab("pending")}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                registrationTab === "pending"
+                  ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white"
+                  : "bg-white/10 text-white/80 hover:bg-white/15"
+              }`}
+            >
+              Pending
+            </button>
+            <button
+              onClick={() => setRegistrationTab("accepted")}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                registrationTab === "accepted"
+                  ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white"
+                  : "bg-white/10 text-white/80 hover:bg-white/15"
+              }`}
+            >
+              Accepted
+            </button>
+            <button
+              onClick={() => setRegistrationTab("rejected")}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                registrationTab === "rejected"
+                  ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white"
+                  : "bg-white/10 text-white/80 hover:bg-white/15"
+              }`}
+            >
+              Rejected
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white/5 rounded-xl border border-[#803791]/10 overflow-hidden">
+          {registrationLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
+            </div>
+          ) : registrationUsers.length === 0 ? (
+            <div className="text-center py-8 text-white/70">No records found</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-white/5 border-b border-[#803791]/10">
+                  <tr>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Name</th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Email</th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Role</th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Status</th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Created</th>
+                    {registrationTab === "pending" && (
+                      <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Actions</th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {registrationUsers.map((user) => (
+                    <tr key={user._id} className="border-t border-[#803791]/10 hover:bg-white/5">
+                      <td className="py-3 px-6 text-white">
+                        {user.firstName} {user.lastName}
+                      </td>
+                      <td className="py-3 px-6 text-white/80">{user.email}</td>
+                      <td className="py-3 px-6 text-white/80 capitalize">{user.role}</td>
+                      <td className="py-3 px-6">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
+                          user.status === "active"
+                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                            : user.status === "rejected"
+                            ? "bg-red-500/20 text-red-300 border-red-500/30"
+                            : "bg-yellow-500/20 text-yellow-300 border-yellow-500/30"
+                        }`}>
+                          {user.status === "active" ? "Accepted" : user.status === "rejected" ? "Rejected" : "Pending"}
+                        </span>
+                      </td>
+                      <td className="py-3 px-6 text-white/70">
+                        {new Date(user.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </td>
+                      {registrationTab === "pending" && (
+                        <td className="py-3 px-6">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleApproveUserReg(user._id)}
+                              className="px-3 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg hover:bg-emerald-500/30 transition-all"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={() => handleRejectUserReg(user._id)}
+                              className="px-3 py-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition-all"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Tabs */}
       <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-1">
