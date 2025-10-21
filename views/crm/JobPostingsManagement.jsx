@@ -27,6 +27,8 @@ import {
   Users,
   X,
   ChevronRight,
+  SendHorizonal,
+  AlertCircle,
 } from "lucide-react";
 import { adminService } from "@/services/adminService";
 import { customToast } from "@/components/ui/toast";
@@ -41,6 +43,11 @@ export default function JobPostingsManagement() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
+
+  // New states for change request modal
+  const [showChangeRequestModal, setShowChangeRequestModal] = useState(false);
+  const [changeRequestNote, setChangeRequestNote] = useState("");
+  const [sendingRequest, setSendingRequest] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -150,25 +157,34 @@ export default function JobPostingsManagement() {
     }
   }
 
-  async function handleRequestChanges(job) {
-    const note =
-      typeof window !== "undefined"
-        ? window.prompt("Enter change request notes for employer:")
-        : null;
-    if (!note) {
-      customToast.warning("Change request cancelled");
+  // Updated change request handler
+  const handleOpenChangeRequest = (job) => {
+    setSelectedJob(job);
+    setChangeRequestNote("");
+    setShowChangeRequestModal(true);
+  };
+
+  const handleSendChangeRequest = async () => {
+    if (!changeRequestNote.trim()) {
+      customToast.warning("Please enter change request notes");
       return;
     }
+
+    setSendingRequest(true);
     try {
-      await adminService.requestJobChanges(job._id, note);
-      customToast.success("Change request sent");
+      await adminService.requestJobChanges(selectedJob._id, changeRequestNote);
+      customToast.success("Change request sent to employer");
+      setShowChangeRequestModal(false);
+      setChangeRequestNote("");
       await refresh();
     } catch (e) {
       customToast.error(
         e?.response?.data?.message || e?.message || "Failed to request changes"
       );
+    } finally {
+      setSendingRequest(false);
     }
-  }
+  };
 
   async function handleReanalyze(jobId) {
     const toastId = customToast.loading("Reanalyzing job...");
@@ -584,7 +600,7 @@ export default function JobPostingsManagement() {
                       <XCircle className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleRequestChanges(job)}
+                      onClick={() => handleOpenChangeRequest(job)}
                       className="p-3 bg-amber-600/80 hover:bg-amber-600 text-white rounded-xl transition-all hover:scale-110 shadow-lg"
                       title="Request Changes"
                     >
@@ -621,6 +637,121 @@ export default function JobPostingsManagement() {
             >
               Clear Filters
             </button>
+          </div>
+        )}
+
+        {/* Premium Change Request Modal */}
+        {showChangeRequestModal && selectedJob && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-end md:items-center md:justify-center z-50 animate-in fade-in duration-300">
+            <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] w-full md:w-[600px] max-h-[90vh] rounded-t-3xl md:rounded-3xl overflow-hidden shadow-2xl border border-amber-500/20 animate-in slide-in-from-bottom md:slide-in-from-bottom-0 duration-300 hover:shadow-2xl hover:shadow-amber-500/20 transition-all">
+              <div className="flex items-center justify-between px-6 py-5 border-b border-amber-500/20 bg-gradient-to-r from-amber-500/5 to-orange-500/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                    <MessageSquare className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">
+                      Request Changes
+                    </h3>
+                    <p className="text-sm text-amber-300/80">
+                      Send change request to employer
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowChangeRequestModal(false)}
+                  className="p-2 hover:bg-amber-500/10 rounded-xl transition-all duration-200 text-amber-300 hover:text-amber-200 border border-transparent hover:border-amber-500/30 hover:scale-110 active:scale-95"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Job Info */}
+                <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-amber-400" />
+                    Job Details
+                  </h4>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <div className="text-amber-300/70 text-xs">Title</div>
+                      <div className="text-white font-medium truncate">
+                        {selectedJob.title}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-amber-300/70 text-xs">Employer</div>
+                      <div className="text-white font-medium truncate">
+                        {selectedJob.employerId?.firstName &&
+                        selectedJob.employerId?.lastName
+                          ? `${selectedJob.employerId.firstName} ${selectedJob.employerId.lastName}`
+                          : selectedJob.employerId?.email || "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Change Request Form */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-white mb-3 items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-amber-400" />
+                      Change Request Notes
+                      <span className="text-amber-400">*</span>
+                    </label>
+                    <textarea
+                      value={changeRequestNote}
+                      onChange={(e) => setChangeRequestNote(e.target.value)}
+                      placeholder="Please provide clear and constructive feedback about what changes are needed for this job posting to be approved. Be specific about issues and required improvements..."
+                      rows={6}
+                      className="w-full px-4 py-3 bg-white/5 backdrop-blur-xl border border-amber-500/30 rounded-xl text-white placeholder:text-amber-300/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 shadow-lg transition-all resize-none"
+                    />
+                    <div className="flex justify-between items-center mt-2">
+                      <span className="text-xs text-amber-300/60">
+                        {changeRequestNote.length}/1000 characters
+                      </span>
+                      <span className="text-xs text-amber-300/60">
+                        Required
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Tips */}
+                  <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
+                    <h5 className="font-semibold text-amber-300 text-sm mb-2 flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4" />
+                      Tips for effective feedback:
+                    </h5>
+                    <ul className="text-amber-300/70 text-xs space-y-1">
+                      <li>• Be specific about what needs to be changed</li>
+                      <li>• Provide examples of acceptable content</li>
+                      <li>• Explain why the changes are necessary</li>
+                      <li>• Keep the tone professional and constructive</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4 border-t border-amber-500/20">
+                  <button
+                    onClick={() => setShowChangeRequestModal(false)}
+                    className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold border border-white/10 transition-all hover:scale-105 hover:border-white/20 flex items-center justify-center gap-2"
+                  >
+                    <X className="w-4 h-4" />
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSendChangeRequest}
+                    disabled={!changeRequestNote.trim() || sendingRequest}
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all hover:scale-105 shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <SendHorizonal className="w-4 h-4" />
+                    {sendingRequest ? "Sending..." : "Send Request"}
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -871,7 +1002,7 @@ export default function JobPostingsManagement() {
                     </button>
                     <button
                       onClick={() => {
-                        handleRequestChanges(selectedJob);
+                        handleOpenChangeRequest(selectedJob);
                         setShowDetails(false);
                       }}
                       className="px-4 py-3 bg-amber-600/80 hover:bg-amber-600 text-white rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-105 active:scale-95 shadow-lg shadow-amber-600/20 hover:shadow-lg hover:shadow-amber-600/40"
