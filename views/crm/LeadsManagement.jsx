@@ -129,7 +129,10 @@ export default function LeadsManagement() {
         setRegistrationPagination(response?.pagination || null);
       }
     } catch (err) {
-      const message = err?.response?.data?.message || err?.message || "Failed to load registrations";
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to load registrations";
       customToast.error("Error", message);
     } finally {
       setRegistrationLoading(false);
@@ -143,7 +146,10 @@ export default function LeadsManagement() {
       customToast.success("Approved", "User approved successfully");
       await loadRegistrations();
     } catch (err) {
-      const message = err?.response?.data?.message || err?.message || "Failed to approve user";
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to approve user";
       customToast.error("Approval Failed", message);
     } finally {
       toast.dismiss(toastId);
@@ -151,14 +157,16 @@ export default function LeadsManagement() {
   };
 
   const handleRejectUserReg = async (userId) => {
-    const reason = window.prompt("Enter rejection reason (optional):", "") || "";
+    const reason =
+      window.prompt("Enter rejection reason (optional):", "") || "";
     const toastId = customToast.loading("Rejecting user...");
     try {
       await adminService.rejectUser(userId, reason);
       customToast.success("Rejected", "User rejected successfully");
       await loadRegistrations();
     } catch (err) {
-      const message = err?.response?.data?.message || err?.message || "Failed to reject user";
+      const message =
+        err?.response?.data?.message || err?.message || "Failed to reject user";
       customToast.error("Rejection Failed", message);
     } finally {
       toast.dismiss(toastId);
@@ -746,7 +754,9 @@ export default function LeadsManagement() {
       {/* Registration Approvals */}
       <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-white text-lg font-semibold">Registration Approvals</h2>
+          <h2 className="text-white text-lg font-semibold">
+            Registration Approvals
+          </h2>
           <div className="flex gap-2">
             <button
               onClick={() => setRegistrationTab("pending")}
@@ -787,39 +797,64 @@ export default function LeadsManagement() {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
             </div>
           ) : registrationUsers.length === 0 ? (
-            <div className="text-center py-8 text-white/70">No records found</div>
+            <div className="text-center py-8 text-white/70">
+              No records found
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-white/5 border-b border-[#803791]/10">
                   <tr>
-                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Name</th>
-                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Email</th>
-                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Role</th>
-                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Status</th>
-                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Created</th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">
+                      Name
+                    </th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">
+                      Email
+                    </th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">
+                      Role
+                    </th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">
+                      Status
+                    </th>
+                    <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">
+                      Created
+                    </th>
                     {registrationTab === "pending" && (
-                      <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">Actions</th>
+                      <th className="text-left py-3 px-6 text-sm font-semibold text-white/90">
+                        Actions
+                      </th>
                     )}
                   </tr>
                 </thead>
                 <tbody>
                   {registrationUsers.map((user) => (
-                    <tr key={user._id} className="border-t border-[#803791]/10 hover:bg-white/5">
+                    <tr
+                      key={user._id}
+                      className="border-t border-[#803791]/10 hover:bg-white/5"
+                    >
                       <td className="py-3 px-6 text-white">
                         {user.firstName} {user.lastName}
                       </td>
                       <td className="py-3 px-6 text-white/80">{user.email}</td>
-                      <td className="py-3 px-6 text-white/80 capitalize">{user.role}</td>
+                      <td className="py-3 px-6 text-white/80 capitalize">
+                        {user.role}
+                      </td>
                       <td className="py-3 px-6">
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
-                          user.status === "active"
-                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                        <span
+                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
+                            user.status === "active"
+                              ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                              : user.status === "rejected"
+                              ? "bg-red-500/20 text-red-300 border-red-500/30"
+                              : "bg-yellow-500/20 text-yellow-300 border-yellow-500/30"
+                          }`}
+                        >
+                          {user.status === "active"
+                            ? "Accepted"
                             : user.status === "rejected"
-                            ? "bg-red-500/20 text-red-300 border-red-500/30"
-                            : "bg-yellow-500/20 text-yellow-300 border-yellow-500/30"
-                        }`}>
-                          {user.status === "active" ? "Accepted" : user.status === "rejected" ? "Rejected" : "Pending"}
+                            ? "Rejected"
+                            : "Pending"}
                         </span>
                       </td>
                       <td className="py-3 px-6 text-white/70">
