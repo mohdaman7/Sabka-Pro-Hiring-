@@ -162,15 +162,7 @@ export default function CandidatesManagement() {
           <div className="relative p-8 md:p-10">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-xl border border-white/30 flex items-center justify-center">
-                    <UserPlus className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-xl text-white text-sm font-medium border border-white/30 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-yellow-300" />
-                    Talent Management
-                  </span>
-                </div>
+                <div className="flex items-center gap-3 mb-3"></div>
                 <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
                   Candidates Management
                 </h1>
