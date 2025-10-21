@@ -81,6 +81,37 @@ const jobSchema = new Schema(
         ref: "Application",
       },
     ],
+    // Moderation fields for admin review and content analysis
+    moderation: {
+      approvalStatus: {
+        type: String,
+        enum: ["pending", "approved", "rejected", "needs_changes"],
+        default: "pending",
+        index: true,
+      },
+      reviewerId: { type: Schema.Types.ObjectId, ref: "User" },
+      reviewedAt: { type: Date },
+      rejectionReason: { type: String },
+      requestChangesNote: { type: String },
+      spamScore: { type: Number, default: 0, min: 0, max: 1 },
+      flags: [
+        {
+          type: String,
+          enum: [
+            "suspicious_link",
+            "profanity",
+            "contact_info",
+            "salary_outlier",
+            "short_description",
+            "caps_overuse",
+            "blacklisted_term",
+          ],
+        },
+      ],
+      lastAnalyzedAt: { type: Date },
+      autoFlagged: { type: Boolean, default: false },
+      notes: { type: String },
+    },
   },
   {
     timestamps: true,
@@ -100,5 +131,6 @@ jobSchema.set("toObject", { virtuals: true });
 jobSchema.index({ employerId: 1, createdAt: -1 });
 jobSchema.index({ status: 1, createdAt: -1 });
 jobSchema.index({ location: 1, jobType: 1 });
+jobSchema.index({ "moderation.approvalStatus": 1, createdAt: -1 });
 
 export const JobModel = mongoose.model("Job", jobSchema);

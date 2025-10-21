@@ -61,6 +61,24 @@ export const adminService = {
     return response.data;
   },
 
+  // Job moderation actions
+  approveJob: async (jobId) => {
+    const response = await api.post(`/api/admin/jobs/${jobId}/approve`);
+    return response.data;
+  },
+  rejectJob: async (jobId, reason) => {
+    const response = await api.post(`/api/admin/jobs/${jobId}/reject`, { reason });
+    return response.data;
+  },
+  requestJobChanges: async (jobId, note) => {
+    const response = await api.post(`/api/admin/jobs/${jobId}/request-changes`, { note });
+    return response.data;
+  },
+  reanalyzeJob: async (jobId) => {
+    const response = await api.post(`/api/admin/jobs/${jobId}/reanalyze`);
+    return response.data;
+  },
+
   // Companies CRUD
   listCompanies: async (params = {}) => {
     const response = await api.get("/api/admin/companies", { params });

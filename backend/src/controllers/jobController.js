@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { JobModel } from "../models/Job.js";
 import { ApplicationModel } from "../models/Application.js";
+import { analyzeJobContent, shouldResetApprovalOnUpdate } from "../utils/moderation.js";
 
 // Validation schemas
 export const createJobSchema = z.object({
@@ -58,16 +59,32 @@ export const createJob = async (req, res, next) => {
       // Keep deadline as string, let MongoDB handle the date conversion
     });
 
+    // Analyze content for moderation
+    const moderationAnalysis = analyzeJobContent(parsed);
+    const moderation = {
+      approvalStatus: "pending",
+      spamScore: moderationAnalysis.spamScore,
+      flags: moderationAnalysis.flags,
+      autoFlagged: moderationAnalysis.autoFlagged,
+      lastAnalyzedAt: moderationAnalysis.lastAnalyzedAt,
+    };
+
+    // If employer tries to activate immediately without approval, force draft
+    const initialStatus = parsed.status === "active" ? "draft" : parsed.status;
+
     const job = await JobModel.create({
       ...parsed,
+      status: initialStatus,
       employerId: req.user.id,
+      moderation,
     });
 
     res.status(201).json({
       success: true,
-      message: `Job ${
-        parsed.status === "draft" ? "saved as draft" : "published"
-      } successfully`,
+      message:
+        parsed.status === "active"
+          ? "Job saved as draft pending approval"
+          : `Job ${parsed.status === "draft" ? "saved as draft" : "created"} successfully`,
       data: job,
     });
   } catch (err) {
@@ -89,7 +106,7 @@ export const getAllJobs = async (req, res, next) => {
       maxSalary,
     } = req.query;
 
-    const filter = { status: "active" };
+    const filter = { status: "active", "moderation.approvalStatus": "approved" };
 
     if (search) {
       filter.$or = [
@@ -197,9 +214,32 @@ export const updateJob = async (req, res, next) => {
 
     const parsed = updateJobSchema.parse(updateData);
 
+    // Determine if we need to reset approval and re-analyze
+    const shouldReanalyze = shouldResetApprovalOnUpdate(parsed);
+    let updatePayload = { $set: parsed };
+
+    if (shouldReanalyze) {
+      const moderationAnalysis = analyzeJobContent({ ...parsed });
+      updatePayload = {
+        ...updatePayload,
+        $set: {
+          ...parsed,
+          "moderation.approvalStatus": "pending",
+          "moderation.reviewerId": undefined,
+          "moderation.reviewedAt": undefined,
+          "moderation.rejectionReason": undefined,
+          "moderation.requestChangesNote": undefined,
+          "moderation.spamScore": moderationAnalysis.spamScore,
+          "moderation.flags": moderationAnalysis.flags,
+          "moderation.autoFlagged": moderationAnalysis.autoFlagged,
+          "moderation.lastAnalyzedAt": moderationAnalysis.lastAnalyzedAt,
+        },
+      };
+    }
+
     const job = await JobModel.findOneAndUpdate(
       { _id: req.params.id, employerId: req.user.id },
-      { $set: parsed },
+      updatePayload,
       { new: true, runValidators: true }
     );
 
@@ -213,7 +253,9 @@ export const updateJob = async (req, res, next) => {
     res.json({
       success: true,
       data: job,
-      message: "Job updated successfully",
+      message: shouldReanalyze
+        ? "Job updated and sent for moderation"
+        : "Job updated successfully",
     });
   } catch (err) {
     next(err);
@@ -281,6 +323,25 @@ export const changeJobStatusSchema = z.object({
 export const changeJobStatus = async (req, res, next) => {
   try {
     const parsed = changeJobStatusSchema.parse(req.body);
+    // Prevent activation without approval
+    if (parsed.status === "active") {
+      const existing = await JobModel.findOne({
+        _id: req.params.id,
+        employerId: req.user.id,
+      }).select("moderation");
+      if (!existing) {
+        return res.status(404).json({
+          success: false,
+          message: "Job not found or you are not authorized to update this job",
+        });
+      }
+      if (existing?.moderation?.approvalStatus !== "approved") {
+        return res.status(400).json({
+          success: false,
+          message: "Job must be approved by admin before activation",
+        });
+      }
+    }
 
     const job = await JobModel.findOneAndUpdate(
       { _id: req.params.id, employerId: req.user.id },
