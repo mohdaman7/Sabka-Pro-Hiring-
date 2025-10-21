@@ -241,8 +241,31 @@ export const getCandidates = async (req, res, next) => {
     const pipeline = [
       { $match: match },
       { $sort: { createdAt: -1 } },
-      { $lookup: { from: "students", localField: "_id", foreignField: "userId", as: "profile" } },
+      // Join with student profile
+      {
+        $lookup: {
+          from: "students",
+          localField: "_id",
+          foreignField: "userId",
+          as: "profile",
+        },
+      },
       { $unwind: { path: "$profile", preserveNullAndEmptyArrays: true } },
+      // Join with applications to get total applied jobs count
+      {
+        $lookup: {
+          from: "applications",
+          localField: "_id",
+          foreignField: "studentId",
+          as: "applications",
+        },
+      },
+      // Add computed field for total applications
+      {
+        $addFields: {
+          totalApplications: { $size: "$applications" },
+        },
+      },
     ];
 
     if (plan && ["free", "pro"].includes(plan)) {
@@ -253,10 +276,11 @@ export const getCandidates = async (req, res, next) => {
     const skip = (Number(page) - 1) * Number(limit);
     const paginatedPipeline = [
       ...pipeline,
-      { $facet: {
-          data: [ { $skip: skip }, { $limit: Number(limit) } ],
-          count: [ { $count: "total" } ]
-        }
+      {
+        $facet: {
+          data: [{ $skip: skip }, { $limit: Number(limit) }],
+          count: [{ $count: "total" }],
+        },
       },
       { $unwind: { path: "$count", preserveNullAndEmptyArrays: true } },
       { $project: { data: 1, total: "$count.total" } },
@@ -274,6 +298,10 @@ export const getCandidates = async (req, res, next) => {
       city: doc.profile?.address?.city || "",
       hasResume: Boolean(doc.profile?.resume?.url),
       createdAt: doc.createdAt,
+      // NEW: Added skills from profile
+      skills: doc.profile?.skills || [],
+      // NEW: Added total applied jobs count
+      appliedJobs: doc.totalApplications || 0,
     }));
     const total = result?.total || 0;
 
@@ -406,7 +434,9 @@ export const getPlatformStats = async (req, res, next) => {
       ApplicationModel.countDocuments(),
       JobModel.countDocuments({ status: "active" }),
       UserModel.find().sort({ createdAt: -1 }).limit(5).select("-passwordHash"),
-      SupportTicketModel.countDocuments({ status: { $in: ["open", "in_progress"] } }),
+      SupportTicketModel.countDocuments({
+        status: { $in: ["open", "in_progress"] },
+      }),
     ]);
 
     res.json({
@@ -523,10 +553,14 @@ export const createCompany = async (req, res, next) => {
   try {
     const payload = req.body || {};
     if (!payload.name) {
-      return res.status(400).json({ success: false, message: "Company name is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Company name is required" });
     }
     const company = await CompanyModel.create(payload);
-    res.status(201).json({ success: true, data: company, message: "Company created" });
+    res
+      .status(201)
+      .json({ success: true, data: company, message: "Company created" });
   } catch (err) {
     next(err);
   }
@@ -564,7 +598,9 @@ export const getCompanyById = async (req, res, next) => {
   try {
     const company = await CompanyModel.findById(req.params.id);
     if (!company) {
-      return res.status(404).json({ success: false, message: "Company not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Company not found" });
     }
     res.json({ success: true, data: company });
   } catch (err) {
@@ -580,7 +616,9 @@ export const updateCompany = async (req, res, next) => {
       { new: true }
     );
     if (!company) {
-      return res.status(404).json({ success: false, message: "Company not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Company not found" });
     }
     res.json({ success: true, data: company, message: "Company updated" });
   } catch (err) {
@@ -592,7 +630,9 @@ export const deleteCompany = async (req, res, next) => {
   try {
     const company = await CompanyModel.findByIdAndDelete(req.params.id);
     if (!company) {
-      return res.status(404).json({ success: false, message: "Company not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Company not found" });
     }
     res.json({ success: true, message: "Company deleted" });
   } catch (err) {
@@ -607,11 +647,11 @@ export const deleteCompany = async (req, res, next) => {
 export const updateEmployerVerification = async (req, res, next) => {
   try {
     const { id } = req.params; // user id
-    const parseBody = z
-      .object({ isVerified: z.boolean() })
-      .safeParse(req.body);
+    const parseBody = z.object({ isVerified: z.boolean() }).safeParse(req.body);
     if (!parseBody.success) {
-      return res.status(400).json({ success: false, message: "Invalid payload" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid payload" });
     }
 
     const employer = await EmployerModel.findOneAndUpdate(
@@ -621,10 +661,18 @@ export const updateEmployerVerification = async (req, res, next) => {
     );
 
     if (!employer) {
-      return res.status(404).json({ success: false, message: "Employer profile not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
     }
 
-    res.json({ success: true, data: employer, message: `Employer marked as ${parseBody.data.isVerified ? "verified" : "unverified"}` });
+    res.json({
+      success: true,
+      data: employer,
+      message: `Employer marked as ${
+        parseBody.data.isVerified ? "verified" : "unverified"
+      }`,
+    });
   } catch (err) {
     next(err);
   }
@@ -647,10 +695,16 @@ export const updateEmployerPlanAdmin = async (req, res, next) => {
     );
 
     if (!employer) {
-      return res.status(404).json({ success: false, message: "Employer profile not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
     }
 
-    res.json({ success: true, data: employer, message: "Employer plan updated" });
+    res.json({
+      success: true,
+      data: employer,
+      message: "Employer plan updated",
+    });
   } catch (err) {
     next(err);
   }
@@ -667,17 +721,23 @@ export const updateEmployerDocumentStatus = async (req, res, next) => {
       })
       .safeParse(req.body);
     if (!parseBody.success) {
-      return res.status(400).json({ success: false, message: "Invalid payload" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid payload" });
     }
 
     const employer = await EmployerModel.findOne({ userId: id });
     if (!employer) {
-      return res.status(404).json({ success: false, message: "Employer profile not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
     }
 
     const document = employer.verificationDocuments.id(docId);
     if (!document) {
-      return res.status(404).json({ success: false, message: "Document not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Document not found" });
     }
 
     document.status = parseBody.data.status;
@@ -696,7 +756,11 @@ export const updateEmployerDocumentStatus = async (req, res, next) => {
 
     await employer.save();
 
-    res.json({ success: true, data: document, message: "Document status updated" });
+    res.json({
+      success: true,
+      data: document,
+      message: "Document status updated",
+    });
   } catch (err) {
     next(err);
   }
@@ -709,7 +773,9 @@ export const changeJobStatusAdmin = async (req, res, next) => {
       .object({ status: z.enum(["draft", "active", "paused", "closed"]) })
       .safeParse(req.body);
     if (!parseBody.success) {
-      return res.status(400).json({ success: false, message: "Invalid status" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid status" });
     }
 
     const job = await JobModel.findByIdAndUpdate(
