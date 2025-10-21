@@ -18,6 +18,32 @@ export const updateApplicationStatusSchema = z.object({
   feedback: z.string().max(1000).optional(),
 });
 
+// Interview schemas
+const interviewPanelMemberSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  role: z.string().optional(),
+});
+
+const scheduleInterviewSchema = z.object({
+  scheduledAt: z.coerce.date(),
+  timezone: z.string().min(1),
+  durationMinutes: z.number().int().positive().max(8 * 60),
+  type: z.enum(["video", "phone", "onsite"]),
+  meetingLink: z.string().url().optional(),
+  location: z.string().optional(),
+  panel: z.array(interviewPanelMemberSchema).default([]),
+  notes: z.string().max(1000).optional(),
+});
+
+const rescheduleInterviewSchema = scheduleInterviewSchema.extend({
+  reason: z.string().max(500).optional(),
+});
+
+const interviewFeedbackSchema = z.object({
+  feedback: z.string().min(1).max(2000),
+});
+
 // Apply for a job
 export const applyForJob = async (req, res, next) => {
   try {
@@ -274,6 +300,164 @@ export const updateApplicationStatus = async (req, res, next) => {
       data: application,
       message: `Application status updated to ${parsed.status}`,
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Schedule an interview (employer)
+export const scheduleInterview = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const parsed = scheduleInterviewSchema.parse(req.body);
+
+    const application = await ApplicationModel.findOneAndUpdate(
+      { _id: id, employerId: req.user.id },
+      {
+        interview: {
+          scheduledAt: parsed.scheduledAt,
+          timezone: parsed.timezone,
+          durationMinutes: parsed.durationMinutes,
+          type: parsed.type,
+          meetingLink: parsed.meetingLink,
+          location: parsed.location,
+          panel: parsed.panel,
+          notes: parsed.notes,
+          status: "scheduled",
+          history: [
+            {
+              scheduledAt: parsed.scheduledAt,
+              reason: "initial schedule",
+            },
+          ],
+        },
+        status: "interview",
+        updatedAt: new Date(),
+      },
+      { new: true }
+    )
+      .populate("jobId", "title")
+      .populate("studentId", "firstName lastName email");
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found or not authorized",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: application,
+      message: "Interview scheduled",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Reschedule interview (employer)
+export const rescheduleInterview = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const parsed = rescheduleInterviewSchema.parse(req.body);
+
+    const application = await ApplicationModel.findOne({
+      _id: id,
+      employerId: req.user.id,
+      "interview.status": { $in: ["scheduled", "rescheduled"] },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Interview not found or cannot be rescheduled",
+      });
+    }
+
+    application.interview = {
+      ...application.interview,
+      scheduledAt: parsed.scheduledAt,
+      timezone: parsed.timezone,
+      durationMinutes: parsed.durationMinutes,
+      type: parsed.type,
+      meetingLink: parsed.meetingLink,
+      location: parsed.location,
+      panel: parsed.panel,
+      notes: parsed.notes,
+      status: "rescheduled",
+      history: [
+        ...(application.interview?.history || []),
+        { scheduledAt: parsed.scheduledAt, reason: parsed.reason },
+      ],
+    };
+
+    application.updatedAt = new Date();
+
+    await application.save();
+
+    await application.populate("jobId", "title");
+    await application.populate("studentId", "firstName lastName email");
+
+    res.json({ success: true, data: application, message: "Interview rescheduled" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Cancel interview (employer)
+export const cancelInterview = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body || {};
+
+    const application = await ApplicationModel.findOneAndUpdate(
+      { _id: id, employerId: req.user.id },
+      {
+        $set: {
+          "interview.status": "cancelled",
+        },
+        $push: {
+          "interview.history": { scheduledAt: new Date(), reason: reason || "cancelled" },
+        },
+        updatedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!application) {
+      return res.status(404).json({ success: false, message: "Interview not found" });
+    }
+
+    res.json({ success: true, data: application, message: "Interview cancelled" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Complete interview and attach feedback (employer)
+export const completeInterview = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const parsed = interviewFeedbackSchema.parse(req.body);
+
+    const application = await ApplicationModel.findOneAndUpdate(
+      { _id: id, employerId: req.user.id },
+      {
+        $set: {
+          "interview.status": "completed",
+          "interview.feedback": parsed.feedback,
+        },
+        updatedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!application) {
+      return res.status(404).json({ success: false, message: "Interview not found" });
+    }
+
+    res.json({ success: true, data: application, message: "Interview marked as completed" });
   } catch (err) {
     next(err);
   }

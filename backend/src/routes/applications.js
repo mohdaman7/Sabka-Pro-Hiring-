@@ -8,6 +8,10 @@ import {
   getApplicationById,
   withdrawApplication,
   getApplicationStats,
+  scheduleInterview,
+  rescheduleInterview,
+  cancelInterview,
+  completeInterview,
 } from "../controllers/applicationController.js";
 import { limitByPlan } from "../middleware/plan.js";
 
@@ -64,6 +68,35 @@ router.patch(
   authenticate,
   authorize(["employer", "admin"]),
   updateApplicationStatus
+);
+
+// Interview routes (employer)
+router.post(
+  "/:id/interview/schedule",
+  authenticate,
+  authorize(["employer", "admin"]),
+  scheduleInterview
+);
+
+router.patch(
+  "/:id/interview/reschedule",
+  authenticate,
+  authorize(["employer", "admin"]),
+  rescheduleInterview
+);
+
+router.patch(
+  "/:id/interview/cancel",
+  authenticate,
+  authorize(["employer", "admin"]),
+  cancelInterview
+);
+
+router.patch(
+  "/:id/interview/complete",
+  authenticate,
+  authorize(["employer", "admin"]),
+  completeInterview
 );
 
 export default router;

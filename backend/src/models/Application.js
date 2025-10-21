@@ -15,9 +15,50 @@ const applicationSchema = new Schema(
       yearsExperience: { type: Schema.Types.Mixed },
       languages: { type: String },
     },
+    // Interview scheduling information
+    interview: {
+      type: new Schema(
+        {
+          scheduledAt: { type: Date },
+          timezone: { type: String },
+          durationMinutes: { type: Number },
+          type: { type: String, enum: ['video', 'phone', 'onsite'] },
+          meetingLink: { type: String },
+          location: { type: String },
+          panel: [
+            new Schema(
+              {
+                name: { type: String },
+                email: { type: String },
+                role: { type: String },
+              },
+              { _id: false }
+            ),
+          ],
+          notes: { type: String },
+          status: {
+            type: String,
+            enum: ['scheduled', 'rescheduled', 'completed', 'cancelled'],
+          },
+          feedback: { type: String },
+          history: [
+            new Schema(
+              {
+                scheduledAt: { type: Date },
+                updatedAt: { type: Date, default: Date.now },
+                reason: { type: String },
+              },
+              { _id: false }
+            ),
+          ],
+        },
+        { _id: false }
+      ),
+      default: null,
+    },
     status: {
       type: String,
-      enum: ['applied', 'reviewed', 'interview', 'rejected', 'hired'],
+      enum: ['applied', 'reviewed', 'interview', 'rejected', 'hired', 'withdrawn'],
       default: 'applied',
       required: true,
     },
