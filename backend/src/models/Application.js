@@ -21,6 +21,8 @@ const applicationSchema = new Schema(
       default: 'applied',
       required: true,
     },
+    // Optional employer feedback about this application (populated when updating status)
+    feedback: { type: String },
   },
   { timestamps: true }
 );

@@ -10,6 +10,7 @@ import {
   getApplicationStats,
 } from "../controllers/applicationController.js";
 import { limitByPlan } from "../middleware/plan.js";
+import interviewRoutes from "./interviews.js";
 
 const router = Router();
 
@@ -67,3 +68,4 @@ router.patch(
 );
 
 export default router;
+

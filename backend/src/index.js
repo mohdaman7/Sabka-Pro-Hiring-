@@ -16,6 +16,9 @@ import crmRoutes from "./routes/crm.js";
 import leadRoutes from "./routes/leads.js";
 import studentRoutes from "./routes/student.js";
 import employerRoutes from "./routes/employer.js";
+import interviewRoutes from "./routes/interviews.js";
+import { InterviewModel } from "./models/Interview.js";
+import { sendInterviewReminder } from "./utils/mailer.js";
 import userRoutes from "./routes/user.js";
 
 // Rate limiting configuration
@@ -117,6 +120,7 @@ async function bootstrap() {
     app.use("/api/leads", leadRoutes);
     app.use("/api/student", studentRoutes);
     app.use("/api/employer", employerRoutes);
+    app.use("/api/interviews", interviewRoutes);
     app.use("/api/user", userRoutes);
 
     // API documentation route (you can implement Swagger later)
@@ -172,6 +176,50 @@ async function bootstrap() {
       console.error("❌ Server error:", error);
       process.exit(1);
     });
+
+    // Lightweight reminder scheduler (runs every 60 seconds)
+    const REMINDER_INTERVAL_MS = 60 * 1000;
+    setInterval(async () => {
+      try {
+        const now = new Date();
+        const in1Hour = new Date(now.getTime() + 60 * 60 * 1000);
+        const in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+        // 24-hour reminders
+        const due24h = await InterviewModel.find({
+          status: { $in: ["scheduled", "rescheduled"] },
+          startTime: { $gte: now, $lte: in24Hours },
+          "reminders.oneDaySent": false,
+        }).populate("studentId", "firstName lastName email");
+
+        for (const iv of due24h) {
+          await sendInterviewReminder({
+            to: [iv.studentId.email, ...(iv.panel || []).map((p) => p.email)],
+            interview: iv,
+            windowLabel: "24 hours",
+          });
+          await InterviewModel.updateOne({ _id: iv._id }, { $set: { "reminders.oneDaySent": true } });
+        }
+
+        // 1-hour reminders
+        const due1h = await InterviewModel.find({
+          status: { $in: ["scheduled", "rescheduled"] },
+          startTime: { $gte: now, $lte: in1Hour },
+          "reminders.oneHourSent": false,
+        }).populate("studentId", "firstName lastName email");
+
+        for (const iv of due1h) {
+          await sendInterviewReminder({
+            to: [iv.studentId.email, ...(iv.panel || []).map((p) => p.email)],
+            interview: iv,
+            windowLabel: "1 hour",
+          });
+          await InterviewModel.updateOne({ _id: iv._id }, { $set: { "reminders.oneHourSent": true } });
+        }
+      } catch (schedulerErr) {
+        console.error("Reminder scheduler error:", schedulerErr?.message || schedulerErr);
+      }
+    }, REMINDER_INTERVAL_MS);
   } catch (error) {
     console.error("❌ Failed to start server:", error);
     process.exit(1);
