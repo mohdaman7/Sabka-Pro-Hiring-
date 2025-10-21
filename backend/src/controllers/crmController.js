@@ -1,5 +1,6 @@
 // backend/src/controllers/crmController.js
 import bcrypt from "bcryptjs";
+import { z } from "zod";
 import { UserModel } from "../models/User.js";
 import { StudentModel } from "../models/Student.js";
 import { EmployerModel } from "../models/Employer.js";
@@ -524,6 +525,134 @@ export const deleteCompany = async (req, res, next) => {
       return res.status(404).json({ success: false, message: "Company not found" });
     }
     res.json({ success: true, message: "Company deleted" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Employer Admin Actions
+// ============================================
+
+export const updateEmployerVerification = async (req, res, next) => {
+  try {
+    const { id } = req.params; // user id
+    const parseBody = z
+      .object({ isVerified: z.boolean() })
+      .safeParse(req.body);
+    if (!parseBody.success) {
+      return res.status(400).json({ success: false, message: "Invalid payload" });
+    }
+
+    const employer = await EmployerModel.findOneAndUpdate(
+      { userId: id },
+      { $set: { isVerified: parseBody.data.isVerified } },
+      { new: true }
+    );
+
+    if (!employer) {
+      return res.status(404).json({ success: false, message: "Employer profile not found" });
+    }
+
+    res.json({ success: true, data: employer, message: `Employer marked as ${parseBody.data.isVerified ? "verified" : "unverified"}` });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateEmployerPlanAdmin = async (req, res, next) => {
+  try {
+    const { id } = req.params; // user id
+    const parseBody = z
+      .object({ plan: z.enum(["free", "pro"]) })
+      .safeParse(req.body);
+    if (!parseBody.success) {
+      return res.status(400).json({ success: false, message: "Invalid plan" });
+    }
+
+    const employer = await EmployerModel.findOneAndUpdate(
+      { userId: id },
+      { $set: { plan: parseBody.data.plan } },
+      { new: true }
+    );
+
+    if (!employer) {
+      return res.status(404).json({ success: false, message: "Employer profile not found" });
+    }
+
+    res.json({ success: true, data: employer, message: "Employer plan updated" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateEmployerDocumentStatus = async (req, res, next) => {
+  try {
+    const { id, docId } = req.params; // user id, document id
+    const parseBody = z
+      .object({
+        status: z.enum(["uploaded", "verified", "rejected", "needs_reupload"]),
+        reviewNotes: z.string().max(1000).optional(),
+        rejectionReason: z.string().max(500).optional(),
+      })
+      .safeParse(req.body);
+    if (!parseBody.success) {
+      return res.status(400).json({ success: false, message: "Invalid payload" });
+    }
+
+    const employer = await EmployerModel.findOne({ userId: id });
+    if (!employer) {
+      return res.status(404).json({ success: false, message: "Employer profile not found" });
+    }
+
+    const document = employer.verificationDocuments.id(docId);
+    if (!document) {
+      return res.status(404).json({ success: false, message: "Document not found" });
+    }
+
+    document.status = parseBody.data.status;
+    if (parseBody.data.reviewNotes !== undefined) {
+      document.reviewNotes = parseBody.data.reviewNotes;
+    }
+    if (parseBody.data.rejectionReason !== undefined) {
+      document.rejectionReason = parseBody.data.rejectionReason;
+    }
+    document.reviewedAt = new Date();
+    try {
+      // If authentication middleware provides user, record reviewer
+      // @ts-ignore
+      if (req.user?.id) document.reviewedBy = req.user.id;
+    } catch {}
+
+    await employer.save();
+
+    res.json({ success: true, data: document, message: "Document status updated" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const changeJobStatusAdmin = async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const parseBody = z
+      .object({ status: z.enum(["draft", "active", "paused", "closed"]) })
+      .safeParse(req.body);
+    if (!parseBody.success) {
+      return res.status(400).json({ success: false, message: "Invalid status" });
+    }
+
+    const job = await JobModel.findByIdAndUpdate(
+      jobId,
+      { $set: { status: parseBody.data.status } },
+      { new: true }
+    );
+
+    if (!job) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+
+    res.json({ success: true, data: job, message: "Job status updated" });
   } catch (err) {
     next(err);
   }
