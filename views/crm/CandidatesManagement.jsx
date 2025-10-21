@@ -6,6 +6,8 @@ import { adminService } from "@/services/adminService"
 
 export default function CandidatesManagement() {
   const [activeTab, setActiveTab] = useState("all")
+  const [search, setSearch] = useState("")
+  const [plan, setPlan] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [users, setUsers] = useState([])
@@ -16,11 +18,14 @@ export default function CandidatesManagement() {
       try {
         setLoading(true)
         setError("")
-        const res = await adminService.getUsers("active")
+        const res = await adminService.getCandidates({
+          status: "active",
+          plan: plan || (activeTab === "pro" ? "pro" : activeTab === "free" ? "free" : undefined),
+          search: search || undefined,
+        })
         if (!mounted) return
         const data = Array.isArray(res?.data) ? res.data : []
-        const candidates = data.filter((u) => u.role === "student")
-        setUsers(candidates)
+        setUsers(data)
       } catch (e) {
         setError(e?.response?.data?.message || e?.message || "Failed to load candidates")
       } finally {
@@ -31,7 +36,7 @@ export default function CandidatesManagement() {
     return () => {
       mounted = false
     }
-  }, [])
+  }, [activeTab, search])
 
   const tabs = useMemo(() => {
     const total = users.length
@@ -85,13 +90,23 @@ export default function CandidatesManagement() {
           <input
             type="text"
             placeholder="Search by name, email, skills..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
           />
         </div>
-        <button className="px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm">
-          <Filter className="w-5 h-5" />
-          Filters
-        </button>
+        <div className="flex items-center gap-2">
+          <select
+            value={plan}
+            onChange={(e) => setPlan(e.target.value)}
+            className="px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+          >
+            <option value="">All plans</option>
+            <option value="free">Free</option>
+            <option value="pro">Pro</option>
+          </select>
+          <button onClick={() => setSearch("")} className="px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">Clear</button>
+        </div>
       </div>
 
       {/* Candidates Grid */}
@@ -111,6 +126,7 @@ export default function CandidatesManagement() {
                 <div>
                   <h3 className="font-semibold text-gray-900">{candidate.firstName} {candidate.lastName}</h3>
                   <p className="text-sm text-gray-600">{candidate.email}</p>
+                  {candidate.city && (<p className="text-xs text-gray-500">{candidate.city}</p>)}
                 </div>
               </div>
               {candidate.plan === "pro" && (
@@ -131,6 +147,11 @@ export default function CandidatesManagement() {
                 >
                   {candidate.status}
                 </span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-xs text-gray-600">
+                <div className="px-2 py-1 bg-gray-50 rounded-lg">Completion: {candidate.profileCompletion}%</div>
+                <div className="px-2 py-1 bg-gray-50 rounded-lg">Resume: {candidate.hasResume ? "Yes" : "No"}</div>
+                <div className="px-2 py-1 bg-gray-50 rounded-lg">Plan: {candidate.plan}</div>
               </div>
             </div>
 

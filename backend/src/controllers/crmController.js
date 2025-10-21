@@ -223,6 +223,76 @@ export const getAllUsers = async (req, res, next) => {
   }
 };
 
+// Get candidates (students) with filters joined with student profile
+export const getCandidates = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 12, search, status, plan } = req.query;
+
+    const match = { role: "student" };
+    if (status) match.status = status;
+    if (search) {
+      match.$or = [
+        { firstName: new RegExp(search, "i") },
+        { lastName: new RegExp(search, "i") },
+        { email: new RegExp(search, "i") },
+      ];
+    }
+
+    const pipeline = [
+      { $match: match },
+      { $sort: { createdAt: -1 } },
+      { $lookup: { from: "students", localField: "_id", foreignField: "userId", as: "profile" } },
+      { $unwind: { path: "$profile", preserveNullAndEmptyArrays: true } },
+    ];
+
+    if (plan && ["free", "pro"].includes(plan)) {
+      pipeline.push({ $match: { "profile.plan": plan } });
+    }
+
+    // Pagination
+    const skip = (Number(page) - 1) * Number(limit);
+    const paginatedPipeline = [
+      ...pipeline,
+      { $facet: {
+          data: [ { $skip: skip }, { $limit: Number(limit) } ],
+          count: [ { $count: "total" } ]
+        }
+      },
+      { $unwind: { path: "$count", preserveNullAndEmptyArrays: true } },
+      { $project: { data: 1, total: "$count.total" } },
+    ];
+
+    const [result] = await UserModel.aggregate(paginatedPipeline);
+    const data = (result?.data || []).map((doc) => ({
+      _id: doc._id,
+      firstName: doc.firstName,
+      lastName: doc.lastName,
+      email: doc.email,
+      status: doc.status,
+      plan: doc.profile?.plan || "free",
+      profileCompletion: doc.profile?.profileCompletion || 0,
+      city: doc.profile?.address?.city || "",
+      hasResume: Boolean(doc.profile?.resume?.url),
+      createdAt: doc.createdAt,
+    }));
+    const total = result?.total || 0;
+
+    res.json({
+      success: true,
+      data,
+      pagination: {
+        currentPage: Number(page),
+        totalPages: Math.ceil(total / Number(limit)),
+        totalCandidates: total,
+        hasNext: Number(page) < Math.ceil(total / Number(limit)),
+        hasPrev: Number(page) > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Get user by ID with details
 export const getUserById = async (req, res, next) => {
   try {

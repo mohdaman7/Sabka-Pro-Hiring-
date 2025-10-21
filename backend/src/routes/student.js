@@ -41,4 +41,12 @@ router.get(
   studentController.getMySupportTicketById
 );
 
+// Activity overview
+router.get(
+  "/activity",
+  authenticate,
+  authorize(["student"]),
+  studentController.getActivity
+);
+
 export default router;

@@ -8,6 +8,7 @@ import {
   getPlatformStats,
   getAllJobsAdmin,
   getAllApplications,
+  getCandidates,
   getPendingRegistrations,
   approveUser,
   rejectUser,
@@ -40,6 +41,9 @@ router.post("/reject/:id", rejectUser);
 router.get("/users", getAllUsers);
 router.get("/users/:id", getUserById);
 router.patch("/users/:id/status", updateUserStatus);
+
+// Candidates listing with filters
+router.get("/candidates", getCandidates);
 
 // ============================================
 // Platform Statistics

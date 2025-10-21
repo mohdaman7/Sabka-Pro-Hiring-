@@ -17,6 +17,12 @@ export const studentService = {
     }
   },
 
+  // Get activity overview (applications, last login, etc.)
+  getActivity: async () => {
+    const response = await api.get("/api/student/activity");
+    return response.data;
+  },
+
   // Update student profile
   updateProfile: async (profileData) => {
     try {

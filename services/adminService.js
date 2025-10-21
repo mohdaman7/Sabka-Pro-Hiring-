@@ -15,6 +15,12 @@ export const adminService = {
     return response.data;
   },
 
+  // Get candidates with filters (search, status, plan, pagination)
+  getCandidates: async (params = {}) => {
+    const response = await api.get("/api/admin/candidates", { params });
+    return response.data;
+  },
+
   // Get user with profile/details
   getUserById: async (id) => {
     const response = await api.get(`/api/admin/users/${id}`);
