@@ -2,8 +2,12 @@ import { z } from "zod";
 import { StudentModel } from "../models/Student.js";
 import { SupportTicketModel } from "../models/SupportTicket.js";
 import { UserModel } from "../models/User.js";
+import { ApplicationModel } from "../models/Application.js";
+import mongoose from "mongoose";
 
 const updateStudentSchema = z.object({
+  // Allow plan change (free/pro)
+  plan: z.enum(["free", "pro"]).optional(),
   phone: z.string().optional(),
   phoneVerified: z.boolean().optional(),
   dateOfBirth: z.string().optional(),
@@ -119,6 +123,50 @@ export async function updateProfile(req, res, next) {
       success: true,
       data: student,
       message: "Profile updated successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// =============================
+// Activity (student self view)
+// =============================
+export async function getActivity(req, res, next) {
+  try {
+    // Last login and basic user info
+    const user = await UserModel.findById(req.user.id).select(
+      "lastLogin createdAt updatedAt"
+    );
+
+    // Applications summary
+    const [appsSummary] = await ApplicationModel.aggregate([
+      { $match: { studentId: new mongoose.Types.ObjectId(req.user.id) } },
+      {
+        $group: {
+          _id: null,
+          totalApplications: { $sum: 1 },
+          lastAppliedAt: { $max: "$createdAt" },
+        },
+      },
+    ]);
+
+    // Student profile bits
+    const student = await StudentModel.findOne({ userId: req.user.id }).select(
+      "profileCompletion resume uploadedAt plan"
+    );
+
+    res.json({
+      success: true,
+      data: {
+        lastLogin: user?.lastLogin || null,
+        accountCreatedAt: user?.createdAt || null,
+        totalApplications: appsSummary?.totalApplications || 0,
+        lastAppliedAt: appsSummary?.lastAppliedAt || null,
+        profileCompletion: student?.profileCompletion || 0,
+        hasResume: Boolean(student?.resume?.url),
+        plan: student?.plan || "free",
+      },
     });
   } catch (err) {
     next(err);

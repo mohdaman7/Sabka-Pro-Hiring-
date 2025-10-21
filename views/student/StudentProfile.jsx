@@ -235,6 +235,15 @@ export default function StudentProfile() {
   const [dataLoading, setDataLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
   const [isHovering, setIsHovering] = useState(null);
+  const [activity, setActivity] = useState({
+    totalApplications: 0,
+    lastAppliedAt: null,
+    profileCompletion: 0,
+    hasResume: false,
+    plan: "free",
+    lastLogin: null,
+    accountCreatedAt: null,
+  });
   const [formData, setFormData] = useState({
     // Basic Info
     firstName: "",
@@ -513,6 +522,16 @@ export default function StudentProfile() {
             setFormData(transformedData);
             console.log("Form data set:", transformedData);
           }
+        }
+
+        // Load activity
+        try {
+          const activityRes = await studentService.getActivity();
+          if (activityRes?.success && activityRes?.data) {
+            setActivity(activityRes.data);
+          }
+        } catch (e) {
+          console.warn("Failed to load activity:", e?.message);
         }
       } catch (error) {
         console.error("Failed to load student profile:", error);
@@ -1060,53 +1079,33 @@ export default function StudentProfile() {
               <span>Profile Stats</span>
             </h3>
             <div className="space-y-4">
-              {[
-                {
-                  icon: Eye,
-                  label: "Profile Views",
-                  value: "45",
-                  color: "from-emerald-400 to-green-500",
-                },
-                {
-                  icon: FileText,
-                  label: "Applications",
-                  value: "12",
-                  color: "from-blue-400 to-cyan-500",
-                },
-                {
-                  icon: Target,
-                  label: "Match Score",
-                  value: "85%",
-                  color: "from-purple-400 to-pink-500",
-                },
-                {
-                  icon: Rocket,
-                  label: "Response Rate",
-                  value: "92%",
-                  color: "from-orange-400 to-red-500",
-                },
-              ].map((stat, index) => (
-                <div
-                  key={stat.label}
-                  className="flex items-center justify-between p-3 bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer group/stat"
-                  onMouseEnter={() => setIsHovering(`stat-${index}`)}
-                  onMouseLeave={() => setIsHovering(null)}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`p-2 rounded-lg bg-gradient-to-br ${stat.color} shadow-lg transform transition-transform duration-300 group-hover/stat:scale-110`}
-                    >
-                      <stat.icon className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="text-sm text-blue-100 font-medium">
-                      {stat.label}
-                    </span>
-                  </div>
-                  <span className="text-xl font-black text-white">
-                    {stat.value}
-                  </span>
+            <div className="flex items-center justify-between p-3 bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 shadow-lg">
+                  <FileText className="w-4 h-4 text-white" />
                 </div>
-              ))}
+                <span className="text-sm text-blue-100 font-medium">Applications</span>
+              </div>
+              <span className="text-xl font-black text-white">{activity.totalApplications}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-400 to-green-500 shadow-lg">
+                  <Target className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-sm text-blue-100 font-medium">Profile Completion</span>
+              </div>
+              <span className="text-xl font-black text-white">{activity.profileCompletion}%</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-purple-400 to-pink-500 shadow-lg">
+                  <Eye className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-sm text-blue-100 font-medium">Resume Uploaded</span>
+              </div>
+              <span className="text-xl font-black text-white">{activity.hasResume ? "Yes" : "No"}</span>
+            </div>
             </div>
           </div>
         </div>
