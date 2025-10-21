@@ -8,7 +8,8 @@ import { ApplicationModel } from "../models/Application.js";
 import { JobModel } from "../models/Job.js";
 import { CompanyModel } from "../models/Company.js";
 import { SupportTicketModel } from "../models/SupportTicket.js";
-import { sendApprovalEmail } from "../utils/mailer.js";
+import { sendApprovalEmail, sendJobModerationEmail } from "../utils/mailer.js";
+import { analyzeJobContent } from "../utils/moderation.js";
 
 // Generate random password
 function generatePassword() {
@@ -789,6 +790,148 @@ export const changeJobStatusAdmin = async (req, res, next) => {
     }
 
     res.json({ success: true, data: job, message: "Job status updated" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// Job Moderation (Admin)
+// ============================================
+
+export const approveJob = async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const job = await JobModel.findByIdAndUpdate(
+      jobId,
+      {
+        $set: {
+          "moderation.approvalStatus": "approved",
+          "moderation.reviewerId": req.user?.id || undefined,
+          "moderation.reviewedAt": new Date(),
+          "moderation.rejectionReason": undefined,
+          "moderation.requestChangesNote": undefined,
+        },
+      },
+      { new: true }
+    ).populate("employerId", "email");
+
+    if (!job) return res.status(404).json({ success: false, message: "Job not found" });
+
+    try {
+      if (job?.employerId?.email) {
+        await sendJobModerationEmail({
+          to: job.employerId.email,
+          jobTitle: job.title,
+          action: "approved",
+        });
+      }
+    } catch {}
+    return res.json({ success: true, data: job, message: "Job approved" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const rejectJob = async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const parseBody = z
+      .object({ reason: z.string().min(3).max(1000) })
+      .safeParse(req.body);
+    if (!parseBody.success) {
+      return res.status(400).json({ success: false, message: "Reason is required" });
+    }
+
+    const job = await JobModel.findByIdAndUpdate(
+      jobId,
+      {
+        $set: {
+          "moderation.approvalStatus": "rejected",
+          "moderation.reviewerId": req.user?.id || undefined,
+          "moderation.reviewedAt": new Date(),
+          "moderation.rejectionReason": parseBody.data.reason,
+        },
+      },
+      { new: true }
+    ).populate("employerId", "email");
+
+    if (!job) return res.status(404).json({ success: false, message: "Job not found" });
+
+    try {
+      if (job?.employerId?.email) {
+        await sendJobModerationEmail({
+          to: job.employerId.email,
+          jobTitle: job.title,
+          action: "rejected",
+          reasonOrNote: parseBody.data.reason,
+        });
+      }
+    } catch {}
+    return res.json({ success: true, data: job, message: "Job rejected" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const requestJobChanges = async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const parseBody = z
+      .object({ note: z.string().min(3).max(1000) })
+      .safeParse(req.body);
+    if (!parseBody.success) {
+      return res.status(400).json({ success: false, message: "Note is required" });
+    }
+
+    const job = await JobModel.findByIdAndUpdate(
+      jobId,
+      {
+        $set: {
+          "moderation.approvalStatus": "needs_changes",
+          "moderation.reviewerId": req.user?.id || undefined,
+          "moderation.reviewedAt": new Date(),
+          "moderation.requestChangesNote": parseBody.data.note,
+        },
+      },
+      { new: true }
+    ).populate("employerId", "email");
+
+    if (!job) return res.status(404).json({ success: false, message: "Job not found" });
+
+    try {
+      if (job?.employerId?.email) {
+        await sendJobModerationEmail({
+          to: job.employerId.email,
+          jobTitle: job.title,
+          action: "needs_changes",
+          reasonOrNote: parseBody.data.note,
+        });
+      }
+    } catch {}
+    return res.json({ success: true, data: job, message: "Change request recorded" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const reanalyzeJob = async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const job = await JobModel.findById(jobId);
+    if (!job) return res.status(404).json({ success: false, message: "Job not found" });
+
+    const analysis = analyzeJobContent(job.toObject());
+    job.moderation = {
+      ...(job.moderation || {}),
+      spamScore: analysis.spamScore,
+      flags: analysis.flags,
+      autoFlagged: analysis.autoFlagged,
+      lastAnalyzedAt: analysis.lastAnalyzedAt,
+    };
+    await job.save();
+
+    return res.json({ success: true, data: job, message: "Job reanalyzed" });
   } catch (err) {
     next(err);
   }

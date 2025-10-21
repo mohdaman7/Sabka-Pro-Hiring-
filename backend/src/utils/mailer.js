@@ -456,6 +456,46 @@ If you have any questions, contact us at ${env.smtpUser}
   }
 }
 
+// Send job moderation status email to employer
+export async function sendJobModerationEmail({ to, jobTitle, action, reasonOrNote }) {
+  try {
+    const subjectMap = {
+      approved: `✅ Your job "${jobTitle}" has been approved`,
+      rejected: `❌ Your job "${jobTitle}" was rejected`,
+      needs_changes: `✏️ Changes requested for your job "${jobTitle}"`,
+    };
+
+    const messageMap = {
+      approved:
+        "Your job posting has been approved by our moderation team. You can now activate it to make it visible to candidates.",
+      rejected:
+        "Unfortunately, your job posting was rejected. Please review the reason below and consider submitting a revised posting.",
+      needs_changes:
+        "We have reviewed your job posting and require some changes. Please review the notes below and update your posting.",
+    };
+
+    const html = `
+      <div style="font-family: Arial, sans-serif;">
+        <h2>Job Moderation Update</h2>
+        <p><strong>Job:</strong> ${jobTitle}</p>
+        <p><strong>Status:</strong> ${action.replace("_", " ")}</p>
+        <p>${messageMap[action] || ""}</p>
+        ${reasonOrNote ? `<div style="background:#f9fafb;border:1px solid #e5e7eb;padding:12px;border-radius:8px;"><strong>Details:</strong><br/>${reasonOrNote}</div>` : ""}
+        <p style="margin-top:16px;">Regards,<br/>Sabka Pro Team</p>
+      </div>
+    `;
+
+    await transporter.sendMail({
+      from: `"Sabka Pro" <${env.smtpUser}>`,
+      to,
+      subject: subjectMap[action] || `Update on your job ${jobTitle}`,
+      html,
+    });
+  } catch (error) {
+    console.error("❌ Failed to send job moderation email:", error.message);
+  }
+}
+
 // Send OTP Email
 export async function sendOTPEmail(email, otp) {
   try {

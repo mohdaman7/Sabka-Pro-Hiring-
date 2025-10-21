@@ -21,6 +21,10 @@ import {
   getCompanyById,
   updateCompany,
   deleteCompany,
+  approveJob,
+  rejectJob,
+  requestJobChanges,
+  reanalyzeJob,
 } from "../controllers/crmController.js";
 
 const router = Router();
@@ -55,6 +59,11 @@ router.get("/dashboard/stats", getPlatformStats);
 // ============================================
 router.get("/jobs", getAllJobsAdmin);
 router.patch("/jobs/:jobId/status", changeJobStatusAdmin);
+// Moderation actions
+router.post("/jobs/:jobId/approve", approveJob);
+router.post("/jobs/:jobId/reject", rejectJob);
+router.post("/jobs/:jobId/request-changes", requestJobChanges);
+router.post("/jobs/:jobId/reanalyze", reanalyzeJob);
 
 // ============================================
 // Application Management (admin view)
