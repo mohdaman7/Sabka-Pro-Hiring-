@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Calendar,
   Clock,
@@ -21,138 +21,66 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { applicationService } from "@/services/applicationService";
 
 export default function InterviewsPage() {
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [applications, setApplications] = useState([]);
+  const [stats, setStats] = useState({});
 
-  const stats = [
-    {
-      label: "Total Interviews",
-      value: "24",
-      change: "+3 this month",
-      color: "from-purple-500 to-blue-500",
-      icon: Calendar,
-    },
-    {
-      label: "Upcoming",
-      value: "5",
-      change: "Next in 2 days",
-      color: "from-green-500 to-emerald-500",
-      icon: Bell,
-    },
-    {
-      label: "Completed",
-      value: "18",
-      change: "85% success rate",
-      color: "from-blue-500 to-cyan-500",
-      icon: Award,
-    },
-    {
-      label: "Pending Response",
-      value: "1",
-      change: "Awaiting confirmation",
-      color: "from-amber-500 to-orange-500",
-      icon: AlertCircle,
-    },
-  ];
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await applicationService.studentMyApplications({ status: "interview", limit: 100 });
+        if (!mounted) return;
+        const apps = res?.data || [];
+        setApplications(apps);
+        setStats(res?.stats || {});
+      } catch (e) {
+        setError(e?.response?.data?.message || e?.message || "Failed to load interviews");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-  const interviews = [
-    {
-      id: 1,
-      company: "Google",
-      position: "Software Engineer Intern",
-      type: "video",
-      date: "Oct 15, 2025",
-      time: "2:00 PM - 3:00 PM",
-      status: "upcoming",
-      interviewer: "Sarah Chen",
-      round: "Technical Round 2",
-      logo: "https://logo.clearbit.com/google.com",
-      meetingLink: "https://meet.google.com/abc-defg-hij",
-      notes: "Prepare system design questions",
-    },
-    {
-      id: 2,
-      company: "Meta",
-      position: "Frontend Developer",
-      type: "video",
-      date: "Oct 18, 2025",
-      time: "10:00 AM - 11:00 AM",
-      status: "upcoming",
-      interviewer: "Michael Rodriguez",
-      round: "Behavioral Interview",
-      logo: "https://logo.clearbit.com/meta.com",
-      meetingLink: "https://zoom.us/j/123456789",
-      notes: "Review STAR method examples",
-    },
-    {
-      id: 3,
-      company: "Amazon",
-      position: "SDE Intern",
-      type: "phone",
-      date: "Oct 20, 2025",
-      time: "3:30 PM - 4:30 PM",
-      status: "upcoming",
-      interviewer: "David Kim",
-      round: "Phone Screen",
-      logo: "https://logo.clearbit.com/amazon.com",
-      notes: "Focus on leadership principles",
-    },
-    {
-      id: 4,
-      company: "Microsoft",
-      position: "Cloud Engineer",
-      type: "onsite",
-      date: "Oct 25, 2025",
-      time: "9:00 AM - 12:00 PM",
-      status: "upcoming",
-      interviewer: "Emily Watson",
-      round: "Final Round",
-      logo: "https://logo.clearbit.com/microsoft.com",
-      location: "Microsoft Campus, Building 92",
-      notes: "Bring ID and portfolio",
-    },
-    {
-      id: 5,
-      company: "Apple",
-      position: "iOS Developer Intern",
-      type: "video",
-      date: "Oct 8, 2025",
-      time: "1:00 PM - 2:00 PM",
-      status: "completed",
-      interviewer: "James Park",
-      round: "Technical Round 1",
-      logo: "https://logo.clearbit.com/apple.com",
-      result: "Passed",
-    },
-    {
-      id: 6,
-      company: "Netflix",
-      position: "Data Analyst",
-      type: "video",
-      date: "Oct 5, 2025",
-      time: "11:00 AM - 12:00 PM",
-      status: "completed",
-      interviewer: "Lisa Anderson",
-      round: "Case Study",
-      logo: "https://logo.clearbit.com/netflix.com",
-      result: "Passed",
-    },
-    {
-      id: 7,
-      company: "Stripe",
-      position: "Backend Engineer",
-      type: "phone",
-      date: "Oct 22, 2025",
-      time: "4:00 PM - 5:00 PM",
-      status: "pending",
-      interviewer: "TBD",
-      round: "Initial Screen",
-      logo: "https://logo.clearbit.com/stripe.com",
-      notes: "Awaiting interviewer assignment",
-    },
-  ];
+  const interviews = useMemo(() => {
+    return (applications || [])
+      .filter((a) => a.interview)
+      .map((a) => {
+        const when = a.interview?.scheduledAt ? new Date(a.interview.scheduledAt) : null;
+        const company = a.jobId?.employerId?.company?.name || a.jobId?.company?.name || "Company";
+        const position = a.jobId?.title || "Position";
+        const type = a.interview?.type || "video";
+        const status = a.interview?.status === "completed" ? "completed" : a.interview?.status === "cancelled" ? "pending" : "upcoming";
+        return {
+          id: a._id,
+          company,
+          position,
+          type,
+          date: when ? when.toDateString() : "",
+          time: when ? when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + (a.interview?.durationMinutes ? ` - ${a.interview.durationMinutes} min` : "") : "",
+          status,
+          interviewer: a.interview?.panel?.[0]?.name || "Interviewer",
+          round: a.interview?.notes ? "Interview" : "Interview",
+          logo: "/placeholder.svg",
+          meetingLink: a.interview?.meetingLink,
+          notes: a.interview?.notes,
+          location: a.interview?.location,
+          result: a.interview?.status === "completed" ? a.interview?.feedback ? "Completed" : "Completed" : undefined,
+        };
+      });
+  }, [applications]);
 
   const getTypeIcon = (type) => {
     switch (type) {
@@ -213,9 +141,14 @@ export default function InterviewsPage() {
           </p>
         </div>
 
-        {/* Stats Grid - Focus on reminders and dates */}
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {stats.map((stat, index) => (
+          {[
+            { label: "Total Interviews", value: String(interviews.length || 0), change: "", color: "from-purple-500 to-blue-500", icon: Calendar },
+            { label: "Upcoming", value: String(interviews.filter((i) => i.status === "upcoming").length), change: "", color: "from-green-500 to-emerald-500", icon: Bell },
+            { label: "Completed", value: String(interviews.filter((i) => i.status === "completed").length), change: "", color: "from-blue-500 to-cyan-500", icon: Award },
+            { label: "Pending", value: String(interviews.filter((i) => i.status === "pending").length), change: "", color: "from-amber-500 to-orange-500", icon: AlertCircle },
+          ].map((stat, index) => (
             <Card
               key={index}
               className="relative group rounded-2xl p-6 overflow-hidden"
@@ -491,29 +424,16 @@ export default function InterviewsPage() {
                 {/* Actions */}
                 <div className="flex lg:flex-col gap-2 flex-shrink-0">
                   {interview.status === "upcoming" && interview.meetingLink && (
-                    <Button
-                      size="sm"
-                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 px-6"
+                    <a
+                      href={interview.meetingLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 px-6 py-2 text-sm"
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Join Now
-                    </Button>
+                    </a>
                   )}
-                  {interview.status === "upcoming" && (
-                    <Button
-                      size="sm"
-                      className="bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-purple-300 rounded-xl font-medium"
-                    >
-                      Reschedule
-                    </Button>
-                  )}
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-xl"
-                  >
-                    <MoreVertical className="w-4 h-4" />
-                  </Button>
                 </div>
               </div>
             </Card>
