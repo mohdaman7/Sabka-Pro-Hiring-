@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ApplicationModel } from "../models/Application.js";
+import { ActivityModel } from "../models/Activity.js";
 import { JobModel } from "../models/Job.js";
 import mongoose from "mongoose";
 
@@ -309,6 +310,17 @@ export const updateApplicationStatus = async (req, res, next) => {
       });
     }
 
+    // Record activity
+    try {
+      await ActivityModel.create({
+        employerId: req.user.id,
+        actorId: req.user.id,
+        type: "application_status_changed",
+        target: { kind: "application", id: application._id, label: application?.jobId?.title },
+        meta: { status: parsed.status, feedback: parsed.feedback },
+      });
+    } catch {}
+
     res.json({
       success: true,
       data: application,
@@ -365,6 +377,16 @@ export const scheduleInterview = async (req, res, next) => {
       data: application,
       message: "Interview scheduled",
     });
+
+    try {
+      await ActivityModel.create({
+        employerId: req.user.id,
+        actorId: req.user.id,
+        type: "interview_scheduled",
+        target: { kind: "application", id: application._id, label: application?.jobId?.title },
+        meta: { scheduledAt: parsed.scheduledAt, type: parsed.type },
+      });
+    } catch {}
   } catch (err) {
     next(err);
   }
@@ -414,6 +436,16 @@ export const rescheduleInterview = async (req, res, next) => {
     await application.populate("studentId", "firstName lastName email");
 
     res.json({ success: true, data: application, message: "Interview rescheduled" });
+
+    try {
+      await ActivityModel.create({
+        employerId: req.user.id,
+        actorId: req.user.id,
+        type: "interview_rescheduled",
+        target: { kind: "application", id: application._id, label: application?.jobId?.title },
+        meta: { scheduledAt: parsed.scheduledAt, reason: parsed.reason },
+      });
+    } catch {}
   } catch (err) {
     next(err);
   }
@@ -444,6 +476,16 @@ export const cancelInterview = async (req, res, next) => {
     }
 
     res.json({ success: true, data: application, message: "Interview cancelled" });
+
+    try {
+      await ActivityModel.create({
+        employerId: req.user.id,
+        actorId: req.user.id,
+        type: "interview_cancelled",
+        target: { kind: "application", id: application._id, label: undefined },
+        meta: { reason },
+      });
+    } catch {}
   } catch (err) {
     next(err);
   }

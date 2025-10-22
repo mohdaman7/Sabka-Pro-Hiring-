@@ -25,6 +25,9 @@ import {
   Clock,
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
+import { collabService } from "@/services/collabService";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function CandidatesPage() {
   const [applications, setApplications] = useState([]);
@@ -37,6 +40,11 @@ export default function CandidatesPage() {
   const [favorites, setFavorites] = useState(new Set());
   const [filterOptions, setFilterOptions] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteText, setNoteText] = useState("");
+  const [noteContext, setNoteContext] = useState(null); // {candidateUserId, applicationId, jobId}
+  const [savedViews, setSavedViews] = useState([]);
+  const [activeViewId, setActiveViewId] = useState(null);
 
   useEffect(() => {
     const loadApplications = async () => {
@@ -64,6 +72,13 @@ export default function CandidatesPage() {
     };
 
     loadApplications();
+    // Load saved candidate views in parallel
+    (async () => {
+      try {
+        const res = await collabService.listViews({ type: "candidates" });
+        setSavedViews(res.data || []);
+      } catch {}
+    })();
   }, []);
 
   useEffect(() => {
@@ -159,6 +174,68 @@ export default function CandidatesPage() {
     }
   };
 
+  const openNote = (app) => {
+    setNoteContext({
+      candidateUserId: app?.studentId?._id,
+      applicationId: app?._id,
+      jobId: app?.jobId?._id,
+    });
+    setNoteText("");
+    setNoteOpen(true);
+  };
+
+  const saveNote = async () => {
+    if (!noteContext || !noteText.trim()) return;
+    try {
+      await collabService.addNote({
+        candidateUserId: noteContext.candidateUserId,
+        applicationId: noteContext.applicationId,
+        jobId: noteContext.jobId,
+        content: noteText.trim(),
+        visibility: "team",
+      });
+      setNoteOpen(false);
+    } catch (e) {
+      console.error("Failed to add note", e);
+    }
+  };
+
+  const applySavedView = (view) => {
+    setActiveViewId(view._id);
+    const q = view.query || {};
+    setSearchTerm(q.searchTerm || "");
+    setActiveFilter(q.activeFilter || "All Candidates");
+    setSelectedJob(q.selectedJob || null);
+  };
+
+  const saveCurrentAsView = async () => {
+    const name = window.prompt("Name this view:");
+    if (!name) return;
+    try {
+      const payload = {
+        name,
+        type: "candidates",
+        query: { searchTerm, activeFilter, selectedJob },
+        sharedWithTeam: true,
+      };
+      const res = await collabService.createView(payload);
+      setSavedViews([res.data, ...savedViews]);
+      setActiveViewId(res.data._id);
+    } catch (e) {
+      console.error("Failed to create view", e);
+    }
+  };
+
+  const deleteView = async (id) => {
+    try {
+      await collabService.deleteView(id);
+      setSavedViews(savedViews.filter((v) => v._id !== id));
+      if (activeViewId === id) setActiveViewId(null);
+    } catch (e) {
+      console.error("Failed to delete view", e);
+    }
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Premium animated background */}
@@ -219,7 +296,7 @@ export default function CandidatesPage() {
           </div>
         </div>
 
-        {/* Search and Stats */}
+        {/* Saved Views + Search and Stats */}
         <div className="grid lg:grid-cols-4 gap-6">
           <div
             className="lg:col-span-3 rounded-xl p-1 group transition-all duration-300 hover:shadow-xl hover:shadow-[#803791]/20"
@@ -238,6 +315,35 @@ export default function CandidatesPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-2 bg-transparent text-white placeholder-white/50 border-none focus:outline-none text-sm"
               />
+              <div className="mt-3 flex items-center gap-2 flex-wrap">
+                {savedViews.map((v) => (
+                  <button
+                    key={v._id}
+                    onClick={() => applySavedView(v)}
+                    className={`px-3 py-1 rounded-full text-xs border transition-all ${
+                      activeViewId === v._id
+                        ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white border-transparent"
+                        : "text-white/80 hover:text-white border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    {v.name}
+                  </button>
+                ))}
+                <button
+                  onClick={saveCurrentAsView}
+                  className="px-3 py-1 rounded-full text-xs bg-white/10 hover:bg-white/20 text-white border border-white/10"
+                >
+                  + Save View
+                </button>
+                {activeViewId && (
+                  <button
+                    onClick={() => deleteView(activeViewId)}
+                    className="px-3 py-1 rounded-full text-xs bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-500/30"
+                  >
+                    Delete View
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -495,6 +601,13 @@ export default function CandidatesPage() {
                           <Mail className="w-4 h-4" />
                           Email
                         </button>
+                        <button
+                          onClick={() => openNote(app)}
+                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg hover:bg-white/10 text-white/80 hover:text-white border border-white/10 transition-all duration-300 text-sm font-medium"
+                        >
+                          <FileText className="w-4 h-4" />
+                          Add Note
+                        </button>
                         <button className="p-2.5 rounded-lg hover:bg-white/10 text-white/80 hover:text-white border border-white/10 transition-all duration-300">
                           <Share2 className="w-4 h-4" />
                         </button>
@@ -512,6 +625,37 @@ export default function CandidatesPage() {
           </div>
         )}
       </div>
+
+      <Dialog open={noteOpen} onOpenChange={setNoteOpen}>
+        <DialogContent className="bg-gray-900 border border-white/10 text-white">
+          <DialogHeader>
+            <DialogTitle>Add Team Note</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Textarea
+              placeholder="Write an internal note for your team..."
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+              className="bg-transparent text-white border-white/20"
+              rows={5}
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setNoteOpen(false)}
+                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveNote}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#803791] to-[#b87bd1]"
+              >
+                Save Note
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
