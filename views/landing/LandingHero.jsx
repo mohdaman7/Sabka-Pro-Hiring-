@@ -15,6 +15,7 @@ import {
   Shield,
 } from "lucide-react";
 import LandingNavbar from "./LandingNavbar";
+import { AuroraText } from "@/components/ui/aurora-text";
 
 export default function LandingHero() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -88,9 +89,7 @@ export default function LandingHero() {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
             Welcome To The
             <br />
-            <span className="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
-              Professional Recruitment
-            </span>
+            <AuroraText>Professional Recruitment</AuroraText>
             <br />
             Service of Sabka World
           </h1>

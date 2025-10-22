@@ -452,7 +452,9 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                   onChange={(e) => setMeetingLink(e.target.value)}
                   className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
                 />
-                <p className="text-xs text-white/50">Paste a Google Meet, Zoom, or Teams link</p>
+                <p className="text-xs text-white/50">
+                  Paste a Google Meet, Zoom, or Teams link
+                </p>
               </div>
             )}
 
@@ -468,7 +470,9 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                   onChange={(e) => setLocation(e.target.value)}
                   className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
                 />
-                <p className="text-xs text-white/50">Include building, floor, and check-in instructions</p>
+                <p className="text-xs text-white/50">
+                  Include building, floor, and check-in instructions
+                </p>
               </div>
             )}
           </div>
@@ -837,7 +841,9 @@ function TimezoneSelect({ value, onChange }) {
   ];
 
   // Ensure current value is present
-  const options = Array.from(new Set([value, ...COMMON_TIMEZONES])).filter(Boolean);
+  const options = Array.from(new Set([value, ...COMMON_TIMEZONES])).filter(
+    Boolean
+  );
 
   return (
     <select
