@@ -902,7 +902,7 @@ export default function LeadsManagement() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-3 px-6 py-3 font-medium transition-all duration-300 rounded-lg flex-1 justify-center whitespace-nowrap ${
                   activeTab === tab.id
-                    ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg"
+                    ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg"
                     : "text-white/75 hover:text-white hover:bg-white/5"
                 }`}
               >

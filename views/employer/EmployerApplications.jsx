@@ -509,6 +509,31 @@ export default function EmployerApplications() {
                       </div>
                     </div>
                   </div>
+                  {/* Quick Schedule Button (visible on all cards) */}
+                  <div className="absolute right-6 top-6 hidden md:block">
+                    {(app.status === "applied" ||
+                      app.status === "reviewed" ||
+                      app.status === "interview") && (
+                      <button
+                        onClick={() => setScheduleApp(app)}
+                        className="group relative px-4 py-2 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        style={{
+                          background: "rgba(255,255,255,0.06)",
+                          border: "1px solid rgba(255,255,255,0.06)",
+                        }}
+                        title={
+                          app.interview?.status
+                            ? "Update Interview"
+                            : "Schedule Interview"
+                        }
+                      >
+                        <span className="relative flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          {app.interview?.status ? "Update" : "Schedule"}
+                        </span>
+                      </button>
+                    )}
+                  </div>
 
                   {/* Action Buttons */}
                   <div className="flex items-center gap-3">

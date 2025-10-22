@@ -210,10 +210,10 @@ export default function StudentDashboard() {
       <div className="relative z-10 space-y-6 max-w-[1600px] mx-auto">
         {/* Premium Welcome Section */}
         <div className="relative overflow-hidden rounded-3xl group">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-600/90 via-purple-700/90 to-blue-600/90 backdrop-blur-xl" />
+          <div className="absolute inset-0 bg-linear-to-r from-purple-600/90 via-purple-700/90 to-blue-600/90 backdrop-blur-xl" />
           <div className="absolute inset-0 opacity-20">
             <div
-              className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400"
+              className="absolute inset-0 bg-linear-to-r from-purple-400 to-blue-400"
               style={{
                 mixBlendMode: "overlay",
                 animation: "pulse 8s ease-in-out infinite",
@@ -245,7 +245,7 @@ export default function StudentDashboard() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <button className="group/btn relative px-6 py-3 bg-white text-purple-700 rounded-xl font-semibold shadow-2xl shadow-white/20 transition-all hover:scale-105 hover:shadow-white/30 flex items-center gap-2 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-white to-purple-50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white to-purple-50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                     <Briefcase className="w-5 h-5 relative z-10" />
                     <span className="relative z-10">Browse Jobs</span>
                   </button>
@@ -261,8 +261,8 @@ export default function StudentDashboard() {
               </div>
               <div className="hidden lg:block">
                 <div className="relative w-32 h-32">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-3xl backdrop-blur-xl border border-white/30 shadow-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-3xl backdrop-blur-xl border border-white/40 shadow-2xl flex items-center justify-center transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
+                  <div className="absolute inset-0 bg-linear-to-br from-white/20 to-white/5 rounded-3xl backdrop-blur-xl border border-white/30 shadow-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-linear-to-br from-white/30 to-white/10 rounded-3xl backdrop-blur-xl border border-white/40 shadow-2xl flex items-center justify-center transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
                     <TrendingUp className="w-16 h-16 text-white" />
                   </div>
                 </div>

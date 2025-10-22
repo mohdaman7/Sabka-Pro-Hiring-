@@ -16,28 +16,9 @@ import {
   CheckCircle,
   XCircle,
   Sparkles,
-  Mail,
-  User,
-  Award,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar as CalendarPicker } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { applicationService } from "@/services/applicationService";
 
 export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
@@ -56,6 +37,9 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   const [completionFeedback, setCompletionFeedback] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Calendar state
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
     const shouldOpen = !!app;
@@ -123,6 +107,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
       setError("");
       const scheduledAt = buildDateTime();
       if (!scheduledAt) throw new Error("Please select date and time");
+
       const payload = {
         scheduledAt,
         timezone,
@@ -133,13 +118,17 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
         panel: panel.filter((p) => p.name && p.email),
         notes: notes || undefined,
       };
+
       const fn = app?.interview?.status
         ? applicationService.rescheduleInterview
         : applicationService.scheduleInterview;
+
       const res = await fn(app._id, payload);
       if (!res?.success)
         throw new Error(res?.message || "Failed to schedule interview");
+
       onScheduled?.(res.data);
+      closeAll();
     } catch (e) {
       setError(
         e?.response?.data?.message ||
@@ -154,12 +143,14 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   const handleCancelInterview = async () => {
     try {
       setLoading(true);
+      setError("");
       const res = await applicationService.cancelInterview(
         app._id,
         "Employer cancelled"
       );
       if (!res?.success) throw new Error(res?.message || "Failed to cancel");
       onScheduled?.(res.data);
+      closeAll();
     } catch (e) {
       setError(
         e?.response?.data?.message || e.message || "Failed to cancel interview"
@@ -180,6 +171,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
       if (!res?.success)
         throw new Error(res?.message || "Failed to complete interview");
       onScheduled?.(res.data);
+      closeAll();
     } catch (e) {
       setError(
         e?.response?.data?.message ||
@@ -213,133 +205,173 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   ];
 
   const durationOptions = [
-    { value: 15, label: "15 min", icon: "🕐" },
-    { value: 30, label: "30 min", icon: "🕑" },
-    { value: 45, label: "45 min", icon: "🕒" },
-    { value: 60, label: "1 hour", icon: "🕓" },
-    { value: 90, label: "1.5 hours", icon: "🕔" },
-    { value: 120, label: "2 hours", icon: "🕕" },
+    { value: 15, label: "15 min" },
+    { value: 30, label: "30 min" },
+    { value: 45, label: "45 min" },
+    { value: 60, label: "1 hour" },
+    { value: 90, label: "1.5 hours" },
+    { value: 120, label: "2 hours" },
   ];
 
+  const timeSlots = [
+    "09:00",
+    "09:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
+  ];
+
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={(v) => (!v ? closeAll() : setOpen(v))}>
-      <DialogContent
-        className="max-w-6xl max-h-[90vh] overflow-y-auto bg-liner-to-br from-slate-900 via-slate-800 to-slate-900 border-slate-700/50 text-white"
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 lg:p-8 animate-fade-in">
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
+        onClick={closeAll}
+      />
+
+      <div
+        className="relative w-full max-w-5xl h-[85vh] overflow-y-auto rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-300 hover:scale-[1.01]"
         style={{
           background:
             "linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,41,59,0.98))",
-          backdropFilter: "blur(20px)",
         }}
       >
         {/* Premium Header */}
-        <DialogHeader className="space-y-4 pb-6 border-b border-white/10">
-          <div className="flex items-start gap-4">
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl blur-md opacity-50"></div>
-              <div
-                className="relative p-3 rounded-2xl"
-                style={{
-                  background: "linear-gradient(135deg,#803791,#b87bd1)",
-                }}
-              >
-                <Calendar className="w-7 h-7 text-white" />
+        <div className="sticky top-0 z-10 backdrop-blur-xl bg-slate-900/80 border-b border-white/10 p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-2xl blur-md opacity-50" />
+                <div
+                  className="relative p-3.5 rounded-2xl transform transition-transform duration-300 hover:scale-110"
+                  style={{
+                    background: "linear-gradient(135deg,#803791,#b87bd1)",
+                  }}
+                >
+                  <Calendar className="w-8 h-8 text-white" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl lg:text-3xl font-bold bg-linear-to-r from-white to-white/70 bg-clip-text text-transparent">
+                  {app?.interview?.status
+                    ? "Update Interview Schedule"
+                    : "Schedule New Interview"}
+                </h2>
+                <p className="text-white/60 text-sm mt-1">
+                  {app?.studentId?.firstName} {app?.studentId?.lastName} •{" "}
+                  {app?.jobId?.title}
+                </p>
               </div>
             </div>
-            <div className="flex-1">
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-                {app?.interview?.status
-                  ? "Update Interview Schedule"
-                  : "Schedule New Interview"}
-              </DialogTitle>
-              <p className="text-white/60 text-sm mt-1">
-                {app?.studentId?.firstName} {app?.studentId?.lastName} •{" "}
-                {app?.jobId?.title}
-              </p>
-            </div>
-            {app?.interview?.status && (
-              <div className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-[#803791] to-[#b87bd1]">
-                {app.interview.status}
-              </div>
-            )}
+            <button
+              onClick={closeAll}
+              className="p-2 rounded-xl hover:bg-white/10 text-white/60 hover:text-white transition-all duration-300"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-        </DialogHeader>
+        </div>
 
         {error && (
-          <div className="flex items-center gap-3 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
-            <XCircle className="w-5 h-5 flex-shrink-0" />
+          <div className="mx-6 mt-6 flex items-center gap-3 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
+            <XCircle className="w-5 h-5 shrink-0" />
             <p className="text-sm font-medium">{error}</p>
           </div>
         )}
 
-        <div className="space-y-6 py-6">
-          {/* Date & Time Section - FIXED LAYOUT */}
+        <div className="p-6 space-y-6">
+          {/* Date & Time Section - Premium Layout */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-white/90">
               <Calendar className="w-4 h-4 text-[#b87bd1]" />
               <span>Date & Time</span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-              {/* Calendar - Takes 3 columns */}
-              <div className="lg:col-span-3">
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <CalendarPicker
-                    selected={date || undefined}
-                    onSelect={(newDate) => setDate(newDate || null)}
-                    mode="single"
-                    className="w-full"
-                  />
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div
+                className="rounded-2xl overflow-hidden border border-white/10 shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(128,55,145,0.08), rgba(184,123,209,0.05))",
+                }}
+              >
+                <PremiumCalendar
+                  selected={date}
+                  onSelect={setDate}
+                  currentMonth={currentMonth}
+                  setCurrentMonth={setCurrentMonth}
+                />
               </div>
 
-              {/* Time Details - Takes 2 columns */}
-              <div className="lg:col-span-2 space-y-4">
-                <div className="space-y-2">
+              {/* Time & Duration Panel */}
+              <div className="space-y-4">
+                {/* Time Selector */}
+                <div className="space-y-3">
                   <label className="flex items-center gap-2 text-sm font-medium text-white/70">
                     <Clock className="w-4 h-4 text-[#b87bd1]" />
-                    Time
+                    Select Time
                   </label>
-                  <Input
-                    type="time"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="bg-white/5 border-white/10 text-white focus:border-[#b87bd1] focus:ring-[#b87bd1]/50"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-medium text-white/70">
-                    <Clock className="w-4 h-4 text-[#b87bd1]" />
-                    Duration
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {durationOptions.map((opt) => (
+                  <div className="grid grid-cols-3 gap-2 max-h-[240px] overflow-y-auto p-1 rounded-xl bg-white/5 border border-white/10">
+                    {timeSlots.map((slot) => (
                       <button
-                        key={opt.value}
-                        onClick={() => setDuration(opt.value)}
-                        className={`p-3 rounded-xl text-xs font-medium transition-all duration-300 ${
-                          duration === opt.value
-                            ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
-                            : "bg-white/5 text-white/70 hover:bg-white/10 border border-white/10"
+                        key={slot}
+                        onClick={() => setTime(slot)}
+                        className={`p-3.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                          time === slot
+                            ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
+                            : "bg-white/5 text-white/70 hover:bg-white/10 hover:scale-105 border border-white/10"
                         }`}
                       >
-                        <div className="text-base mb-1">{opt.icon}</div>
-                        <div className="text-[10px]">{opt.label}</div>
+                        {slot}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* Duration Selector */}
+                <div className="space-y-3">
                   <label className="flex items-center gap-2 text-sm font-medium text-white/70">
-                    <Globe className="w-4 h-4 text-[#b87bd1]" />
+                    <Clock className="w-4 h-4 text-[#b87bd1]" />
+                    Duration
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {durationOptions.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setDuration(opt.value)}
+                        className={`p-4 rounded-xl text-sm font-medium transition-all duration-300 ${
+                          duration === opt.value
+                            ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
+                            : "bg-white/5 text-white/70 hover:bg-white/10 hover:scale-105 border border-white/10"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Timezone */}
+                <div className="space-y-2 p-4 rounded-xl bg-white/5 border border-white/10">
+                  <label className="flex items-center gap-2 text-xs font-medium text-white/50">
+                    <Globe className="w-3 h-3" />
                     Timezone
                   </label>
-                  <Input
-                    value={timezone}
-                    onChange={(e) => setTimezone(e.target.value)}
-                    className="bg-white/5 border-white/10 text-white focus:border-[#b87bd1] focus:ring-[#b87bd1]/50"
-                  />
+                  <div className="text-white font-medium">{timezone}</div>
                 </div>
               </div>
             </div>
@@ -352,7 +384,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               <span>Interview Type</span>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-4">
               {interviewTypes.map((typeOption) => {
                 const Icon = typeOption.icon;
                 return (
@@ -378,8 +410,8 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                   >
                     {type === typeOption.value && (
                       <div
-                        className={`absolute inset-0 bg-gradient-to-br ${typeOption.gradient} opacity-10`}
-                      ></div>
+                        className={`absolute inset-0 bg-linear-to-br ${typeOption.gradient} opacity-10`}
+                      />
                     )}
                     <Icon
                       className={`w-8 h-8 mx-auto mb-3 ${
@@ -408,11 +440,11 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                   <Video className="w-4 h-4 text-[#b87bd1]" />
                   Meeting Link
                 </label>
-                <Input
+                <input
                   placeholder="https://meet.google.com/..."
                   value={meetingLink}
                   onChange={(e) => setMeetingLink(e.target.value)}
-                  className="bg-white/5 border-white/10 text-white focus:border-[#b87bd1] focus:ring-[#b87bd1]/50"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
                 />
               </div>
             )}
@@ -423,11 +455,11 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                   <MapPin className="w-4 h-4 text-[#b87bd1]" />
                   Location Address
                 </label>
-                <Input
+                <input
                   placeholder="123 Main Street, City, State"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="bg-white/5 border-white/10 text-white focus:border-[#b87bd1] focus:ring-[#b87bd1]/50"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
                 />
               </div>
             )}
@@ -454,61 +486,43 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               {panel.map((member, idx) => (
                 <div
                   key={idx}
-                  className="group p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300"
+                  className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-xs font-medium text-white/50">
-                        <User className="w-3 h-3" />
-                        Name
-                      </label>
-                      <Input
-                        placeholder="John Doe"
-                        value={member.name}
+                    <input
+                      placeholder="Name"
+                      value={member.name}
+                      onChange={(e) =>
+                        handlePanelChange(idx, "name", e.target.value)
+                      }
+                      className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
+                    />
+                    <input
+                      placeholder="Email"
+                      value={member.email}
+                      onChange={(e) =>
+                        handlePanelChange(idx, "email", e.target.value)
+                      }
+                      className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
+                    />
+                    <div className="flex gap-2">
+                      <input
+                        placeholder="Role"
+                        value={member.role}
                         onChange={(e) =>
-                          handlePanelChange(idx, "name", e.target.value)
+                          handlePanelChange(idx, "role", e.target.value)
                         }
-                        className="bg-white/5 border-white/10 text-white focus:border-[#b87bd1] focus:ring-[#b87bd1]/50"
+                        className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-xs font-medium text-white/50">
-                        <Mail className="w-3 h-3" />
-                        Email
-                      </label>
-                      <Input
-                        placeholder="john@company.com"
-                        value={member.email}
-                        onChange={(e) =>
-                          handlePanelChange(idx, "email", e.target.value)
-                        }
-                        className="bg-white/5 border-white/10 text-white focus:border-[#b87bd1] focus:ring-[#b87bd1]/50"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-xs font-medium text-white/50">
-                        <Award className="w-3 h-3" />
-                        Role
-                      </label>
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="Senior Engineer"
-                          value={member.role}
-                          onChange={(e) =>
-                            handlePanelChange(idx, "role", e.target.value)
-                          }
-                          className="bg-white/5 border-white/10 text-white focus:border-[#b87bd1] focus:ring-[#b87bd1]/50"
-                        />
-                        {panel.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removePanelMember(idx)}
-                            className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 transition-all duration-300"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
+                      {panel.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removePanelMember(idx)}
+                          className="p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 transition-all duration-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -522,12 +536,12 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               <FileText className="w-4 h-4 text-[#b87bd1]" />
               <span>Additional Notes</span>
             </div>
-            <Textarea
+            <textarea
               rows={4}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add any special instructions or notes for this interview..."
-              className="bg-white/5 border-white/10 text-white placeholder-white/30 focus:border-[#b87bd1] focus:ring-[#b87bd1]/50 resize-none"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 resize-none"
             />
           </div>
 
@@ -538,72 +552,74 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                 <Sparkles className="w-4 h-4 text-[#b87bd1]" />
                 <span>Interview Feedback</span>
               </div>
-              <Textarea
+              <textarea
                 rows={4}
                 value={completionFeedback}
                 onChange={(e) => setCompletionFeedback(e.target.value)}
                 placeholder="Add feedback after completing the interview..."
-                className="bg-white/5 border-white/10 text-white placeholder-white/30 focus:border-[#b87bd1] focus:ring-[#b87bd1]/50 resize-none"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 resize-none"
               />
             </div>
           )}
         </div>
 
         {/* Premium Footer */}
-        <DialogFooter className="pt-6 border-t border-white/10 gap-3">
+        <div className="sticky bottom-0 backdrop-blur-xl bg-slate-900/80 border-t border-white/10 p-6 flex justify-end gap-3">
           {app?.interview?.status && (
-            <button
-              disabled={loading}
-              onClick={handleCancelInterview}
-              className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105"
-              style={{
-                background: "rgba(239,68,68,0.1)",
-                border: "2px solid rgba(239,68,68,0.3)",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-500 to-red-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-              <span className="relative flex items-center gap-2">
-                <XCircle className="w-5 h-5" />
-                Cancel Interview
-              </span>
-            </button>
-          )}
+            <>
+              <button
+                disabled={loading}
+                onClick={handleCancelInterview}
+                className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105"
+                style={{
+                  background: "rgba(239,68,68,0.1)",
+                  border: "2px solid rgba(239,68,68,0.3)",
+                }}
+              >
+                <div className="absolute inset-0 bg-linear-to-r from-rose-500 to-red-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                <span className="relative flex items-center gap-2">
+                  <XCircle className="w-5 h-5" />
+                  Cancel Interview
+                </span>
+              </button>
 
-          {app?.interview?.status && app?.interview?.status !== "completed" && (
-            <button
-              disabled={loading}
-              onClick={handleMarkCompleted}
-              className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105"
-              style={{
-                background: "rgba(16,185,129,0.1)",
-                border: "2px solid rgba(16,185,129,0.3)",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-              <span className="relative flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
-                Mark Completed
-              </span>
-            </button>
+              {app?.interview?.status !== "completed" && (
+                <button
+                  disabled={loading}
+                  onClick={handleMarkCompleted}
+                  className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105"
+                  style={{
+                    background: "rgba(16,185,129,0.1)",
+                    border: "2px solid rgba(16,185,129,0.3)",
+                  }}
+                >
+                  <div className="absolute inset-0 bg-linear-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                  <span className="relative flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5" />
+                    Mark Completed
+                  </span>
+                </button>
+              )}
+            </>
           )}
 
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="group relative px-8 py-3 rounded-xl font-bold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative px-8 py-3 rounded-xl font-bold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl disabled:opacity-50"
           >
             <div
               className="absolute inset-0 transition-transform group-hover:scale-105 duration-300"
               style={{ background: "linear-gradient(135deg,#803791,#b87bd1)" }}
-            ></div>
+            />
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               style={{ background: "linear-gradient(135deg,#b87bd1,#803791)" }}
-            ></div>
+            />
             <span className="relative flex items-center gap-2">
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   Saving...
                 </>
               ) : (
@@ -616,8 +632,178 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               )}
             </span>
           </button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function PremiumCalendar({
+  selected,
+  onSelect,
+  currentMonth,
+  setCurrentMonth,
+}) {
+  const daysInMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0
+  ).getDate();
+
+  const firstDayOfMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    1
+  ).getDay();
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const prevMonth = () => {
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)
+    );
+  };
+
+  const nextMonth = () => {
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1)
+    );
+  };
+
+  const isSelected = (day) => {
+    if (!selected) return false;
+    const checkDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    return (
+      checkDate.getFullYear() === selected.getFullYear() &&
+      checkDate.getMonth() === selected.getMonth() &&
+      checkDate.getDate() === selected.getDate()
+    );
+  };
+
+  const isToday = (day) => {
+    const checkDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    return (
+      checkDate.getFullYear() === today.getFullYear() &&
+      checkDate.getMonth() === today.getMonth() &&
+      checkDate.getDate() === today.getDate()
+    );
+  };
+
+  const isPast = (day) => {
+    const checkDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate < today;
+  };
+
+  const handleDayClick = (day) => {
+    const newDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    onSelect(newDate);
+  };
+
+  const monthYear = currentMonth.toLocaleString("default", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+  return (
+    <div className="p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <button
+          onClick={prevMonth}
+          className="p-2 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <h3 className="text-lg font-bold text-white">{monthYear}</h3>
+        <button
+          onClick={nextMonth}
+          className="p-2 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Week days */}
+      <div className="grid grid-cols-7 gap-2 mb-3">
+        {weekDays.map((day) => (
+          <div
+            key={day}
+            className="text-center text-xs font-semibold text-white/50 py-2"
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      {/* Days */}
+      <div className="grid grid-cols-7 gap-2">
+        {[...Array(firstDayOfMonth)].map((_, i) => (
+          <div key={`empty-${i}`} />
+        ))}
+        {[...Array(daysInMonth)].map((_, i) => {
+          const day = i + 1;
+          const selected = isSelected(day);
+          const todayDate = isToday(day);
+          const past = isPast(day);
+
+          return (
+            <button
+              key={day}
+              onClick={() => !past && handleDayClick(day)}
+              disabled={past}
+              className={`
+                aspect-square rounded-xl text-sm font-medium transition-all duration-300
+                ${
+                  selected
+                    ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-110"
+                    : todayDate
+                    ? "bg-white/10 text-white border-2 border-[#b87bd1]/50"
+                    : past
+                    ? "text-white/30 cursor-not-allowed"
+                    : "text-white/70 hover:bg-white/10 hover:text-white hover:scale-105"
+                }
+              `}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
