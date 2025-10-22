@@ -114,7 +114,7 @@ export default function CRMDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6 space-y-6">
+    <div className="min-h-screen bg-linear-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6 space-y-6">
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>

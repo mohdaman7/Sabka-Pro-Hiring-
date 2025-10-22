@@ -141,15 +141,15 @@ export default function CRMSidebar({ isOpen, onClose }) {
         }}
       >
         {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#803791]/5 via-transparent to-[#b87bd1]/5 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-[#803791]/5 via-transparent to-[#b87bd1]/5 pointer-events-none"></div>
 
         {/* Header */}
-        <div className="relative flex-shrink-0 flex h-20 items-center justify-between border-b border-white/10 px-5">
+        <div className="relative shrink-0 flex h-20 items-center justify-between border-b border-white/10 px-5">
           <div className="flex items-center gap-3">
             {!isCollapsed && (
               <>
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-lg opacity-50 animate-pulse"></div>
+                  <div className="absolute inset-0 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-lg opacity-50 animate-pulse"></div>
                   <div
                     className="relative w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
                     style={{
@@ -171,7 +171,7 @@ export default function CRMSidebar({ isOpen, onClose }) {
             )}
             {isCollapsed && (
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-lg opacity-50 animate-pulse"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-lg opacity-50 animate-pulse"></div>
                 <div
                   className="relative w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
                   style={{
@@ -247,13 +247,13 @@ export default function CRMSidebar({ isOpen, onClose }) {
                 >
                   {/* Hover gradient overlay */}
                   <div
-                    className={`absolute inset-1 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-lg`}
+                    className={`absolute inset-1 bg-linear-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-lg`}
                   ></div>
 
                   {/* Active indicator */}
                   {isActive && (
                     <div
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-gradient-to-b"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-linear-to-b"
                       style={{
                         background: `linear-gradient(to bottom, ${
                           item.gradient.split(" ")[1]
@@ -283,7 +283,7 @@ export default function CRMSidebar({ isOpen, onClose }) {
                     ></div>
                     <Icon
                       className={cn(
-                        "h-5 w-5 flex-shrink-0 relative z-10 transition-colors duration-300",
+                        "h-5 w-5 shrink-0 relative z-10 transition-colors duration-300",
                         isActive
                           ? "text-white"
                           : "text-white/70 group-hover:text-white"
@@ -308,10 +308,10 @@ export default function CRMSidebar({ isOpen, onClose }) {
                       {item.badge && (
                         <div className="ml-auto relative">
                           <div
-                            className={`absolute inset-0 blur-sm opacity-40 rounded-full bg-gradient-to-r ${item.gradient}`}
+                            className={`absolute inset-0 blur-sm opacity-40 rounded-full bg-linear-to-r ${item.gradient}`}
                           ></div>
                           <div
-                            className={`relative px-2 py-1 rounded-full text-xs font-semibold text-white shadow-md bg-gradient-to-r ${item.gradient}`}
+                            className={`relative px-2 py-1 rounded-full text-xs font-semibold text-white shadow-md bg-linear-to-r ${item.gradient}`}
                           >
                             {item.badge}
                           </div>
@@ -322,7 +322,7 @@ export default function CRMSidebar({ isOpen, onClose }) {
 
                   {/* Indicator dot for collapsed state */}
                   {isCollapsed && item.badge && (
-                    <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 border border-gray-900 animate-pulse"></div>
+                    <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-linear-to-r from-red-500 to-pink-500 border border-gray-900 animate-pulse"></div>
                   )}
                 </Link>
               );
@@ -331,7 +331,7 @@ export default function CRMSidebar({ isOpen, onClose }) {
         </nav>
 
         {/* Bottom Navigation */}
-        <div className="flex-shrink-0 border-t border-white/10 p-3 space-y-2">
+        <div className="shrink-0 border-t border-white/10 p-3 space-y-2">
           {bottomNavigation.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -372,13 +372,13 @@ export default function CRMSidebar({ isOpen, onClose }) {
               >
                 {!item.highlight && (
                   <div
-                    className={`absolute inset-1 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-lg`}
+                    className={`absolute inset-1 bg-linear-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-lg`}
                   ></div>
                 )}
 
                 {item.highlight && (
                   <>
-                    <div className="absolute inset-1 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
+                    <div className="absolute inset-1 bg-linear-to-r from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
                     <div className="absolute -top-1 -right-1">
                       <Star className="w-3 h-3 text-yellow-400 fill-yellow-400 animate-pulse" />
                     </div>
@@ -395,7 +395,7 @@ export default function CRMSidebar({ isOpen, onClose }) {
                 >
                   <Icon
                     className={cn(
-                      "h-5 w-5 flex-shrink-0 relative z-10 transition-colors duration-300",
+                      "h-5 w-5 shrink-0 relative z-10 transition-colors duration-300",
                       item.highlight || isActive
                         ? "text-white"
                         : "text-white/70 group-hover:text-white"
@@ -428,10 +428,10 @@ export default function CRMSidebar({ isOpen, onClose }) {
 
         {/* User Profile */}
         {!isCollapsed && (
-          <div className="flex-shrink-0 border-t border-white/10 p-4">
+          <div className="shrink-0 border-t border-white/10 p-4">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer group">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
                 <div
                   className="relative w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
                   style={{
@@ -461,9 +461,9 @@ export default function CRMSidebar({ isOpen, onClose }) {
         )}
 
         {isCollapsed && (
-          <div className="flex-shrink-0 border-t border-white/10 p-3">
+          <div className="shrink-0 border-t border-white/10 p-3">
             <div className="relative group cursor-pointer">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
               <div
                 className="relative w-12 h-12 rounded-xl flex items-center justify-center shadow-lg mx-auto group-hover:scale-110 transition-transform duration-300"
                 style={{

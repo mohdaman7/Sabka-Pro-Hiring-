@@ -194,7 +194,7 @@ export default function StudentDashboard() {
             animation: "float 12s ease-in-out infinite reverse",
           }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(128,55,145,0.04),transparent_50%)]" />
 
         {/* Grid overlay */}
         <div

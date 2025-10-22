@@ -23,7 +23,7 @@ export default function StudentLayout({ children }) {
           className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
           style={{ background: "rgba(240,194,238,0.03)" }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
+  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(128,55,145,0.03),transparent_30%)]" />
       </div>
 
       {/* Sidebar */}

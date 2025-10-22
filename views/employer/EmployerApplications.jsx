@@ -191,7 +191,7 @@ export default function EmployerApplications() {
           className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl animate-float"
           style={{ background: "rgba(240,194,238,0.06)" }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_30%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(128,55,145,0.04),transparent_30%)]" />
       </div>
 
       {/* Premium Header with Animation */}
@@ -202,7 +202,7 @@ export default function EmployerApplications() {
             "linear-gradient(135deg, rgba(128,55,145,0.16), rgba(184,123,209,0.12))",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
         <div className="relative flex items-center justify-between">
           <div>
@@ -215,7 +215,7 @@ export default function EmployerApplications() {
               >
                 <Users className="w-7 h-7 text-white" />
               </div>
-              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-extrabold bg-linear-to-r from-white to-white/80 bg-clip-text text-transparent">
                 Applications Dashboard
               </h1>
             </div>
@@ -273,26 +273,26 @@ export default function EmployerApplications() {
             >
               {/* Animated gradient overlay */}
               <div
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                className={`absolute inset-0 rounded-2xl bg-linear-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
               ></div>
 
               {/* Glow effect on hover */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500"></div>
+              <div className="absolute -inset-0.5 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500"></div>
 
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">
                   <div
-                    className={`p-3 rounded-xl shadow-md transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 bg-gradient-to-br ${stat.gradient}`}
+                    className={`p-3 rounded-xl shadow-md transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 bg-linear-to-br ${stat.gradient}`}
                   >
                     <Icon className="w-6 h-6 text-white" />
                   </div>
 
                   {stage === stat.value && (
-                    <div className="w-3 h-3 rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1] animate-pulse shadow-lg"></div>
+                    <div className="w-3 h-3 rounded-full bg-linear-to-r from-[#803791] to-[#b87bd1] animate-pulse shadow-lg"></div>
                   )}
                 </div>
 
-                <div className="text-3xl font-extrabold text-white mb-1 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
+                <div className="text-3xl font-extrabold text-white mb-1 group-hover:text-transparent group-hover:bg-linear-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
                   {stat.count}
                 </div>
 
@@ -303,7 +303,7 @@ export default function EmployerApplications() {
                 {/* Progress indicator */}
                 <div className="mt-3 h-1 bg-white/10 rounded-full overflow-hidden">
                   <div
-                    className={`h-full bg-gradient-to-r ${stat.gradient} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700`}
+                    className={`h-full bg-linear-to-r ${stat.gradient} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700`}
                   ></div>
                 </div>
               </div>
@@ -322,7 +322,7 @@ export default function EmployerApplications() {
       >
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex-1 relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-focus-within:opacity-20 blur transition-opacity duration-500"></div>
+            <div className="absolute -inset-0.5 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-focus-within:opacity-20 blur transition-opacity duration-500"></div>
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 group-focus-within:text-[#b87bd1] transition-colors duration-300" />
               <input
@@ -381,7 +381,7 @@ export default function EmployerApplications() {
                 }}
               >
                 {stage === s.value && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-linear-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 )}
 
                 <Icon
@@ -425,7 +425,7 @@ export default function EmployerApplications() {
               onMouseLeave={() => setHoveredCard(null)}
             >
               {/* Animated gradient border effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-3xl opacity-0 group-hover:opacity-20 blur transition-opacity duration-500"></div>
+              <div className="absolute -inset-0.5 bg-linear-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-3xl opacity-0 group-hover:opacity-20 blur transition-opacity duration-500"></div>
 
               {/* Card content */}
               <div className="relative backdrop-blur-xl p-6">
@@ -434,7 +434,7 @@ export default function EmployerApplications() {
                   <div className="flex-1 flex items-start gap-5">
                     {/* Avatar with gradient */}
                     <div className="relative group/avatar">
-                      <div className="absolute -inset-1 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl blur-md opacity-50 group-hover/avatar:opacity-75 transition-opacity duration-300"></div>
+                      <div className="absolute -inset-1 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-2xl blur-md opacity-50 group-hover/avatar:opacity-75 transition-opacity duration-300"></div>
                       <div
                         className="relative w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transform group-hover/avatar:scale-110 group-hover/avatar:rotate-6 transition-all duration-300"
                         style={{
@@ -451,7 +451,7 @@ export default function EmployerApplications() {
                     {/* Candidate Info */}
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
+                        <h3 className="text-xl font-bold text-white group-hover:text-transparent group-hover:bg-linear-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
                           {app.studentId?.firstName} {app.studentId?.lastName}
                         </h3>
                         <StageBadge value={app.status} />
@@ -519,7 +519,7 @@ export default function EmployerApplications() {
                         rel="noopener noreferrer"
                         className="group/btn relative px-5 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl"
                       >
-                        <div className="absolute inset-0 bg-white/10 group-hover/btn:bg-gradient-to-r group-hover/btn:from-[#803791] group-hover/btn:to-[#b87bd1] transition-all duration-300"></div>
+                        <div className="absolute inset-0 bg-white/10 group-hover/btn:bg-linear-to-r group-hover/btn:from-[#803791] group-hover/btn:to-[#b87bd1] transition-all duration-300"></div>
                         <span className="relative flex items-center gap-2">
                           <FileText className="w-5 h-5 group-hover/btn:rotate-12 transition-transform duration-300" />
                           Resume
@@ -561,7 +561,7 @@ export default function EmployerApplications() {
                       app.meta?.previousPosition) && (
                       <div className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300">
                         <h4 className="text-sm font-bold text-white/90 mb-4 flex items-center gap-2">
-                          <div className="p-2 rounded-lg bg-gradient-to-r from-[#803791] to-[#b87bd1]">
+                          <div className="p-2 rounded-lg bg-linear-to-r from-[#803791] to-[#b87bd1]">
                             <Briefcase className="w-4 h-4 text-white" />
                           </div>
                           Previous Experience
@@ -614,7 +614,7 @@ export default function EmployerApplications() {
                     {app.studentId?.education?.length > 0 && (
                       <div className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300">
                         <h4 className="text-sm font-bold text-white/90 mb-4 flex items-center gap-2">
-                          <div className="p-2 rounded-lg bg-gradient-to-r from-[#803791] to-[#b87bd1]">
+                          <div className="p-2 rounded-lg bg-linear-to-r from-[#803791] to-[#b87bd1]">
                             <GraduationCap className="w-4 h-4 text-white" />
                           </div>
                           Education
@@ -646,7 +646,7 @@ export default function EmployerApplications() {
                     {app.meta?.languages && (
                       <div className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300">
                         <h4 className="text-sm font-bold text-white/90 mb-4 flex items-center gap-2">
-                          <div className="p-2 rounded-lg bg-gradient-to-r from-[#803791] to-[#b87bd1]">
+                          <div className="p-2 rounded-lg bg-linear-to-r from-[#803791] to-[#b87bd1]">
                             <Globe className="w-4 h-4 text-white" />
                           </div>
                           Languages
@@ -703,7 +703,7 @@ export default function EmployerApplications() {
       {filtered.length === 0 && (
         <div className="text-center py-20">
           <div className="relative inline-block mb-8">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-3xl blur-2xl opacity-30 animate-pulse"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-3xl blur-2xl opacity-30 animate-pulse"></div>
             <div
               className="relative w-32 h-32 rounded-3xl flex items-center justify-center shadow-2xl"
               style={{
@@ -885,7 +885,7 @@ function StatusUpdateButtons({ currentStatus, onUpdateStatus }) {
             }}
           >
             <div
-              className={`absolute inset-0 bg-gradient-to-r ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+              className={`absolute inset-0 bg-linear-to-r ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
             ></div>
             <span className="relative flex items-center gap-2">
               <Icon className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
@@ -950,7 +950,7 @@ function StageBadge({ value }) {
       className={`group relative inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 ${config.bgClass} ${config.textClass} ${config.borderClass} overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg`}
     >
       <div
-        className={`absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
+        className={`absolute inset-0 bg-linear-to-r ${config.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
       ></div>
       <Icon className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
       <span className="relative z-10">{config.text}</span>

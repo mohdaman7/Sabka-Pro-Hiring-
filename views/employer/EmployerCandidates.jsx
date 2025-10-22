@@ -175,7 +175,7 @@ export default function CandidatesPage() {
           className="absolute top-1/2 right-1/4 w-80 h-80 rounded-full blur-2xl opacity-10 animate-pulse"
           style={{ background: "rgba(240,194,238,0.3)", animationDelay: "2s" }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.05),_transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(128,55,145,0.05),transparent_70%)]" />
       </div>
 
       <div className="relative p-8 space-y-8 max-w-7xl mx-auto">
