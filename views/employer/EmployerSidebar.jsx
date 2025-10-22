@@ -56,6 +56,13 @@ const navigation = [
     gradient: "from-orange-500 to-amber-500",
   },
   {
+    name: "Team",
+    href: "/employer/team",
+    icon: Users,
+    badge: null,
+    gradient: "from-fuchsia-500 to-purple-500",
+  },
+  {
     name: "Applications",
     href: "/employer/applications",
     icon: FileText,
@@ -68,6 +75,13 @@ const navigation = [
     icon: BarChart3,
     badge: null,
     gradient: "from-indigo-500 to-purple-500",
+  },
+  {
+    name: "Activity",
+    href: "/employer/activity",
+    icon: Bell,
+    badge: null,
+    gradient: "from-sky-500 to-blue-500",
   },
 ];
 
