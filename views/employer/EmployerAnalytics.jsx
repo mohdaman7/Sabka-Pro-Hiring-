@@ -248,7 +248,7 @@ export default function EmployerAnalytics() {
         >
           {/* Shine effect */}
           <div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
             style={{
               animation: "shine 2s infinite",
             }}
@@ -328,7 +328,7 @@ export default function EmployerAnalytics() {
             animation: "pulse-glow 6s ease-in-out infinite",
           }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.05),_transparent_30%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(128,55,145,0.05),transparent_30%)]" />
 
         {/* Grid pattern */}
         <div
@@ -367,7 +367,7 @@ export default function EmployerAnalytics() {
             <Filter className="w-4 h-4 group-hover:rotate-12 transition-transform" />
             Filter
           </button>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl transition-all hover:scale-105 font-medium shadow-lg hover:shadow-[#b87bd1]/50 group">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl transition-all hover:scale-105 font-medium shadow-lg hover:shadow-[#b87bd1]/50 group">
             <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
             Export
           </button>
@@ -389,7 +389,7 @@ export default function EmployerAnalytics() {
             onClick={() => setActiveTab(tab)}
             className={`px-6 py-2.5 rounded-lg text-sm font-semibold capitalize transition-all duration-300 ${
               activeTab === tab
-                ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
+                ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
                 : "text-white/60 hover:text-white hover:bg-white/5 hover:scale-102"
             }`}
           >
@@ -889,7 +889,7 @@ export default function EmployerAnalytics() {
           }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
               <Calendar className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -898,7 +898,7 @@ export default function EmployerAnalytics() {
             </div>
           </div>
           <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full w-3/4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full" />
+            <div className="h-full w-3/4 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full" />
           </div>
         </div>
 
@@ -912,7 +912,7 @@ export default function EmployerAnalytics() {
           }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500 to-rose-500 flex items-center justify-center group-hover:scale-110 transition-transform">
               <Eye className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -921,7 +921,7 @@ export default function EmployerAnalytics() {
             </div>
           </div>
           <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full w-4/5 bg-gradient-to-r from-orange-500 to-rose-500 rounded-full" />
+            <div className="h-full w-4/5 bg-linear-to-r from-orange-500 to-rose-500 rounded-full" />
           </div>
         </div>
 
@@ -935,7 +935,7 @@ export default function EmployerAnalytics() {
           }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#803791] to-[#b87bd1] flex items-center justify-center group-hover:scale-110 transition-transform">
               <Award className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -944,7 +944,7 @@ export default function EmployerAnalytics() {
             </div>
           </div>
           <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full w-11/12 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-full" />
+            <div className="h-full w-11/12 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-full" />
           </div>
         </div>
       </div>
