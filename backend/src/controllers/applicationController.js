@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ApplicationModel } from "../models/Application.js";
 import { JobModel } from "../models/Job.js";
+import mongoose from "mongoose";
 
 // Validation schemas
 export const applySchema = z.object({
@@ -152,7 +153,7 @@ export const getMyApplications = async (req, res, next) => {
 
     // Calculate application statistics
     const stats = await ApplicationModel.aggregate([
-      { $match: { studentId: req.user.id } },
+      { $match: { studentId: new mongoose.Types.ObjectId(req.user.id) } },
       {
         $group: {
           _id: "$status",
@@ -227,8 +228,21 @@ export const getApplicationsForMyJobs = async (req, res, next) => {
     const total = await ApplicationModel.countDocuments(filter);
 
     // Get application statistics for employer
+    const statsMatch = {
+      employerId: new mongoose.Types.ObjectId(req.user.id),
+      // Note: we intentionally do not include the `status` filter here so that
+      // we always compute counts across all statuses for the breakdown.
+    };
+    if (jobId) {
+      try {
+        statsMatch.jobId = new mongoose.Types.ObjectId(jobId);
+      } catch (e) {
+        // ignore invalid jobId for stats; fallback to employer-only
+      }
+    }
+
     const stats = await ApplicationModel.aggregate([
-      { $match: { employerId: req.user.id } },
+      { $match: statsMatch },
       {
         $group: {
           _id: "$status",
@@ -542,9 +556,9 @@ export const getApplicationStats = async (req, res, next) => {
     let matchFilter = {};
 
     if (req.user.role === "student") {
-      matchFilter.studentId = req.user.id;
+      matchFilter.studentId = new mongoose.Types.ObjectId(req.user.id);
     } else if (req.user.role === "employer") {
-      matchFilter.employerId = req.user.id;
+      matchFilter.employerId = new mongoose.Types.ObjectId(req.user.id);
     }
 
     const stats = await ApplicationModel.aggregate([
@@ -574,7 +588,7 @@ export const getApplicationStats = async (req, res, next) => {
     const recentApplications = await ApplicationModel.find(matchFilter)
       .populate("jobId", "title")
       .populate("studentId", "firstName lastName")
-      .sort({ appliedAt: -1 })
+      .sort({ createdAt: -1 })
       .limit(5);
 
     res.json({
