@@ -23,6 +23,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { employerService } from "@/services/employerService";
 
 export default function EmployerAnalytics() {
   const [timeRange, setTimeRange] = useState("30d");
@@ -31,73 +32,15 @@ export default function EmployerAnalytics() {
   const [hoveredJob, setHoveredJob] = useState(null);
   const [analyticsData, setAnalyticsData] = useState({
     overview: {
-      totalApplications: 156,
-      conversionRate: 12.5,
-      averageTimeToHireDays: 14,
+      totalApplications: 0,
+      conversionRate: 0,
+      averageTimeToHireDays: 0,
     },
-    monthlyStats: [
-      { month: "Jan", applications: 45, hires: 8 },
-      { month: "Feb", applications: 62, hires: 11 },
-      { month: "Mar", applications: 78, hires: 15 },
-      { month: "Apr", applications: 89, hires: 18 },
-      { month: "May", applications: 95, hires: 22 },
-      { month: "Jun", applications: 105, hires: 25 },
-    ],
-    jobPerformance: [
-      {
-        jobId: 1,
-        title: "Senior Frontend Developer",
-        views: 2456,
-        applications: 45,
-        conversion: 1.8,
-        status: "active",
-      },
-      {
-        jobId: 2,
-        title: "Product Manager",
-        views: 1892,
-        applications: 38,
-        conversion: 2.0,
-        status: "active",
-      },
-      {
-        jobId: 3,
-        title: "UX Designer",
-        views: 1634,
-        applications: 32,
-        conversion: 2.0,
-        status: "active",
-      },
-      {
-        jobId: 4,
-        title: "Backend Engineer",
-        views: 1245,
-        applications: 28,
-        conversion: 2.2,
-        status: "closed",
-      },
-    ],
-    topLocations: [
-      { location: "Bangalore", applicants: 45 },
-      { location: "Mumbai", applicants: 38 },
-      { location: "Delhi", applicants: 32 },
-      { location: "Hyderabad", applicants: 28 },
-      { location: "Pune", applicants: 13 },
-    ],
-    candidateSources: [
-      { source: "LinkedIn", percentage: 35, count: 55 },
-      { source: "Indeed", percentage: 25, count: 39 },
-      { source: "Company Website", percentage: 20, count: 31 },
-      { source: "Referrals", percentage: 15, count: 23 },
-      { source: "Other", percentage: 5, count: 8 },
-    ],
-    status: {
-      applied: 45,
-      reviewed: 32,
-      shortlisted: 28,
-      interview: 18,
-      hired: 25,
-    },
+    monthlyStats: [],
+    jobPerformance: [],
+    topLocations: [],
+    candidateSources: [],
+    status: {},
     recentActivity: [],
   });
   const [loading, setLoading] = useState(false);
@@ -257,6 +200,52 @@ export default function EmployerAnalytics() {
       </div>
     );
   };
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await employerService.getAnalytics({ range: timeRange });
+        if (!mounted) return;
+        if (res?.success) {
+          setAnalyticsData({
+            overview: res.data?.overview || {},
+            monthlyStats: Array.isArray(res.data?.monthlyStats)
+              ? res.data.monthlyStats
+              : [],
+            jobPerformance: Array.isArray(res.data?.jobPerformance)
+              ? res.data.jobPerformance
+              : [],
+            topLocations: Array.isArray(res.data?.topLocations)
+              ? res.data.topLocations
+              : [],
+            candidateSources: Array.isArray(res.data?.candidateSources)
+              ? res.data.candidateSources
+              : [],
+            status: res.data?.status || {},
+            recentActivity: Array.isArray(res.data?.recentActivity)
+              ? res.data.recentActivity
+              : [],
+          });
+        } else {
+          throw new Error(res?.message || "Failed to load analytics");
+        }
+      } catch (e) {
+        if (!mounted) return;
+        setError(
+          e?.response?.data?.message || e?.message || "Failed to load analytics"
+        );
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, [timeRange]);
 
   if (loading) {
     return (
@@ -467,7 +456,15 @@ export default function EmployerAnalytics() {
                         </span>
                       </div>
                       <ProgressBar
-                        percentage={(month.applications / 120) * 100}
+                        percentage={(() => {
+                          const maxApps = Math.max(
+                            1,
+                            ...safeArray(analyticsData.monthlyStats).map(
+                              (m) => m.applications || 0
+                            )
+                          );
+                          return ((month.applications || 0) / maxApps) * 100;
+                        })()}
                         color="purple"
                       />
                     </div>
@@ -496,51 +493,43 @@ export default function EmployerAnalytics() {
                 </h3>
               </div>
               <div className="space-y-5">
-                {[
-                  {
-                    stage: "Applied",
-                    count: 77,
-                    color: "purple",
-                    icon: FileText,
-                  },
-                  {
-                    stage: "Shortlisted",
-                    count: 28,
-                    color: "green",
-                    icon: Award,
-                  },
-                  {
-                    stage: "Interviewed",
-                    count: 18,
-                    color: "indigo",
-                    icon: Users,
-                  },
-                  { stage: "Hired", count: 25, color: "cyan", icon: Briefcase },
-                ].map((stage) => (
-                  <div
-                    key={stage.stage}
-                    className="flex items-center justify-between group/item hover:bg-white/5 p-3 rounded-lg transition-all"
-                  >
-                    <div className="flex items-center gap-3 w-32">
-                      <stage.icon className="w-5 h-5 text-[#b87bd1] group-hover/item:scale-110 transition-transform" />
-                      <span className="text-sm font-bold text-white/80 group-hover/item:text-white transition-colors">
-                        {stage.stage}
-                      </span>
-                    </div>
-                    <div className="flex-1 mx-4">
-                      <div className="flex justify-between text-xs text-white/60 mb-2 font-medium">
-                        <span>{stage.count} candidates</span>
-                        <span className="text-[#b87bd1]">
-                          {Math.round((stage.count / 156) * 100)}%
+                {(() => {
+                  const s = analyticsData?.status || {};
+                  const total = Math.max(1, analyticsData?.overview?.totalApplications || 0);
+                  const funnel = [
+                    { key: "applied", label: "Applied", color: "purple", icon: FileText },
+                    { key: "reviewed", label: "Reviewed", color: "green", icon: Award },
+                    { key: "interview", label: "Interviewed", color: "indigo", icon: Users },
+                    { key: "hired", label: "Hired", color: "cyan", icon: Briefcase },
+                  ];
+                  return funnel.map((stage) => {
+                    const count = s[stage.key] || 0;
+                    const Icon = stage.icon;
+                    return (
+                      <div
+                        key={stage.key}
+                        className="flex items-center justify-between group/item hover:bg-white/5 p-3 rounded-lg transition-all"
+                      >
+                        <div className="flex items-center gap-3 w-32">
+                          <Icon className="w-5 h-5 text-[#b87bd1] group-hover/item:scale-110 transition-transform" />
+                          <span className="text-sm font-bold text-white/80 group-hover/item:text-white transition-colors">
+                            {stage.label}
+                          </span>
+                        </div>
+                        <div className="flex-1 mx-4">
+                          <div className="flex justify-between text-xs text-white/60 mb-2 font-medium">
+                            <span>{count} candidates</span>
+                            <span className="text-[#b87bd1]">{Math.round((count / total) * 100)}%</span>
+                          </div>
+                          <ProgressBar percentage={(count / total) * 100} color={stage.color} />
+                        </div>
+                        <span className="text-sm font-bold text-white px-3 py-1 bg-white/5 rounded-lg group-hover/item:bg-[#b87bd1]/20 transition-colors">
+                          {count}
                         </span>
                       </div>
-                      <ProgressBar
-                        percentage={(stage.count / 156) * 100}
-                        color={stage.color}
-                      />
-                    </div>
-                  </div>
-                ))}
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>
