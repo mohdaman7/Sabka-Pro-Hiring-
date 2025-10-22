@@ -39,12 +39,7 @@ import {
   Building2,
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as DayCalendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import ScheduleInterviewDialog from "@/views/employer/ScheduleInterviewDialog";
 
 export default function EmployerApplications() {
   const [search, setSearch] = useState("");
@@ -61,10 +56,7 @@ export default function EmployerApplications() {
   const handleStatusUpdate = async (applicationId, newStatus) => {
     try {
       setLoading(true);
-      await applicationService.updateStatus(
-        applicationId,
-        newStatus
-      );
+      await applicationService.updateStatus(applicationId, newStatus);
       setApplications(
         applications.map((app) =>
           app._id === applicationId ? { ...app, status: newStatus } : app
@@ -673,12 +665,14 @@ export default function EmployerApplications() {
                       </div>
                       <div className="flex items-center gap-2">
                         <StatusUpdateButtons
-                        currentStatus={app.status}
-                        onUpdateStatus={(newStatus) =>
-                          handleStatusUpdate(app._id, newStatus)
-                        }
+                          currentStatus={app.status}
+                          onUpdateStatus={(newStatus) =>
+                            handleStatusUpdate(app._id, newStatus)
+                          }
                         />
-                        {(app.status === "applied" || app.status === "reviewed" || app.status === "interview") && (
+                        {(app.status === "applied" ||
+                          app.status === "reviewed" ||
+                          app.status === "interview") && (
                           <button
                             onClick={() => setScheduleApp(app)}
                             className="group relative px-4 py-2 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
@@ -689,7 +683,9 @@ export default function EmployerApplications() {
                           >
                             <span className="relative flex items-center gap-2">
                               <Calendar className="w-4 h-4" />
-                              {app.interview?.status ? "Update Interview" : "Schedule Interview"}
+                              {app.interview?.status
+                                ? "Update Interview"
+                                : "Schedule Interview"}
                             </span>
                           </button>
                         )}
@@ -824,11 +820,15 @@ export default function EmployerApplications() {
           animation: bounce-subtle 2s ease-in-out infinite;
         }
       `}</style>
+
+      {/* Use the imported ScheduleInterviewDialog component */}
       <ScheduleInterviewDialog
         app={scheduleApp}
         onClose={() => setScheduleApp(null)}
         onScheduled={(updated) => {
-          setApplications((prev) => prev.map((a) => (a._id === updated._id ? updated : a)));
+          setApplications((prev) =>
+            prev.map((a) => (a._id === updated._id ? updated : a))
+          );
           setScheduleApp(null);
         }}
       />
@@ -895,241 +895,6 @@ function StatusUpdateButtons({ currentStatus, onUpdateStatus }) {
         );
       })}
     </div>
-  );
-}
-function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(null);
-  const [time, setTime] = useState("10:00");
-  const [duration, setDuration] = useState(60);
-  const [type, setType] = useState("video");
-  const [meetingLink, setMeetingLink] = useState("");
-  const [location, setLocation] = useState("");
-  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
-  const [panel, setPanel] = useState([{ name: "", email: "", role: "" }]);
-  const [notes, setNotes] = useState("");
-  const [completionFeedback, setCompletionFeedback] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const shouldOpen = !!app;
-    setOpen(shouldOpen);
-    setError("");
-    if (app?.interview?.scheduledAt) {
-      const d = new Date(app.interview.scheduledAt);
-      setDate(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
-      const hh = String(d.getHours()).padStart(2, "0");
-      const mm = String(d.getMinutes()).padStart(2, "0");
-      setTime(`${hh}:${mm}`);
-      setDuration(app.interview.durationMinutes || 60);
-      setType(app.interview.type || "video");
-      setMeetingLink(app.interview.meetingLink || "");
-      setLocation(app.interview.location || "");
-      setTimezone(app.interview.timezone || timezone);
-      setPanel(app.interview.panel?.length ? app.interview.panel : [{ name: "", email: "", role: "" }]);
-      setNotes(app.interview.notes || "");
-      setCompletionFeedback(app.interview.feedback || "");
-    } else {
-      // defaults
-      setDate(null);
-      setTime("10:00");
-      setDuration(60);
-      setType("video");
-      setMeetingLink("");
-      setLocation("");
-      setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
-      setPanel([{ name: "", email: "", role: "" }]);
-      setNotes("");
-      setCompletionFeedback("");
-    }
-  }, [app]);
-
-  const closeAll = () => {
-    setOpen(false);
-    onClose?.();
-  };
-
-  const handlePanelChange = (idx, field, value) => {
-    setPanel((prev) => prev.map((p, i) => (i === idx ? { ...p, [field]: value } : p)));
-  };
-
-  const addPanelMember = () => setPanel((prev) => [...prev, { name: "", email: "", role: "" }]);
-  const removePanelMember = (idx) => setPanel((prev) => prev.filter((_, i) => i !== idx));
-
-  const buildDateTime = () => {
-    if (!date || !time) return null;
-    const [hh, mm] = time.split(":").map((s) => parseInt(s, 10));
-    const dt = new Date(date);
-    dt.setHours(hh, mm, 0, 0);
-    return dt;
-  };
-
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const scheduledAt = buildDateTime();
-      if (!scheduledAt) throw new Error("Please select date and time");
-      const payload = {
-        scheduledAt,
-        timezone,
-        durationMinutes: Number(duration),
-        type,
-        meetingLink: type === "video" ? meetingLink : undefined,
-        location: type === "onsite" ? location : undefined,
-        panel: panel.filter((p) => p.name && p.email),
-        notes: notes || undefined,
-      };
-      const fn = app?.interview?.status ? applicationService.rescheduleInterview : applicationService.scheduleInterview;
-      const res = await fn(app._id, payload);
-      if (!res?.success) throw new Error(res?.message || "Failed to schedule interview");
-      onScheduled?.(res.data);
-    } catch (e) {
-      setError(e?.response?.data?.message || e.message || "Failed to schedule interview");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCancelInterview = async () => {
-    try {
-      setLoading(true);
-      const res = await applicationService.cancelInterview(app._id, "Employer cancelled");
-      if (!res?.success) throw new Error(res?.message || "Failed to cancel");
-      onScheduled?.(res.data);
-    } catch (e) {
-      setError(e?.response?.data?.message || e.message || "Failed to cancel interview");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleMarkCompleted = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const res = await applicationService.completeInterview(app._id, completionFeedback || "Interview completed");
-      if (!res?.success) throw new Error(res?.message || "Failed to complete interview");
-      onScheduled?.(res.data);
-    } catch (e) {
-      setError(e?.response?.data?.message || e.message || "Failed to complete interview");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => (!v ? closeAll() : setOpen(v))}>
-      <DialogContent className="bg-white text-slate-900 max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>{app?.interview?.status ? "Update Interview" : "Schedule Interview"}</DialogTitle>
-        </DialogHeader>
-
-        {error && (
-          <div className="text-sm text-rose-600 bg-rose-50 border border-rose-200 rounded-md p-2">{error}</div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Date</label>
-            <DayCalendar selected={date} onSelect={setDate} mode="single" />
-          </div>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Time</label>
-              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Duration (minutes)</label>
-              <Input type="number" min={15} step={15} value={duration} onChange={(e) => setDuration(e.target.value)} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Type</label>
-              <Select value={type} onValueChange={setType}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="video">Video</SelectItem>
-                  <SelectItem value="phone">Phone</SelectItem>
-                  <SelectItem value="onsite">Onsite</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            {type === "video" && (
-              <div>
-                <label className="block text-sm font-medium mb-2">Meeting Link</label>
-                <Input placeholder="https://..." value={meetingLink} onChange={(e) => setMeetingLink(e.target.value)} />
-              </div>
-            )}
-            {type === "onsite" && (
-              <div>
-                <label className="block text-sm font-medium mb-2">Location</label>
-                <Input placeholder="Address" value={location} onChange={(e) => setLocation(e.target.value)} />
-              </div>
-            )}
-            <div>
-              <label className="block text-sm font-medium mb-2">Timezone</label>
-              <Input value={timezone} onChange={(e) => setTimezone(e.target.value)} />
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <label className="block text-sm font-medium">Interview Panel</label>
-          {panel.map((m, idx) => (
-            <div key={idx} className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Input placeholder="Name" value={m.name} onChange={(e) => handlePanelChange(idx, "name", e.target.value)} />
-              <Input placeholder="Email" value={m.email} onChange={(e) => handlePanelChange(idx, "email", e.target.value)} />
-              <div className="flex gap-2">
-                <Input placeholder="Role" value={m.role} onChange={(e) => handlePanelChange(idx, "role", e.target.value)} />
-                {panel.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removePanelMember(idx)}
-                    className="px-3 rounded-md border text-sm hover:bg-slate-50"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-          <button type="button" onClick={addPanelMember} className="px-3 py-1.5 rounded-md border text-sm w-fit hover:bg-slate-50">
-            Add Panel Member
-          </button>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">Notes</label>
-          <Textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />
-        </div>
-
-        {app?.interview?.status && (
-          <div>
-            <label className="block text-sm font-medium mb-2">Feedback (on completion)</label>
-            <Textarea rows={3} value={completionFeedback} onChange={(e) => setCompletionFeedback(e.target.value)} />
-          </div>
-        )}
-
-        <DialogFooter>
-          {app?.interview?.status && (
-            <Button variant="outline" disabled={loading} onClick={handleCancelInterview}>
-              Cancel Interview
-            </Button>
-          )}
-          {app?.interview?.status && app?.interview?.status !== "completed" && (
-            <Button variant="secondary" disabled={loading} onClick={handleMarkCompleted}>
-              Mark Completed
-            </Button>
-          )}
-          <Button onClick={handleSubmit} disabled={loading}>
-            {loading ? "Saving..." : app?.interview?.status ? "Save Changes" : "Schedule"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
 
