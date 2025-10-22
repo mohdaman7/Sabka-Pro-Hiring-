@@ -53,6 +53,17 @@ export default function EmployerApplications() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [scheduleApp, setScheduleApp] = useState(null);
 
+  // Always compute live stats from current applications list so counts update immediately
+  const computedStats = useMemo(() => {
+    const counts = applications.reduce((acc, app) => {
+      const key = app.status || "applied";
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+    counts.totalApplications = applications.length;
+    return counts;
+  }, [applications]);
+
   const handleStatusUpdate = async (applicationId, newStatus) => {
     try {
       setLoading(true);
@@ -104,7 +115,7 @@ export default function EmployerApplications() {
       icon: Users,
       color: "slate",
       gradient: "from-slate-500 to-slate-600",
-      count: stats.totalApplications || applications.length || 0,
+      count: computedStats.totalApplications || 0,
     },
     {
       value: "applied",
@@ -112,7 +123,7 @@ export default function EmployerApplications() {
       icon: Sparkles,
       color: "blue",
       gradient: "from-blue-500 to-cyan-500",
-      count: stats.applied || 0,
+      count: computedStats.applied || 0,
     },
     {
       value: "reviewed",
@@ -120,7 +131,7 @@ export default function EmployerApplications() {
       icon: Eye,
       color: "cyan",
       gradient: "from-cyan-500 to-teal-500",
-      count: stats.reviewed || 0,
+      count: computedStats.reviewed || 0,
     },
     {
       value: "interview",
@@ -128,7 +139,7 @@ export default function EmployerApplications() {
       icon: Calendar,
       color: "indigo",
       gradient: "from-indigo-500 to-purple-500",
-      count: stats.interview || 0,
+      count: computedStats.interview || 0,
     },
     {
       value: "hired",
@@ -136,7 +147,7 @@ export default function EmployerApplications() {
       icon: Award,
       color: "emerald",
       gradient: "from-emerald-500 to-teal-500",
-      count: stats.hired || 0,
+      count: computedStats.hired || 0,
     },
     {
       value: "rejected",
@@ -144,7 +155,7 @@ export default function EmployerApplications() {
       icon: XCircle,
       color: "rose",
       gradient: "from-rose-500 to-pink-500",
-      count: stats.rejected || 0,
+      count: computedStats.rejected || 0,
     },
   ];
 

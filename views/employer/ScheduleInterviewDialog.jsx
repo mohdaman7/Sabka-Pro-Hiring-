@@ -107,6 +107,12 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
       setError("");
       const scheduledAt = buildDateTime();
       if (!scheduledAt) throw new Error("Please select date and time");
+      if (type === "video" && !meetingLink.trim()) {
+        throw new Error("Meeting link is required for video interviews");
+      }
+      if (type === "onsite" && !location.trim()) {
+        throw new Error("Location is required for on-site interviews");
+      }
 
       const payload = {
         scheduledAt,
@@ -237,14 +243,14 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 lg:p-8 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 lg:p-8 animate-fade-in">
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-md"
         onClick={closeAll}
       />
 
       <div
-        className="relative w-full max-w-5xl h-[85vh] overflow-y-auto rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-300 hover:scale-[1.01]"
+        className="relative w-full max-w-6xl h-[85vh] overflow-y-auto rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-300 hover:scale-[1.01]"
         style={{
           background:
             "linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,41,59,0.98))",
@@ -301,7 +307,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               <span>Date & Time</span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
               <div
                 className="rounded-2xl overflow-hidden border border-white/10 shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
                 style={{
@@ -320,8 +326,8 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               {/* Time & Duration Panel */}
               <div className="space-y-4">
                 {/* Time Selector */}
-                <div className="space-y-3">
-                  <label className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-xs uppercase tracking-wide font-semibold text-white/60">
                     <Clock className="w-4 h-4 text-[#b87bd1]" />
                     Select Time
                   </label>
@@ -330,7 +336,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                       <button
                         key={slot}
                         onClick={() => setTime(slot)}
-                        className={`p-3.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                        className={`p-3.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                           time === slot
                             ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
                             : "bg-white/5 text-white/70 hover:bg-white/10 hover:scale-105 border border-white/10"
@@ -343,8 +349,8 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                 </div>
 
                 {/* Duration Selector */}
-                <div className="space-y-3">
-                  <label className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-xs uppercase tracking-wide font-semibold text-white/60">
                     <Clock className="w-4 h-4 text-[#b87bd1]" />
                     Duration
                   </label>
@@ -353,7 +359,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                       <button
                         key={opt.value}
                         onClick={() => setDuration(opt.value)}
-                        className={`p-4 rounded-xl text-sm font-medium transition-all duration-300 ${
+                        className={`p-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                           duration === opt.value
                             ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
                             : "bg-white/5 text-white/70 hover:bg-white/10 hover:scale-105 border border-white/10"
@@ -367,11 +373,11 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
 
                 {/* Timezone */}
                 <div className="space-y-2 p-4 rounded-xl bg-white/5 border border-white/10">
-                  <label className="flex items-center gap-2 text-xs font-medium text-white/50">
+                  <label className="flex items-center gap-2 text-xs uppercase tracking-wide font-semibold text-white/60">
                     <Globe className="w-3 h-3" />
                     Timezone
                   </label>
-                  <div className="text-white font-medium">{timezone}</div>
+                  <TimezoneSelect value={timezone} onChange={setTimezone} />
                 </div>
               </div>
             </div>
@@ -384,7 +390,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               <span>Interview Type</span>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {interviewTypes.map((typeOption) => {
                 const Icon = typeOption.icon;
                 return (
@@ -436,7 +442,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
 
             {type === "video" && (
               <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <label className="flex items-center gap-2 text-xs uppercase tracking-wide font-semibold text-white/60">
                   <Video className="w-4 h-4 text-[#b87bd1]" />
                   Meeting Link
                 </label>
@@ -444,14 +450,15 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                   placeholder="https://meet.google.com/..."
                   value={meetingLink}
                   onChange={(e) => setMeetingLink(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
+                  className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
                 />
+                <p className="text-xs text-white/50">Paste a Google Meet, Zoom, or Teams link</p>
               </div>
             )}
 
             {type === "onsite" && (
               <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <label className="flex items-center gap-2 text-xs uppercase tracking-wide font-semibold text-white/60">
                   <MapPin className="w-4 h-4 text-[#b87bd1]" />
                   Location Address
                 </label>
@@ -459,8 +466,9 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                   placeholder="123 Main Street, City, State"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
+                  className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
                 />
+                <p className="text-xs text-white/50">Include building, floor, and check-in instructions</p>
               </div>
             )}
           </div>
@@ -475,7 +483,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               <button
                 type="button"
                 onClick={addPanelMember}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all duration-300 hover:scale-105"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all duration-300 hover:scale-105"
               >
                 <Plus className="w-4 h-4" />
                 Add Member
@@ -495,7 +503,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                       onChange={(e) =>
                         handlePanelChange(idx, "name", e.target.value)
                       }
-                      className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
+                      className="px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
                     />
                     <input
                       placeholder="Email"
@@ -503,7 +511,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                       onChange={(e) =>
                         handlePanelChange(idx, "email", e.target.value)
                       }
-                      className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
+                      className="px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
                     />
                     <div className="flex gap-2">
                       <input
@@ -512,7 +520,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                         onChange={(e) =>
                           handlePanelChange(idx, "role", e.target.value)
                         }
-                        className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
+                        className="flex-1 px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
                       />
                       {panel.length > 1 && (
                         <button
@@ -541,7 +549,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add any special instructions or notes for this interview..."
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 resize-none"
+              className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 resize-none"
             />
           </div>
 
@@ -557,7 +565,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                 value={completionFeedback}
                 onChange={(e) => setCompletionFeedback(e.target.value)}
                 placeholder="Add feedback after completing the interview..."
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 resize-none"
+                className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 resize-none"
               />
             </div>
           )}
@@ -805,5 +813,43 @@ function PremiumCalendar({
         })}
       </div>
     </div>
+  );
+}
+
+// Lightweight timezone select with common options and graceful fallback
+function TimezoneSelect({ value, onChange }) {
+  const COMMON_TIMEZONES = [
+    "UTC",
+    "America/Los_Angeles",
+    "America/Denver",
+    "America/Chicago",
+    "America/New_York",
+    "Europe/London",
+    "Europe/Berlin",
+    "Europe/Paris",
+    "Europe/Madrid",
+    "Europe/Rome",
+    "Asia/Dubai",
+    "Asia/Kolkata",
+    "Asia/Singapore",
+    "Asia/Tokyo",
+    "Australia/Sydney",
+  ];
+
+  // Ensure current value is present
+  const options = Array.from(new Set([value, ...COMMON_TIMEZONES])).filter(Boolean);
+
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
+    >
+      {options.map((tz) => (
+        <option key={tz} value={tz} className="bg-slate-900 text-white">
+          {tz}
+        </option>
+      ))}
+    </select>
   );
 }
