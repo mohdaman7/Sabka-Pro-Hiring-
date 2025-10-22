@@ -440,8 +440,9 @@ export default function EmployerApplications() {
 
               {/* Card content */}
               <div className="relative backdrop-blur-xl p-6">
-                {/* Header Section */}
-                <div className="flex items-start justify-between gap-6">
+                {/* Header Section - Improved Layout */}
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                  {/* Left Section - Candidate Info */}
                   <div className="flex-1 flex items-start gap-5">
                     {/* Avatar with gradient */}
                     <div className="relative group/avatar">
@@ -520,14 +521,16 @@ export default function EmployerApplications() {
                       </div>
                     </div>
                   </div>
-                  {/* Quick Schedule Button (visible on all cards) */}
-                  <div className="absolute right-6 top-6 hidden md:block">
+
+                  {/* Right Section - Action Buttons - Improved Layout */}
+                  <div className="flex flex-col sm:flex-row lg:flex-col gap-3 justify-end items-start lg:items-end">
+                    {/* Schedule Button - Always visible for eligible statuses */}
                     {(app.status === "applied" ||
                       app.status === "reviewed" ||
                       app.status === "interview") && (
                       <button
                         onClick={() => setScheduleApp(app)}
-                        className="group relative px-4 py-2 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        className="group relative px-4 py-2 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto lg:w-full text-center"
                         style={{
                           background: "rgba(255,255,255,0.06)",
                           border: "1px solid rgba(255,255,255,0.06)",
@@ -538,49 +541,48 @@ export default function EmployerApplications() {
                             : "Schedule Interview"
                         }
                       >
-                        <span className="relative flex items-center gap-2">
+                        <span className="relative flex items-center gap-2 justify-center">
                           <Calendar className="w-4 h-4" />
                           {app.interview?.status ? "Update" : "Schedule"}
                         </span>
                       </button>
                     )}
-                  </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-3">
+                    {/* Resume Button */}
                     {app.resumeUrl && (
                       <a
                         href={app.resumeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/btn relative px-5 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                        className="group/btn relative px-4 py-2 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl w-full sm:w-auto lg:w-full text-center"
                       >
                         <div className="absolute inset-0 bg-white/10 group-hover/btn:bg-linear-to-r group-hover/btn:from-[#803791] group-hover/btn:to-[#b87bd1] transition-all duration-300"></div>
-                        <span className="relative flex items-center gap-2">
-                          <FileText className="w-5 h-5 group-hover/btn:rotate-12 transition-transform duration-300" />
+                        <span className="relative flex items-center gap-2 justify-center">
+                          <FileText className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-300" />
                           Resume
                         </span>
                       </a>
                     )}
 
+                    {/* Expand/Collapse Button */}
                     <button
                       onClick={() => setExpandedId(isOpen ? null : app._id)}
-                      className="group/btn relative px-5 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105"
+                      className="group/btn relative px-4 py-2 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 w-full sm:w-auto lg:w-full text-center"
                       style={{
                         background: isOpen
                           ? "linear-gradient(135deg,#803791,#b87bd1)"
                           : "rgba(255,255,255,0.1)",
                       }}
                     >
-                      <span className="relative flex items-center gap-2">
+                      <span className="relative flex items-center gap-2 justify-center">
                         {isOpen ? (
                           <>
-                            <ChevronUp className="w-5 h-5 group-hover/btn:-translate-y-1 transition-transform duration-300" />
+                            <ChevronUp className="w-4 h-4 group-hover/btn:-translate-y-1 transition-transform duration-300" />
                             Less
                           </>
                         ) : (
                           <>
-                            <ChevronDown className="w-5 h-5 group-hover/btn:translate-y-1 transition-transform duration-300" />
+                            <ChevronDown className="w-4 h-4 group-hover/btn:translate-y-1 transition-transform duration-300" />
                             More
                           </>
                         )}
@@ -694,12 +696,12 @@ export default function EmployerApplications() {
                     )}
 
                     {/* Status Update Section */}
-                    <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                    <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-white/10 gap-4">
                       <div className="flex items-center gap-2 text-white/60 text-sm">
                         <Clock className="w-4 h-4" />
                         Applied {new Date(app.createdAt).toLocaleDateString()}
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-end">
                         <StatusUpdateButtons
                           currentStatus={app.status}
                           onUpdateStatus={(newStatus) =>

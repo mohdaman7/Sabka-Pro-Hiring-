@@ -250,7 +250,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
       />
 
       <div
-        className="relative w-full max-w-6xl h-[85vh] overflow-y-auto rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-300 hover:scale-[1.01]"
+        className="relative w-full max-w-6xl h-[90vh] overflow-y-auto rounded-3xl shadow-2xl border border-white/10 transform transition-transform duration-300"
         style={{
           background:
             "linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,41,59,0.98))",
@@ -300,22 +300,23 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
         )}
 
         <div className="p-6 space-y-6">
-          {/* Date & Time Section - Premium Layout */}
+          {/* Date & Time Section - Improved Responsive Layout */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-white/90">
               <Calendar className="w-4 h-4 text-[#b87bd1]" />
               <span>Date & Time</span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+              {/* Calendar Section */}
               <div
-                className="rounded-2xl overflow-hidden border border-white/10 shadow-xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+                className="rounded-2xl overflow-hidden border border-white/10 shadow-xl"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(128,55,145,0.08), rgba(184,123,209,0.05))",
                 }}
               >
-                <PremiumCalendar
+                <EnhancedCalendar
                   selected={date}
                   onSelect={setDate}
                   currentMonth={currentMonth}
@@ -331,7 +332,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                     <Clock className="w-4 h-4 text-[#b87bd1]" />
                     Select Time
                   </label>
-                  <div className="grid grid-cols-3 gap-2 max-h-[240px] overflow-y-auto p-1 rounded-xl bg-white/5 border border-white/10">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[240px] overflow-y-auto p-1 rounded-xl bg-white/5 border border-white/10">
                     {timeSlots.map((slot) => (
                       <button
                         key={slot}
@@ -354,7 +355,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                     <Clock className="w-4 h-4 text-[#b87bd1]" />
                     Duration
                   </label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {durationOptions.map((opt) => (
                       <button
                         key={opt.value}
@@ -377,12 +378,16 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
                     <Globe className="w-3 h-3" />
                     Timezone
                   </label>
-                  <TimezoneSelect value={timezone} onChange={setTimezone} />
+                  <EnhancedTimezoneSelect
+                    value={timezone}
+                    onChange={setTimezone}
+                  />
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Rest of your existing form sections remain the same */}
           {/* Interview Type Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-white/90">
@@ -576,7 +581,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
         </div>
 
         {/* Premium Footer */}
-        <div className="sticky bottom-0 backdrop-blur-xl bg-slate-900/80 border-t border-white/10 p-6 flex justify-end gap-3">
+        <div className="sticky bottom-0 backdrop-blur-xl bg-slate-900/80 border-t border-white/10 p-6 flex flex-wrap justify-end gap-3">
           {app?.interview?.status && (
             <>
               <button
@@ -665,7 +670,8 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   );
 }
 
-function PremiumCalendar({
+// Enhanced Calendar Component with Better Responsiveness
+function EnhancedCalendar({
   selected,
   onSelect,
   currentMonth,
@@ -752,30 +758,32 @@ function PremiumCalendar({
   const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6 w-full">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
           onClick={prevMonth}
-          className="p-2 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+          className="p-2 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300 min-w-[40px]"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
-        <h3 className="text-lg font-bold text-white">{monthYear}</h3>
+        <h3 className="text-base sm:text-lg font-bold text-white text-center truncate px-2">
+          {monthYear}
+        </h3>
         <button
           onClick={nextMonth}
-          className="p-2 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+          className="p-2 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300 min-w-[40px]"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
 
       {/* Week days */}
-      <div className="grid grid-cols-7 gap-2 mb-3">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-3">
         {weekDays.map((day) => (
           <div
             key={day}
-            className="text-center text-xs font-semibold text-white/50 py-2"
+            className="text-center text-xs font-semibold text-white/50 py-2 truncate"
           >
             {day}
           </div>
@@ -783,29 +791,30 @@ function PremiumCalendar({
       </div>
 
       {/* Days */}
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {[...Array(firstDayOfMonth)].map((_, i) => (
           <div key={`empty-${i}`} />
         ))}
         {[...Array(daysInMonth)].map((_, i) => {
           const day = i + 1;
-          const selected = isSelected(day);
-          const todayDate = isToday(day);
-          const past = isPast(day);
+          const isDaySelected = isSelected(day);
+          const isTodayDate = isToday(day);
+          const isPastDate = isPast(day);
 
           return (
             <button
               key={day}
-              onClick={() => !past && handleDayClick(day)}
-              disabled={past}
+              onClick={() => !isPastDate && handleDayClick(day)}
+              disabled={isPastDate}
               className={`
-                aspect-square rounded-xl text-sm font-medium transition-all duration-300
+                aspect-square rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300
+                flex items-center justify-center min-w-0
                 ${
-                  selected
+                  isDaySelected
                     ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-110"
-                    : todayDate
-                    ? "bg-white/10 text-white border-2 border-[#b87bd1]/50"
-                    : past
+                    : isTodayDate
+                    ? "bg-white/10 text-white border border-[#b87bd1]/50"
+                    : isPastDate
                     ? "text-white/30 cursor-not-allowed"
                     : "text-white/70 hover:bg-white/10 hover:text-white hover:scale-105"
                 }
@@ -820,8 +829,8 @@ function PremiumCalendar({
   );
 }
 
-// Lightweight timezone select with common options and graceful fallback
-function TimezoneSelect({ value, onChange }) {
+// Enhanced Timezone Select with Better Styling
+function EnhancedTimezoneSelect({ value, onChange }) {
   const COMMON_TIMEZONES = [
     "UTC",
     "America/Los_Angeles",
@@ -840,7 +849,6 @@ function TimezoneSelect({ value, onChange }) {
     "Australia/Sydney",
   ];
 
-  // Ensure current value is present
   const options = Array.from(new Set([value, ...COMMON_TIMEZONES])).filter(
     Boolean
   );
@@ -849,11 +857,11 @@ function TimezoneSelect({ value, onChange }) {
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all"
+      className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all appearance-none cursor-pointer"
     >
       {options.map((tz) => (
         <option key={tz} value={tz} className="bg-slate-900 text-white">
-          {tz}
+          {tz.replace(/_/g, " ")}
         </option>
       ))}
     </select>
