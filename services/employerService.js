@@ -83,4 +83,45 @@ export const employerService = {
       };
     }
   },
+
+  // Verification docs
+  listVerificationDocuments: async () => {
+    const response = await api.get("/api/employer/verification/documents");
+    return response.data;
+  },
+  uploadVerificationDocument: async (type, file) => {
+    const formData = new FormData();
+    formData.append("type", type);
+    formData.append("document", file);
+    const response = await api.post(
+      "/api/employer/verification/documents",
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    return response.data;
+  },
+  deleteVerificationDocument: async (docId) => {
+    const response = await api.delete(
+      `/api/employer/verification/documents/${docId}`
+    );
+    return response.data;
+  },
+  getVerificationStatus: async () => {
+    const response = await api.get("/api/employer/verification/status");
+    return response.data;
+  },
+
+  // Branding
+  uploadCoverImage: async (file) => {
+    const formData = new FormData();
+    formData.append("coverImage", file);
+    const response = await api.post("/api/employer/branding/cover-image", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  },
+  updateBranding: async (branding) => {
+    const response = await api.put("/api/employer/branding", branding);
+    return response.data;
+  },
 };

@@ -75,6 +75,21 @@ const employerSchema = new Schema(
     bio: { type: String, maxlength: 500 },
     hiringGoals: { type: String, maxlength: 300 },
 
+    // Branding & Social
+    socialLinks: {
+      linkedin: { type: String },
+      twitter: { type: String },
+      facebook: { type: String },
+    },
+    branding: {
+      themeColor: { type: String },
+      coverImage: {
+        filename: String,
+        url: String,
+        uploadedAt: { type: Date, default: Date.now },
+      },
+    },
+
     // Verification
     isVerified: { type: Boolean, default: false },
     verificationDocuments: [

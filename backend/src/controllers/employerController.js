@@ -4,6 +4,9 @@ import { JobModel } from "../models/Job.js";
 import { ApplicationModel } from "../models/Application.js";
 import { UserModel } from "../models/User.js";
 import mongoose from "mongoose";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Validation schema for profile completion (required fields)
 export const completeEmployerProfileSchema = z.object({
@@ -83,6 +86,19 @@ export const updateEmployerSchema = z.object({
     .optional(),
   bio: z.string().max(500).optional(),
   hiringGoals: z.string().max(300).optional(),
+  socialLinks: z
+    .object({
+      linkedin: z.string().url().optional().or(z.literal("")),
+      twitter: z.string().url().optional().or(z.literal("")),
+      facebook: z.string().url().optional().or(z.literal("")),
+    })
+    .optional(),
+  branding: z
+    .object({
+      themeColor: z.string().optional(),
+      // coverImage updated via upload endpoint
+    })
+    .optional(),
 });
 
 // Calculate profile completion percentage
@@ -666,6 +682,258 @@ export const getEmployerAnalytics = async (req, res, next) => {
     });
   } catch (err) {
     console.error("Analytics error:", err);
+    next(err);
+  }
+};
+
+// ==============================
+// Verification documents & branding
+// ==============================
+
+const allowedDocTypes = [
+  "business_license",
+  "tax_certificate",
+  "company_registration",
+  "gst",
+  "pan",
+  "other",
+];
+
+export const uploadVerificationDocumentSchema = z.object({
+  type: z.enum([
+    "business_license",
+    "tax_certificate",
+    "company_registration",
+    "gst",
+    "pan",
+    "other",
+  ]),
+});
+
+export const uploadVerificationDocument = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No document uploaded" });
+    }
+
+    const parsed = uploadVerificationDocumentSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid document type" });
+    }
+
+    // Basic file type guard: allow PDFs and common images
+    const allowedMime = [
+      "application/pdf",
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "image/webp",
+    ];
+    if (!allowedMime.includes(req.file.mimetype)) {
+      return res.status(400).json({
+        success: false,
+        message: "Only PDF or image files are allowed",
+      });
+    }
+
+    const employer = await EmployerModel.findOne({ userId: req.user.id });
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+
+    const newDoc = {
+      type: parsed.data.type,
+      filename: req.file.originalname,
+      url: `/uploads/${req.file.filename}`,
+      uploadedAt: new Date(),
+      status: "uploaded",
+    };
+
+    employer.verificationDocuments.push(newDoc);
+    await employer.save();
+
+    const saved = employer.verificationDocuments[employer.verificationDocuments.length - 1];
+
+    res.json({
+      success: true,
+      data: saved,
+      message: "Document uploaded",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const listVerificationDocuments = async (req, res, next) => {
+  try {
+    const employer = await EmployerModel.findOne({ userId: req.user.id });
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+    return res.json({ success: true, data: employer.verificationDocuments });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteVerificationDocument = async (req, res, next) => {
+  try {
+    const { docId } = req.params;
+    const employer = await EmployerModel.findOne({ userId: req.user.id });
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+
+    const document = employer.verificationDocuments.id(docId);
+    if (!document) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Document not found" });
+    }
+
+    // Attempt to delete physical file (best-effort)
+    try {
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      const uploadsDir = path.resolve(__dirname, "..", "..", "uploads");
+      if (document.url && document.url.startsWith("/uploads/")) {
+        const filepath = path.join(uploadsDir, path.basename(document.url));
+        fs.unlink(filepath, () => {});
+      }
+    } catch {}
+
+    document.deleteOne();
+    await employer.save();
+
+    return res.json({ success: true, message: "Document deleted" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getEmployerVerificationStatus = async (req, res, next) => {
+  try {
+    const employer = await EmployerModel.findOne({ userId: req.user.id });
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+
+    const counts = employer.verificationDocuments.reduce(
+      (acc, d) => {
+        acc.total += 1;
+        acc.byStatus[d.status] = (acc.byStatus[d.status] || 0) + 1;
+        acc.byType[d.type] = (acc.byType[d.type] || 0) + 1;
+        return acc;
+      },
+      { total: 0, byStatus: {}, byType: {} }
+    );
+
+    return res.json({
+      success: true,
+      data: {
+        isVerified: employer.isVerified,
+        documents: employer.verificationDocuments,
+        counts,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const uploadCoverImage = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No cover image uploaded" });
+    }
+
+    const allowedMime = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    if (!allowedMime.includes(req.file.mimetype)) {
+      return res.status(400).json({
+        success: false,
+        message: "Only image files are allowed",
+      });
+    }
+
+    const employer = await EmployerModel.findOneAndUpdate(
+      { userId: req.user.id },
+      {
+        $set: {
+          "branding.coverImage": {
+            filename: req.file.originalname,
+            url: `/uploads/${req.file.filename}`,
+            uploadedAt: new Date(),
+          },
+        },
+      },
+      { new: true }
+    );
+
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+
+    return res.json({
+      success: true,
+      data: employer.branding?.coverImage,
+      message: "Cover image uploaded",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateBranding = async (req, res, next) => {
+  try {
+    const schema = z
+      .object({
+        themeColor: z.string().optional(),
+      })
+      .strict();
+    const parsed = schema.safeParse(req.body || {});
+    if (!parsed.success) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid branding payload" });
+    }
+
+    const employer = await EmployerModel.findOneAndUpdate(
+      { userId: req.user.id },
+      {
+        $set: Object.fromEntries(
+          Object.entries(parsed.data).map(([k, v]) => [
+            `branding.${k}`,
+            v,
+          ])
+        ),
+      },
+      { new: true }
+    );
+
+    if (!employer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employer profile not found" });
+    }
+
+    return res.json({ success: true, data: employer.branding, message: "Branding updated" });
+  } catch (err) {
     next(err);
   }
 };
