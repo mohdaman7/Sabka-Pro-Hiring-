@@ -9,6 +9,10 @@ const router = Router();
 router.get("/", courseController.listPublicCourses);
 router.get("/:id", courseController.getCourseById);
 
+// Authenticated student progress
+router.get("/:id/progress", authenticate, courseController.getMyProgress);
+router.post("/:id/progress", authenticate, courseController.updateMyProgress);
+
 // Authenticated student
 router.get("/me/access", authenticate, courseController.listMyAccess);
 router.get("/me/recommendations", authenticate, courseController.getRecommendations);
@@ -20,5 +24,10 @@ router.post("/admin/:id/lessons", authenticate, authorize(["admin"]), courseCont
 router.get("/admin", authenticate, authorize(["admin"]), courseController.adminListCourses);
 router.put("/admin/:id", authenticate, authorize(["admin"]), courseController.adminUpdateCourse);
 router.delete("/admin/:id", authenticate, authorize(["admin"]), courseController.adminDeleteCourse);
+
+// Admin access matrix
+router.get("/admin/access", authenticate, authorize(["admin"]), courseController.adminListAccesses);
+router.post("/admin/access", authenticate, authorize(["admin"]), courseController.adminGrantAccess);
+router.delete("/admin/access/:id", authenticate, authorize(["admin"]), courseController.adminRevokeAccess);
 
 export default router;
