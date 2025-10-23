@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { X, Plus, Trash2 } from "lucide-react"
 import courseService from "@/services/courseService"
 
-export default function CreateModuleModal({ onClose, onSuccess, parentCourses }) {
+export default function CreateModuleModal({ onClose, onSuccess, parentCourses, defaultParentId = "" }) {
   const [formData, setFormData] = useState({
     parentCourseId: "",
     title: "",
@@ -15,9 +15,16 @@ export default function CreateModuleModal({ onClose, onSuccess, parentCourses })
     individualPrice: 0,
     status: "draft",
   })
+  // Preselect parent when opened from a specific course
+  useEffect(() => {
+    if (defaultParentId) {
+      setFormData((prev) => ({ ...prev, parentCourseId: defaultParentId }))
+    }
+  }, [defaultParentId])
   const [lessons, setLessons] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [validation, setValidation] = useState({ parentCourseId: "", title: "" })
 
   const addLesson = () => {
     setLessons([
@@ -50,6 +57,14 @@ export default function CreateModuleModal({ onClose, onSuccess, parentCourses })
     setLoading(true)
     setError("")
     try {
+      const v = { parentCourseId: "", title: "" }
+      if (!formData.parentCourseId) v.parentCourseId = "Parent is required"
+      if (!formData.title.trim()) v.title = "Title is required"
+      setValidation(v)
+      if (v.parentCourseId || v.title) {
+        setLoading(false)
+        return
+      }
       await courseService.adminCreateModule({
         ...formData,
         lessons,
@@ -93,6 +108,7 @@ export default function CreateModuleModal({ onClose, onSuccess, parentCourses })
                 </option>
               ))}
             </select>
+            {validation.parentCourseId && <p className="text-sm text-red-600 mt-1">{validation.parentCourseId}</p>}
           </div>
 
           <div>
@@ -105,6 +121,7 @@ export default function CreateModuleModal({ onClose, onSuccess, parentCourses })
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g., Introduction to React"
             />
+            {validation.title && <p className="text-sm text-red-600 mt-1">{validation.title}</p>}
           </div>
 
           <div>
@@ -164,6 +181,11 @@ export default function CreateModuleModal({ onClose, onSuccess, parentCourses })
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="https://example.com/image.jpg"
             />
+            {formData.thumbnail && (
+              <div className="mt-2">
+                <img src={formData.thumbnail} alt="preview" className="h-24 w-full object-cover rounded border" onError={(e)=>{e.currentTarget.style.display='none'}} />
+              </div>
+            )}
           </div>
 
           <div>
@@ -248,6 +270,9 @@ export default function CreateModuleModal({ onClose, onSuccess, parentCourses })
                       }
                       className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    {lesson.videoProvider !== 'youtube' && lesson.videoUrl && (
+                      <a href={lesson.videoUrl} target="_blank" rel="noreferrer" className="text-blue-600 text-sm">Open video</a>
+                    )}
                     <input
                       type="number"
                       placeholder="Duration (seconds)"

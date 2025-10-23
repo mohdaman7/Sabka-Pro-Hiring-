@@ -22,6 +22,7 @@ export default function EditCourseModal({ course, onClose, onSuccess }) {
   const [lessons, setLessons] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [saveSuccess, setSaveSuccess] = useState("")
 
   const isParent = course.type === "parent"
   const isModule = course.type === "module"
@@ -76,6 +77,7 @@ export default function EditCourseModal({ course, onClose, onSuccess }) {
     e.preventDefault()
     setLoading(true)
     setError("")
+    setSaveSuccess("")
     try {
       const updateData = {
         ...formData,
@@ -87,6 +89,7 @@ export default function EditCourseModal({ course, onClose, onSuccess }) {
         updateData.lessons = lessons
       }
       await courseService.adminUpdate(course._id, updateData)
+      setSaveSuccess("Saved")
       onSuccess()
       onClose()
     } catch (e) {
@@ -111,6 +114,9 @@ export default function EditCourseModal({ course, onClose, onSuccess }) {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{error}</div>
+          )}
+          {saveSuccess && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">{saveSuccess}</div>
           )}
 
           <div>

@@ -14,6 +14,7 @@ export default function CourseAccessManager({ onClose }) {
     accessType: "admin_grant",
     notes: "",
   })
+  const [grantError, setGrantError] = useState("")
 
   useEffect(() => {
     loadAccesses()
@@ -33,6 +34,13 @@ export default function CourseAccessManager({ onClose }) {
 
   const handleGrant = async (e) => {
     e.preventDefault()
+    setGrantError("")
+    // Validate ObjectId-like format to avoid backend 400
+    const isObjectId = (v) => /^[a-fA-F0-9]{24}$/.test(v || "")
+    if (!isObjectId(grantData.userId) || !isObjectId(grantData.courseId)) {
+      setGrantError("Please enter valid 24-char IDs for user and course")
+      return
+    }
     try {
       await courseService.adminGrantAccess(grantData)
       setShowGrantForm(false)
@@ -77,6 +85,9 @@ export default function CourseAccessManager({ onClose }) {
 
           {showGrantForm && (
             <form onSubmit={handleGrant} className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4 space-y-3">
+              {grantError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded">{grantError}</div>
+              )}
               <div className="grid grid-cols-2 gap-3">
                 <input
                   type="text"
