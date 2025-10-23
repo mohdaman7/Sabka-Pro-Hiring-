@@ -17,6 +17,14 @@ const courseService = {
     const res = await api.get("/api/courses/me/recommendations");
     return res.data.data;
   },
+  myProgress: async (courseId) => {
+    const res = await api.get(`/api/courses/me/progress/${courseId}`);
+    return res.data.data;
+  },
+  completeLesson: async (courseId, lessonId) => {
+    const res = await api.post(`/api/courses/me/progress/${courseId}/lessons/${lessonId}/complete`);
+    return res.data.data;
+  },
 
   // Admin
   adminCreateParent: async (payload) => {
@@ -41,6 +49,19 @@ const courseService = {
   },
   adminDelete: async (id) => {
     const res = await api.delete(`/api/courses/admin/${id}`);
+    return res.data;
+  },
+  // Admin Access Control
+  adminListAccess: async (params) => {
+    const res = await api.get("/api/courses/admin/access", { params });
+    return res.data.data;
+  },
+  adminGrantAccess: async (payload) => {
+    const res = await api.post("/api/courses/admin/access", payload);
+    return res.data.data;
+  },
+  adminRevokeAccess: async (id) => {
+    const res = await api.delete(`/api/courses/admin/access/${id}`);
     return res.data;
   },
 };
