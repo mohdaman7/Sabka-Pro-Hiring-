@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { employerService } from "@/services/employerService";
+import { userService } from "@/services/userService";
 import {
   Building2,
   MapPin,
@@ -33,6 +35,9 @@ import {
   Zap,
   Star,
   Rocket,
+  Shield,
+  ShieldCheck,
+  Image as ImageIcon,
 } from "lucide-react";
 
 // Mock toast function
@@ -41,64 +46,7 @@ const customToast = {
   error: (title, message) => console.error("Error:", title, message),
 };
 
-// Mock user service
-const userService = {
-  getProfile: async () => ({
-    data: {
-      profile: {
-        company: {
-          name: "TechCorp Solutions",
-          description: "Leading provider of innovative technology solutions",
-          industry: "Technology",
-          size: "201-500",
-          website: "https://techcorp.com",
-          foundedYear: 2015,
-          logo: { url: null },
-        },
-        contact: {
-          phone: "+91 98765 43210",
-          address: {
-            street: "123 Tech Park",
-            city: "Bangalore",
-            state: "Karnataka",
-            country: "India",
-            zipCode: "560001",
-          },
-        },
-        position: "HR Manager",
-        department: "Human Resources",
-        hiringNeeds: {
-          typesOfRoles: ["Software Engineer", "Product Manager"],
-          locations: ["Bangalore", "Remote"],
-          typicalSalaryRanges: [
-            {
-              role: "Software Engineer",
-              min: "800000",
-              max: "1500000",
-              currency: "INR",
-            },
-          ],
-        },
-        bio: "Passionate about building great teams",
-        hiringGoals:
-          "Looking for talented individuals to join our growing team",
-        socialLinks: {
-          linkedin: "https://linkedin.com/company/techcorp",
-          twitter: "https://twitter.com/techcorp",
-          facebook: "",
-        },
-      },
-    },
-  }),
-  updateProfile: async (data) => {
-    console.log("Updating profile:", data);
-    return { success: true };
-  },
-  uploadProfilePicture: async (file) => {
-    console.log("Uploading file:", file);
-    return { success: true };
-  },
-};
+// Using real services from /services
 
 // Enhanced Loading Skeleton Component
 const CompanyProfileSkeleton = () => {
@@ -241,6 +189,13 @@ export default function CompanyProfile() {
   const [dataLoading, setDataLoading] = useState(true);
   const [companyLogo, setCompanyLogo] = useState(null);
   const [isHovering, setIsHovering] = useState(null);
+  const [verification, setVerification] = useState(null);
+  const [docs, setDocs] = useState([]);
+  const [docType, setDocType] = useState("business_license");
+  const [docFile, setDocFile] = useState(null);
+  const [docUploading, setDocUploading] = useState(false);
+  const [coverImage, setCoverImage] = useState(null);
+  const [themeColor, setThemeColor] = useState("");
   const [formData, setFormData] = useState({
     company: {
       name: "",
@@ -274,6 +229,10 @@ export default function CompanyProfile() {
       twitter: "",
       facebook: "",
     },
+    branding: {
+      themeColor: "",
+      coverImage: null,
+    },
   });
 
   useEffect(() => {
@@ -287,6 +246,8 @@ export default function CompanyProfile() {
 
         if (!mounted) return;
         setCompanyLogo(profile?.company?.logo?.url || null);
+        setCoverImage(profile?.branding?.coverImage?.url || null);
+        setThemeColor(profile?.branding?.themeColor || "");
 
         if (profile) {
           setFormData({
@@ -332,7 +293,20 @@ export default function CompanyProfile() {
               twitter: profile?.socialLinks?.twitter || "",
               facebook: profile?.socialLinks?.facebook || "",
             },
+            branding: {
+              themeColor: profile?.branding?.themeColor || "",
+              coverImage: profile?.branding?.coverImage || null,
+            },
           });
+        }
+
+        // Load verification status
+        try {
+          const v = await employerService.getVerificationStatus();
+          setVerification(v.data);
+          setDocs(v.data?.documents || []);
+        } catch (e) {
+          // ignore
         }
       } catch (error) {
         console.error("Failed to load company profile:", error);
@@ -427,15 +401,86 @@ export default function CompanyProfile() {
         bio: formData.bio,
         hiringGoals: formData.hiringGoals,
         socialLinks: formData.socialLinks,
+        branding: {
+          themeColor,
+        },
       };
 
-      await userService.updateProfile(payload);
+      await employerService.updateProfile(payload);
       customToast.success("Success", "Company profile updated successfully");
     } catch (error) {
       console.error("Failed to update company profile:", error);
       customToast.error("Error", "Failed to update company profile");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const refreshVerification = async () => {
+    try {
+      const v = await employerService.getVerificationStatus();
+      setVerification(v.data);
+      setDocs(v.data?.documents || []);
+    } catch {}
+  };
+
+  const handleDocUpload = async () => {
+    try {
+      if (!docFile) {
+        customToast.error("Error", "Please choose a document file");
+        return;
+      }
+      setDocUploading(true);
+      await employerService.uploadVerificationDocument(docType, docFile);
+      setDocFile(null);
+      await refreshVerification();
+      customToast.success("Success", "Document uploaded");
+    } catch (e) {
+      console.error(e);
+      customToast.error("Error", "Failed to upload document");
+    } finally {
+      setDocUploading(false);
+    }
+  };
+
+  const handleDocDelete = async (docId) => {
+    try {
+      await employerService.deleteVerificationDocument(docId);
+      await refreshVerification();
+      customToast.success("Deleted", "Document removed");
+    } catch {
+      customToast.error("Error", "Failed to delete document");
+    }
+  };
+
+  const handleCoverUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      customToast.error("Error", "Only image files are allowed");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      customToast.error("Error", "Max size is 10MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => setCoverImage(reader.result);
+    reader.readAsDataURL(file);
+    try {
+      await employerService.uploadCoverImage(file);
+      customToast.success("Success", "Cover image updated");
+    } catch (e) {
+      customToast.error("Error", "Failed to upload cover image");
+    }
+  };
+
+  const handleBrandingSave = async () => {
+    try {
+      await employerService.updateBranding({ themeColor });
+      customToast.success("Success", "Branding updated");
+    } catch (e) {
+      customToast.error("Error", "Failed to update branding");
     }
   };
 
@@ -457,7 +502,7 @@ export default function CompanyProfile() {
     return Math.round((completed / total) * 100);
   };
 
-  const completeness = profileCompleteness();
+  const completeness = verification?.profileCompletion ?? profileCompleteness();
 
   return (
     <div className="relative min-h-screen p-6 space-y-6 overflow-hidden">
@@ -776,6 +821,131 @@ export default function CompanyProfile() {
                   </div>
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Verification & Documents */}
+          <div
+            className="rounded-3xl p-8 shadow-xl backdrop-blur-xl border border-white/10"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
+            }}
+          >
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                {verification?.isVerified ? (
+                  <ShieldCheck className="w-5 h-5 text-white" />
+                ) : (
+                  <Shield className="w-5 h-5 text-white" />
+                )}
+              </div>
+              <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                Verification
+              </span>
+            </h3>
+
+            <div className="mb-4 text-white/85 text-sm">
+              Status: {verification?.isVerified ? "Verified" : "Pending"}
+            </div>
+
+            <div className="flex items-center gap-3 mb-4">
+              <select
+                value={docType}
+                onChange={(e) => setDocType(e.target.value)}
+                className="flex-1 px-4 py-3 border border-white/10 rounded-2xl bg-white/5 text-white"
+              >
+                <option value="business_license">Business License</option>
+                <option value="tax_certificate">Tax Certificate</option>
+                <option value="company_registration">Company Registration</option>
+                <option value="gst">GST</option>
+                <option value="pan">PAN</option>
+                <option value="other">Other</option>
+              </select>
+              <input
+                type="file"
+                accept=".pdf,image/*"
+                onChange={(e) => setDocFile(e.target.files?.[0] || null)}
+                className="flex-1 text-white/80"
+              />
+            </div>
+            <button
+              disabled={docUploading}
+              onClick={handleDocUpload}
+              className="w-full px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-2xl font-semibold disabled:opacity-50"
+            >
+              {docUploading ? "Uploading..." : "Upload Document"}
+            </button>
+
+            <div className="mt-6 space-y-3">
+              {docs?.length ? (
+                docs.map((d) => (
+                  <div
+                    key={d._id}
+                    className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10"
+                  >
+                    <div className="text-white/90 text-sm">
+                      <div className="font-semibold capitalize">{d.type?.replaceAll("_", " ")}</div>
+                      <div className="text-white/60 text-xs">{d.status}</div>
+                    </div>
+                    <button
+                      onClick={() => handleDocDelete(d._id)}
+                      className="px-3 py-2 rounded-lg bg-white/10 text-white/80 hover:bg-white/15"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-white/60 text-sm">No documents yet.</div>
+              )}
+            </div>
+          </div>
+
+          {/* Branding */}
+          <div
+            className="rounded-3xl p-8 shadow-xl backdrop-blur-xl border border-white/10"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
+            }}
+          >
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                <ImageIcon className="w-5 h-5 text-white" />
+              </div>
+              <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                Branding
+              </span>
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <div className="text-sm text-white/80 mb-2">Cover Image</div>
+                <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                  {coverImage ? (
+                    <img src={coverImage} alt="Cover" className="w-full h-32 object-cover" />
+                  ) : (
+                    <div className="w-full h-32 flex items-center justify-center text-white/60">No cover image</div>
+                  )}
+                </div>
+                <input type="file" accept="image/*" onChange={handleCoverUpload} className="mt-2 text-white/80" />
+              </div>
+              <div>
+                <div className="text-sm text-white/80 mb-2">Theme Color</div>
+                <input
+                  type="text"
+                  placeholder="#803791"
+                  value={themeColor}
+                  onChange={(e) => setThemeColor(e.target.value)}
+                  className="w-full px-4 py-3 border border-white/10 rounded-2xl bg-white/5 text-white placeholder:text-white/50"
+                />
+              </div>
+              <button
+                onClick={handleBrandingSave}
+                className="w-full px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-2xl font-semibold"
+              >
+                Save Branding
+              </button>
             </div>
           </div>
         </div>

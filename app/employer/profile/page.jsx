@@ -1,4 +1,4 @@
-"use clinet";
+"use client";
 
 import EmployerProfile from "@/views/employer/EmployerProfile";
 
