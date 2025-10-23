@@ -53,7 +53,6 @@ export default function EmployerApplications() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [scheduleApp, setScheduleApp] = useState(null);
 
-  // Always compute live stats from current applications list so counts update immediately
   const computedStats = useMemo(() => {
     const counts = applications.reduce((acc, app) => {
       const key = app.status || "applied";
@@ -177,7 +176,6 @@ export default function EmployerApplications() {
         `${candidate.firstName || ""} ${candidate.lastName || ""}`,
         job.title || "",
         candidate.address?.city || "",
-        ...(Array.isArray(candidate.skills) ? candidate.skills : []),
       ]
         .join(" ")
         .toLowerCase();
@@ -187,135 +185,230 @@ export default function EmployerApplications() {
   }, [applications, search, stage, sortBy]);
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
-      {/* Enhanced Animated Background */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
+    <div className="relative p-8 space-y-8 min-h-screen overflow-hidden">
+      {/* Sophisticated Animated Background */}
+      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+        {/* Primary gradient orbs */}
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse-slow"
-          style={{ background: "rgba(128,55,145,0.12)" }}
+          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-[120px] animate-pulse-slow opacity-20"
+          style={{
+            background: "radial-gradient(circle, #803791 0%, transparent 70%)",
+          }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl animate-pulse-slower"
-          style={{ background: "rgba(184,123,209,0.10)" }}
+          className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full blur-[140px] animate-pulse-slower opacity-15"
+          style={{
+            background: "radial-gradient(circle, #b87bd1 0%, transparent 70%)",
+          }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl animate-float"
-          style={{ background: "rgba(240,194,238,0.06)" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[100px] animate-float opacity-10"
+          style={{
+            background: "radial-gradient(circle, #f0c2ee 0%, transparent 70%)",
+          }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(128,55,145,0.04),transparent_30%)]" />
+
+        {/* Grid overlay for depth */}
+        <div
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: "50px 50px",
+          }}
+        />
+
+        {/* Radial spotlight effect */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.1) 100%)",
+          }}
+        />
       </div>
 
-      {/* Premium Header with Animation */}
+      {/* Ultra Premium Header */}
       <div
-        className="relative overflow-hidden rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10 group"
+        className="relative overflow-hidden rounded-[32px] shadow-[0_20px_80px_-20px_rgba(128,55,145,0.5)] backdrop-blur-xl group transition-all duration-700 hover:shadow-[0_30px_100px_-20px_rgba(128,55,145,0.6)]"
         style={{
           background:
-            "linear-gradient(135deg, rgba(128,55,145,0.16), rgba(184,123,209,0.12))",
+            "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
+          borderImage:
+            "linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05)) 1",
         }}
       >
-        <div className="absolute inset-0 bg-linear-to-r from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#803791]/10 via-transparent to-[#b87bd1]/10 animate-gradient-shift" />
+        </div>
 
-        <div className="relative flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-3">
-              <div
-                className="p-3 rounded-2xl shadow-lg"
-                style={{
-                  background: "linear-gradient(135deg,#803791,#b87bd1)",
-                }}
-              >
-                <Users className="w-7 h-7 text-white" />
+        {/* Shimmer effect */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+        </div>
+
+        <div className="relative p-10">
+          <div className="flex items-start justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                {/* Premium icon container */}
+                <div className="relative group/icon">
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[24px] blur-xl opacity-50 group-hover/icon:opacity-75 transition-all duration-500" />
+                  <div
+                    className="relative w-20 h-20 rounded-[20px] flex items-center justify-center shadow-2xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-500"
+                    style={{
+                      background:
+                        "linear-gradient(135deg,#803791 0%,#b87bd1 100%)",
+                    }}
+                  >
+                    <Users className="w-9 h-9 text-white" strokeWidth={2.5} />
+                  </div>
+                </div>
+
+                <div>
+                  <h1 className="text-5xl font-black tracking-tight mb-2">
+                    <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
+                      Applications Dashboard
+                    </span>
+                  </h1>
+                  <p className="text-white/60 text-lg font-medium">
+                    Advanced candidate management with real-time insights
+                  </p>
+                </div>
               </div>
-              <h1 className="text-4xl font-extrabold bg-linear-to-r from-white to-white/80 bg-clip-text text-transparent">
-                Applications Dashboard
-              </h1>
+
+              {/* Live stats ticker */}
+              <div className="flex items-center gap-6 pl-24">
+                <div className="flex items-center gap-2 text-white/70">
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                  <span className="text-sm font-semibold">
+                    {applications.length} Active
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-white/70">
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="text-sm font-semibold">Live Updates</span>
+                </div>
+              </div>
             </div>
-            <p className="text-white/70 text-lg ml-16">
-              Manage and review candidate applications with advanced insights
-            </p>
-          </div>
 
-          <div className="flex items-center gap-3">
-            <button className="group/btn relative px-6 py-3 rounded-xl font-semibold text-white border border-white/20 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl">
-              <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-colors duration-300"></div>
-              <span className="relative flex items-center gap-2">
-                <Download className="w-5 h-5 group-hover/btn:rotate-12 transition-transform duration-300" />
-                Export CSV
-              </span>
-            </button>
+            {/* Premium action buttons */}
+            <div className="flex items-center gap-3">
+              <button className="group/btn relative px-7 py-4 rounded-2xl font-bold text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30">
+                <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-all duration-500" />
+                <span className="relative flex items-center gap-2.5">
+                  <Download
+                    className="w-5 h-5 group-hover/btn:rotate-12 transition-transform duration-500"
+                    strokeWidth={2.5}
+                  />
+                  Export
+                </span>
+              </button>
 
-            <button className="group/btn relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-              <div
-                className="absolute inset-0 transition-transform group-hover/btn:scale-105 duration-300"
-                style={{
-                  background: "linear-gradient(135deg,#803791,#b87bd1)",
-                }}
-              ></div>
-              <div
-                className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
-                style={{
-                  background: "linear-gradient(135deg,#b87bd1,#803791)",
-                }}
-              ></div>
-              <span className="relative flex items-center gap-2">
-                <Filter className="w-5 h-5 group-hover/btn:rotate-180 transition-transform duration-500" />
-                Advanced Filter
-              </span>
-            </button>
+              <button className="group/btn relative px-7 py-4 rounded-2xl font-bold text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] transition-transform group-hover/btn:scale-110 duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
+                <span className="relative flex items-center gap-2.5">
+                  <Filter
+                    className="w-5 h-5 group-hover/btn:rotate-180 transition-transform duration-700"
+                    strokeWidth={2.5}
+                  />
+                  Filters
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Premium Stats Grid with Hover Effects */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+      {/* Premium Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
         {stages.map((stat, index) => {
           const Icon = stat.icon;
+          const isActive = stage === stat.value;
+
           return (
             <div
               key={stat.value}
-              className="group relative rounded-2xl p-6 shadow-lg transition-all duration-500 cursor-pointer hover:scale-105 hover:shadow-2xl"
+              className="group relative rounded-[24px] p-7 shadow-xl transition-all duration-700 cursor-pointer hover:scale-105"
               style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
-                border: "1px solid rgba(255,255,255,0.10)",
-                animationDelay: `${index * 100}ms`,
+                background: isActive
+                  ? "linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08))"
+                  : "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+                border: isActive
+                  ? "2px solid rgba(184,123,209,0.4)"
+                  : "1px solid rgba(255,255,255,0.1)",
+                animationDelay: `${index * 80}ms`,
               }}
               onClick={() => setStage(stat.value)}
             >
-              {/* Animated gradient overlay */}
+              {/* Glow effect */}
               <div
-                className={`absolute inset-0 rounded-2xl bg-linear-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-              ></div>
+                className={`absolute -inset-1 bg-gradient-to-r ${
+                  stat.gradient
+                } rounded-[24px] opacity-0 ${
+                  isActive ? "opacity-30" : "group-hover:opacity-20"
+                } blur-xl transition-opacity duration-700`}
+              />
 
-              {/* Glow effect on hover */}
-              <div className="absolute -inset-0.5 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500"></div>
-
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
+              <div className="relative space-y-5">
+                <div className="flex items-center justify-between">
                   <div
-                    className={`p-3 rounded-xl shadow-md transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 bg-linear-to-br ${stat.gradient}`}
+                    className={`p-4 rounded-2xl shadow-lg transform ${
+                      isActive
+                        ? "scale-110 rotate-6"
+                        : "group-hover:scale-110 group-hover:rotate-6"
+                    } transition-all duration-700 bg-gradient-to-br ${
+                      stat.gradient
+                    }`}
                   >
-                    <Icon className="w-6 h-6 text-white" />
+                    <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
                   </div>
 
-                  {stage === stat.value && (
-                    <div className="w-3 h-3 rounded-full bg-linear-to-r from-[#803791] to-[#b87bd1] animate-pulse shadow-lg"></div>
+                  {isActive && (
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-full blur-md animate-pulse" />
+                      <div className="relative w-3 h-3 rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1]" />
+                    </div>
                   )}
                 </div>
 
-                <div className="text-3xl font-extrabold text-white mb-1 group-hover:text-transparent group-hover:bg-linear-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
-                  {stat.count}
-                </div>
-
-                <div className="text-sm text-white/70 group-hover:text-white/90 transition-colors duration-300 font-medium">
-                  {stat.label}
-                </div>
-
-                {/* Progress indicator */}
-                <div className="mt-3 h-1 bg-white/10 rounded-full overflow-hidden">
+                <div>
                   <div
-                    className={`h-full bg-linear-to-r ${stat.gradient} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700`}
-                  ></div>
+                    className={`text-4xl font-black mb-2 transition-all duration-500 ${
+                      isActive
+                        ? "bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent"
+                        : "text-white group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/80 group-hover:bg-clip-text group-hover:text-transparent"
+                    }`}
+                  >
+                    {stat.count}
+                  </div>
+
+                  <div
+                    className={`text-sm font-bold transition-colors duration-500 ${
+                      isActive
+                        ? "text-white"
+                        : "text-white/60 group-hover:text-white/90"
+                    }`}
+                  >
+                    {stat.label}
+                  </div>
+                </div>
+
+                {/* Animated progress bar */}
+                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full bg-gradient-to-r ${
+                      stat.gradient
+                    } transform origin-left transition-all duration-1000 ${
+                      isActive
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
                 </div>
               </div>
             </div>
@@ -323,89 +416,95 @@ export default function EmployerApplications() {
         })}
       </div>
 
-      {/* Premium Search and Filters Section */}
+      {/* Premium Search and Filters */}
       <div
-        className="rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10"
+        className="rounded-[28px] p-8 shadow-2xl backdrop-blur-xl border"
         style={{
           background:
-            "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
+            "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))",
+          borderColor: "rgba(255,255,255,0.12)",
         }}
       >
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          {/* Premium search input */}
           <div className="flex-1 relative group">
-            <div className="absolute -inset-0.5 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-focus-within:opacity-20 blur transition-opacity duration-500"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[20px] opacity-0 group-focus-within:opacity-25 blur-lg transition-opacity duration-500" />
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 group-focus-within:text-[#b87bd1] transition-colors duration-300" />
+              <Search
+                className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50 group-focus-within:text-[#b87bd1] group-focus-within:scale-110 transition-all duration-500"
+                strokeWidth={2.5}
+              />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search candidates, positions, skills..."
-                className="w-full pl-12 pr-4 py-4 bg-white/5 text-white placeholder-white/50 rounded-2xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 hover:bg-white/[0.07]"
+                className="w-full pl-14 pr-14 py-5 bg-white/5 text-white placeholder-white/40 rounded-[20px] border-2 border-white/10 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40 focus:border-[#b87bd1]/50 transition-all duration-500 hover:bg-white/[0.08] font-medium"
               />
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white hover:scale-110 transition-all duration-300"
                 >
-                  <XCircle className="w-5 h-5" />
+                  <XCircle className="w-5 h-5" strokeWidth={2.5} />
                 </button>
               )}
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-5 py-4 bg-white/5 text-white border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] transition-all duration-300 hover:bg-white/[0.07] cursor-pointer"
-            >
-              <option value="newest">🕐 Newest First</option>
-              <option value="oldest">🕑 Oldest First</option>
-              <option value="match">⭐ Best Match</option>
-              <option value="name">🔤 Name A-Z</option>
-            </select>
-          </div>
+          {/* Premium sort dropdown */}
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-6 py-5 bg-white/5 text-white border-2 border-white/10 rounded-[20px] focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40 focus:border-[#b87bd1]/50 transition-all duration-500 hover:bg-white/[0.08] cursor-pointer font-semibold appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.6)%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[center_right_1rem]"
+            style={{ paddingRight: "3rem" }}
+          >
+            <option value="newest">⏰ Newest First</option>
+            <option value="oldest">🕐 Oldest First</option>
+            <option value="match">⭐ Best Match</option>
+            <option value="name">🔤 Name A-Z</option>
+          </select>
         </div>
 
-        {/* Enhanced Stage Filter Pills */}
-        <div className="flex flex-wrap gap-3 mt-6">
+        {/* Premium stage pills */}
+        <div className="flex flex-wrap gap-3 mt-8">
           {stages.map((s) => {
             const Icon = s.icon;
+            const isActive = stage === s.value;
+
             return (
               <button
                 key={s.value}
                 onClick={() => setStage(s.value)}
-                className={`group relative px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center gap-3 overflow-hidden ${
-                  stage === s.value
+                className={`group relative px-6 py-3.5 rounded-2xl font-bold text-sm transition-all duration-500 flex items-center gap-3 overflow-hidden ${
+                  isActive
                     ? "text-white shadow-2xl scale-105"
-                    : "text-white/70 hover:text-white hover:scale-105"
+                    : "text-white/60 hover:text-white hover:scale-105"
                 }`}
                 style={{
-                  background:
-                    stage === s.value
-                      ? "linear-gradient(135deg,#803791,#b87bd1)"
-                      : "rgba(255,255,255,0.05)",
-                  border:
-                    stage === s.value
-                      ? "2px solid rgba(184,123,209,0.5)"
-                      : "2px solid rgba(255,255,255,0.1)",
+                  background: isActive
+                    ? "linear-gradient(135deg,#803791,#b87bd1)"
+                    : "rgba(255,255,255,0.06)",
+                  border: isActive
+                    ? "2px solid rgba(184,123,209,0.5)"
+                    : "2px solid rgba(255,255,255,0.1)",
                 }}
               >
-                {stage === s.value && (
-                  <div className="absolute inset-0 bg-linear-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 )}
 
                 <Icon
                   className={`w-5 h-5 relative z-10 ${
-                    stage === s.value ? "animate-bounce-subtle" : ""
-                  }`}
+                    isActive ? "animate-bounce-subtle" : "group-hover:scale-110"
+                  } transition-transform duration-500`}
+                  strokeWidth={2.5}
                 />
                 <span className="relative z-10">{s.label}</span>
                 <span
-                  className={`relative z-10 px-2.5 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
-                    stage === s.value
-                      ? "bg-white/25 text-white"
-                      : "bg-white/10 text-white/70 group-hover:bg-white/20"
+                  className={`relative z-10 px-3 py-1 rounded-xl text-xs font-black transition-all duration-500 ${
+                    isActive
+                      ? "bg-white/30 text-white"
+                      : "bg-white/10 text-white/60 group-hover:bg-white/25"
                   }`}
                 >
                   {s.count}
@@ -416,8 +515,8 @@ export default function EmployerApplications() {
         </div>
       </div>
 
-      {/* Premium Applications List */}
-      <div className="space-y-5">
+      {/* Ultra Premium Applications List */}
+      <div className="space-y-6">
         {filtered.map((app, index) => {
           const isOpen = expandedId === app._id;
           const isHovered = hoveredCard === app._id;
@@ -425,83 +524,98 @@ export default function EmployerApplications() {
           return (
             <div
               key={app._id}
-              className="group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
+              className="group relative rounded-[28px] overflow-hidden transition-all duration-700 hover:scale-[1.01]"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
-                border: "1px solid rgba(255,255,255,0.1)",
-                animationDelay: `${index * 50}ms`,
+                  "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))",
+                border: "1px solid rgba(255,255,255,0.12)",
+                boxShadow: isHovered
+                  ? "0 30px 80px -20px rgba(128,55,145,0.4)"
+                  : "0 10px 40px -10px rgba(0,0,0,0.3)",
+                animationDelay: `${index * 60}ms`,
               }}
               onMouseEnter={() => setHoveredCard(app._id)}
               onMouseLeave={() => setHoveredCard(null)}
             >
-              {/* Animated gradient border effect */}
-              <div className="absolute -inset-0.5 bg-linear-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-3xl opacity-0 group-hover:opacity-20 blur transition-opacity duration-500"></div>
+              {/* Premium gradient border effect */}
+              <div
+                className={`absolute -inset-[1px] bg-gradient-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-[28px] opacity-0 ${
+                  isHovered ? "opacity-30" : "group-hover:opacity-20"
+                } blur-sm transition-opacity duration-700`}
+              />
 
-              {/* Card content */}
-              <div className="relative backdrop-blur-xl p-6">
-                {/* Header Section - Improved Layout */}
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                  {/* Left Section - Candidate Info */}
-                  <div className="flex-1 flex items-start gap-5">
-                    {/* Avatar with gradient */}
-                    <div className="relative group/avatar">
-                      <div className="absolute -inset-1 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-2xl blur-md opacity-50 group-hover/avatar:opacity-75 transition-opacity duration-300"></div>
+              {/* Shimmer animation on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+              </div>
+
+              <div className="relative backdrop-blur-xl p-8">
+                {/* Header Section */}
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+                  {/* Candidate Info */}
+                  <div className="flex-1 flex items-start gap-6">
+                    {/* Premium Avatar */}
+                    <div className="relative group/avatar flex-shrink-0">
+                      <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[20px] blur-xl opacity-40 group-hover/avatar:opacity-70 transition-opacity duration-500" />
                       <div
-                        className="relative w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transform group-hover/avatar:scale-110 group-hover/avatar:rotate-6 transition-all duration-300"
+                        className="relative w-20 h-20 rounded-[18px] flex items-center justify-center shadow-2xl transform group-hover/avatar:scale-110 group-hover/avatar:rotate-6 transition-all duration-500"
                         style={{
                           background: "linear-gradient(135deg,#803791,#b87bd1)",
                         }}
                       >
-                        <span className="text-white font-bold text-xl">
+                        <span className="text-white font-black text-2xl">
                           {app.studentId?.firstName?.charAt(0)}
                           {app.studentId?.lastName?.charAt(0)}
                         </span>
                       </div>
+                      {/* Status indicator */}
+                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-400 rounded-full border-4 border-[#0a0118] animate-pulse" />
                     </div>
 
-                    {/* Candidate Info */}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-white group-hover:text-transparent group-hover:bg-linear-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
+                    {/* Candidate Details */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-4 mb-3">
+                        <h3 className="text-2xl font-black text-white group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">
                           {app.studentId?.firstName} {app.studentId?.lastName}
                         </h3>
                         <StageBadge value={app.status} />
                       </div>
 
-                      <p className="text-[#b87bd1] font-semibold mb-3 flex items-center gap-2">
-                        <Briefcase className="w-4 h-4" />
+                      <p className="text-[#b87bd1] font-bold text-lg mb-4 flex items-center gap-2.5">
+                        <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/20 border border-[#b87bd1]/30">
+                          <Briefcase className="w-4 h-4" strokeWidth={2.5} />
+                        </div>
                         {app.jobId?.title}
                       </p>
 
-                      {/* Enhanced Details Grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
-                          <div className="p-2 rounded-lg bg-white/5 group-hover/detail:bg-white/10 transition-colors duration-300">
-                            <Mail className="w-4 h-4" />
+                      {/* Premium Info Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-all duration-500">
+                          <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover/detail:bg-gradient-to-br group-hover/detail:from-[#803791]/20 group-hover/detail:to-[#b87bd1]/20 group-hover/detail:border-[#b87bd1]/30 transition-all duration-500">
+                            <Mail className="w-4 h-4" strokeWidth={2.5} />
                           </div>
-                          <span className="text-sm">
+                          <span className="text-sm font-semibold truncate">
                             {app.studentId?.email}
                           </span>
                         </div>
 
                         {app.studentId?.phone && (
-                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
-                            <div className="p-2 rounded-lg bg-white/5 group-hover/detail:bg-white/10 transition-colors duration-300">
-                              <Phone className="w-4 h-4" />
+                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-all duration-500">
+                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover/detail:bg-gradient-to-br group-hover/detail:from-[#803791]/20 group-hover/detail:to-[#b87bd1]/20 group-hover/detail:border-[#b87bd1]/30 transition-all duration-500">
+                              <Phone className="w-4 h-4" strokeWidth={2.5} />
                             </div>
-                            <span className="text-sm">
+                            <span className="text-sm font-semibold">
                               {app.studentId?.phone}
                             </span>
                           </div>
                         )}
 
                         {app.studentId?.address?.city && (
-                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
-                            <div className="p-2 rounded-lg bg-white/5 group-hover/detail:bg-white/10 transition-colors duration-300">
-                              <MapPin className="w-4 h-4" />
+                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-all duration-500">
+                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover/detail:bg-gradient-to-br group-hover/detail:from-[#803791]/20 group-hover/detail:to-[#b87bd1]/20 group-hover/detail:border-[#b87bd1]/30 transition-all duration-500">
+                              <MapPin className="w-4 h-4" strokeWidth={2.5} />
                             </div>
-                            <span className="text-sm">
+                            <span className="text-sm font-semibold">
                               {app.studentId?.address.city},{" "}
                               {app.studentId?.address.state}
                             </span>
@@ -509,12 +623,12 @@ export default function EmployerApplications() {
                         )}
 
                         {app.meta?.yearsExperience && (
-                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
-                            <div className="p-2 rounded-lg bg-white/5 group-hover/detail:bg-white/10 transition-colors duration-300">
-                              <Award className="w-4 h-4" />
+                          <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-all duration-500">
+                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover/detail:bg-gradient-to-br group-hover/detail:from-[#803791]/20 group-hover/detail:to-[#b87bd1]/20 group-hover/detail:border-[#b87bd1]/30 transition-all duration-500">
+                              <Award className="w-4 h-4" strokeWidth={2.5} />
                             </div>
-                            <span className="text-sm font-semibold">
-                              {app.meta.yearsExperience} Years Exp
+                            <span className="text-sm font-black">
+                              {app.meta.yearsExperience} Years Experience
                             </span>
                           </div>
                         )}
@@ -522,27 +636,27 @@ export default function EmployerApplications() {
                     </div>
                   </div>
 
-                  {/* Right Section - Action Buttons - Improved Layout */}
-                  <div className="flex flex-col sm:flex-row lg:flex-col gap-3 justify-end items-start lg:items-end">
-                    {/* Schedule Button - Always visible for eligible statuses */}
+                  {/* Premium Action Buttons */}
+                  <div className="flex flex-row lg:flex-col gap-3 justify-end items-stretch lg:items-end flex-wrap sm:flex-nowrap">
+                    {/* Schedule Button */}
                     {(app.status === "applied" ||
                       app.status === "reviewed" ||
                       app.status === "interview") && (
                       <button
                         onClick={() => setScheduleApp(app)}
-                        className="group relative px-4 py-2 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto lg:w-full text-center"
+                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
                         style={{
-                          background: "rgba(255,255,255,0.06)",
-                          border: "1px solid rgba(255,255,255,0.06)",
+                          background:
+                            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+                          border: "2px solid rgba(255,255,255,0.15)",
                         }}
-                        title={
-                          app.interview?.status
-                            ? "Update Interview"
-                            : "Schedule Interview"
-                        }
                       >
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
                         <span className="relative flex items-center gap-2 justify-center">
-                          <Calendar className="w-4 h-4" />
+                          <Calendar
+                            className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-500"
+                            strokeWidth={2.5}
+                          />
                           {app.interview?.status ? "Update" : "Schedule"}
                         </span>
                       </button>
@@ -554,36 +668,53 @@ export default function EmployerApplications() {
                         href={app.resumeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/btn relative px-4 py-2 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl w-full sm:w-auto lg:w-full text-center"
+                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial text-center"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+                          border: "2px solid rgba(255,255,255,0.15)",
+                        }}
                       >
-                        <div className="absolute inset-0 bg-white/10 group-hover/btn:bg-linear-to-r group-hover/btn:from-[#803791] group-hover/btn:to-[#b87bd1] transition-all duration-300"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
                         <span className="relative flex items-center gap-2 justify-center">
-                          <FileText className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-300" />
+                          <FileText
+                            className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-500"
+                            strokeWidth={2.5}
+                          />
                           Resume
                         </span>
                       </a>
                     )}
 
-                    {/* Expand/Collapse Button */}
+                    {/* Expand Button */}
                     <button
                       onClick={() => setExpandedId(isOpen ? null : app._id)}
-                      className="group/btn relative px-4 py-2 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 w-full sm:w-auto lg:w-full text-center"
+                      className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
                       style={{
                         background: isOpen
                           ? "linear-gradient(135deg,#803791,#b87bd1)"
-                          : "rgba(255,255,255,0.1)",
+                          : "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+                        border: isOpen
+                          ? "2px solid rgba(184,123,209,0.5)"
+                          : "2px solid rgba(255,255,255,0.15)",
                       }}
                     >
                       <span className="relative flex items-center gap-2 justify-center">
                         {isOpen ? (
                           <>
-                            <ChevronUp className="w-4 h-4 group-hover/btn:-translate-y-1 transition-transform duration-300" />
+                            <ChevronUp
+                              className="w-4 h-4 group-hover/btn:-translate-y-1 transition-transform duration-500"
+                              strokeWidth={2.5}
+                            />
                             Less
                           </>
                         ) : (
                           <>
-                            <ChevronDown className="w-4 h-4 group-hover/btn:translate-y-1 transition-transform duration-300" />
-                            More
+                            <ChevronDown
+                              className="w-4 h-4 group-hover/btn:translate-y-1 transition-transform duration-500"
+                              strokeWidth={2.5}
+                            />
+                            Details
                           </>
                         )}
                       </span>
@@ -591,142 +722,179 @@ export default function EmployerApplications() {
                   </div>
                 </div>
 
-                {/* Expanded Details with Animation */}
+                {/* Expanded Details with Premium Animations */}
                 {isOpen && (
-                  <div className="mt-6 space-y-6 border-t border-white/10 pt-6 animate-slide-down">
+                  <div className="mt-8 space-y-6 border-t border-white/10 pt-8 animate-slide-down">
                     {/* Previous Experience Card */}
                     {(app.meta?.previousCompany ||
                       app.meta?.previousPosition) && (
-                      <div className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300">
-                        <h4 className="text-sm font-bold text-white/90 mb-4 flex items-center gap-2">
-                          <div className="p-2 rounded-lg bg-linear-to-r from-[#803791] to-[#b87bd1]">
-                            <Briefcase className="w-4 h-4 text-white" />
+                      <div
+                        className="group/card relative p-6 rounded-[20px] overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                        }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
+
+                        <div className="relative">
+                          <h4 className="text-sm font-black text-white mb-6 flex items-center gap-3">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                              <Briefcase
+                                className="w-5 h-5 text-white"
+                                strokeWidth={2.5}
+                              />
+                            </div>
+                            <span className="text-lg">Previous Experience</span>
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {app.meta.previousPosition && (
+                              <div className="group/item flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#b87bd1]/30 transition-all duration-500">
+                                <Target
+                                  className="w-5 h-5 text-[#b87bd1] mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform duration-500"
+                                  strokeWidth={2.5}
+                                />
+                                <div className="min-w-0">
+                                  <div className="text-xs text-white/50 font-bold mb-1">
+                                    Position
+                                  </div>
+                                  <div className="font-bold text-white text-sm">
+                                    {app.meta.previousPosition}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            {app.meta.previousCompany && (
+                              <div className="group/item flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#b87bd1]/30 transition-all duration-500">
+                                <Building2
+                                  className="w-5 h-5 text-[#b87bd1] mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform duration-500"
+                                  strokeWidth={2.5}
+                                />
+                                <div className="min-w-0">
+                                  <div className="text-xs text-white/50 font-bold mb-1">
+                                    Company
+                                  </div>
+                                  <div className="font-bold text-white text-sm">
+                                    {app.meta.previousCompany}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            {app.meta.yearsExperience && (
+                              <div className="group/item flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#b87bd1]/30 transition-all duration-500">
+                                <Clock
+                                  className="w-5 h-5 text-[#b87bd1] mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform duration-500"
+                                  strokeWidth={2.5}
+                                />
+                                <div className="min-w-0">
+                                  <div className="text-xs text-white/50 font-bold mb-1">
+                                    Experience
+                                  </div>
+                                  <div className="font-bold text-white text-sm">
+                                    {app.meta.yearsExperience} Years
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          Previous Experience
-                        </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/70">
-                          {app.meta.previousPosition && (
-                            <div className="flex items-start gap-2">
-                              <Target className="w-4 h-4 text-[#b87bd1] mt-0.5" />
-                              <div>
-                                <div className="text-xs text-white/50">
-                                  Position
-                                </div>
-                                <div className="font-semibold text-white">
-                                  {app.meta.previousPosition}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                          {app.meta.previousCompany && (
-                            <div className="flex items-start gap-2">
-                              <Building2 className="w-4 h-4 text-[#b87bd1] mt-0.5" />
-                              <div>
-                                <div className="text-xs text-white/50">
-                                  Company
-                                </div>
-                                <div className="font-semibold text-white">
-                                  {app.meta.previousCompany}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                          {app.meta.yearsExperience && (
-                            <div className="flex items-start gap-2">
-                              <Clock className="w-4 h-4 text-[#b87bd1] mt-0.5" />
-                              <div>
-                                <div className="text-xs text-white/50">
-                                  Experience
-                                </div>
-                                <div className="font-semibold text-white">
-                                  {app.meta.yearsExperience} Years
-                                </div>
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </div>
                     )}
 
                     {/* Education Card */}
                     {app.studentId?.education?.length > 0 && (
-                      <div className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300">
-                        <h4 className="text-sm font-bold text-white/90 mb-4 flex items-center gap-2">
-                          <div className="p-2 rounded-lg bg-linear-to-r from-[#803791] to-[#b87bd1]">
-                            <GraduationCap className="w-4 h-4 text-white" />
-                          </div>
-                          Education
-                        </h4>
-                        <div className="space-y-3">
-                          {app.studentId.education.map((edu, index) => (
-                            <div
-                              key={index}
-                              className="flex items-start gap-3 text-white/70"
-                            >
-                              <div className="p-2 rounded-lg bg-white/5 mt-1">
-                                <BookOpen className="w-4 h-4 text-[#b87bd1]" />
-                              </div>
-                              <div className="flex-1">
-                                <p className="font-semibold text-white">
-                                  {edu.degree} in {edu.fieldOfStudy}
-                                </p>
-                                <p className="text-sm text-white/60">
-                                  {edu.institution} • {edu.graduationYear}
-                                </p>
-                              </div>
+                      <div
+                        className="group/card relative p-6 rounded-[20px] overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                        }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
+
+                        <div className="relative">
+                          <h4 className="text-sm font-black text-white mb-6 flex items-center gap-3">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                              <GraduationCap
+                                className="w-5 h-5 text-white"
+                                strokeWidth={2.5}
+                              />
                             </div>
-                          ))}
+                            <span className="text-lg">Education</span>
+                          </h4>
+                          <div className="space-y-4">
+                            {app.studentId.education.map((edu, index) => (
+                              <div
+                                key={index}
+                                className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#b87bd1]/30 transition-all duration-500"
+                              >
+                                <div className="p-3 rounded-xl bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/20 border border-[#b87bd1]/30 flex-shrink-0">
+                                  <BookOpen
+                                    className="w-5 h-5 text-[#b87bd1]"
+                                    strokeWidth={2.5}
+                                  />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-black text-white text-base mb-1">
+                                    {edu.degree} in {edu.fieldOfStudy}
+                                  </p>
+                                  <p className="text-sm text-white/60 font-semibold">
+                                    {edu.institution} • {edu.graduationYear}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
 
                     {/* Languages Card */}
                     {app.meta?.languages && (
-                      <div className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all duration-300">
-                        <h4 className="text-sm font-bold text-white/90 mb-4 flex items-center gap-2">
-                          <div className="p-2 rounded-lg bg-linear-to-r from-[#803791] to-[#b87bd1]">
-                            <Globe className="w-4 h-4 text-white" />
-                          </div>
-                          Languages
-                        </h4>
-                        <p className="text-white/70 font-medium">
-                          {app.meta.languages}
-                        </p>
+                      <div
+                        className="group/card relative p-6 rounded-[20px] overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                        }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
+
+                        <div className="relative">
+                          <h4 className="text-sm font-black text-white mb-4 flex items-center gap-3">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+                              <Globe
+                                className="w-5 h-5 text-white"
+                                strokeWidth={2.5}
+                              />
+                            </div>
+                            <span className="text-lg">Languages</span>
+                          </h4>
+                          <p className="text-white font-bold text-base">
+                            {app.meta.languages}
+                          </p>
+                        </div>
                       </div>
                     )}
 
                     {/* Status Update Section */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-white/10 gap-4">
-                      <div className="flex items-center gap-2 text-white/60 text-sm">
-                        <Clock className="w-4 h-4" />
+                    <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-white/10 gap-6">
+                      <div className="flex items-center gap-3 text-white/60 font-semibold">
+                        <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                          <Clock className="w-4 h-4" strokeWidth={2.5} />
+                        </div>
                         Applied {new Date(app.createdAt).toLocaleDateString()}
                       </div>
-                      <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-end">
+                      <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-end">
                         <StatusUpdateButtons
                           currentStatus={app.status}
                           onUpdateStatus={(newStatus) =>
                             handleStatusUpdate(app._id, newStatus)
                           }
                         />
-                        {(app.status === "applied" ||
-                          app.status === "reviewed" ||
-                          app.status === "interview") && (
-                          <button
-                            onClick={() => setScheduleApp(app)}
-                            className="group relative px-4 py-2 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                            style={{
-                              background: "rgba(255,255,255,0.08)",
-                              border: "1px solid rgba(255,255,255,0.1)",
-                            }}
-                          >
-                            <span className="relative flex items-center gap-2">
-                              <Calendar className="w-4 h-4" />
-                              {app.interview?.status
-                                ? "Update Interview"
-                                : "Schedule Interview"}
-                            </span>
-                          </button>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -739,25 +907,25 @@ export default function EmployerApplications() {
 
       {/* Premium Empty State */}
       {filtered.length === 0 && (
-        <div className="text-center py-20">
-          <div className="relative inline-block mb-8">
-            <div className="absolute inset-0 bg-linear-to-r from-[#803791] to-[#b87bd1] rounded-3xl blur-2xl opacity-30 animate-pulse"></div>
+        <div className="text-center py-24">
+          <div className="relative inline-block mb-10">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[32px] blur-3xl opacity-30 animate-pulse" />
             <div
-              className="relative w-32 h-32 rounded-3xl flex items-center justify-center shadow-2xl"
+              className="relative w-40 h-40 rounded-[32px] flex items-center justify-center shadow-2xl"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
-                border: "1px solid rgba(255,255,255,0.2)",
+                  "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))",
+                border: "2px solid rgba(255,255,255,0.2)",
               }}
             >
-              <Users className="w-16 h-16 text-white/40" />
+              <Users className="w-20 h-20 text-white/30" strokeWidth={2} />
             </div>
           </div>
 
-          <h3 className="text-3xl font-bold text-white mb-3">
+          <h3 className="text-4xl font-black text-white mb-4">
             No applications found
           </h3>
-          <p className="text-white/60 text-lg mb-8 max-w-md mx-auto">
+          <p className="text-white/60 text-lg font-medium mb-10 max-w-md mx-auto">
             Try adjusting your search criteria or filters to find what you're
             looking for
           </p>
@@ -767,16 +935,14 @@ export default function EmployerApplications() {
               setSearch("");
               setStage("all");
             }}
-            className="group relative px-8 py-4 rounded-xl font-bold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+            className="group relative px-10 py-5 rounded-2xl font-black text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]"
           >
-            <div
-              className="absolute inset-0 transition-transform group-hover:scale-105 duration-300"
-              style={{
-                background: "linear-gradient(135deg,#803791,#b87bd1)",
-              }}
-            ></div>
-            <span className="relative flex items-center gap-2">
-              <XCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] transition-transform group-hover:scale-110 duration-500" />
+            <span className="relative flex items-center gap-3">
+              <XCircle
+                className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500"
+                strokeWidth={2.5}
+              />
               Clear All Filters
             </span>
           </button>
@@ -787,20 +953,24 @@ export default function EmployerApplications() {
         @keyframes pulse-slow {
           0%,
           100% {
-            opacity: 0.12;
+            opacity: 0.2;
+            transform: scale(1);
           }
           50% {
-            opacity: 0.18;
+            opacity: 0.3;
+            transform: scale(1.05);
           }
         }
 
         @keyframes pulse-slower {
           0%,
           100% {
-            opacity: 0.1;
+            opacity: 0.15;
+            transform: scale(1);
           }
           50% {
-            opacity: 0.16;
+            opacity: 0.25;
+            transform: scale(1.08);
           }
         }
 
@@ -810,17 +980,17 @@ export default function EmployerApplications() {
             transform: translate(0, 0) rotate(0deg);
           }
           33% {
-            transform: translate(30px, -30px) rotate(5deg);
+            transform: translate(40px, -40px) rotate(8deg);
           }
           66% {
-            transform: translate(-20px, 20px) rotate(-5deg);
+            transform: translate(-30px, 30px) rotate(-8deg);
           }
         }
 
         @keyframes slide-down {
           from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-30px);
           }
           to {
             opacity: 1;
@@ -834,32 +1004,84 @@ export default function EmployerApplications() {
             transform: translateY(0);
           }
           50% {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
+          }
+        }
+
+        @keyframes gradient-shift {
+          0%,
+          100% {
+            transform: translateX(0) translateY(0);
+          }
+          50% {
+            transform: translateX(100px) translateY(50px);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        @keyframes orbit-1 {
+          0% {
+            transform: rotate(0deg) translateX(40px) rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg) translateX(40px) rotate(-360deg);
+          }
+        }
+
+        @keyframes orbit-2 {
+          0% {
+            transform: rotate(120deg) translateX(40px) rotate(-120deg);
+          }
+          100% {
+            transform: rotate(480deg) translateX(40px) rotate(-480deg);
           }
         }
 
         .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
+          animation: pulse-slow 5s ease-in-out infinite;
         }
 
         .animate-pulse-slower {
-          animation: pulse-slower 5s ease-in-out infinite;
+          animation: pulse-slower 6s ease-in-out infinite;
         }
 
         .animate-float {
-          animation: float 8s ease-in-out infinite;
+          animation: float 10s ease-in-out infinite;
         }
 
         .animate-slide-down {
-          animation: slide-down 0.4s ease-out;
+          animation: slide-down 0.5s ease-out;
         }
 
         .animate-bounce-subtle {
-          animation: bounce-subtle 2s ease-in-out infinite;
+          animation: bounce-subtle 2.5s ease-in-out infinite;
+        }
+
+        .animate-gradient-shift {
+          animation: gradient-shift 8s ease-in-out infinite;
+        }
+
+        .animate-shimmer {
+          animation: shimmer 2s ease-in-out infinite;
+        }
+
+        .animate-orbit-1 {
+          animation: orbit-1 4s linear infinite;
+        }
+
+        .animate-orbit-2 {
+          animation: orbit-2 6s linear infinite;
         }
       `}</style>
 
-      {/* Use the imported ScheduleInterviewDialog component */}
       <ScheduleInterviewDialog
         app={scheduleApp}
         onClose={() => setScheduleApp(null)}
@@ -909,24 +1131,28 @@ function StatusUpdateButtons({ currentStatus, onUpdateStatus }) {
   ];
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-3">
       {statusButtons.map(({ status, label, icon: Icon, gradient }) => {
         if (status === currentStatus) return null;
         return (
           <button
             key={status}
             onClick={() => onUpdateStatus(status)}
-            className="group relative px-4 py-2 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            className="group relative px-5 py-3 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl"
             style={{
-              background: "rgba(255,255,255,0.08)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background:
+                "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
+              border: "2px solid rgba(255,255,255,0.15)",
             }}
           >
             <div
-              className={`absolute inset-0 bg-linear-to-r ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-            ></div>
+              className={`absolute inset-0 bg-gradient-to-r ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+            />
             <span className="relative flex items-center gap-2">
-              <Icon className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+              <Icon
+                className="w-4 h-4 group-hover:scale-110 transition-transform duration-500"
+                strokeWidth={2.5}
+              />
               {label}
             </span>
           </button>
@@ -944,7 +1170,7 @@ function StageBadge({ value }) {
       gradient: "from-blue-500 to-cyan-500",
       bgClass: "bg-blue-500/15",
       textClass: "text-blue-400",
-      borderClass: "border-blue-500/30",
+      borderClass: "border-blue-500/40",
     },
     reviewed: {
       icon: Eye,
@@ -952,7 +1178,7 @@ function StageBadge({ value }) {
       gradient: "from-cyan-500 to-teal-500",
       bgClass: "bg-cyan-500/15",
       textClass: "text-cyan-400",
-      borderClass: "border-cyan-500/30",
+      borderClass: "border-cyan-500/40",
     },
     interview: {
       icon: Calendar,
@@ -960,7 +1186,7 @@ function StageBadge({ value }) {
       gradient: "from-indigo-500 to-purple-500",
       bgClass: "bg-indigo-500/15",
       textClass: "text-indigo-400",
-      borderClass: "border-indigo-500/30",
+      borderClass: "border-indigo-500/40",
     },
     hired: {
       icon: Award,
@@ -968,7 +1194,7 @@ function StageBadge({ value }) {
       gradient: "from-emerald-500 to-teal-500",
       bgClass: "bg-emerald-500/15",
       textClass: "text-emerald-400",
-      borderClass: "border-emerald-500/30",
+      borderClass: "border-emerald-500/40",
     },
     rejected: {
       icon: XCircle,
@@ -976,7 +1202,7 @@ function StageBadge({ value }) {
       gradient: "from-rose-500 to-pink-500",
       bgClass: "bg-rose-500/15",
       textClass: "text-rose-400",
-      borderClass: "border-rose-500/30",
+      borderClass: "border-rose-500/40",
     },
   };
 
@@ -985,12 +1211,15 @@ function StageBadge({ value }) {
 
   return (
     <span
-      className={`group relative inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 ${config.bgClass} ${config.textClass} ${config.borderClass} overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg`}
+      className={`group relative inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl text-sm font-black border-2 ${config.bgClass} ${config.textClass} ${config.borderClass} overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-lg`}
     >
       <div
-        className={`absolute inset-0 bg-linear-to-r ${config.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
-      ></div>
-      <Icon className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+        className={`absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-0 group-hover:opacity-25 transition-opacity duration-500`}
+      />
+      <Icon
+        className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-500"
+        strokeWidth={2.5}
+      />
       <span className="relative z-10">{config.text}</span>
     </span>
   );
