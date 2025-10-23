@@ -131,6 +131,76 @@ export const courseController = {
     }
   },
 
+  // Authenticated: my progress for a module course
+  async getMyProgress(req, res, next) {
+    try {
+      const userId = req.user?.id;
+      const { courseId } = req.params;
+      if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
+      if (!isObjectId(courseId)) return res.status(400).json({ success: false, message: "Invalid course id" });
+
+      const course = await CourseModel.findById(courseId).lean();
+      if (!course) return res.status(404).json({ success: false, message: "Course not found" });
+      if (course.type !== "module") return res.status(400).json({ success: false, message: "Progress is tracked at module level" });
+
+      const progress = await (await import("../models/CourseProgress.js")).CourseProgressModel.findOne({ userId, courseId }).lean();
+      const lessonsTotal = course.lessons?.length || 0;
+      const completedCount = progress?.completedLessons?.length || 0;
+      const percent = lessonsTotal > 0 ? Math.round((completedCount / lessonsTotal) * 100) : 0;
+
+      return res.json({ success: true, data: { progress: progress || null, stats: { lessonsTotal, completedCount, percent } } });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Authenticated: mark a lesson as completed
+  async completeLesson(req, res, next) {
+    try {
+      const userId = req.user?.id;
+      const { courseId, lessonId } = req.params;
+      if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
+      if (!isObjectId(courseId) || !isObjectId(lessonId)) return res.status(400).json({ success: false, message: "Invalid ids" });
+
+      const course = await CourseModel.findById(courseId).lean();
+      if (!course) return res.status(404).json({ success: false, message: "Course not found" });
+      if (course.type !== "module") return res.status(400).json({ success: false, message: "Progress is tracked at module level" });
+      const lessonExists = (course.lessons || []).some((l) => l._id.toString() === lessonId);
+      if (!lessonExists) return res.status(400).json({ success: false, message: "Lesson does not belong to this course" });
+
+      // Access check: pro plan, direct module, or full parent access
+      let canAccessAllLessons = false;
+      const plan = await getUserPlan(userId);
+      if (plan === "pro") {
+        canAccessAllLessons = true;
+      } else {
+        const hasDirect = await userHasAccessToModule(userId, course._id);
+        if (hasDirect) canAccessAllLessons = true;
+        else if (course.parentCourse) {
+          const hasFullParent = await userHasFullAccessToParent(userId, course.parentCourse);
+          if (hasFullParent) canAccessAllLessons = true;
+        }
+      }
+      if (!canAccessAllLessons) return res.status(403).json({ success: false, message: "No access to complete lessons for this course" });
+
+      const { CourseProgressModel } = await import("../models/CourseProgress.js");
+      const update = {
+        $set: { lastLessonId: lessonId, lastAccessedAt: new Date() },
+        $addToSet: { completedLessons: { lessonId, completedAt: new Date() } },
+      };
+      const options = { upsert: true, new: true, setDefaultsOnInsert: true };
+      const progress = await CourseProgressModel.findOneAndUpdate({ userId, courseId }, update, options).lean();
+
+      const lessonsTotal = course.lessons?.length || 0;
+      const completedCount = progress?.completedLessons?.length || 0;
+      const percent = lessonsTotal > 0 ? Math.round((completedCount / lessonsTotal) * 100) : 0;
+
+      return res.json({ success: true, data: { progress, stats: { lessonsTotal, completedCount, percent } } });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // Authenticated: list my accesses (matrix)
   async listMyAccess(req, res, next) {
     try {
@@ -300,6 +370,57 @@ export const courseController = {
       ];
       const courses = await CourseModel.aggregate(pipeline);
       return res.json({ success: true, data: courses });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Admin: list access matrix with optional filters
+  async adminListAccessMatrix(req, res, next) {
+    try {
+      const { userId, courseId, accessType } = req.query;
+      const filter = {};
+      if (userId && isObjectId(userId)) filter.userId = userId;
+      if (courseId && isObjectId(courseId)) filter.courseId = courseId;
+      if (accessType) filter.accessType = accessType;
+
+      const accesses = await CourseAccessModel.find(filter)
+        .populate("userId", "firstName lastName email")
+        .populate("courseId", "title type parentCourse")
+        .sort({ createdAt: -1 })
+        .lean();
+      return res.json({ success: true, data: accesses });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Admin: grant access to a user
+  async adminGrantAccess(req, res, next) {
+    try {
+      const { userId, courseId, accessType, expiresAt, notes } = req.body;
+      if (!isObjectId(userId) || !isObjectId(courseId)) return res.status(400).json({ success: false, message: "Valid userId and courseId required" });
+      if (!accessType || !["sub_course", "full_course", "bundle", "admin_grant", "gift"].includes(accessType)) {
+        return res.status(400).json({ success: false, message: "Invalid accessType" });
+      }
+      const course = await CourseModel.findById(courseId).lean();
+      if (!course) return res.status(404).json({ success: false, message: "Course not found" });
+
+      const access = await CourseAccessModel.create({ userId, courseId, accessType, expiresAt: expiresAt || null, notes });
+      return res.status(201).json({ success: true, data: access });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Admin: revoke access by id
+  async adminRevokeAccess(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!isObjectId(id)) return res.status(400).json({ success: false, message: "Invalid id" });
+      const removed = await CourseAccessModel.findByIdAndDelete(id);
+      if (!removed) return res.status(404).json({ success: false, message: "Access not found" });
+      return res.json({ success: true, message: "Access revoked" });
     } catch (error) {
       next(error);
     }
