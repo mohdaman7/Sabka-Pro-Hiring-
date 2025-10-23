@@ -339,4 +339,18 @@ export const courseController = {
       next(error);
     }
   },
+
+  // Admin: list course accesses (access control matrix)
+  async adminListAccesses(req, res, next) {
+    try {
+      const accesses = await CourseAccessModel.find()
+        .populate("userId", "email firstName lastName role")
+        .populate("courseId", "title type parentCourse")
+        .sort({ createdAt: -1 })
+        .lean();
+      return res.json({ success: true, data: accesses });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
