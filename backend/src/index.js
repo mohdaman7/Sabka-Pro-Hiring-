@@ -17,6 +17,8 @@ import leadRoutes from "./routes/leads.js";
 import studentRoutes from "./routes/student.js";
 import employerRoutes from "./routes/employer.js";
 import userRoutes from "./routes/user.js";
+import courseRoutes from "./routes/courses.js";
+import purchaseRoutes from "./routes/purchases.js";
 
 // Rate limiting configuration
 const limiter = rateLimit({
@@ -116,6 +118,8 @@ async function bootstrap() {
     app.use("/api/admin", crmRoutes); // Changed from /api/crm to /api/admin for better semantics
     app.use("/api/leads", leadRoutes);
     app.use("/api/student", studentRoutes);
+    app.use("/api/courses", courseRoutes);
+    app.use("/api/purchases", purchaseRoutes);
     app.use("/api/employer", employerRoutes);
     app.use("/api/user", userRoutes);
 
@@ -130,7 +134,9 @@ async function bootstrap() {
           applications: "/api/applications",
           admin: "/api/admin",
           leads: "/api/leads",
-          student: "/api/student",
+        student: "/api/student",
+        courses: "/api/courses",
+        purchases: "/api/purchases",
           employer: "/api/employer",
           user: "/api/user",
         },
