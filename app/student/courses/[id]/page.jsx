@@ -14,6 +14,7 @@ export default function CourseDetailPage() {
   const [course, setCourse] = useState(null);
   const [activeLessonId, setActiveLessonId] = useState(null);
   const [purchasing, setPurchasing] = useState(false);
+  const [progress, setProgress] = useState(null);
 
   const isParent = course?.type === "parent";
   const isModule = course?.type === "module";
@@ -31,6 +32,14 @@ export default function CourseDetailPage() {
         if (!mounted) return;
         setCourse(data);
         if (data?.lessons?.length) setActiveLessonId(data.lessons[0]._id);
+        if (data?.type === "module") {
+          try {
+            const p = await courseService.myProgress(data._id);
+            if (mounted) setProgress(p);
+          } catch (e) {
+            // ignore progress errors (likely unauthenticated)
+          }
+        }
       } catch (e) {
         setError(e?.response?.data?.message || e.message || "Failed to load course");
       } finally {
@@ -51,6 +60,12 @@ export default function CourseDetailPage() {
       // Reload course to get unlocked lessons
       const data = await courseService.getById(id);
       setCourse(data);
+      if (data?.type === "module") {
+        try {
+          const p = await courseService.myProgress(data._id);
+          setProgress(p);
+        } catch {}
+      }
     } catch (e) {
       alert(e?.response?.data?.message || e.message || "Purchase failed");
     } finally {
@@ -65,10 +80,25 @@ export default function CourseDetailPage() {
       alert("Bundle unlocked successfully");
       const data = await courseService.getById(id);
       setCourse(data);
+      if (data?.type === "module") {
+        try {
+          const p = await courseService.myProgress(data._id);
+          setProgress(p);
+        } catch {}
+      }
     } catch (e) {
       alert(e?.response?.data?.message || e.message || "Purchase failed");
     } finally {
       setPurchasing(false);
+    }
+  }
+
+  async function markLessonComplete(lessonId) {
+    try {
+      const p = await courseService.completeLesson(course._id, lessonId);
+      setProgress(p);
+    } catch (e) {
+      alert(e?.response?.data?.message || e.message || "Failed to update progress");
     }
   }
 
@@ -128,6 +158,19 @@ export default function CourseDetailPage() {
             <div className="p-4 border-t border-white/10">
               <h2 className="text-white font-bold text-lg">{activeLesson?.title}</h2>
               <p className="text-white/70 text-sm mt-1">{activeLesson?.description}</p>
+              <div className="mt-3 flex items-center gap-3">
+                <button
+                  onClick={() => markLessonComplete(activeLesson?._id)}
+                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/15 text-white flex items-center gap-2"
+                >
+                  <CheckCircle2 className="w-4 h-4" /> Mark complete
+                </button>
+                {progress?.stats && (
+                  <span className="text-white/80 text-sm">
+                    {progress.stats.completedCount}/{progress.stats.lessonsTotal} completed • {progress.stats.percent}%
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
@@ -152,7 +195,12 @@ export default function CourseDetailPage() {
                     {lesson.isFreePreview && <p className="text-xs text-emerald-400">Free preview</p>}
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-white/50" />
+                <div className="flex items-center gap-2">
+                  {progress?.progress?.completedLessons?.some((x) => x.lessonId === lesson._id) && (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  )}
+                  <ChevronRight className="w-4 h-4 text-white/50" />
+                </div>
               </button>
             ))}
           </div>
