@@ -43,6 +43,10 @@ const courseService = {
     const res = await api.delete(`/api/courses/admin/${id}`);
     return res.data;
   },
+  adminListAccesses: async () => {
+    const res = await api.get("/api/courses/admin/accesses");
+    return res.data.data;
+  },
 };
 
 export default courseService;

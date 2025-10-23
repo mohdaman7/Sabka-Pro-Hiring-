@@ -20,5 +20,6 @@ router.post("/admin/:id/lessons", authenticate, authorize(["admin"]), courseCont
 router.get("/admin", authenticate, authorize(["admin"]), courseController.adminListCourses);
 router.put("/admin/:id", authenticate, authorize(["admin"]), courseController.adminUpdateCourse);
 router.delete("/admin/:id", authenticate, authorize(["admin"]), courseController.adminDeleteCourse);
+router.get("/admin/accesses", authenticate, authorize(["admin"]), courseController.adminListAccesses);
 
 export default router;
