@@ -15,8 +15,6 @@ router.get("/me/recommendations", authenticate, courseController.getRecommendati
 // Progress
 router.get("/me/progress/:courseId", authenticate, courseController.getMyProgress);
 router.post("/me/progress/:courseId/lessons/:lessonId/complete", authenticate, courseController.completeLesson);
-router.get("/me/progress/:courseId", authenticate, courseController.getMyProgress);
-router.post("/me/progress/:courseId/lessons/:lessonId/complete", authenticate, courseController.completeLesson);
 
 // Admin endpoints (under /api/admin via crm router usually; provide here as well if mounted separately)
 router.post("/admin/parent", authenticate, authorize(["admin"]), courseController.adminCreateParentCourse);
@@ -30,8 +28,5 @@ router.delete("/admin/access/:id", authenticate, authorize(["admin"]), courseCon
 // Course CRUD
 router.put("/admin/:id", authenticate, authorize(["admin"]), courseController.adminUpdateCourse);
 router.delete("/admin/:id", authenticate, authorize(["admin"]), courseController.adminDeleteCourse);
-router.get("/admin/access", authenticate, authorize(["admin"]), courseController.adminListAccessMatrix);
-router.post("/admin/access", authenticate, authorize(["admin"]), courseController.adminGrantAccess);
-router.delete("/admin/access/:id", authenticate, authorize(["admin"]), courseController.adminRevokeAccess);
 
 export default router;

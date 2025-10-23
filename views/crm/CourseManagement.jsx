@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Search, Plus, Edit2, Trash2, Video, Eye, Lock, BookOpen, DollarSign, Users } from "lucide-react"
+import { Search, Plus, Edit2, Trash2, Video, BookOpen, DollarSign, Users } from "lucide-react"
 import courseService from "@/services/courseService"
 import CreateParentCourseModal from "@/components/ui/CreateParentCourseModal"
 import CreateModuleModal from "@/components/ui/CreateModuleModal"
@@ -14,6 +14,7 @@ export default function CourseManagement() {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [showCreateParentModal, setShowCreateParentModal] = useState(false)
   const [showCreateModuleModal, setShowCreateModuleModal] = useState(false)
+  const [defaultParentId, setDefaultParentId] = useState("")
   const [showEditModal, setShowEditModal] = useState(false)
   const [showAccessManager, setShowAccessManager] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState(null)
@@ -51,6 +52,11 @@ export default function CourseManagement() {
   const handleEdit = (course) => {
     setSelectedCourse(course)
     setShowEditModal(true)
+  }
+
+  const handleAddModuleFor = (parent) => {
+    setDefaultParentId(parent?._id || "")
+    setShowCreateModuleModal(true)
   }
 
   const parentCourses = adminCourses.filter((c) => c.type === "parent")
@@ -92,27 +98,27 @@ export default function CourseManagement() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 border-b border-slate-200">
+      <div className="flex gap-4 border-b border-slate-200 bg-white/60 backdrop-blur supports-[backdrop-filter]:bg-white/40 rounded-lg p-1">
         <button
           onClick={() => setActiveTab("courses")}
-          className={`px-4 py-2 font-medium transition-colors relative ${
+          className={`px-4 py-2 font-medium transition-colors relative rounded-md ${
             activeTab === "courses" ? "text-blue-600" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           Courses
           {activeTab === "courses" && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600"></div>
+            <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600"></div>
           )}
         </button>
         <button
           onClick={() => setActiveTab("modules")}
-          className={`px-4 py-2 font-medium transition-colors relative ${
+          className={`px-4 py-2 font-medium transition-colors relative rounded-md ${
             activeTab === "modules" ? "text-blue-600" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           All Modules
           {activeTab === "modules" && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600"></div>
+            <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600"></div>
           )}
         </button>
       </div>
@@ -141,6 +147,18 @@ export default function CourseManagement() {
             </option>
           ))}
         </select>
+        <button
+          onClick={() => setShowCreateParentModal(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700"
+        >
+          New Course
+        </button>
+        <button
+          onClick={() => setShowCreateModuleModal(true)}
+          className="px-4 py-2 bg-purple-600 text-white rounded-lg shadow-sm hover:bg-purple-700"
+        >
+          New Module
+        </button>
       </div>
 
       {error && (
@@ -208,6 +226,12 @@ export default function CourseManagement() {
                     >
                       <Edit2 className="w-4 h-4" />
                       Edit
+                    </button>
+                    <button
+                      onClick={() => handleAddModuleFor(course)}
+                      className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(course._id)}
@@ -305,6 +329,7 @@ export default function CourseManagement() {
           onClose={() => setShowCreateModuleModal(false)}
           onSuccess={loadCourses}
           parentCourses={parentCourses}
+          defaultParentId={defaultParentId}
         />
       )}
       {showEditModal && selectedCourse && (

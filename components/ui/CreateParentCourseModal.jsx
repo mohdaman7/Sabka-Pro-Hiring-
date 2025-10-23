@@ -18,9 +18,16 @@ export default function CreateParentCourseModal({ onClose, onSuccess }) {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [validation, setValidation] = useState({ title: "", bundlePrice: "" })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    // simple client validation
+    const v = { title: "", bundlePrice: "" }
+    if (!formData.title.trim()) v.title = "Title is required"
+    if (formData.bundlePrice < 0) v.bundlePrice = "Price cannot be negative"
+    setValidation(v)
+    if (v.title || v.bundlePrice) return
     setLoading(true)
     setError("")
     try {
@@ -59,6 +66,7 @@ export default function CreateParentCourseModal({ onClose, onSuccess }) {
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g., Full Stack Development Bootcamp"
             />
+          {validation.title && <p className="text-sm text-red-600 mt-1">{validation.title}</p>}
           </div>
 
           <div>
@@ -124,6 +132,11 @@ export default function CreateParentCourseModal({ onClose, onSuccess }) {
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="https://example.com/image.jpg"
             />
+            {formData.thumbnail && (
+              <div className="mt-2">
+                <img src={formData.thumbnail} alt="preview" className="h-24 w-full object-cover rounded border" onError={(e)=>{e.currentTarget.style.display='none'}} />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -136,6 +149,7 @@ export default function CreateParentCourseModal({ onClose, onSuccess }) {
                 onChange={(e) => setFormData({ ...formData, bundlePrice: Number(e.target.value) })}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+          {validation.bundlePrice && <p className="text-sm text-red-600 mt-1">{validation.bundlePrice}</p>}
             </div>
 
             <div>
