@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import courseService from "@/services/courseService";
 import purchaseService from "@/services/purchaseService";
 import { studentService } from "@/services/studentService";
-import { Play, Lock, CheckCircle2, ShoppingCart, ChevronRight, BookOpen, DollarSign, Star, Users, Clock, Award } from "lucide-react";
+import { Play, Lock, CheckCircle2, ShoppingCart, ChevronRight, BookOpen, DollarSign, Star, Users, Clock, Award, Target } from "lucide-react";
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -115,48 +115,97 @@ export default function CourseDetailPage() {
 
   return (
     <div className="min-h-screen p-4 md:p-6 lg:p-8 space-y-6">
-      {/* Course Header */}
+      {/* Premium Course Header */}
       <div 
-        className="relative overflow-hidden rounded-3xl p-6 md:p-8 text-white shadow-2xl backdrop-blur-xl border border-white/10"
+        className="relative overflow-hidden rounded-3xl p-8 md:p-10 text-white shadow-2xl backdrop-blur-xl border border-white/10 group transition-all duration-500 hover:shadow-purple-500/30"
         style={{
           background: "linear-gradient(135deg, rgba(128,55,145,0.18) 0%, rgba(184,123,209,0.12) 50%, rgba(240,194,238,0.08) 100%)",
-          boxShadow: "0 20px 60px rgba(128,55,145,0.15)",
+          boxShadow: "0 25px 60px rgba(128,55,145,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
         }}
       >
-        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-black text-white mb-2">{course.title}</h1>
-            <p className="text-white/80 mb-4">{course.description}</p>
-            <div className="flex flex-wrap items-center gap-4 text-sm">
+        {/* Animated Background Elements */}
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div className="flex-1 space-y-4">
+            <div className="flex items-start gap-4">
+              {/* Course Icon */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 backdrop-blur-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <BookOpen className="w-8 h-8 text-purple-300" />
+              </div>
+              
+              <div className="flex-1">
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+                  {course.title}
+                </h1>
+                <p className="text-white/90 text-lg leading-relaxed mb-4">{course.description}</p>
+              </div>
+            </div>
+            
+            {/* Enhanced Course Meta */}
+            <div className="flex flex-wrap items-center gap-3">
               {course.category && (
-                <span className="px-3 py-1 bg-white/10 rounded-lg backdrop-blur-sm">
+                <span className="px-4 py-2 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 text-white font-semibold flex items-center gap-2 hover:bg-white/20 transition-colors">
+                  <Target className="w-4 h-4 text-purple-400" />
                   {course.category}
                 </span>
               )}
               {course.level && (
-                <span className="px-3 py-1 bg-white/10 rounded-lg backdrop-blur-sm">
+                <span className={`px-4 py-2 rounded-xl backdrop-blur-sm border font-semibold ${
+                  course.level === 'Beginner' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' :
+                  course.level === 'Intermediate' ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' :
+                  'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                }`}>
+                  <Award className="w-4 h-4 inline mr-2" />
                   {course.level}
                 </span>
               )}
               {course.instructor && (
-                <span className="flex items-center gap-2">
-                  <Users className="w-4 h-4" />
+                <span className="px-4 py-2 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 text-white font-semibold flex items-center gap-2">
+                  <Users className="w-4 h-4 text-blue-400" />
                   {course.instructor}
                 </span>
               )}
               {isParent && (
-                <span className="flex items-center gap-2">
+                <span className="px-4 py-2 bg-purple-500/15 rounded-xl backdrop-blur-sm border border-purple-500/30 text-purple-300 font-semibold flex items-center gap-2">
                   <BookOpen className="w-4 h-4" />
                   {course.modules?.length || 0} modules
                 </span>
               )}
               {isModule && (
-                <span className="flex items-center gap-2">
+                <span className="px-4 py-2 bg-emerald-500/15 rounded-xl backdrop-blur-sm border border-emerald-500/30 text-emerald-300 font-semibold flex items-center gap-2">
                   <Play className="w-4 h-4" />
                   {course.lessons?.length || 0} lessons
                 </span>
               )}
+              {course.rating && (
+                <span className="px-4 py-2 bg-yellow-500/15 rounded-xl backdrop-blur-sm border border-yellow-500/30 text-yellow-300 font-semibold flex items-center gap-2">
+                  <Star className="w-4 h-4 fill-yellow-400" />
+                  {course.rating}
+                </span>
+              )}
             </div>
+            
+            {/* Course Progress Bar (for enrolled users) */}
+            {hasFullAccess && (
+              <div className="mt-4 p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-white/80 font-semibold">Your Progress</span>
+                  <span className="text-white font-bold">0%</span> {/* This would be dynamic */}
+                </div>
+                <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full transition-all duration-700 shadow-lg"
+                    style={{ width: '0%' }} // This would be dynamic based on actual progress
+                  />
+                </div>
+                <div className="flex items-center justify-between mt-2 text-sm text-white/60">
+                  <span>0 lessons completed</span>
+                  <span>{isModule ? course.lessons?.length || 0 : 'Multiple modules'} total</span>
+                </div>
+              </div>
+            )}
           </div>
           {isParent && !hasFullAccess && (
             <div className="flex flex-col items-end gap-2">
@@ -182,131 +231,447 @@ export default function CourseDetailPage() {
       {/* Module Type: Video Player and Lessons */}
       {isModule && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Player */}
-          <div className="lg:col-span-2 bg-black/40 border border-white/10 rounded-2xl overflow-hidden">
+          {/* Premium Video Player */}
+          <div className="lg:col-span-2 relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-xl" style={{
+            background: "linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%)",
+            boxShadow: "0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)"
+          }}>
             {activeLesson ? (
-              <div className="aspect-video w-full">
-                {activeLesson.videoProvider === "youtube" && activeLesson.videoId ? (
-                  <iframe
-                    className="w-full h-full"
-                    src={`https://www.youtube.com/embed/${activeLesson.videoId}`}
-                    title={activeLesson.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                ) : activeLesson.videoUrl ? (
-                  <video className="w-full h-full" controls src={activeLesson.videoUrl} />
+              <div className="aspect-video w-full relative group">
+                {/* Video Content or Premium Lock */}
+                {(activeLesson.isFreePreview || hasFullAccess) ? (
+                  // Show actual video for free preview or full access
+                  <>
+                    {activeLesson.videoProvider === "youtube" && activeLesson.videoId ? (
+                      <iframe
+                        className="w-full h-full rounded-t-3xl"
+                        src={`https://www.youtube.com/embed/${activeLesson.videoId}`}
+                        title={activeLesson.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    ) : activeLesson.videoUrl ? (
+                      <video className="w-full h-full rounded-t-3xl" controls src={activeLesson.videoUrl} />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white/60 bg-black/50">
+                        <Play className="w-12 h-12" />
+                        <span className="ml-3 text-lg">No video available</span>
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white/60">
-                    <Play className="w-8 h-8" />
-                    <span className="ml-2">No video available</span>
+                  // Show premium lock overlay for locked content
+                  <div className="w-full h-full relative">
+                    {/* Blurred preview background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-black/60 to-pink-900/30 backdrop-blur-sm" />
+                    
+                    {/* Premium Lock Content */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 space-y-6">
+                      <div className="relative">
+                        <div className="absolute -inset-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-30 animate-pulse" />
+                        <div className="relative p-6 rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
+                          <Lock className="w-12 h-12 text-white" />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <h3 className="text-2xl font-black text-white">Premium Content</h3>
+                        <p className="text-white/80 text-lg max-w-md leading-relaxed">
+                          Unlock this lesson and access all premium content with our Pro plan
+                        </p>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <button
+                          onClick={() => router.push('/student/upgrade')}
+                          className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-3"
+                        >
+                          <Award className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                          Upgrade to Pro
+                        </button>
+                        
+                        {isModule && (
+                          <button
+                            onClick={() => purchaseModule(course._id)}
+                            disabled={purchasing}
+                            className="px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold border border-white/20 hover:border-white/40 transition-all duration-300 flex items-center gap-3 disabled:opacity-50"
+                          >
+                            <ShoppingCart className="w-5 h-5" />
+                            Buy This Module
+                          </button>
+                        )}
+                      </div>
+                      
+                      <div className="text-sm text-white/60">
+                        <span className="flex items-center gap-2">
+                          <Star className="w-4 h-4 text-yellow-400" />
+                          Join thousands of students already learning
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Premium Badge for Free Preview */}
+                {activeLesson.isFreePreview && !hasFullAccess && (
+                  <div className="absolute top-4 left-4 z-10">
+                    <span className="px-4 py-2 bg-emerald-500/90 backdrop-blur-xl text-white rounded-xl text-sm font-bold shadow-lg border border-emerald-400/30">
+                      🎁 Free Preview
+                    </span>
+                  </div>
+                )}
+                
+                {/* Full Access Badge */}
+                {hasFullAccess && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="px-4 py-2 bg-purple-500/90 backdrop-blur-xl text-white rounded-xl text-sm font-bold shadow-lg border border-purple-400/30 flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4" />
+                      Pro Access
+                    </span>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="aspect-video w-full flex items-center justify-center text-white/60">
-                Select a lesson
+              <div className="aspect-video w-full flex items-center justify-center text-white/60 bg-gradient-to-br from-gray-900/50 to-black/50">
+                <div className="text-center space-y-3">
+                  <Play className="w-16 h-16 mx-auto text-white/40" />
+                  <span className="text-xl font-medium">Select a lesson to start learning</span>
+                </div>
               </div>
             )}
-            <div className="p-4 border-t border-white/10">
-              <h2 className="text-white font-bold text-lg">{activeLesson?.title}</h2>
-              <p className="text-white/70 text-sm mt-1">{activeLesson?.description}</p>
+            {/* Enhanced Lesson Info Panel */}
+            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-black/40 to-black/60 backdrop-blur-xl">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 space-y-2">
+                  <h2 className="text-white font-black text-xl leading-tight">{activeLesson?.title}</h2>
+                  <p className="text-white/80 leading-relaxed">{activeLesson?.description}</p>
+                  
+                  {/* Lesson Meta Info */}
+                  <div className="flex items-center gap-4 text-sm text-white/60 mt-3">
+                    {activeLesson?.duration && (
+                      <span className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        {activeLesson.duration} min
+                      </span>
+                    )}
+                    {activeLesson?.difficulty && (
+                      <span className="px-3 py-1 bg-white/10 rounded-lg text-xs font-semibold">
+                        {activeLesson.difficulty}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Lesson Status */}
+                <div className="flex flex-col items-end gap-2">
+                  {(activeLesson?.isFreePreview || hasFullAccess) ? (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-emerald-500/20 rounded-xl border border-emerald-500/30">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                      <span className="text-emerald-400 font-bold text-sm">Available</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
+                      <Lock className="w-5 h-5 text-purple-400" />
+                      <span className="text-purple-400 font-bold text-sm">Premium</span>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Lessons List */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 max-h-[70vh] overflow-auto">
-            <h3 className="text-white font-bold text-lg mb-4">Lessons</h3>
-            {lessons.length > 0 ? (
-              lessons.map((lesson, idx) => (
-                <button
-                  key={lesson._id}
-                  onClick={() => setActiveLessonId(lesson._id)}
-                  className={`w-full text-left p-3 rounded-xl flex items-center justify-between transition-all ${
-                    activeLessonId === lesson._id
-                      ? "bg-white/10 border border-white/20"
-                      : "hover:bg-white/5 border border-transparent"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    {lesson.isFreePreview || hasFullAccess ? (
-                      <Play className="w-4 h-4 text-emerald-400" />
-                    ) : (
-                      <Lock className="w-4 h-4 text-purple-300" />
-                    )}
-                    <div>
-                      <p className="text-white font-medium">{lesson.title}</p>
-                      {lesson.isFreePreview && !hasFullAccess && (
-                        <p className="text-xs text-emerald-400">Free preview</p>
+          {/* Premium Lessons List */}
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-xl max-h-[70vh]" style={{
+            background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
+            boxShadow: "0 25px 50px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)"
+          }}>
+            {/* Header */}
+            <div className="p-6 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+              <div className="flex items-center justify-between">
+                <h3 className="text-white font-black text-xl flex items-center gap-3">
+                  <BookOpen className="w-6 h-6 text-purple-400" />
+                  Course Lessons
+                </h3>
+                <div className="px-4 py-2 bg-white/10 rounded-xl border border-white/20">
+                  <span className="text-white/80 font-bold text-sm">
+                    {lessons.filter(l => l.isFreePreview || hasFullAccess).length}/{lessons.length} Available
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Lessons List */}
+            <div className="p-4 space-y-2 overflow-auto max-h-[50vh] custom-scrollbar">
+              {lessons.length > 0 ? (
+                lessons.map((lesson, idx) => {
+                  const isAccessible = lesson.isFreePreview || hasFullAccess;
+                  const isActive = activeLessonId === lesson._id;
+                  
+                  return (
+                    <button
+                      key={lesson._id}
+                      onClick={() => setActiveLessonId(lesson._id)}
+                      className={`group w-full text-left p-4 rounded-2xl transition-all duration-300 border relative overflow-hidden ${
+                        isActive
+                          ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/40 shadow-lg shadow-purple-500/20"
+                          : "hover:bg-white/8 border-white/10 hover:border-white/20 hover:shadow-lg"
+                      }`}
+                    >
+                      {/* Background Gradient on Hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/5 group-hover:to-pink-500/5 transition-all duration-300 rounded-2xl" />
+                      
+                      <div className="relative flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          {/* Lesson Number */}
+                          <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black transition-all duration-300 ${
+                            isActive 
+                              ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg" 
+                              : "bg-white/10 text-white/70 group-hover:bg-white/20"
+                          }`}>
+                            {idx + 1}
+                          </div>
+                          
+                          {/* Status Icon */}
+                          <div className={`p-2 rounded-xl transition-all duration-300 ${
+                            isAccessible 
+                              ? "bg-emerald-500/20 border border-emerald-500/30" 
+                              : "bg-purple-500/20 border border-purple-500/30"
+                          }`}>
+                            {isAccessible ? (
+                              <Play className="w-4 h-4 text-emerald-400" />
+                            ) : (
+                              <Lock className="w-4 h-4 text-purple-400" />
+                            )}
+                          </div>
+                          
+                          {/* Lesson Info */}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white font-bold text-base leading-tight group-hover:text-purple-200 transition-colors">
+                              {lesson.title}
+                            </p>
+                            <div className="flex items-center gap-3 mt-1">
+                              {lesson.isFreePreview && !hasFullAccess && (
+                                <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold border border-emerald-500/30">
+                                  🎁 Free Preview
+                                </span>
+                              )}
+                              {lesson.duration && (
+                                <span className="text-white/60 text-xs flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {lesson.duration}m
+                                </span>
+                              )}
+                              {!isAccessible && (
+                                <span className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded-lg text-xs font-bold border border-purple-500/30">
+                                  Pro Only
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Arrow */}
+                        <ChevronRight className={`w-5 h-5 transition-all duration-300 ${
+                          isActive 
+                            ? "text-purple-400 translate-x-1" 
+                            : "text-white/50 group-hover:text-white/80 group-hover:translate-x-1"
+                        }`} />
+                      </div>
+                      
+                      {/* Progress Bar (if lesson is completed) */}
+                      {isAccessible && (
+                        <div className="mt-3 w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full transition-all duration-500"
+                            style={{ width: '0%' }} // This would be dynamic based on actual progress
+                          />
+                        </div>
                       )}
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-white/50" />
-                </button>
-              ))
-            ) : (
-              <div className="text-white/60 text-center py-4">No lessons available</div>
+                    </button>
+                  );
+                })
+              ) : (
+                <div className="text-center py-12 space-y-4">
+                  <BookOpen className="w-16 h-16 text-white/30 mx-auto" />
+                  <div className="text-white/60 text-lg font-medium">No lessons available</div>
+                  <p className="text-white/40 text-sm">Check back later for new content</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Footer with Course Progress */}
+            {lessons.length > 0 && (
+              <div className="p-4 border-t border-white/10 bg-gradient-to-r from-black/20 to-black/40">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-white/70 font-medium">Course Progress</span>
+                  <span className="text-white font-bold">
+                    {Math.round((lessons.filter(l => l.isFreePreview || hasFullAccess).length / lessons.length) * 100)}% Available
+                  </span>
+                </div>
+                <div className="mt-2 w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-700"
+                    style={{ 
+                      width: `${(lessons.filter(l => l.isFreePreview || hasFullAccess).length / lessons.length) * 100}%` 
+                    }}
+                  />
+                </div>
+              </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Parent Type: Modules Grid */}
+      {/* Premium Parent Type: Modules Grid */}
       {isParent && (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-white">Course Modules</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-black text-white flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30">
+                <BookOpen className="w-8 h-8 text-purple-300" />
+              </div>
+              Course Modules
+            </h2>
+            <div className="px-4 py-2 bg-white/10 rounded-xl border border-white/20">
+              <span className="text-white/80 font-bold">
+                {course.modules?.filter(m => {
+                  const isFreeModule = Number(m?.pricing?.individualPrice || 0) === 0;
+                  return isPro || isFreeModule || myAccess.some((access) => access.courseId?._id === m._id);
+                }).length || 0}/{course.modules?.length || 0} Unlocked
+              </span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {course.modules && course.modules.length > 0 ? (
-              course.modules.map((module) => {
+              course.modules.map((module, index) => {
                 const isFreeModule = Number(module?.pricing?.individualPrice || 0) === 0;
                 const hasModuleAccess = isPro || isFreeModule || myAccess.some((access) => access.courseId?._id === module._id);
+                
                 return (
                   <div
                     key={module._id}
-                    className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all"
+                    className="group relative rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-purple-500/30 cursor-pointer"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      animationDelay: `${index * 100}ms`
+                    }}
                   >
-                    <div className="aspect-video bg-black/30 relative">
+                    {/* Background Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/10 group-hover:to-pink-500/10 transition-all duration-500 rounded-3xl pointer-events-none" />
+                    
+                    {/* Module Image */}
+                    <div className="relative overflow-hidden h-48">
                       {module.thumbnail ? (
-                        <img src={module.thumbnail} alt={module.title} className="w-full h-full object-cover" />
+                        <img 
+                          src={module.thumbnail} 
+                          alt={module.title} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                        />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white/60">
-                          <BookOpen className="w-8 h-8" />
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/30 to-pink-900/30">
+                          <BookOpen className="w-16 h-16 text-white/40" />
                         </div>
                       )}
-                      {hasModuleAccess && (
-                        <div className="absolute top-2 right-2">
-                          <span className="px-3 py-1 bg-emerald-500 text-white rounded-lg text-xs font-bold">
+                      
+                      {/* Overlay Gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                      
+                      {/* Access Status Badge */}
+                      <div className="absolute top-4 right-4">
+                        {hasModuleAccess ? (
+                          <span className="px-4 py-2 bg-emerald-500/90 backdrop-blur-xl text-white rounded-xl text-sm font-bold shadow-lg border border-emerald-400/30 flex items-center gap-2">
+                            <CheckCircle2 className="w-4 h-4" />
                             Unlocked
+                          </span>
+                        ) : (
+                          <span className="px-4 py-2 bg-purple-500/90 backdrop-blur-xl text-white rounded-xl text-sm font-bold shadow-lg border border-purple-400/30 flex items-center gap-2">
+                            <Lock className="w-4 h-4" />
+                            Premium
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Free Badge */}
+                      {isFreeModule && (
+                        <div className="absolute top-4 left-4">
+                          <span className="px-4 py-2 bg-emerald-500/90 backdrop-blur-xl text-white rounded-xl text-sm font-bold shadow-lg border border-emerald-400/30">
+                            🎁 Free
                           </span>
                         </div>
                       )}
                     </div>
-                    <div className="p-4 space-y-3">
-                      <h3 className="text-white font-bold text-lg">{module.title}</h3>
-                      <p className="text-white/70 text-sm">{module.description}</p>
-                      <div className="flex items-center gap-2 text-sm text-white/60">
-                        <Play className="w-4 h-4" />
-                        {module.lessons?.length || 0} lessons
+                    
+                    {/* Module Content */}
+                    <div className="relative p-6 space-y-4">
+                      <div>
+                        <h3 className="text-white font-black text-xl leading-tight group-hover:text-purple-200 transition-colors">
+                          {module.title}
+                        </h3>
+                        <p className="text-white/70 text-sm mt-2 leading-relaxed line-clamp-2">
+                          {module.description}
+                        </p>
                       </div>
-                      <div className="flex items-center justify-between pt-2">
-                        <span className="text-white font-bold text-xl">
-                          ₹{module.pricing?.individualPrice ?? 0}
+                      
+                      {/* Module Stats */}
+                      <div className="flex items-center gap-4 text-sm">
+                        <span className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-xl border border-white/20 text-white/80 font-semibold">
+                          <Play className="w-4 h-4 text-purple-400" />
+                          {module.lessons?.length || 0} lessons
                         </span>
+                        {module.duration && (
+                          <span className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-xl border border-white/20 text-white/80 font-semibold">
+                            <Clock className="w-4 h-4 text-blue-400" />
+                            {module.duration}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Progress Bar (if accessible) */}
+                      {hasModuleAccess && (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-white/70">Progress</span>
+                            <span className="text-white font-bold">0%</span>
+                          </div>
+                          <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full transition-all duration-700"
+                              style={{ width: '0%' }} // This would be dynamic
+                            />
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Price and Action */}
+                      <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                        <div className="text-left">
+                          <span className="text-3xl font-black text-white">
+                            ₹{module.pricing?.individualPrice ?? 0}
+                          </span>
+                          {isFreeModule && (
+                            <div className="text-emerald-400 text-sm font-bold">Free Module</div>
+                          )}
+                        </div>
+                        
                         {hasFullAccess || hasModuleAccess ? (
                           <button
                             onClick={() => router.push(`/student/courses/${module._id}`)}
-                            className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white flex items-center gap-2 hover:opacity-95"
+                            className="group/btn px-6 py-3 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-3"
                           >
-                            <Play className="w-4 h-4" /> Start Learning
+                            <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                            Start Learning
                           </button>
                         ) : (
                           <button
                             onClick={() => purchaseModule(module._id)}
                             disabled={purchasing}
-                            className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/15 text-white flex items-center gap-2 disabled:opacity-50"
+                            className="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold border border-white/20 hover:border-white/40 transition-all duration-300 flex items-center gap-3 disabled:opacity-50 hover:scale-105"
                           >
-                            <ShoppingCart className="w-4 h-4" /> Buy Module
+                            <ShoppingCart className="w-5 h-5" />
+                            {purchasing ? 'Processing...' : 'Buy Module'}
                           </button>
                         )}
                       </div>
@@ -315,11 +680,71 @@ export default function CourseDetailPage() {
                 );
               })
             ) : (
-              <div className="col-span-3 text-center py-12 text-white/60">No modules available</div>
+              <div className="col-span-3 text-center py-16 space-y-4">
+                <BookOpen className="w-20 h-20 text-white/30 mx-auto" />
+                <div className="text-white/60 text-xl font-medium">No modules available</div>
+                <p className="text-white/40">This course is still being prepared. Check back soon!</p>
+              </div>
             )}
           </div>
         </div>
       )}
+      
+      {/* Premium Custom Styles */}
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #803791, #b87bd1);
+          border-radius: 10px;
+          box-shadow: 0 2px 10px rgba(128, 55, 145, 0.3);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(135deg, #9d4baa, #c993d8);
+          box-shadow: 0 4px 20px rgba(128, 55, 145, 0.5);
+        }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(200%);
+          }
+        }
+        
+        .animate-shimmer {
+          animation: shimmer 3s infinite;
+        }
+        
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(128, 55, 145, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 40px rgba(128, 55, 145, 0.6), 0 0 60px rgba(184, 123, 209, 0.4);
+          }
+        }
+        
+        .animate-pulse-glow {
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }
