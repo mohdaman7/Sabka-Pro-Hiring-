@@ -217,10 +217,15 @@ export default function JobListingsPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]" />
 
         {/* Animated gradient mesh */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/10 to-transparent" />
-          <div className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/10 to-transparent" />
-          <div className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/10 to-transparent" />
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse" />
+          <div className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse" style={{ animationDelay: '2s' }} />
+          
+          {/* Floating particles */}
+          <div className="absolute top-32 left-16 w-1 h-1 bg-purple-400/40 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+          <div className="absolute top-64 right-24 w-1.5 h-1.5 bg-pink-400/30 rounded-full animate-bounce" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute bottom-40 left-1/3 w-1 h-1 bg-purple-300/35 rounded-full animate-bounce" style={{ animationDelay: '3s' }} />
         </div>
       </div>
 
@@ -246,14 +251,19 @@ export default function JobListingsPage() {
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30 animate-pulse">
-                <Zap className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-4 mb-3">
+              <div className="relative">
+                <div className="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30 animate-pulse" />
+                <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/40 group-hover:scale-110 transition-all duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
+                  <Zap className="relative w-8 h-8 text-white animate-pulse" />
+                </div>
               </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-black mb-1 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+                <h1 className="text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent">
                   Discover Your Future
                 </h1>
+                <p className="text-purple-200/80 text-lg font-medium">Find opportunities that match your ambitions</p>
               </div>
             </div>
           </div>
@@ -321,20 +331,24 @@ export default function JobListingsPage() {
                   <p className="text-5xl font-black text-white mb-1 group-hover:scale-110 transition-transform duration-300 inline-block">
                     {stat.value}
                   </p>
-                  <div className="flex items-center gap-1 text-emerald-400 text-sm font-medium">
-                    <TrendingUp className="w-3 h-3" />
-                    <span>+12% this week</span>
+                  <div className="flex items-center gap-1 text-emerald-400 text-sm font-medium animate-pulse">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+{Math.floor(Math.random() * 20 + 5)}% this week</span>
                   </div>
                 </div>
-                <div
-                  className="h-20 w-20 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"
-                  style={{
-                    background:
-                      "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
-                    boxShadow: "0 10px 30px rgba(128,55,145,0.4)",
-                  }}
-                >
-                  <Icon className="h-10 w-10 text-white" />
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-sm opacity-50 group-hover:opacity-75 transition-opacity duration-500" />
+                  <div
+                    className="relative h-20 w-20 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 overflow-hidden"
+                    style={{
+                      background:
+                        "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
+                      boxShadow: "0 10px 30px rgba(128,55,145,0.4)",
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+                    <Icon className="relative h-10 w-10 text-white drop-shadow-lg" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -514,22 +528,26 @@ export default function JobListingsPage() {
                   <div className="relative flex flex-col sm:flex-row gap-6">
                     {/* Company Logo */}
                     <div className="flex-shrink-0">
-                      <div
-                        className="w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 relative"
-                        style={{
-                          background:
-                            "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
-                          boxShadow: "0 10px 30px rgba(128,55,145,0.4)",
-                        }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-                        {job.employerId?.company ? (
-                          <span className="relative text-white font-black text-lg">
-                            {getInitials(job.employerId.company)}
-                          </span>
-                        ) : (
-                          <Building2 className="relative w-10 h-10 text-white" />
-                        )}
+                      <div className="relative">
+                        <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div
+                          className="relative w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500"
+                          style={{
+                            background:
+                              "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
+                            boxShadow: "0 10px 30px rgba(128,55,145,0.4)",
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/25 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-tl from-purple-400/20 to-transparent" />
+                          {job.employerId?.company ? (
+                            <span className="relative text-white font-black text-lg drop-shadow-lg">
+                              {getInitials(job.employerId.company)}
+                            </span>
+                          ) : (
+                            <Building2 className="relative w-10 h-10 text-white drop-shadow-lg" />
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -542,8 +560,8 @@ export default function JobListingsPage() {
                               {job.title}
                             </h3>
                             {index < 3 && (
-                              <span className="flex-shrink-0 px-3 py-1 bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 text-xs font-bold rounded-full border border-amber-500/30 flex items-center gap-1">
-                                <Star className="w-3 h-3 fill-current" />
+                              <span className="flex-shrink-0 px-3 py-1 bg-gradient-to-r from-amber-500/30 to-orange-500/30 text-amber-200 text-xs font-bold rounded-full border border-amber-400/40 flex items-center gap-1 animate-pulse shadow-lg shadow-amber-500/20">
+                                <Star className="w-3 h-3 fill-current animate-spin" style={{ animationDuration: '3s' }} />
                                 HOT
                               </span>
                             )}
@@ -636,20 +654,22 @@ export default function JobListingsPage() {
                             e.stopPropagation();
                             handleApply(job._id);
                           }}
-                          className="group/btn relative px-8 py-3.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 font-bold shadow-2xl shadow-purple-500/40 flex items-center gap-2 overflow-hidden"
+                          className="group/btn relative px-8 py-3.5 bg-gradient-to-r from-[#803791] via-[#9d4baa] to-[#b87bd1] text-white rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 font-bold shadow-2xl shadow-purple-500/50 hover:shadow-purple-400/60 flex items-center gap-2 overflow-hidden"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
-                          <span className="relative">Apply Now</span>
-                          <ExternalLink className="relative h-5 w-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform duration-300" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-300/20 to-purple-400/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+                          <span className="relative font-black">Apply Now</span>
+                          <ExternalLink className="relative h-5 w-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform duration-300 drop-shadow-sm" />
                         </button>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handleViewDetails(job._id);
                           }}
-                          className="px-8 py-3.5 bg-white/8 hover:bg-white/15 backdrop-blur-xl text-white rounded-2xl transition-all duration-300 font-bold border border-white/15 hover:border-purple-400/50 hover:scale-105 active:scale-95 shadow-lg"
+                          className="relative px-8 py-3.5 bg-white/8 hover:bg-white/15 backdrop-blur-xl text-white rounded-2xl transition-all duration-300 font-bold border border-white/15 hover:border-purple-400/50 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl overflow-hidden group/details"
                         >
-                          View Details
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-400/10 to-purple-500/0 translate-x-[-100%] group-hover/details:translate-x-[100%] transition-transform duration-500" />
+                          <span className="relative">View Details</span>
                         </button>
                       </div>
                     </div>

@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import courseService from "@/services/courseService";
 import purchaseService from "@/services/purchaseService";
 import { studentService } from "@/services/studentService";
-import { Play, Lock, CheckCircle2, ShoppingCart, ChevronRight, BookOpen, DollarSign, Star, Users, Clock, Award, Target } from "lucide-react";
+import { Play, Lock, CheckCircle2, ShoppingCart, ChevronRight, BookOpen, DollarSign, Star, Users, Clock, Award, Target, Crown } from "lucide-react";
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -207,7 +207,7 @@ export default function CourseDetailPage() {
               </div>
             )}
           </div>
-          {isParent && !hasFullAccess && (
+          {isParent && !hasFullAccess && !isPro && (
             <div className="flex flex-col items-end gap-2">
               <div className="text-3xl font-black">₹{course.pricing?.bundlePrice || 0}</div>
               <button
@@ -217,6 +217,15 @@ export default function CourseDetailPage() {
               >
                 <ShoppingCart className="w-5 h-5" /> Buy Complete Bundle
               </button>
+            </div>
+          )}
+          {isPro && (
+            <div className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-xl border border-yellow-500/50">
+              <Crown className="w-6 h-6 text-yellow-400" />
+              <div className="text-center">
+                <div className="text-yellow-400 font-bold text-lg">Pro Member</div>
+                <div className="text-white/80 text-sm">Full Access Included</div>
+              </div>
             </div>
           )}
           {hasFullAccess && (
@@ -291,7 +300,7 @@ export default function CourseDetailPage() {
                           Upgrade to Pro
                         </button>
                         
-                        {isModule && (
+                        {isModule && !isPro && (
                           <button
                             onClick={() => purchaseModule(course._id)}
                             disabled={purchasing}
@@ -664,7 +673,7 @@ export default function CourseDetailPage() {
                             <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
                             Start Learning
                           </button>
-                        ) : (
+                        ) : !isPro ? (
                           <button
                             onClick={() => purchaseModule(module._id)}
                             disabled={purchasing}
@@ -673,6 +682,11 @@ export default function CourseDetailPage() {
                             <ShoppingCart className="w-5 h-5" />
                             {purchasing ? 'Processing...' : 'Buy Module'}
                           </button>
+                        ) : (
+                          <div className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-xl border border-yellow-500/30">
+                            <Crown className="w-5 h-5 text-yellow-400" />
+                            <span className="text-yellow-400 font-bold text-sm">Pro Access</span>
+                          </div>
                         )}
                       </div>
                     </div>

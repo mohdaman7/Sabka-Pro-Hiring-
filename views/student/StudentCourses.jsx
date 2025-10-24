@@ -25,9 +25,11 @@ import {
   Flame,
   ShoppingCart,
   DollarSign,
+  Crown,
 } from "lucide-react";
 import courseService from "@/services/courseService";
 import purchaseService from "@/services/purchaseService";
+import { studentService } from "@/services/studentService";
 
 export default function StudentCourses() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -36,6 +38,7 @@ export default function StudentCourses() {
   const [myAccess, setMyAccess] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isPro, setIsPro] = useState(false);
 
   const categories = [
     { id: "all", name: "All Courses", icon: BookOpen },
@@ -52,12 +55,18 @@ export default function StudentCourses() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [coursesData, accessData] = await Promise.all([
+      const [coursesData, accessData, profileRes] = await Promise.all([
         courseService.listPublic(),
         courseService.myAccess().catch(() => []),
+        studentService.getProfile().catch(() => null),
       ]);
       setCourses(coursesData || []);
       setMyAccess(accessData || []);
+      
+      // Check if user is premium
+      const studentData = profileRes?.data || profileRes?.data?.data || profileRes?.data;
+      const plan = (studentData?.plan || studentData?.data?.plan || "free").toLowerCase();
+      setIsPro(plan === "pro");
     } catch (e) {
       setError(e?.response?.data?.message || e.message);
     } finally {
@@ -66,7 +75,7 @@ export default function StudentCourses() {
   };
 
   const hasAccess = (courseId) => {
-    return myAccess.some((access) => access.courseId?._id === courseId);
+    return isPro || myAccess.some((access) => access.courseId?._id === courseId);
   };
 
   const filteredCourses =
@@ -102,38 +111,60 @@ export default function StudentCourses() {
           <div
             className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
             style={{
-              background: "rgba(128,55,145,0.12)",
+              background: isPro ? "rgba(245,158,11,0.15)" : "rgba(128,55,145,0.12)",
               animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
             }}
           />
           <div
             className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl animate-pulse"
             style={{
-              background: "rgba(184,123,209,0.08)",
+              background: isPro ? "rgba(217,119,6,0.10)" : "rgba(184,123,209,0.08)",
               animation: "pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite",
             }}
           />
           <div
             className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-2xl"
-            style={{ background: "rgba(240,194,238,0.04)" }}
+            style={{ background: isPro ? "rgba(251,191,36,0.06)" : "rgba(240,194,238,0.04)" }}
           />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]" />
+          <div className={`absolute inset-0 ${isPro ? 'bg-[radial-gradient(ellipse_at_center,_rgba(245,158,11,0.06),_transparent_40%)]' : 'bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]'}`} />
+          
+          {/* Premium floating particles */}
+          {isPro && (
+            <>
+              <div className="absolute top-20 left-20 w-2 h-2 bg-yellow-400/30 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+              <div className="absolute top-40 right-32 w-1 h-1 bg-amber-400/40 rounded-full animate-bounce" style={{ animationDelay: '1s' }} />
+              <div className="absolute bottom-32 left-1/3 w-1.5 h-1.5 bg-yellow-300/35 rounded-full animate-bounce" style={{ animationDelay: '2s' }} />
+              <div className="absolute top-1/2 right-20 w-1 h-1 bg-amber-300/30 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }} />
+            </>
+          )}
         </div>
 
         {/* Premium Header */}
         <div
-          className="relative overflow-hidden rounded-3xl p-8 md:p-10 text-white shadow-2xl backdrop-blur-xl border border-white/10 group transition-all duration-500 hover:shadow-purple-500/20"
+          className={`relative overflow-hidden rounded-3xl p-8 md:p-10 text-white shadow-2xl backdrop-blur-xl border group transition-all duration-500 ${
+            isPro 
+              ? 'border-yellow-400/20 hover:shadow-yellow-500/20 hover:border-yellow-400/30' 
+              : 'border-white/10 hover:shadow-purple-500/20'
+          }`}
           style={{
-            background:
-              "linear-gradient(135deg, rgba(128,55,145,0.18) 0%, rgba(184,123,209,0.12) 50%, rgba(240,194,238,0.08) 100%)",
-            boxShadow:
-              "0 20px 60px rgba(128,55,145,0.15), inset 0 1px 0 rgba(255,255,255,0.1)",
+            background: isPro
+              ? "linear-gradient(135deg, rgba(245,158,11,0.18) 0%, rgba(217,119,6,0.12) 50%, rgba(251,191,36,0.08) 100%)"
+              : "linear-gradient(135deg, rgba(128,55,145,0.18) 0%, rgba(184,123,209,0.12) 50%, rgba(240,194,238,0.08) 100%)",
+            boxShadow: isPro
+              ? "0 20px 60px rgba(245,158,11,0.15), inset 0 1px 0 rgba(255,255,255,0.1)"
+              : "0 20px 60px rgba(128,55,145,0.15), inset 0 1px 0 rgba(255,255,255,0.1)",
           }}
         >
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500 ${
+            isPro ? 'via-yellow-400' : 'via-purple-400'
+          }`} />
+          <div className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl animate-pulse ${
+            isPro ? 'bg-yellow-500/10' : 'bg-purple-500/10'
+          }`} />
           <div
-            className="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl animate-pulse"
+            className={`absolute -bottom-10 -left-10 w-40 h-40 rounded-full blur-3xl animate-pulse ${
+              isPro ? 'bg-amber-500/10' : 'bg-pink-500/10'
+            }`}
             style={{ animationDelay: "1s" }}
           />
 
@@ -141,19 +172,36 @@ export default function StudentCourses() {
             <div
               className="p-5 rounded-3xl shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"
               style={{
-                background: "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
-                boxShadow: "0 20px 40px rgba(128,55,145,0.4)",
+                background: isPro 
+                  ? "linear-gradient(135deg,#f59e0b,#d97706,#fbbf24)"
+                  : "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
+                boxShadow: isPro
+                  ? "0 20px 40px rgba(245,158,11,0.4)"
+                  : "0 20px 40px rgba(128,55,145,0.4)",
               }}
             >
-              <GraduationCap className="w-12 h-12 text-white" />
+              {isPro ? (
+                <Crown className="w-12 h-12 text-white" />
+              ) : (
+                <GraduationCap className="w-12 h-12 text-white" />
+              )}
             </div>
             <div className="flex-1">
               <h1 className="text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                My Learning Journey
+                {isPro ? "Premium Learning Hub" : "My Learning Journey"}
               </h1>
               <p className="text-white/90 text-lg font-medium flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-yellow-400" />
-                Continue your path to excellence
+                {isPro ? (
+                  <>
+                    <Crown className="w-5 h-5 text-yellow-400" />
+                    Unlimited access to all premium content
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 text-yellow-400" />
+                    Continue your path to excellence
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -285,9 +333,20 @@ export default function StudentCourses() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-                    {/* Enrolled Badge */}
-                    {enrolled && (
-                      <div className="absolute top-4 left-4 z-30">
+                    {/* Access Badge */}
+                    <div className="absolute top-4 left-4 z-30">
+                      {isPro ? (
+                        <span
+                          className="px-4 py-2 text-white rounded-2xl text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-xl border border-yellow-400/30"
+                          style={{
+                            background: "linear-gradient(135deg,#f59e0b,#d97706)",
+                            boxShadow: "0 10px 30px rgba(245,158,11,0.4)",
+                          }}
+                        >
+                          <Crown className="w-4 h-4" />
+                          Pro Access
+                        </span>
+                      ) : enrolled ? (
                         <span
                           className="px-4 py-2 text-white rounded-2xl text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-xl border border-emerald-400/30"
                           style={{
@@ -298,8 +357,19 @@ export default function StudentCourses() {
                           <CheckCircle className="w-4 h-4" />
                           Enrolled
                         </span>
-                      </div>
-                    )}
+                      ) : course.bundlePrice === 0 ? (
+                        <span
+                          className="px-4 py-2 text-white rounded-2xl text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-xl border border-emerald-400/30"
+                          style={{
+                            background: "linear-gradient(135deg,#10b981,#059669)",
+                            boxShadow: "0 10px 30px rgba(16,185,129,0.4)",
+                          }}
+                        >
+                          <Award className="w-4 h-4" />
+                          Free
+                        </span>
+                      ) : null}
+                    </div>
 
                     {/* Rating Badge */}
                     {course.rating > 0 && (
@@ -326,10 +396,12 @@ export default function StudentCourses() {
                         <BookOpen className="w-4 h-4 text-purple-400" />
                         {course.moduleCount || 0} modules
                       </span>
-                      <span className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/10 text-white/80 font-semibold backdrop-blur-sm">
-                        <DollarSign className="w-4 h-4 text-purple-400" />
-                        ₹{course.bundlePrice ?? 0}
-                      </span>
+                      {!isPro && (
+                        <span className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/10 text-white/80 font-semibold backdrop-blur-sm">
+                          <DollarSign className="w-4 h-4 text-purple-400" />
+                          ₹{course.bundlePrice ?? 0}
+                        </span>
+                      )}
                       {course.level && (
                         <span
                           className={`px-3 py-2 rounded-xl text-xs font-bold border backdrop-blur-sm ${getLevelColor(
@@ -351,16 +423,22 @@ export default function StudentCourses() {
                     {/* Action Button */}
                     <button
                       className={`group/btn relative w-full px-6 py-4 rounded-2xl font-black transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden ${
-                        enrolled
+                        enrolled || isPro
                           ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:opacity-95 text-white shadow-2xl shadow-purple-500/40 hover:scale-105 active:scale-95"
                           : "bg-white/8 hover:bg-white/15 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 border border-white/15"
                       }`}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
-                      {enrolled ? (
+                      {enrolled || isPro ? (
                         <>
                           <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                          <span className="relative">Continue Learning</span>
+                          <span className="relative">{isPro ? "Start Learning" : "Continue Learning"}</span>
+                          <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                        </>
+                      ) : course.bundlePrice === 0 ? (
+                        <>
+                          <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                          <span className="relative">Start Free Course</span>
                           <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </>
                       ) : (
