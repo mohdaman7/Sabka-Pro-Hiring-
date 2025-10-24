@@ -63,7 +63,7 @@ export default function CreateParentCourseModal({ onClose, onSuccess }) {
     formData.bundlePrice * (1 - formData.discountPercent / 100);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-900/95 via-purple-900/95 to-slate-900/95 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/5 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Premium Header */}
         <div

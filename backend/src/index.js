@@ -21,28 +21,28 @@ import courseRoutes from "./routes/courses.js";
 import purchaseRoutes from "./routes/purchases.js";
 
 // Rate limiting configuration
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: {
-    success: false,
-    message: "Too many requests from this IP, please try again later.",
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100, // limit each IP to 100 requests per windowMs
+//   message: {
+//     success: false,
+//     message: "Too many requests from this IP, please try again later.",
+//   },
+//   standardHeaders: true,
+//   legacyHeaders: false,
+// });
 
 // More strict rate limiting for auth endpoints
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 requests per windowMs for auth
-  message: {
-    success: false,
-    message: "Too many authentication attempts, please try again later.",
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// const authLimiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 5, // limit each IP to 5 requests per windowMs for auth
+//   message: {
+//     success: false,
+//     message: "Too many authentication attempts, please try again later.",
+//   },
+//   standardHeaders: true,
+//   legacyHeaders: false,
+// });
 
 async function bootstrap() {
   try {
@@ -87,7 +87,7 @@ async function bootstrap() {
     }
 
     // Apply rate limiting to all routes
-    app.use(limiter);
+    // app.use(limiter);
 
     // Health check endpoint
     app.get("/health", (_req, res) => {
@@ -134,9 +134,9 @@ async function bootstrap() {
           applications: "/api/applications",
           admin: "/api/admin",
           leads: "/api/leads",
-        student: "/api/student",
-        courses: "/api/courses",
-        purchases: "/api/purchases",
+          student: "/api/student",
+          courses: "/api/courses",
+          purchases: "/api/purchases",
           employer: "/api/employer",
           user: "/api/user",
         },
