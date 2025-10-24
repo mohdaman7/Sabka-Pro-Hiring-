@@ -244,7 +244,7 @@ export default function CreateModuleModal({
         </div>
 
         {/* Content */}
-        <div className="p-8 overflow-y-auto max-h-[calc(90vh-280px)]">
+        <div className="p-8 overflow-y-auto max-h-[calc(90vh-320px)]">
           {error && (
             <div className="mb-6 bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-2xl font-semibold flex items-center gap-2">
               <X className="w-5 h-5" strokeWidth={2.5} />
@@ -256,23 +256,35 @@ export default function CreateModuleModal({
           {currentStep === 0 && (
             <div className="space-y-6 animate-fade-in">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
                   <BookOpen
                     className="w-4 h-4 text-[#803791]"
                     strokeWidth={2.5}
                   />
-                  Parent Course *
+                  Parent Course <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.parentCourseId}
                   onChange={(e) =>
                     setFormData({ ...formData, parentCourseId: e.target.value })
                   }
-                  className="w-full px-4 py-4 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium bg-white"
+                  className="w-full px-4 py-4 border-2 border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium bg-white text-slate-900 placeholder-slate-500 appearance-none cursor-pointer hover:border-slate-400"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23803791' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 1rem center",
+                    paddingRight: "2.5rem",
+                  }}
                 >
-                  <option value="">Select Parent Course</option>
+                  <option value="" className="text-slate-500">
+                    Select Parent Course
+                  </option>
                   {parentCourses.map((course) => (
-                    <option key={course._id} value={course._id}>
+                    <option
+                      key={course._id}
+                      value={course._id}
+                      className="text-slate-900"
+                    >
                       {course.title}
                     </option>
                   ))}
@@ -286,12 +298,12 @@ export default function CreateModuleModal({
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
                   <Sparkles
                     className="w-4 h-4 text-[#803791]"
                     strokeWidth={2.5}
                   />
-                  Module Title *
+                  Module Title <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -299,7 +311,7 @@ export default function CreateModuleModal({
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full px-4 py-4 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium"
+                  className="w-full px-4 py-4 border-2 border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium text-slate-900 placeholder-slate-500 hover:border-slate-400"
                   placeholder="e.g., Introduction to React Hooks"
                 />
                 {validation.title && (
@@ -311,7 +323,7 @@ export default function CreateModuleModal({
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">
+                <label className="block text-sm font-bold text-slate-900 mb-3">
                   Description
                 </label>
                 <textarea
@@ -320,13 +332,13 @@ export default function CreateModuleModal({
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full px-4 py-4 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium resize-none"
+                  className="w-full px-4 py-4 border-2 border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium text-slate-900 placeholder-slate-500 resize-none hover:border-slate-400"
                   placeholder="Describe what students will learn in this module..."
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
                   <Upload
                     className="w-4 h-4 text-[#803791]"
                     strokeWidth={2.5}
@@ -339,15 +351,15 @@ export default function CreateModuleModal({
                   onChange={(e) =>
                     setFormData({ ...formData, thumbnail: e.target.value })
                   }
-                  className="w-full px-4 py-4 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium"
+                  className="w-full px-4 py-4 border-2 border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium text-slate-900 placeholder-slate-500 hover:border-slate-400"
                   placeholder="https://example.com/image.jpg"
                 />
                 {formData.thumbnail && (
-                  <div className="mt-4 rounded-2xl overflow-hidden border-2 border-slate-200">
+                  <div className="mt-4 rounded-2xl overflow-hidden border-2 border-slate-300 shadow-md bg-slate-100">
                     <img
-                      src={formData.thumbnail}
+                      src={formData.thumbnail || "/placeholder.svg"}
                       alt="preview"
-                      className="h-48 w-full object-cover"
+                      className="h-80 w-full object-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                       }}
@@ -363,7 +375,7 @@ export default function CreateModuleModal({
             <div className="space-y-6 animate-fade-in">
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">
+                  <label className="block text-sm font-bold text-slate-900 mb-3">
                     Difficulty Level
                   </label>
                   <select
@@ -371,16 +383,28 @@ export default function CreateModuleModal({
                     onChange={(e) =>
                       setFormData({ ...formData, level: e.target.value })
                     }
-                    className="w-full px-4 py-4 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium bg-white"
+                    className="w-full px-4 py-4 border-2 border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium bg-white text-slate-900 appearance-none cursor-pointer hover:border-slate-400"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23803791' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "right 1rem center",
+                      paddingRight: "2.5rem",
+                    }}
                   >
-                    <option value="Beginner">🟢 Beginner</option>
-                    <option value="Intermediate">🟡 Intermediate</option>
-                    <option value="Advanced">🔴 Advanced</option>
+                    <option value="Beginner" className="text-slate-900">
+                      🟢 Beginner
+                    </option>
+                    <option value="Intermediate" className="text-slate-900">
+                      🟡 Intermediate
+                    </option>
+                    <option value="Advanced" className="text-slate-900">
+                      🔴 Advanced
+                    </option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
                     <DollarSign
                       className="w-4 h-4 text-[#803791]"
                       strokeWidth={2.5}
@@ -397,14 +421,14 @@ export default function CreateModuleModal({
                         individualPrice: Number(e.target.value),
                       })
                     }
-                    className="w-full px-4 py-4 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium"
+                    className="w-full px-4 py-4 border-2 border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium text-slate-900 placeholder-slate-500 hover:border-slate-400"
                     placeholder="0"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">
+                <label className="block text-sm font-bold text-slate-900 mb-3">
                   Instructor Name
                 </label>
                 <input
@@ -413,13 +437,13 @@ export default function CreateModuleModal({
                   onChange={(e) =>
                     setFormData({ ...formData, instructor: e.target.value })
                   }
-                  className="w-full px-4 py-4 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium"
+                  className="w-full px-4 py-4 border-2 border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium text-slate-900 placeholder-slate-500 hover:border-slate-400"
                   placeholder="e.g., John Doe"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">
+                <label className="block text-sm font-bold text-slate-900 mb-3">
                   Publication Status
                 </label>
                 <div className="grid grid-cols-3 gap-4">
@@ -452,19 +476,19 @@ export default function CreateModuleModal({
                       className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
                         formData.status === status.value
                           ? `border-${status.color}-500 bg-${status.color}-50 scale-105 shadow-lg`
-                          : "border-slate-200 hover:border-slate-300 hover:scale-102"
+                          : "border-slate-300 hover:border-slate-400 hover:scale-102"
                       }`}
                     >
                       <p
-                        className={`font-bold ${
+                        className={`font-bold text-sm ${
                           formData.status === status.value
-                            ? `text-${status.color}-600`
-                            : "text-slate-600"
+                            ? `text-${status.color}-700`
+                            : "text-slate-700"
                         }`}
                       >
                         {status.label}
                       </p>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-slate-600 mt-1">
                         {status.desc}
                       </p>
                     </button>
@@ -482,7 +506,7 @@ export default function CreateModuleModal({
                   <h3 className="text-lg font-black text-slate-900 mb-1">
                     Course Lessons
                   </h3>
-                  <p className="text-sm text-slate-600 font-medium">
+                  <p className="text-sm text-slate-700 font-medium">
                     Add video lessons to your module
                   </p>
                 </div>
@@ -507,7 +531,7 @@ export default function CreateModuleModal({
                   <h3 className="text-xl font-black text-slate-900 mb-2">
                     No lessons yet
                   </h3>
-                  <p className="text-slate-600 font-medium mb-6">
+                  <p className="text-slate-700 font-medium mb-6">
                     Click "Add Lesson" to create your first lesson
                   </p>
                 </div>
@@ -516,7 +540,7 @@ export default function CreateModuleModal({
                   {lessons.map((lesson, index) => (
                     <div
                       key={index}
-                      className="border-2 border-slate-200 rounded-2xl p-6 space-y-4 hover:border-[#803791]/30 transition-all duration-300 hover:shadow-lg"
+                      className="border-2 border-slate-300 rounded-2xl p-6 space-y-4 hover:border-[#803791]/50 transition-all duration-300 hover:shadow-lg bg-white"
                     >
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
@@ -545,7 +569,7 @@ export default function CreateModuleModal({
                             onChange={(e) =>
                               updateLesson(index, "title", e.target.value)
                             }
-                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-semibold"
+                            className="w-full px-4 py-3 border-2 border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-semibold text-slate-900 placeholder-slate-500 hover:border-slate-400"
                           />
                         </div>
                         <div className="col-span-2">
@@ -556,7 +580,7 @@ export default function CreateModuleModal({
                             onChange={(e) =>
                               updateLesson(index, "description", e.target.value)
                             }
-                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium resize-none"
+                            className="w-full px-4 py-3 border-2 border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium resize-none text-slate-900 placeholder-slate-500 hover:border-slate-400"
                           />
                         </div>
                         <select
@@ -564,11 +588,23 @@ export default function CreateModuleModal({
                           onChange={(e) =>
                             updateLesson(index, "videoProvider", e.target.value)
                           }
-                          className="px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-semibold bg-white"
+                          className="px-4 py-3 border-2 border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-semibold bg-white text-slate-900 appearance-none cursor-pointer hover:border-slate-400"
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23803791' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "right 0.75rem center",
+                            paddingRight: "2rem",
+                          }}
                         >
-                          <option value="youtube">📺 YouTube</option>
-                          <option value="vimeo">🎬 Vimeo</option>
-                          <option value="external">🔗 External</option>
+                          <option value="youtube" className="text-slate-900">
+                            📺 YouTube
+                          </option>
+                          <option value="vimeo" className="text-slate-900">
+                            🎬 Vimeo
+                          </option>
+                          <option value="external" className="text-slate-900">
+                            🔗 External
+                          </option>
                         </select>
                         <input
                           type="text"
@@ -591,7 +627,7 @@ export default function CreateModuleModal({
                               e.target.value
                             )
                           }
-                          className="px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium"
+                          className="px-4 py-3 border-2 border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium text-slate-900 placeholder-slate-500 hover:border-slate-400"
                         />
                         <input
                           type="number"
@@ -604,9 +640,9 @@ export default function CreateModuleModal({
                               Number(e.target.value)
                             )
                           }
-                          className="px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium"
+                          className="px-4 py-3 border-2 border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#803791]/50 focus:border-[#803791] transition-all font-medium text-slate-900 placeholder-slate-500 hover:border-slate-400"
                         />
-                        <label className="flex items-center gap-3 px-4 py-3 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-[#803791]/30 transition-all">
+                        <label className="flex items-center gap-3 px-4 py-3 border-2 border-slate-300 rounded-xl cursor-pointer hover:border-[#803791]/50 transition-all bg-white">
                           <input
                             type="checkbox"
                             checked={lesson.isFreePreview}
@@ -619,7 +655,7 @@ export default function CreateModuleModal({
                             }
                             className="w-5 h-5 rounded accent-[#803791]"
                           />
-                          <span className="text-sm font-bold text-slate-700 flex items-center gap-2">
+                          <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
                             <Eye className="w-4 h-4" strokeWidth={2.5} />
                             Free Preview
                           </span>
@@ -643,19 +679,19 @@ export default function CreateModuleModal({
                   />
                   Review Your Module
                 </h3>
-                <p className="text-slate-600 font-medium">
+                <p className="text-slate-700 font-medium">
                   Please review all details before creating the module
                 </p>
               </div>
 
               <div className="space-y-4">
-                <div className="p-6 rounded-2xl border-2 border-slate-200">
+                <div className="p-6 rounded-2xl border-2 border-slate-300 bg-white">
                   <h4 className="font-black text-slate-900 mb-4">
                     Basic Information
                   </h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-slate-500 font-semibold mb-1">
+                      <p className="text-slate-600 font-semibold mb-1">
                         Parent Course
                       </p>
                       <p className="font-bold text-slate-900">
@@ -665,7 +701,7 @@ export default function CreateModuleModal({
                       </p>
                     </div>
                     <div>
-                      <p className="text-slate-500 font-semibold mb-1">
+                      <p className="text-slate-600 font-semibold mb-1">
                         Module Title
                       </p>
                       <p className="font-bold text-slate-900">
@@ -673,23 +709,23 @@ export default function CreateModuleModal({
                       </p>
                     </div>
                     <div className="col-span-2">
-                      <p className="text-slate-500 font-semibold mb-1">
+                      <p className="text-slate-600 font-semibold mb-1">
                         Description
                       </p>
-                      <p className="font-medium text-slate-700">
+                      <p className="font-medium text-slate-800">
                         {formData.description || "No description"}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl border-2 border-slate-200">
+                <div className="p-6 rounded-2xl border-2 border-slate-300 bg-white">
                   <h4 className="font-black text-slate-900 mb-4">
                     Configuration
                   </h4>
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
-                      <p className="text-slate-500 font-semibold mb-1">Level</p>
+                      <p className="text-slate-600 font-semibold mb-1">Level</p>
                       <span
                         className={`inline-block px-3 py-1 rounded-lg font-bold text-xs ${
                           formData.level === "Beginner"
@@ -703,13 +739,13 @@ export default function CreateModuleModal({
                       </span>
                     </div>
                     <div>
-                      <p className="text-slate-500 font-semibold mb-1">Price</p>
+                      <p className="text-slate-600 font-semibold mb-1">Price</p>
                       <p className="font-bold text-slate-900">
                         ₹{formData.individualPrice}
                       </p>
                     </div>
                     <div>
-                      <p className="text-slate-500 font-semibold mb-1">
+                      <p className="text-slate-600 font-semibold mb-1">
                         Status
                       </p>
                       <span
@@ -727,12 +763,12 @@ export default function CreateModuleModal({
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl border-2 border-slate-200">
+                <div className="p-6 rounded-2xl border-2 border-slate-300 bg-white">
                   <h4 className="font-black text-slate-900 mb-4">
                     Lessons ({lessons.length})
                   </h4>
                   {lessons.length === 0 ? (
-                    <p className="text-slate-500 font-medium">
+                    <p className="text-slate-700 font-medium">
                       No lessons added
                     </p>
                   ) : (
@@ -740,7 +776,7 @@ export default function CreateModuleModal({
                       {lessons.map((lesson, index) => (
                         <div
                           key={index}
-                          className="flex items-center gap-3 p-3 rounded-xl bg-slate-50"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200"
                         >
                           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#803791] to-[#b87bd1] flex items-center justify-center text-white font-bold text-sm">
                             {index + 1}
@@ -749,7 +785,7 @@ export default function CreateModuleModal({
                             <p className="font-bold text-slate-900 text-sm">
                               {lesson.title || `Lesson ${index + 1}`}
                             </p>
-                            <p className="text-xs text-slate-500 font-medium">
+                            <p className="text-xs text-slate-600 font-medium">
                               {lesson.videoProvider} • {lesson.durationSec}s
                             </p>
                           </div>
@@ -779,7 +815,7 @@ export default function CreateModuleModal({
           <button
             type="button"
             onClick={currentStep === 0 ? onClose : prevStep}
-            className="flex-1 px-6 py-4 border-2 border-slate-300 text-slate-700 rounded-2xl hover:bg-slate-50 transition-all font-bold flex items-center justify-center gap-2 hover:scale-105 duration-300"
+            className="flex-1 px-6 py-4 border-2 border-slate-400 text-slate-900 rounded-2xl hover:bg-slate-50 transition-all font-bold flex items-center justify-center gap-2 hover:scale-105 duration-300 hover:border-slate-500"
           >
             {currentStep === 0 ? (
               <>
