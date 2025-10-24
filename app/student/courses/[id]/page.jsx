@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import courseService from "@/services/courseService";
 import purchaseService from "@/services/purchaseService";
+import { studentService } from "@/services/studentService";
 import { Play, Lock, CheckCircle2, ShoppingCart, ChevronRight, BookOpen, DollarSign, Star, Users, Clock, Award } from "lucide-react";
 
 export default function CourseDetailPage() {
@@ -17,17 +18,20 @@ export default function CourseDetailPage() {
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [purchasing, setPurchasing] = useState(false);
   const [myAccess, setMyAccess] = useState([]);
+  const [isPro, setIsPro] = useState(false);
 
   const isParent = course?.type === "parent";
   const isModule = course?.type === "module";
 
   const hasFullAccess = useMemo(() => {
     if (!course) return false;
-    return myAccess.some((access) => 
-      access.courseId?._id === course._id || 
-      access.courseId?._id === course.parentCourse
+    if (isPro) return true;
+    return myAccess.some(
+      (access) =>
+        access.courseId?._id === course._id ||
+        access.courseId?._id === course.parentCourse
     );
-  }, [myAccess, course]);
+  }, [myAccess, course, isPro]);
 
   const lessons = useMemo(() => (isModule ? course?.lessons || [] : []), [course, isModule]);
 
@@ -46,12 +50,16 @@ export default function CourseDetailPage() {
     if (!id) return;
     try {
       setLoading(true);
-      const [courseData, accessData] = await Promise.all([
+      const [courseData, accessData, profileRes] = await Promise.all([
         courseService.getById(id),
         courseService.myAccess().catch(() => []),
+        studentService.getProfile().catch(() => null),
       ]);
       setCourse(courseData);
       setMyAccess(accessData || []);
+      const studentData = profileRes?.data || profileRes?.data?.data || profileRes?.data; // handle different shapes defensively
+      const plan = (studentData?.plan || studentData?.data?.plan || "free").toLowerCase();
+      setIsPro(plan === "pro");
       if (courseData?.lessons?.length) setActiveLessonId(courseData.lessons[0]._id);
       if (courseData?.modules?.length) setActiveModuleId(courseData.modules[0]._id);
     } catch (e) {
@@ -251,7 +259,8 @@ export default function CourseDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {course.modules && course.modules.length > 0 ? (
               course.modules.map((module) => {
-                const hasModuleAccess = myAccess.some((access) => access.courseId?._id === module._id);
+                const isFreeModule = Number(module?.pricing?.individualPrice || 0) === 0;
+                const hasModuleAccess = isPro || isFreeModule || myAccess.some((access) => access.courseId?._id === module._id);
                 return (
                   <div
                     key={module._id}

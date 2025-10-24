@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticate } from "../middleware/auth.js";
+import { authenticate, maybeAuthenticate } from "../middleware/auth.js";
 import { authorize } from "../middleware/auth.js";
 import { courseController } from "../controllers/courseController.js";
 
@@ -73,6 +73,7 @@ router.delete(
 );
 
 // ✅ This should be LAST to avoid intercepting other routes
-router.get("/:id", courseController.getCourseById);
+// Allow optional auth so pro users can get full lessons on module
+router.get("/:id", maybeAuthenticate, courseController.getCourseById);
 
 export default router;
