@@ -22,7 +22,9 @@ const courseService = {
     return res.data.data;
   },
   completeLesson: async (courseId, lessonId) => {
-    const res = await api.post(`/api/courses/me/progress/${courseId}/lessons/${lessonId}/complete`);
+    const res = await api.post(
+      `/api/courses/me/progress/${courseId}/lessons/${lessonId}/complete`
+    );
     return res.data.data;
   },
 
@@ -36,11 +38,16 @@ const courseService = {
     return res.data.data;
   },
   adminAddLesson: async (courseId, payload) => {
-    const res = await api.post(`/api/courses/admin/${courseId}/lessons`, payload);
+    const res = await api.post(
+      `/api/courses/admin/${courseId}/lessons`,
+      payload
+    );
     return res.data.data;
   },
   adminList: async () => {
+    console.log("Fetching admin courses list...");
     const res = await api.get("/api/courses/admin");
+    console.log("Admin courses response:", res.data);
     return res.data.data;
   },
   adminUpdate: async (id, payload) => {
