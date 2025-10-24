@@ -39,3 +39,24 @@ export function authorize(roles = []) {
     next();
   };
 }
+
+// ✅ Optional authentication: attach req.user if token is valid; otherwise continue
+export async function maybeAuthenticate(req, _res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return next();
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, env.jwtSecret);
+    const user = await UserModel.findById(decoded.id).select("-passwordHash");
+    if (user) {
+      req.user = { id: user._id.toString(), role: user.role };
+    }
+    return next();
+  } catch (_err) {
+    // Ignore invalid token and proceed as anonymous
+    return next();
+  }
+}
