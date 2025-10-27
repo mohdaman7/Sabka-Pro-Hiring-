@@ -151,6 +151,10 @@ export default function CandidateLeadForm({ onSuccess }) {
     }
   };
 
+  const handleBackToSelection = () => {
+    window.location.href = "/register";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-4">
       <motion.div
@@ -245,9 +249,18 @@ export default function CandidateLeadForm({ onSuccess }) {
           {/* Form Content - Full width */}
           <div className="lg:col-span-3 p-8">
             <div className="w-full max-w-none">
-              {" "}
-              {/* Changed to full width */}
-              {/* Header */}
+              {/* Header with Back Button */}
+              <div className="flex items-center justify-between mb-8">
+                <button
+                  onClick={handleBackToSelection}
+                  className="flex items-center gap-2 text-white/60 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/10"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  <span>Back to Selection</span>
+                </button>
+              </div>
+
+              {/* Main Header */}
               <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-white mb-2">
                   {step === 1 && "Start Your Journey"}
@@ -261,6 +274,7 @@ export default function CandidateLeadForm({ onSuccess }) {
                     "Help us find the perfect opportunities for you"}
                 </p>
               </div>
+
               <form
                 onSubmit={step === 3 ? handleSubmit : (e) => e.preventDefault()}
                 className="space-y-6"
