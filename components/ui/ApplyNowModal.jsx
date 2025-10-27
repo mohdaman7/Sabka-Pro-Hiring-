@@ -120,7 +120,7 @@ export default function ApplyNowModal({ job, isOpen, onClose, onSubmit }) {
         {submitSuccess && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm rounded-2xl z-10 animate-fadeIn">
             <div className="text-center">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center mx-auto mb-4 animate-scaleIn">
+              <div className="w-20 h-20 rounded-full bg-linear-to-r from-green-500 to-emerald-500 flex items-center justify-center mx-auto mb-4 animate-scaleIn">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">
@@ -347,7 +347,7 @@ export default function ApplyNowModal({ job, isOpen, onClose, onSubmit }) {
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="flex-1 px-6 py-3 bg-linear-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">

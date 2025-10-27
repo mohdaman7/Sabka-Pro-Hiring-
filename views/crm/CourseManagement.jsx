@@ -8,17 +8,10 @@ import {
   Trash2,
   Video,
   BookOpen,
-  DollarSign,
+  IndianRupee,
   Users,
-  Eye,
   TrendingUp,
-  Award,
-  Zap,
-  Sparkles,
-  Filter,
-  ChevronRight,
   Star,
-  BarChart3,
 } from "lucide-react";
 import courseService from "@/services/courseService";
 import CreateParentCourseModal from "@/components/ui/CreateParentCourseModal";
@@ -481,7 +474,7 @@ export default function CourseManagement() {
                     {course.modules?.length || 0} modules
                   </span>
                   <span className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/10 text-white/80 font-semibold">
-                    <DollarSign
+                    <IndianRupee
                       className="w-4 h-4 text-purple-400"
                       strokeWidth={2.5}
                     />
@@ -597,7 +590,7 @@ export default function CourseManagement() {
                     {module.lessons?.length || 0} lessons
                   </span>
                   <span className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/10 text-white/80 font-semibold">
-                    <DollarSign
+                    <IndianRupee
                       className="w-4 h-4 text-purple-400"
                       strokeWidth={2.5}
                     />

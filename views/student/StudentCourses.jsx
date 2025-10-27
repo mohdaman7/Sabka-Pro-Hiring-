@@ -62,10 +62,15 @@ export default function StudentCourses() {
       ]);
       setCourses(coursesData || []);
       setMyAccess(accessData || []);
-      
+
       // Check if user is premium
-      const studentData = profileRes?.data || profileRes?.data?.data || profileRes?.data;
-      const plan = (studentData?.plan || studentData?.data?.plan || "free").toLowerCase();
+      const studentData =
+        profileRes?.data || profileRes?.data?.data || profileRes?.data;
+      const plan = (
+        studentData?.plan ||
+        studentData?.data?.plan ||
+        "free"
+      ).toLowerCase();
       setIsPro(plan === "pro");
     } catch (e) {
       setError(e?.response?.data?.message || e.message);
@@ -75,7 +80,9 @@ export default function StudentCourses() {
   };
 
   const hasAccess = (courseId) => {
-    return isPro || myAccess.some((access) => access.courseId?._id === courseId);
+    return (
+      isPro || myAccess.some((access) => access.courseId?._id === courseId)
+    );
   };
 
   const filteredCourses =
@@ -84,7 +91,8 @@ export default function StudentCourses() {
       : courses.filter((course) => course.category === selectedCategory);
 
   const enrolledCourses = courses.filter((c) => hasAccess(c._id));
-  const avgProgress = enrolledCourses.length > 0 ? Math.round(Math.random() * 40 + 10) : 0; // Mock progress - would be calculated from actual progress data
+  const avgProgress =
+    enrolledCourses.length > 0 ? Math.round(Math.random() * 40 + 10) : 0; // Mock progress - would be calculated from actual progress data
 
   const getLevelColor = (level) => {
     const colors = {
@@ -111,30 +119,56 @@ export default function StudentCourses() {
           <div
             className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
             style={{
-              background: isPro ? "rgba(245,158,11,0.15)" : "rgba(128,55,145,0.12)",
+              background: isPro
+                ? "rgba(245,158,11,0.15)"
+                : "rgba(128,55,145,0.12)",
               animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
             }}
           />
           <div
             className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl animate-pulse"
             style={{
-              background: isPro ? "rgba(217,119,6,0.10)" : "rgba(184,123,209,0.08)",
+              background: isPro
+                ? "rgba(217,119,6,0.10)"
+                : "rgba(184,123,209,0.08)",
               animation: "pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite",
             }}
           />
           <div
             className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-2xl"
-            style={{ background: isPro ? "rgba(251,191,36,0.06)" : "rgba(240,194,238,0.04)" }}
+            style={{
+              background: isPro
+                ? "rgba(251,191,36,0.06)"
+                : "rgba(240,194,238,0.04)",
+            }}
           />
-          <div className={`absolute inset-0 ${isPro ? 'bg-[radial-gradient(ellipse_at_center,_rgba(245,158,11,0.06),_transparent_40%)]' : 'bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]'}`} />
-          
+          <div
+            className={`absolute inset-0 ${
+              isPro
+                ? "bg-[radial-gradient(ellipse_at_center,_rgba(245,158,11,0.06),_transparent_40%)]"
+                : "bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]"
+            }`}
+          />
+
           {/* Premium floating particles */}
           {isPro && (
             <>
-              <div className="absolute top-20 left-20 w-2 h-2 bg-yellow-400/30 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
-              <div className="absolute top-40 right-32 w-1 h-1 bg-amber-400/40 rounded-full animate-bounce" style={{ animationDelay: '1s' }} />
-              <div className="absolute bottom-32 left-1/3 w-1.5 h-1.5 bg-yellow-300/35 rounded-full animate-bounce" style={{ animationDelay: '2s' }} />
-              <div className="absolute top-1/2 right-20 w-1 h-1 bg-amber-300/30 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }} />
+              <div
+                className="absolute top-20 left-20 w-2 h-2 bg-yellow-400/30 rounded-full animate-bounce"
+                style={{ animationDelay: "0s" }}
+              />
+              <div
+                className="absolute top-40 right-32 w-1 h-1 bg-amber-400/40 rounded-full animate-bounce"
+                style={{ animationDelay: "1s" }}
+              />
+              <div
+                className="absolute bottom-32 left-1/3 w-1.5 h-1.5 bg-yellow-300/35 rounded-full animate-bounce"
+                style={{ animationDelay: "2s" }}
+              />
+              <div
+                className="absolute top-1/2 right-20 w-1 h-1 bg-amber-300/30 rounded-full animate-bounce"
+                style={{ animationDelay: "0.5s" }}
+              />
             </>
           )}
         </div>
@@ -142,9 +176,9 @@ export default function StudentCourses() {
         {/* Premium Header */}
         <div
           className={`relative overflow-hidden rounded-3xl p-8 md:p-10 text-white shadow-2xl backdrop-blur-xl border group transition-all duration-500 ${
-            isPro 
-              ? 'border-yellow-400/20 hover:shadow-yellow-500/20 hover:border-yellow-400/30' 
-              : 'border-white/10 hover:shadow-purple-500/20'
+            isPro
+              ? "border-yellow-400/20 hover:shadow-yellow-500/20 hover:border-yellow-400/30"
+              : "border-white/10 hover:shadow-purple-500/20"
           }`}
           style={{
             background: isPro
@@ -155,15 +189,19 @@ export default function StudentCourses() {
               : "0 20px 60px rgba(128,55,145,0.15), inset 0 1px 0 rgba(255,255,255,0.1)",
           }}
         >
-          <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500 ${
-            isPro ? 'via-yellow-400' : 'via-purple-400'
-          }`} />
-          <div className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl animate-pulse ${
-            isPro ? 'bg-yellow-500/10' : 'bg-purple-500/10'
-          }`} />
+          <div
+            className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500 ${
+              isPro ? "via-yellow-400" : "via-purple-400"
+            }`}
+          />
+          <div
+            className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl animate-pulse ${
+              isPro ? "bg-yellow-500/10" : "bg-purple-500/10"
+            }`}
+          />
           <div
             className={`absolute -bottom-10 -left-10 w-40 h-40 rounded-full blur-3xl animate-pulse ${
-              isPro ? 'bg-amber-500/10' : 'bg-pink-500/10'
+              isPro ? "bg-amber-500/10" : "bg-pink-500/10"
             }`}
             style={{ animationDelay: "1s" }}
           />
@@ -172,7 +210,7 @@ export default function StudentCourses() {
             <div
               className="p-5 rounded-3xl shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"
               style={{
-                background: isPro 
+                background: isPro
                   ? "linear-gradient(135deg,#f59e0b,#d97706,#fbbf24)"
                   : "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
                 boxShadow: isPro
@@ -299,7 +337,9 @@ export default function StudentCourses() {
         {/* Premium Courses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-            <div className="col-span-3 text-center py-12 text-white/80">Loading courses...</div>
+            <div className="col-span-3 text-center py-12 text-white/80">
+              Loading courses...
+            </div>
           ) : filteredCourses.length > 0 ? (
             filteredCourses.map((course, index) => {
               const enrolled = hasAccess(course._id);
@@ -339,7 +379,8 @@ export default function StudentCourses() {
                         <span
                           className="px-4 py-2 text-white rounded-2xl text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-xl border border-yellow-400/30"
                           style={{
-                            background: "linear-gradient(135deg,#f59e0b,#d97706)",
+                            background:
+                              "linear-gradient(135deg,#f59e0b,#d97706)",
                             boxShadow: "0 10px 30px rgba(245,158,11,0.4)",
                           }}
                         >
@@ -350,7 +391,8 @@ export default function StudentCourses() {
                         <span
                           className="px-4 py-2 text-white rounded-2xl text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-xl border border-emerald-400/30"
                           style={{
-                            background: "linear-gradient(135deg,#10b981,#059669)",
+                            background:
+                              "linear-gradient(135deg,#10b981,#059669)",
                             boxShadow: "0 10px 30px rgba(16,185,129,0.4)",
                           }}
                         >
@@ -361,7 +403,8 @@ export default function StudentCourses() {
                         <span
                           className="px-4 py-2 text-white rounded-2xl text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-xl border border-emerald-400/30"
                           style={{
-                            background: "linear-gradient(135deg,#10b981,#059669)",
+                            background:
+                              "linear-gradient(135deg,#10b981,#059669)",
                             boxShadow: "0 10px 30px rgba(16,185,129,0.4)",
                           }}
                         >
@@ -376,7 +419,9 @@ export default function StudentCourses() {
                       <div className="absolute bottom-4 right-4 z-30">
                         <div className="px-3 py-2 bg-black/50 backdrop-blur-xl rounded-xl border border-white/20 flex items-center gap-2">
                           <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                          <span className="text-white font-bold text-sm">{course.rating}</span>
+                          <span className="text-white font-bold text-sm">
+                            {course.rating}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -388,7 +433,9 @@ export default function StudentCourses() {
                       <h3 className="text-white font-black text-xl leading-tight group-hover:text-purple-200 transition-colors">
                         {course.title}
                       </h3>
-                      <p className="text-white/70 text-sm mt-1">{course.category}</p>
+                      <p className="text-white/70 text-sm mt-1">
+                        {course.category}
+                      </p>
                     </div>
 
                     <div className="flex items-center gap-3 text-sm flex-wrap">
@@ -398,8 +445,8 @@ export default function StudentCourses() {
                       </span>
                       {!isPro && (
                         <span className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/10 text-white/80 font-semibold backdrop-blur-sm">
-                          <DollarSign className="w-4 h-4 text-purple-400" />
-                          ₹{course.bundlePrice ?? 0}
+                          <DollarSign className="w-4 h-4 text-purple-400" />₹
+                          {course.bundlePrice ?? 0}
                         </span>
                       )}
                       {course.level && (
@@ -432,7 +479,9 @@ export default function StudentCourses() {
                       {enrolled || isPro ? (
                         <>
                           <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                          <span className="relative">{isPro ? "Start Learning" : "Continue Learning"}</span>
+                          <span className="relative">
+                            {isPro ? "Start Learning" : "Continue Learning"}
+                          </span>
                           <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </>
                       ) : course.bundlePrice === 0 ? (
@@ -454,7 +503,9 @@ export default function StudentCourses() {
               );
             })
           ) : (
-            <div className="col-span-3 text-center py-12 text-white/80">No courses available</div>
+            <div className="col-span-3 text-center py-12 text-white/80">
+              No courses available
+            </div>
           )}
         </div>
       </div>
