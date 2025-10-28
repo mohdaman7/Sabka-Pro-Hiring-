@@ -19,6 +19,7 @@ import CourseOverviewTab from "./CourseOverviewTab";
 import CourseLessonsTab from "./CourseLessonsTab";
 import CourseModulesTab from "./CourseModulesTab";
 import CreateModuleModal from "./CreateModuleModal";
+import CreateLessonModal from "./CreateLessonModal";
 
 export default function CourseDetailView({ course, onClose, onSuccess }) {
   const [activeTab, setActiveTab] = useState("overview");
@@ -27,6 +28,7 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showAddModuleModal, setShowAddModuleModal] = useState(false);
+  const [showAddLessonModal, setShowAddLessonModal] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const [courseData, setCourseData] = useState({
@@ -203,6 +205,19 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
     }, 1000);
   };
 
+  const handleAddLesson = (lessonData) => {
+    const newLesson = {
+      _id: `temp_${Date.now()}`,
+      ...lessonData,
+      order: lessons.length,
+      isNew: true,
+    };
+    setLessons([...lessons, newLesson]);
+    setShowAddLessonModal(false);
+    setSuccess("Lesson added! Don't forget to save changes.");
+    if (!editMode) setEditMode(true);
+  };
+
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-hidden border border-purple-500/20">
@@ -350,6 +365,7 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
               setLessons={setLessons}
               editMode={editMode}
               addLesson={addLesson}
+              onCreateLesson={() => setShowAddLessonModal(true)}
             />
           )}
 
@@ -444,6 +460,14 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
           onSuccess={handleModuleAdded}
           parentCourses={[{ _id: course._id, title: course.title }]}
           defaultParentId={course._id}
+        />
+      )}
+
+      {/* Add Lesson Modal */}
+      {showAddLessonModal && (
+        <CreateLessonModal
+          onClose={() => setShowAddLessonModal(false)}
+          onAddLesson={handleAddLesson}
         />
       )}
     </div>

@@ -7,6 +7,7 @@ export default function CourseLessonsTab({
   setLessons,
   editMode,
   addLesson,
+  onCreateLesson,
 }) {
   const removeLesson = (index) => {
     setLessons(lessons.filter((_, i) => i !== index));
@@ -35,13 +36,22 @@ export default function CourseLessonsTab({
           <div className="text-white/60 font-semibold">
             {lessons.length} lessons
           </div>
-          {editMode && (
+          {!editMode && onCreateLesson && (
             <button
-              onClick={addLesson}
+              onClick={onCreateLesson}
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center gap-2 shadow-xl hover:scale-105"
             >
               <Plus className="w-5 h-5" strokeWidth={2.5} />
-              Add Lesson
+              Create Lesson
+            </button>
+          )}
+          {editMode && (
+            <button
+              onClick={addLesson}
+              className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 flex items-center gap-2 shadow-xl hover:scale-105"
+            >
+              <Plus className="w-5 h-5" strokeWidth={2.5} />
+              Add Quick Lesson
             </button>
           )}
         </div>
@@ -53,13 +63,13 @@ export default function CourseLessonsTab({
           <p className="text-white/60 text-lg font-semibold mb-4">
             No lessons added yet
           </p>
-          {editMode && (
+          {onCreateLesson && (
             <button
-              onClick={addLesson}
+              onClick={onCreateLesson}
               className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 inline-flex items-center gap-2 shadow-xl"
             >
               <Plus className="w-5 h-5" strokeWidth={2.5} />
-              Add Your First Lesson
+              Create Your First Lesson
             </button>
           )}
         </div>
