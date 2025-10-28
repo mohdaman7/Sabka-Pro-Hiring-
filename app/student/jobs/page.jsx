@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Search,
@@ -41,6 +41,7 @@ import { useRouter } from "next/navigation";
 import { customToast } from "@/components/ui/toast";
 import ApplyNowModal from "@/components/ui/ApplyNowModal";
 import JobDetailsModal from "@/components/ui/JobDetailsModal";
+import { createPortal } from "react-dom";
 
 export default function JobListingsPage() {
   const router = useRouter();
@@ -63,6 +64,12 @@ export default function JobListingsPage() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
+
+  // Search suggestions state
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const searchWrapperRef = useRef(null);
+  const [suggestionPos, setSuggestionPos] = useState({ left: 0, top: 0, width: 0 });
 
   // Modal states
   const [showApplyModal, setShowApplyModal] = useState(false);
@@ -121,8 +128,66 @@ export default function JobListingsPage() {
     setCurrentPage(1);
   }, [filters.searchQuery, filters.selectedType, filters.workMode]);
 
+  // Keep portal dropdown positioned under the input
+  useEffect(() => {
+    const updatePos = () => {
+      if (!searchWrapperRef.current) return;
+      const rect = searchWrapperRef.current.getBoundingClientRect();
+      setSuggestionPos({ left: rect.left, top: rect.bottom + 8, width: rect.width });
+    };
+    updatePos();
+    if (showSuggestions) {
+      window.addEventListener("scroll", updatePos, true);
+      window.addEventListener("resize", updatePos);
+    }
+    return () => {
+      window.removeEventListener("scroll", updatePos, true);
+      window.removeEventListener("resize", updatePos);
+    };
+  }, [showSuggestions]);
+
   const handleSearch = (query) => {
     dispatch(setSearchQuery(query));
+    
+    // Generate suggestions
+    if (query.trim().length > 0) {
+      const allJobs = jobs.length > 0 ? jobs : [];
+      const uniqueSuggestions = new Set();
+      
+      allJobs.forEach(job => {
+        // Add job titles
+        if (job.title?.toLowerCase().includes(query.toLowerCase())) {
+          uniqueSuggestions.add(JSON.stringify({ type: 'title', value: job.title, icon: 'briefcase' }));
+        }
+        
+        // Add company names
+        if (job.employerId?.company?.toLowerCase().includes(query.toLowerCase())) {
+          uniqueSuggestions.add(JSON.stringify({ type: 'company', value: job.employerId.company, icon: 'building' }));
+        }
+        
+        // Add skills
+        job.skills?.forEach(skill => {
+          if (skill.toLowerCase().includes(query.toLowerCase())) {
+            uniqueSuggestions.add(JSON.stringify({ type: 'skill', value: skill, icon: 'code' }));
+          }
+        });
+      });
+      
+      const suggestionArray = Array.from(uniqueSuggestions)
+        .map(s => JSON.parse(s))
+        .slice(0, 8); // Limit to 8 suggestions
+      
+      setSuggestions(suggestionArray);
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+  
+  const handleSuggestionClick = (value) => {
+    dispatch(setSearchQuery(value));
+    setShowSuggestions(false);
   };
 
   const handleTypeChange = (type) => {
@@ -265,7 +330,7 @@ export default function JobListingsPage() {
 
       {/* Premium Header Section */}
       <div
-        className="relative overflow-hidden rounded-3xl p-10 md:p-12 text-white shadow-2xl backdrop-blur-xl border border-white/15 mb-10 group transition-all duration-500 hover:shadow-purple-500/30"
+        className="relative overflow-visible rounded-3xl p-10 md:p-12 text-white shadow-2xl backdrop-blur-xl border border-white/15 mb-10 group transition-all duration-500 hover:shadow-purple-500/30"
         style={{
           background:
             "linear-gradient(135deg, rgba(128,55,145,0.18) 0%, rgba(184,123,209,0.12) 50%, rgba(240,194,238,0.08) 100%)",
@@ -312,18 +377,62 @@ export default function JobListingsPage() {
           </button>
         </div>
 
-        {/* Premium Search Bar */}
+        {/* Premium Search Bar with Suggestions */}
         <div className="relative group/search">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-3xl blur-2xl opacity-0 group-hover/search:opacity-100 transition-opacity duration-500" />
-          <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-3xl blur-2xl opacity-0 group-hover/search:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="relative" ref={searchWrapperRef}>
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-7 w-7 text-purple-300 group-hover/search:text-purple-100 transition-colors" strokeWidth={2.5} />
             <input
               type="text"
               placeholder="Search by job title, company, or skills..."
               value={filters.searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
+              onFocus={() => { if (filters.searchQuery && suggestions.length > 0) setShowSuggestions(true); }}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               className="w-full pl-20 pr-8 py-6 text-lg border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white placeholder:text-white/60 focus:border-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-400/30 rounded-3xl transition-all duration-300 font-semibold shadow-2xl hover:shadow-purple-500/20 hover:bg-white/15"
             />
+
+            {/* Suggestions Dropdown via portal */}
+            {showSuggestions && suggestions.length > 0 &&
+              createPortal(
+                <div
+                  className="rounded-3xl shadow-2xl overflow-visible animate-slideDown max-h-96 overflow-y-auto"
+                  style={{
+                    position: "fixed",
+                    left: suggestionPos.left,
+                    top: suggestionPos.top,
+                    width: suggestionPos.width,
+                    zIndex: 9999,
+                    background: "linear-gradient(135deg, rgba(25,15,35,0.98), rgba(45,25,55,0.98))",
+                    backdropFilter: "blur(24px)",
+                    border: "3px solid rgba(184,123,209,0.5)",
+                    boxShadow: "0 25px 50px rgba(128,55,145,0.6), 0 0 0 1px rgba(255,255,255,0.1)"
+                  }}
+                >
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion.value)}
+                      className="w-full px-8 py-5 text-left transition-all duration-200 flex items-center gap-4 text-white group/suggestion border-b last:border-b-0"
+                      style={{
+                        borderBottom: index !== suggestions.length - 1 ? "1px solid rgba(255,255,255,0.2)" : "none"
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = "linear-gradient(135deg, rgba(128,55,145,0.4), rgba(184,123,209,0.3))"}
+                      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                    >
+                      {suggestion.type === 'title' && <Briefcase className="w-7 h-7 text-purple-300 shrink-0" strokeWidth={2.5} />}
+                      {suggestion.type === 'company' && <Building2 className="w-7 h-7 text-pink-300 shrink-0" strokeWidth={2.5} />}
+                      {suggestion.type === 'skill' && <Zap className="w-7 h-7 text-emerald-300 shrink-0" strokeWidth={2.5} />}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-black text-xl text-white mb-1">{suggestion.value}</div>
+                        <div className="text-sm text-purple-200 font-bold uppercase tracking-wider">{suggestion.type}</div>
+                      </div>
+                      <ChevronRight className="w-6 h-6 text-white/60 group-hover/suggestion:text-white group-hover/suggestion:translate-x-1 transition-all shrink-0" strokeWidth={2.5} />
+                    </button>
+                  ))}
+                </div>,
+                document.body
+              )}
           </div>
         </div>
       </div>
@@ -807,6 +916,21 @@ export default function JobListingsPage() {
             opacity: 0.8;
             transform: scale(1.05);
           }
+        }
+
+        @keyframes slideDown {
+          0% {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-slideDown {
+          animation: slideDown 0.2s ease-out;
         }
       `}</style>
     </div>
