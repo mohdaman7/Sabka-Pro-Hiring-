@@ -156,7 +156,7 @@ export default function CandidateLeadForm({ onSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -164,9 +164,9 @@ export default function CandidateLeadForm({ onSuccess }) {
       >
         <div className="grid lg:grid-cols-5 h-full">
           {/* Sidebar - Full height */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-purple-600/20 to-pink-600/20 p-8 border-r border-white/10 flex flex-col">
+          <div className="lg:col-span-2 bg-linear-to-br from-purple-600/20 to-pink-600/20 p-8 border-r border-white/10 flex flex-col">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
                 <User className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -239,7 +239,7 @@ export default function CandidateLeadForm({ onSuccess }) {
                   key={index}
                   className="flex items-center gap-3 text-white/80"
                 >
-                  <benefit.icon className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                  <benefit.icon className="w-5 h-5 text-purple-400 shrink-0" />
                   <span className="text-sm">{benefit.text}</span>
                 </div>
               ))}
@@ -433,7 +433,7 @@ export default function CandidateLeadForm({ onSuccess }) {
                       type="button"
                       onClick={handleSendOTP}
                       disabled={loading}
-                      className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg"
+                      className="w-full py-4 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg"
                     >
                       {loading ? (
                         <>
@@ -458,7 +458,7 @@ export default function CandidateLeadForm({ onSuccess }) {
                       animate={{ opacity: 1, y: 0 }}
                       className="text-center"
                     >
-                      <div className="w-20 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                      <div className="w-20 h-20 bg-linear-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <Shield className="w-10 h-10 text-purple-400" />
                       </div>
                       <h3 className="text-2xl font-bold text-white mb-2">
@@ -508,7 +508,7 @@ export default function CandidateLeadForm({ onSuccess }) {
                       type="button"
                       onClick={handleVerifyOTP}
                       disabled={loading}
-                      className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg"
+                      className="w-full py-4 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg"
                     >
                       {loading ? (
                         <>
@@ -721,7 +721,7 @@ export default function CandidateLeadForm({ onSuccess }) {
                       whileTap={{ scale: 0.98 }}
                       type="submit"
                       disabled={loading}
-                      className="w-full py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-xl"
+                      className="w-full py-5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-xl"
                     >
                       {loading ? (
                         <>
