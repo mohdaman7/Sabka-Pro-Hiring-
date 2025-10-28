@@ -18,6 +18,7 @@ router.post("/register", authController.register);
 // router.post("/register/employer", authController.registerEmployer);
 
 router.post("/login", authController.login);
+router.post("/admin/login", authController.adminLogin);
 router.post("/logout", authController.logout);
 
 // Additions to align with frontend services

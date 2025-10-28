@@ -50,4 +50,13 @@ export const authService = {
     const response = await api.put("/api/auth/profile", profileData);
     return response.data;
   },
+
+  // Admin login
+  adminLogin: async (email, password) => {
+    const response = await api.post("/api/auth/admin/login", {
+      email,
+      password,
+    });
+    return response.data;
+  },
 };

@@ -13,24 +13,24 @@ router.get("/admin", courseController.adminListCourses);
 router.post("/admin/parent", courseController.adminCreateParentCourse);
 router.post(
   "/admin/module",
-  // authenticate,
+  authenticate,
   courseController.adminCreateSubCourse
 );
 router.post(
   "/admin/:id/lessons",
-  // authenticate,
+  authenticate,
   courseController.adminAddLesson
 );
 router.put(
   "/admin/:id/lessons/:lessonId",
-  // authenticate,
-  // authorize(["admin"]),
+  authenticate,
+  authorize(["admin"]),
   courseController.adminUpdateLesson
 );
 router.delete(
   "/admin/:id/lessons/:lessonId",
-  // authenticate,
-  // authorize(["admin"]),
+  authenticate,
+  authorize(["admin"]),
   courseController.adminDeleteLesson
 );
 

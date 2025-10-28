@@ -15,6 +15,13 @@ export async function authenticate(req, res, next) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, env.jwtSecret);
 
+    // Handle admin token
+    if (decoded.id === "admin" && decoded.role === "admin") {
+      req.user = { id: "admin", role: "admin", email: decoded.email };
+      return next();
+    }
+
+    // Handle regular user token
     const user = await UserModel.findById(decoded.id).select("-passwordHash");
     if (!user) {
       return res

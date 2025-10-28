@@ -366,6 +366,57 @@ export async function logout(req, res, next) {
   }
 }
 
+// Admin Login (Simple env-based authentication)
+export async function adminLogin(req, res, next) {
+  try {
+    const parsed = loginSchema.parse(req.body);
+
+    // Check against env variables
+    if (
+      !env.adminLoginEmail ||
+      !env.adminLoginPassword ||
+      parsed.email !== env.adminLoginEmail ||
+      parsed.password !== env.adminLoginPassword
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid admin credentials",
+      });
+    }
+
+    // Generate admin token
+    const token = jwt.sign(
+      {
+        id: "admin",
+        role: "admin",
+        email: env.adminLoginEmail,
+      },
+      env.jwtSecret,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Admin login successful",
+      data: {
+        user: {
+          id: "admin",
+          email: env.adminLoginEmail,
+          role: "admin",
+          firstName: "Admin",
+          lastName: "User",
+        },
+        token,
+      },
+    });
+  } catch (err) {
+    console.error("❌ Admin login error:", err);
+    next(err);
+  }
+}
+
 // Helper function
 function serializeUser(user) {
   return {

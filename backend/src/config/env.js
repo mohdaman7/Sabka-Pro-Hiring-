@@ -17,6 +17,8 @@ const envSchema = z.object({
   SMTP_USER: z.string().min(1, "SMTP_USER is required"),
   SMTP_PASS: z.string().min(1, "SMTP_PASS is required"),
   ADMIN_EMAIL: z.string().email(),
+  ADMIN_LOGIN_EMAIL: z.string().email().optional(),
+  ADMIN_LOGIN_PASSWORD: z.string().min(6).optional(),
 });
 
 console.log(process.env.MONGODB_URI);
@@ -43,4 +45,6 @@ export const env = {
   smtpUser: parsed.data.SMTP_USER,
   smtpPass: parsed.data.SMTP_PASS,
   adminEmail: parsed.data.ADMIN_EMAIL,
+  adminLoginEmail: parsed.data.ADMIN_LOGIN_EMAIL,
+  adminLoginPassword: parsed.data.ADMIN_LOGIN_PASSWORD,
 };
