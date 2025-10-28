@@ -212,9 +212,9 @@ export default function JobListingsPage() {
   const statIcons = [TrendingUp, Users, Award];
 
   return (
-    <div className="relative min-h-screen p-4 md:p-6 lg:p-8 overflow-visible">
+    <div className="relative min-h-screen p-4 md:p-6 lg:p-8 overflow-x-hidden overflow-y-auto">
       {/* Enhanced Animated Background */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
+      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div
           className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
           style={{
@@ -393,14 +393,14 @@ export default function JobListingsPage() {
       </div>
 
       <div className="flex gap-8 items-start">
-        {/* Sticky Premium Filters Sidebar */}
+        {/* Premium Filters Sidebar */}
         <aside
-          className={`w-80 flex-shrink-0 space-y-6 transition-all duration-300 sticky top-6 self-start ${
+          className={`w-80 flex-shrink-0 transition-all duration-300 ${
             showFilters ? "block" : "hidden lg:block"
           }`}
         >
           <div
-            className="p-8 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/15 sticky top-6 transition-all duration-300 hover:shadow-purple-500/30"
+            className="p-8 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/15 transition-all duration-300 hover:shadow-purple-500/30"
             style={{
               background:
                 "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))",
