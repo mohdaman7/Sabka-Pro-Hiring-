@@ -699,4 +699,97 @@ export const courseController = {
       next(error);
     }
   },
+
+  // Admin: update a specific lesson
+  async adminUpdateLesson(req, res, next) {
+    try {
+      const { id, lessonId } = req.params;
+      const {
+        title,
+        description,
+        durationSec,
+        videoProvider,
+        videoId,
+        videoUrl,
+        isFreePreview,
+        order,
+      } = req.body;
+
+      if (!isObjectId(id) || !isObjectId(lessonId))
+        return res.status(400).json({ success: false, message: "Invalid ids" });
+
+      const course = await CourseModel.findById(id);
+      if (!course)
+        return res
+          .status(404)
+          .json({ success: false, message: "Course not found" });
+      if (course.type !== "module")
+        return res.status(400).json({
+          success: false,
+          message: "Lessons can only be updated in module courses",
+        });
+
+      const lessonIndex = course.lessons.findIndex(
+        (l) => l._id.toString() === lessonId
+      );
+      if (lessonIndex === -1)
+        return res
+          .status(404)
+          .json({ success: false, message: "Lesson not found" });
+
+      // Update lesson fields
+      if (title !== undefined) course.lessons[lessonIndex].title = title;
+      if (description !== undefined)
+        course.lessons[lessonIndex].description = description;
+      if (durationSec !== undefined)
+        course.lessons[lessonIndex].durationSec = Number(durationSec);
+      if (videoProvider !== undefined)
+        course.lessons[lessonIndex].videoProvider = videoProvider;
+      if (videoId !== undefined) course.lessons[lessonIndex].videoId = videoId;
+      if (videoUrl !== undefined)
+        course.lessons[lessonIndex].videoUrl = videoUrl;
+      if (isFreePreview !== undefined)
+        course.lessons[lessonIndex].isFreePreview = Boolean(isFreePreview);
+      if (order !== undefined) course.lessons[lessonIndex].order = Number(order);
+
+      await course.save();
+      return res.json({ success: true, data: course });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Admin: delete a specific lesson
+  async adminDeleteLesson(req, res, next) {
+    try {
+      const { id, lessonId } = req.params;
+      if (!isObjectId(id) || !isObjectId(lessonId))
+        return res.status(400).json({ success: false, message: "Invalid ids" });
+
+      const course = await CourseModel.findById(id);
+      if (!course)
+        return res
+          .status(404)
+          .json({ success: false, message: "Course not found" });
+      if (course.type !== "module")
+        return res.status(400).json({
+          success: false,
+          message: "Lessons can only be deleted from module courses",
+        });
+
+      const lessonIndex = course.lessons.findIndex(
+        (l) => l._id.toString() === lessonId
+      );
+      if (lessonIndex === -1)
+        return res
+          .status(404)
+          .json({ success: false, message: "Lesson not found" });
+
+      course.lessons.splice(lessonIndex, 1);
+      await course.save();
+      return res.json({ success: true, message: "Lesson deleted", data: course });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

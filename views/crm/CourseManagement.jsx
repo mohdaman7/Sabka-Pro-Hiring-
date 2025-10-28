@@ -16,7 +16,7 @@ import {
 import courseService from "@/services/courseService";
 import CreateParentCourseModal from "@/components/ui/CreateParentCourseModal";
 import CreateModuleModal from "@/components/ui/CreateModuleModal";
-import EditCourseModal from "@/components/ui/EditCourseModal";
+import CourseDetailView from "@/components/ui/CourseDetailView";
 import CourseAccessManager from "@/components/ui/CourseAccessManager";
 
 export default function CourseManagement() {
@@ -26,7 +26,7 @@ export default function CourseManagement() {
   const [showCreateParentModal, setShowCreateParentModal] = useState(false);
   const [showCreateModuleModal, setShowCreateModuleModal] = useState(false);
   const [defaultParentId, setDefaultParentId] = useState("");
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDetailView, setShowDetailView] = useState(false);
   const [showAccessManager, setShowAccessManager] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [adminCourses, setAdminCourses] = useState([]);
@@ -68,9 +68,9 @@ export default function CourseManagement() {
     }
   };
 
-  const handleEdit = (course) => {
+  const handleViewDetails = (course) => {
     setSelectedCourse(course);
-    setShowEditModal(true);
+    setShowDetailView(true);
   };
 
   const handleAddModuleFor = (parent) => {
@@ -504,11 +504,11 @@ export default function CourseManagement() {
                 {/* Action Buttons */}
                 <div className="flex gap-2 pt-2">
                   <button
-                    onClick={() => handleEdit(course)}
+                    onClick={() => handleViewDetails(course)}
                     className="flex-1 px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:opacity-95 text-white rounded-2xl font-black transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
                   >
                     <Edit2 className="w-4 h-4" strokeWidth={2.5} />
-                    Edit
+                    Manage
                   </button>
                   <button
                     onClick={() => handleAddModuleFor(course)}
@@ -601,11 +601,11 @@ export default function CourseManagement() {
                 {/* Action Buttons */}
                 <div className="flex gap-2 pt-2">
                   <button
-                    onClick={() => handleEdit(module)}
+                    onClick={() => handleViewDetails(module)}
                     className="flex-1 px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:opacity-95 text-white rounded-2xl font-black transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
                   >
                     <Edit2 className="w-4 h-4" strokeWidth={2.5} />
-                    Edit
+                    Manage
                   </button>
                   <button
                     onClick={() => handleDelete(module._id)}
@@ -815,10 +815,10 @@ export default function CourseManagement() {
           defaultParentId={defaultParentId}
         />
       )}
-      {showEditModal && selectedCourse && (
-        <EditCourseModal
+      {showDetailView && selectedCourse && (
+        <CourseDetailView
           course={selectedCourse}
-          onClose={() => setShowEditModal(false)}
+          onClose={() => setShowDetailView(false)}
           onSuccess={loadCourses}
         />
       )}

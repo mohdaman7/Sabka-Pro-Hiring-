@@ -21,6 +21,18 @@ router.post(
   authenticate,
   courseController.adminAddLesson
 );
+router.put(
+  "/admin/:id/lessons/:lessonId",
+  authenticate,
+  authorize(["admin"]),
+  courseController.adminUpdateLesson
+);
+router.delete(
+  "/admin/:id/lessons/:lessonId",
+  authenticate,
+  authorize(["admin"]),
+  courseController.adminDeleteLesson
+);
 
 // Authenticated student
 router.get("/me/access", authenticate, courseController.listMyAccess);

@@ -58,6 +58,19 @@ const courseService = {
     const res = await api.delete(`/api/courses/admin/${id}`);
     return res.data;
   },
+  adminUpdateLesson: async (courseId, lessonId, payload) => {
+    const res = await api.put(
+      `/api/courses/admin/${courseId}/lessons/${lessonId}`,
+      payload
+    );
+    return res.data.data;
+  },
+  adminDeleteLesson: async (courseId, lessonId) => {
+    const res = await api.delete(
+      `/api/courses/admin/${courseId}/lessons/${lessonId}`
+    );
+    return res.data;
+  },
   // Admin Access Control
   adminListAccess: async (params) => {
     const res = await api.get("/api/courses/admin/access", { params });
