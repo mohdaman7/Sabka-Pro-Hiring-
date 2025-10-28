@@ -29,6 +29,7 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
   const [success, setSuccess] = useState("");
   const [showAddModuleModal, setShowAddModuleModal] = useState(false);
   const [showAddLessonModal, setShowAddLessonModal] = useState(false);
+  const [selectedModuleForLesson, setSelectedModuleForLesson] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const [courseData, setCourseData] = useState({
@@ -165,10 +166,12 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
       await courseService.adminUpdate(course._id, updateData);
       setSuccess("Course updated successfully!");
       setEditMode(false);
-      setRefreshKey(prev => prev + 1);
+      // Refresh the current course data
+      await loadCourseData();
+      // Notify parent to refresh
       setTimeout(() => {
         onSuccess();
-      }, 1500);
+      }, 500);
     } catch (e) {
       setError(e?.response?.data?.message || e.message);
     } finally {
@@ -183,12 +186,15 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
     
     try {
       setLoading(true);
+      setError("");
       await courseService.adminDelete(moduleId);
       setSuccess("Module deleted successfully!");
-      setRefreshKey(prev => prev + 1);
+      // Refresh the current course data
+      await loadCourseData();
+      // Notify parent to refresh
       setTimeout(() => {
         onSuccess();
-      }, 1000);
+      }, 500);
     } catch (e) {
       setError(e?.response?.data?.message || e.message);
     } finally {
@@ -196,26 +202,76 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
     }
   };
 
-  const handleModuleAdded = () => {
+  const handleModuleAdded = async () => {
     setShowAddModuleModal(false);
     setSuccess("Module added successfully!");
-    setRefreshKey(prev => prev + 1);
+    // Refresh the current course data
+    await loadCourseData();
+    // Notify parent to refresh
     setTimeout(() => {
       onSuccess();
-    }, 1000);
+    }, 500);
   };
 
-  const handleAddLesson = (lessonData) => {
-    const newLesson = {
-      _id: `temp_${Date.now()}`,
-      ...lessonData,
-      order: lessons.length,
-      isNew: true,
-    };
-    setLessons([...lessons, newLesson]);
-    setShowAddLessonModal(false);
-    setSuccess("Lesson added! Don't forget to save changes.");
-    if (!editMode) setEditMode(true);
+  const handleAddLesson = async (lessonData) => {
+    try {
+      setLoading(true);
+      setError("");
+      
+      // Determine which module to add the lesson to
+      const targetModuleId = selectedModuleForLesson?._id || course._id;
+      const targetModule = selectedModuleForLesson || course;
+      const currentLessons = selectedModuleForLesson?.lessons || lessons;
+      
+      // Add the new lesson to the existing lessons array
+      const updatedLessons = [
+        ...currentLessons,
+        {
+          ...lessonData,
+          order: currentLessons.length,
+        },
+      ];
+      
+      // Prepare update data with all lessons
+      const updateData = {
+        lessons: updatedLessons.map((lesson) => ({
+          title: lesson.title,
+          description: lesson.description,
+          videoProvider: lesson.videoProvider,
+          videoId: lesson.videoId,
+          videoUrl: lesson.videoUrl,
+          durationSec: lesson.durationSec,
+          isFreePreview: lesson.isFreePreview,
+          order: lesson.order,
+        })),
+      };
+      
+      // Save to backend
+      await courseService.adminUpdate(targetModuleId, updateData);
+      
+      setShowAddLessonModal(false);
+      setSelectedModuleForLesson(null);
+      setSuccess("Lesson created successfully!");
+      
+      // Refresh the current course data
+      await loadCourseData();
+      
+      // Notify parent to refresh
+      setTimeout(() => {
+        onSuccess();
+      }, 500);
+    } catch (e) {
+      setError(e?.response?.data?.message || e.message);
+      setShowAddLessonModal(false);
+      setSelectedModuleForLesson(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddLessonToModule = (module) => {
+    setSelectedModuleForLesson(module);
+    setShowAddLessonModal(true);
   };
 
   return (
@@ -355,6 +411,7 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
               modules={modules} 
               onDeleteModule={handleDeleteModule}
               onAddModule={() => setShowAddModuleModal(true)}
+              onAddLessonToModule={handleAddLessonToModule}
               editMode={editMode}
             />
           )}
@@ -466,8 +523,12 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
       {/* Add Lesson Modal */}
       {showAddLessonModal && (
         <CreateLessonModal
-          onClose={() => setShowAddLessonModal(false)}
+          onClose={() => {
+            setShowAddLessonModal(false);
+            setSelectedModuleForLesson(null);
+          }}
           onAddLesson={handleAddLesson}
+          moduleName={selectedModuleForLesson?.title}
         />
       )}
     </div>

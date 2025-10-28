@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { X, Video, Clock, Eye, Upload, CheckCircle, Sparkles } from "lucide-react";
 
-export default function CreateLessonModal({ onClose, onAddLesson }) {
+export default function CreateLessonModal({ onClose, onAddLesson, moduleName }) {
   const [lessonData, setLessonData] = useState({
     title: "",
     description: "",
@@ -15,8 +15,9 @@ export default function CreateLessonModal({ onClose, onAddLesson }) {
   });
 
   const [validation, setValidation] = useState({ title: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validate
@@ -26,8 +27,14 @@ export default function CreateLessonModal({ onClose, onAddLesson }) {
     }
 
     // Add lesson
-    onAddLesson(lessonData);
-    onClose();
+    setIsSubmitting(true);
+    try {
+      await onAddLesson(lessonData);
+      // Modal will be closed by parent component
+    } catch (error) {
+      setIsSubmitting(false);
+      // Error will be handled by parent
+    }
   };
 
   return (
@@ -67,7 +74,7 @@ export default function CreateLessonModal({ onClose, onAddLesson }) {
                   Create New Lesson
                 </h2>
                 <p className="text-sm text-slate-600 font-medium">
-                  Add a video lesson to your module
+                  {moduleName ? `Add a video lesson to "${moduleName}"` : "Add a video lesson to your module"}
                 </p>
               </div>
             </div>
@@ -276,16 +283,27 @@ export default function CreateLessonModal({ onClose, onAddLesson }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-4 border-2 border-slate-300 text-slate-700 rounded-2xl hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 font-bold"
+              disabled={isSubmitting}
+              className="flex-1 px-6 py-4 border-2 border-slate-300 text-slate-700 rounded-2xl hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-2xl hover:opacity-95 transition-all duration-300 font-bold shadow-lg hover:scale-105 flex items-center justify-center gap-2"
+              disabled={isSubmitting}
+              className="flex-1 px-6 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-2xl hover:opacity-95 transition-all duration-300 font-bold shadow-lg hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              <Video className="w-5 h-5" strokeWidth={2.5} />
-              Create Lesson
+              {isSubmitting ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <Video className="w-5 h-5" strokeWidth={2.5} />
+                  Create Lesson
+                </>
+              )}
             </button>
           </div>
         </form>

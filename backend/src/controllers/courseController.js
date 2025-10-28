@@ -750,7 +750,8 @@ export const courseController = {
         course.lessons[lessonIndex].videoUrl = videoUrl;
       if (isFreePreview !== undefined)
         course.lessons[lessonIndex].isFreePreview = Boolean(isFreePreview);
-      if (order !== undefined) course.lessons[lessonIndex].order = Number(order);
+      if (order !== undefined)
+        course.lessons[lessonIndex].order = Number(order);
 
       await course.save();
       return res.json({ success: true, data: course });
@@ -787,7 +788,11 @@ export const courseController = {
 
       course.lessons.splice(lessonIndex, 1);
       await course.save();
-      return res.json({ success: true, message: "Lesson deleted", data: course });
+      return res.json({
+        success: true,
+        message: "Lesson deleted",
+        data: course,
+      });
     } catch (error) {
       next(error);
     }

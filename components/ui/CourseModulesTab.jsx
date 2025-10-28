@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Layers, Video, ChevronDown, ChevronUp, Play, Trash2, Plus, Edit2 } from "lucide-react";
 
-export default function CourseModulesTab({ modules, onDeleteModule, onAddModule, editMode }) {
+export default function CourseModulesTab({ modules, onDeleteModule, onAddModule, onAddLessonToModule, editMode }) {
   const [expandedModules, setExpandedModules] = useState(new Set());
 
   const toggleModuleExpand = (moduleId) => {
@@ -117,6 +117,20 @@ export default function CourseModulesTab({ modules, onDeleteModule, onAddModule,
 
               {expandedModules.has(module._id) && (
                 <div className="px-6 pb-6 space-y-3 border-t border-white/10 pt-4">
+                  {/* Add Lesson Button */}
+                  <div className="flex justify-between items-center mb-3">
+                    <p className="text-white/70 text-sm font-semibold">
+                      {module.lessons?.length || 0} Lessons
+                    </p>
+                    <button
+                      onClick={() => onAddLessonToModule(module)}
+                      className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:scale-105 text-sm"
+                    >
+                      <Plus className="w-4 h-4" strokeWidth={2.5} />
+                      Add Lesson
+                    </button>
+                  </div>
+
                   {module.lessons && module.lessons.length > 0 ? (
                     module.lessons.map((lesson, lessonIndex) => (
                       <div
@@ -142,9 +156,18 @@ export default function CourseModulesTab({ modules, onDeleteModule, onAddModule,
                       </div>
                     ))
                   ) : (
-                    <p className="text-white/40 text-center py-4 font-semibold">
-                      No lessons in this module
-                    </p>
+                    <div className="text-center py-8">
+                      <p className="text-white/40 font-semibold mb-3">
+                        No lessons in this module yet
+                      </p>
+                      <button
+                        onClick={() => onAddLessonToModule(module)}
+                        className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 inline-flex items-center gap-2 shadow-lg"
+                      >
+                        <Plus className="w-4 h-4" strokeWidth={2.5} />
+                        Add First Lesson
+                      </button>
+                    </div>
                   )}
                 </div>
               )}
