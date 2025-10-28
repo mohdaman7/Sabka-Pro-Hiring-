@@ -219,13 +219,28 @@ export default function JobListingsPage() {
         {/* Animated gradient mesh */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse" />
-          <div className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse" style={{ animationDelay: '2s' }} />
-          
+          <div
+            className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
+          <div
+            className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/15 to-transparent animate-pulse"
+            style={{ animationDelay: "2s" }}
+          />
+
           {/* Floating particles */}
-          <div className="absolute top-32 left-16 w-1 h-1 bg-purple-400/40 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
-          <div className="absolute top-64 right-24 w-1.5 h-1.5 bg-pink-400/30 rounded-full animate-bounce" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute bottom-40 left-1/3 w-1 h-1 bg-purple-300/35 rounded-full animate-bounce" style={{ animationDelay: '3s' }} />
+          <div
+            className="absolute top-32 left-16 w-1 h-1 bg-purple-400/40 rounded-full animate-bounce"
+            style={{ animationDelay: "0s" }}
+          />
+          <div
+            className="absolute top-64 right-24 w-1.5 h-1.5 bg-pink-400/30 rounded-full animate-bounce"
+            style={{ animationDelay: "1.5s" }}
+          />
+          <div
+            className="absolute bottom-40 left-1/3 w-1 h-1 bg-purple-300/35 rounded-full animate-bounce"
+            style={{ animationDelay: "3s" }}
+          />
         </div>
       </div>
 
@@ -263,7 +278,9 @@ export default function JobListingsPage() {
                 <h1 className="text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent">
                   Discover Your Future
                 </h1>
-                <p className="text-purple-200/80 text-lg font-medium">Find opportunities that match your ambitions</p>
+                <p className="text-purple-200/80 text-lg font-medium">
+                  Find opportunities that match your ambitions
+                </p>
               </div>
             </div>
           </div>
@@ -333,7 +350,9 @@ export default function JobListingsPage() {
                   </p>
                   <div className="flex items-center gap-1 text-emerald-400 text-sm font-medium animate-pulse">
                     <TrendingUp className="w-4 h-4" />
-                    <span>+{Math.floor(Math.random() * 20 + 5)}% this week</span>
+                    <span>
+                      +{Math.floor(Math.random() * 20 + 5)}% this week
+                    </span>
                   </div>
                 </div>
                 <div className="relative">
@@ -561,7 +580,10 @@ export default function JobListingsPage() {
                             </h3>
                             {index < 3 && (
                               <span className="flex-shrink-0 px-3 py-1 bg-gradient-to-r from-amber-500/30 to-orange-500/30 text-amber-200 text-xs font-bold rounded-full border border-amber-400/40 flex items-center gap-1 animate-pulse shadow-lg shadow-amber-500/20">
-                                <Star className="w-3 h-3 fill-current animate-spin" style={{ animationDuration: '3s' }} />
+                                <Star
+                                  className="w-3 h-3 fill-current animate-spin"
+                                  style={{ animationDuration: "3s" }}
+                                />
                                 HOT
                               </span>
                             )}
