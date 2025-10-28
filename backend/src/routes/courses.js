@@ -22,6 +22,10 @@ router.post(
   courseController.adminAddLesson
 );
 
+// Authenticated student progress
+router.get("/:id/progress", authenticate, courseController.getMyProgress);
+router.post("/:id/progress", authenticate, courseController.updateMyProgress);
+
 // Authenticated student
 router.get("/me/access", authenticate, courseController.listMyAccess);
 router.get(
@@ -75,5 +79,10 @@ router.delete(
 // ✅ This should be LAST to avoid intercepting other routes
 // Allow optional auth so pro users can get full lessons on module
 router.get("/:id", maybeAuthenticate, courseController.getCourseById);
+
+// Admin access matrix
+router.get("/admin/access", authenticate, authorize(["admin"]), courseController.adminListAccesses);
+router.post("/admin/access", authenticate, authorize(["admin"]), courseController.adminGrantAccess);
+router.delete("/admin/access/:id", authenticate, authorize(["admin"]), courseController.adminRevokeAccess);
 
 export default router;

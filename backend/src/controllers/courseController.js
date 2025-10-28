@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { CourseModel } from "../models/Course.js";
 import { CourseAccessModel } from "../models/CourseAccess.js";
 import { StudentModel } from "../models/Student.js";
+import { CourseProgressModel } from "../models/CourseProgress.js";
 
 function isObjectId(id) {
   return mongoose.Types.ObjectId.isValid(id);
@@ -695,6 +696,137 @@ export const courseController = {
       }
       await CourseModel.findByIdAndDelete(id);
       return res.json({ success: true, message: "Course deleted" });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Student: get my progress for a module course
+  async getMyProgress(req, res, next) {
+    try {
+      const userId = req.user?.id;
+      const { id } = req.params; // course id (module)
+      if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
+      if (!isObjectId(id)) return res.status(400).json({ success: false, message: "Invalid course id" });
+
+      const course = await CourseModel.findById(id).lean();
+      if (!course) return res.status(404).json({ success: false, message: "Course not found" });
+      if (course.type !== "module") return res.status(400).json({ success: false, message: "Progress is tracked per module course" });
+
+      const progress = await CourseProgressModel.findOne({ userId, courseId: course._id }).lean();
+      return res.json({ success: true, data: progress || null });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Student: update my progress for a module course
+  async updateMyProgress(req, res, next) {
+    try {
+      const userId = req.user?.id;
+      const { id } = req.params; // course id (module)
+      const { lastLessonId, completedLessonId } = req.body;
+      if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
+      if (!isObjectId(id)) return res.status(400).json({ success: false, message: "Invalid course id" });
+      if (lastLessonId && !isObjectId(lastLessonId)) return res.status(400).json({ success: false, message: "Invalid lastLessonId" });
+      if (completedLessonId && !isObjectId(completedLessonId)) return res.status(400).json({ success: false, message: "Invalid completedLessonId" });
+
+      const course = await CourseModel.findById(id).lean();
+      if (!course) return res.status(404).json({ success: false, message: "Course not found" });
+      if (course.type !== "module") return res.status(400).json({ success: false, message: "Progress is tracked per module course" });
+
+      // Ensure user can access this module (Pro, direct access, or full parent)
+      let canAccessAllLessons = false;
+      const plan = await getUserPlan(userId);
+      if (plan === "pro") {
+        canAccessAllLessons = true;
+      } else {
+        const hasDirect = await userHasAccessToModule(userId, course._id);
+        if (hasDirect) canAccessAllLessons = true;
+        else if (course.parentCourse) {
+          const hasFullParent = await userHasFullAccessToParent(userId, course.parentCourse);
+          if (hasFullParent) canAccessAllLessons = true;
+        }
+      }
+
+      if (!canAccessAllLessons) {
+        return res.status(403).json({ success: false, message: "No access to update progress for this course" });
+      }
+
+      const update = {
+        lastAccessedAt: new Date(),
+      };
+      if (lastLessonId) update.lastLessonId = lastLessonId;
+
+      const options = { new: true, upsert: true, setDefaultsOnInsert: true };
+      let doc = await CourseProgressModel.findOneAndUpdate(
+        { userId, courseId: course._id },
+        { $set: update },
+        options
+      );
+
+      if (completedLessonId) {
+        await CourseProgressModel.updateOne(
+          { userId, courseId: course._id },
+          { $addToSet: { completedLessons: { lessonId: completedLessonId, completedAt: new Date() } } }
+        );
+        doc = await CourseProgressModel.findOne({ userId, courseId: course._id }).lean();
+      }
+
+      return res.json({ success: true, data: doc });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Admin: list access matrix (optionally filter by courseId)
+  async adminListAccesses(req, res, next) {
+    try {
+      const { courseId } = req.query;
+      const filter = {};
+      if (courseId) {
+        if (!isObjectId(courseId)) return res.status(400).json({ success: false, message: "Invalid courseId" });
+        filter.courseId = courseId;
+      }
+      const accesses = await CourseAccessModel.find(filter)
+        .populate("userId", "firstName lastName email role")
+        .populate("courseId", "title type parentCourse")
+        .sort({ createdAt: -1 })
+        .lean();
+      return res.json({ success: true, data: accesses });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Admin: grant access manually
+  async adminGrantAccess(req, res, next) {
+    try {
+      const { userId, courseId, accessType, expiresAt, notes } = req.body;
+      if (!isObjectId(userId) || !isObjectId(courseId)) return res.status(400).json({ success: false, message: "Valid userId and courseId required" });
+      if (!accessType || !["sub_course", "full_course", "bundle", "gift", "admin_grant"].includes(accessType)) {
+        return res.status(400).json({ success: false, message: "Invalid accessType" });
+      }
+      const access = await CourseAccessModel.create({
+        userId,
+        courseId,
+        accessType,
+        expiresAt: expiresAt ? new Date(expiresAt) : null,
+        notes: notes || "",
+      });
+      return res.status(201).json({ success: true, data: access });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Admin: revoke access by access id
+  async adminRevokeAccess(req, res, next) {
+    try {
+      const { id } = req.params; // access id
+      if (!isObjectId(id)) return res.status(400).json({ success: false, message: "Invalid id" });
+      await CourseAccessModel.deleteOne({ _id: id });
+      return res.json({ success: true, message: "Access revoked" });
     } catch (error) {
       next(error);
     }
