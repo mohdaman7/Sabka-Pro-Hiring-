@@ -274,6 +274,31 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
     setShowAddLessonModal(true);
   };
 
+  const handleDeleteLesson = async (moduleId, lessonId) => {
+    if (!confirm("Are you sure you want to delete this lesson? This action cannot be undone.")) {
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      setError("");
+      await courseService.adminDeleteLesson(moduleId, lessonId);
+      setSuccess("Lesson deleted successfully!");
+      
+      // Refresh the current course data
+      await loadCourseData();
+      
+      // Notify parent to refresh
+      setTimeout(() => {
+        onSuccess();
+      }, 500);
+    } catch (e) {
+      setError(e?.response?.data?.message || e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-hidden border border-purple-500/20">
@@ -412,6 +437,7 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
               onDeleteModule={handleDeleteModule}
               onAddModule={() => setShowAddModuleModal(true)}
               onAddLessonToModule={handleAddLessonToModule}
+              onDeleteLesson={handleDeleteLesson}
               editMode={editMode}
             />
           )}
