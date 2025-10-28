@@ -18,6 +18,7 @@ import courseService from "@/services/courseService";
 import CourseOverviewTab from "./CourseOverviewTab";
 import CourseLessonsTab from "./CourseLessonsTab";
 import CourseModulesTab from "./CourseModulesTab";
+import CreateModuleModal from "./CreateModuleModal";
 
 export default function CourseDetailView({ course, onClose, onSuccess }) {
   const [activeTab, setActiveTab] = useState("overview");
@@ -25,6 +26,8 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showAddModuleModal, setShowAddModuleModal] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const [courseData, setCourseData] = useState({
     title: "",
@@ -50,31 +53,62 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
 
   useEffect(() => {
     loadCourseData();
-  }, [course]);
+  }, [course, refreshKey]);
 
   const loadCourseData = async () => {
-    setCourseData({
-      title: course.title || "",
-      description: course.description || "",
-      category: course.category || "",
-      thumbnail: course.thumbnail || "",
-      instructor: course.instructor || "",
-      level: course.level || "Beginner",
-      status: course.status || "draft",
-    });
+    try {
+      // Fetch fresh course data
+      const freshCourse = await courseService.getById(course._id);
+      
+      setCourseData({
+        title: freshCourse.title || "",
+        description: freshCourse.description || "",
+        category: freshCourse.category || "",
+        thumbnail: freshCourse.thumbnail || "",
+        instructor: freshCourse.instructor || "",
+        level: freshCourse.level || "Beginner",
+        status: freshCourse.status || "draft",
+      });
 
-    setPricing({
-      bundlePrice: course.pricing?.bundlePrice || 0,
-      individualPrice: course.pricing?.individualPrice || 0,
-      discountPercent: course.pricing?.discountPercent || 0,
-    });
+      setPricing({
+        bundlePrice: freshCourse.pricing?.bundlePrice || 0,
+        individualPrice: freshCourse.pricing?.individualPrice || 0,
+        discountPercent: freshCourse.pricing?.discountPercent || 0,
+      });
 
-    if (isParent && course.modules) {
-      setModules(course.modules);
-    }
+      if (isParent && freshCourse.modules) {
+        setModules(freshCourse.modules);
+      }
 
-    if (isModule && course.lessons) {
-      setLessons(course.lessons);
+      if (isModule && freshCourse.lessons) {
+        setLessons(freshCourse.lessons);
+      }
+    } catch (e) {
+      console.error("Error loading course data:", e);
+      // Fallback to course prop if API fails
+      setCourseData({
+        title: course.title || "",
+        description: course.description || "",
+        category: course.category || "",
+        thumbnail: course.thumbnail || "",
+        instructor: course.instructor || "",
+        level: course.level || "Beginner",
+        status: course.status || "draft",
+      });
+
+      setPricing({
+        bundlePrice: course.pricing?.bundlePrice || 0,
+        individualPrice: course.pricing?.individualPrice || 0,
+        discountPercent: course.pricing?.discountPercent || 0,
+      });
+
+      if (isParent && course.modules) {
+        setModules(course.modules);
+      }
+
+      if (isModule && course.lessons) {
+        setLessons(course.lessons);
+      }
     }
   };
 
@@ -129,6 +163,7 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
       await courseService.adminUpdate(course._id, updateData);
       setSuccess("Course updated successfully!");
       setEditMode(false);
+      setRefreshKey(prev => prev + 1);
       setTimeout(() => {
         onSuccess();
       }, 1500);
@@ -137,6 +172,35 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDeleteModule = async (moduleId) => {
+    if (!confirm("Are you sure you want to delete this module? This action cannot be undone.")) {
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      await courseService.adminDelete(moduleId);
+      setSuccess("Module deleted successfully!");
+      setRefreshKey(prev => prev + 1);
+      setTimeout(() => {
+        onSuccess();
+      }, 1000);
+    } catch (e) {
+      setError(e?.response?.data?.message || e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleModuleAdded = () => {
+    setShowAddModuleModal(false);
+    setSuccess("Module added successfully!");
+    setRefreshKey(prev => prev + 1);
+    setTimeout(() => {
+      onSuccess();
+    }, 1000);
   };
 
   return (
@@ -272,7 +336,12 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
           )}
 
           {activeTab === "content" && isParent && (
-            <CourseModulesTab modules={modules} />
+            <CourseModulesTab 
+              modules={modules} 
+              onDeleteModule={handleDeleteModule}
+              onAddModule={() => setShowAddModuleModal(true)}
+              editMode={editMode}
+            />
           )}
 
           {activeTab === "content" && isModule && (
@@ -287,57 +356,79 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
           {activeTab === "settings" && (
             <div className="space-y-6">
               <h3 className="text-2xl font-black text-white flex items-center gap-3">
-                <Settings className="w-7 h-7 text-purple-400" />
+                <Settings className="w-7 h-7 text-purple-400" strokeWidth={2.5} />
                 Course Settings
               </h3>
 
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <label className="block text-sm font-bold text-white/80 mb-3">
-                  Status
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:border-purple-500/30 transition-all duration-300">
+                <label className="block text-sm font-bold text-white/80 mb-3 flex items-center gap-2">
+                  <Settings className="w-4 h-4 text-purple-400" strokeWidth={2.5} />
+                  Publication Status
                 </label>
                 {editMode ? (
-                  <select
-                    value={courseData.status}
-                    onChange={(e) =>
-                      setCourseData({ ...courseData, status: e.target.value })
-                    }
-                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                  >
-                    <option value="draft">Draft</option>
-                    <option value="active">Active</option>
-                    <option value="archived">Archived</option>
-                  </select>
+                  <div className="grid grid-cols-3 gap-4">
+                    {[
+                      { value: "draft", label: "Draft", color: "amber", desc: "Not visible to students" },
+                      { value: "active", label: "Active", color: "emerald", desc: "Published & visible" },
+                      { value: "archived", label: "Archived", color: "slate", desc: "Hidden from view" }
+                    ].map((status) => (
+                      <button
+                        key={status.value}
+                        type="button"
+                        onClick={() => setCourseData({ ...courseData, status: status.value })}
+                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                          courseData.status === status.value
+                            ? `border-${status.color}-500 bg-${status.color}-500/20 scale-105 shadow-lg`
+                            : "border-white/10 hover:border-white/20 hover:scale-102"
+                        }`}
+                      >
+                        <p className={`font-bold text-sm ${
+                          courseData.status === status.value ? "text-white" : "text-white/70"
+                        }`}>
+                          {status.label}
+                        </p>
+                        <p className="text-xs text-white/50 mt-1">{status.desc}</p>
+                      </button>
+                    ))}
+                  </div>
                 ) : (
-                  <p className="text-white font-semibold text-lg capitalize">
-                    {courseData.status}
-                  </p>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-xl border border-white/20">
+                    <span className={`w-2 h-2 rounded-full ${
+                      courseData.status === "active" ? "bg-emerald-400" :
+                      courseData.status === "draft" ? "bg-amber-400" : "bg-slate-400"
+                    }`} />
+                    <p className="text-white font-semibold text-lg capitalize">
+                      {courseData.status}
+                    </p>
+                  </div>
                 )}
               </div>
 
-              <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-2xl p-6 border border-amber-500/30">
-                <h4 className="text-lg font-bold text-white mb-4">
+              <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-2xl p-6 border border-amber-500/30 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300">
+                <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-amber-400" strokeWidth={2.5} />
                   Course Information
                 </h4>
-                <div className="space-y-3 text-white/80">
-                  <div className="flex justify-between">
+                <div className="space-y-3 text-white/80 font-medium">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span>Type:</span>
-                    <span className="font-bold capitalize">{course.type}</span>
+                    <span className="font-bold capitalize px-3 py-1 bg-purple-500/20 text-purple-300 rounded-lg border border-purple-500/30">{course.type}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span>Created:</span>
                     <span className="font-bold">
                       {new Date(course.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span>Last Updated:</span>
                     <span className="font-bold">
                       {new Date(course.updatedAt).toLocaleDateString()}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span>Course ID:</span>
-                    <span className="font-mono text-xs">{course._id}</span>
+                    <span className="font-mono text-xs bg-slate-800/50 px-2 py-1 rounded">{course._id}</span>
                   </div>
                 </div>
               </div>
@@ -345,6 +436,16 @@ export default function CourseDetailView({ course, onClose, onSuccess }) {
           )}
         </div>
       </div>
+
+      {/* Add Module Modal */}
+      {showAddModuleModal && (
+        <CreateModuleModal
+          onClose={() => setShowAddModuleModal(false)}
+          onSuccess={handleModuleAdded}
+          parentCourses={[{ _id: course._id, title: course.title }]}
+          defaultParentId={course._id}
+        />
+      )}
     </div>
   );
 }

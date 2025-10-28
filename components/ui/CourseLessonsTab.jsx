@@ -28,30 +28,35 @@ export default function CourseLessonsTab({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-2xl font-black text-white flex items-center gap-3">
-          <Video className="w-7 h-7 text-purple-400" />
+          <Video className="w-7 h-7 text-purple-400" strokeWidth={2.5} />
           Course Lessons
         </h3>
-        {editMode && (
-          <button
-            onClick={addLesson}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center gap-2 shadow-xl"
-          >
-            <Plus className="w-5 h-5" strokeWidth={2.5} />
-            Add Lesson
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          <div className="text-white/60 font-semibold">
+            {lessons.length} lessons
+          </div>
+          {editMode && (
+            <button
+              onClick={addLesson}
+              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center gap-2 shadow-xl hover:scale-105"
+            >
+              <Plus className="w-5 h-5" strokeWidth={2.5} />
+              Add Lesson
+            </button>
+          )}
+        </div>
       </div>
 
       {lessons.length === 0 ? (
         <div className="text-center py-20 bg-white/5 rounded-2xl border border-white/10">
-          <Video className="w-16 h-16 text-white/20 mx-auto mb-4" />
-          <p className="text-white/60 text-lg font-semibold">
+          <Video className="w-16 h-16 text-white/20 mx-auto mb-4" strokeWidth={2} />
+          <p className="text-white/60 text-lg font-semibold mb-4">
             No lessons added yet
           </p>
           {editMode && (
             <button
               onClick={addLesson}
-              className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 inline-flex items-center gap-2"
+              className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 inline-flex items-center gap-2 shadow-xl"
             >
               <Plus className="w-5 h-5" strokeWidth={2.5} />
               Add Your First Lesson
@@ -63,11 +68,11 @@ export default function CourseLessonsTab({
           {lessons.map((lesson, index) => (
             <div
               key={lesson._id || index}
-              className="bg-white/5 rounded-2xl border border-white/10 p-6 hover:border-purple-500/30 transition-all duration-300"
+              className="bg-white/5 rounded-2xl border border-white/10 p-6 hover:border-purple-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl">
+                  <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg">
                     <Video className="w-5 h-5 text-white" strokeWidth={2.5} />
                   </div>
                   <h4 className="text-lg font-bold text-white">
@@ -77,9 +82,10 @@ export default function CourseLessonsTab({
                 {editMode && (
                   <button
                     onClick={() => removeLesson(index)}
-                    className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all duration-200"
+                    className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all duration-200 hover:scale-110"
+                    title="Delete Lesson"
                   >
-                    <Trash2 className="w-5 h-5" />
+                    <Trash2 className="w-5 h-5" strokeWidth={2.5} />
                   </button>
                 )}
               </div>
@@ -88,7 +94,7 @@ export default function CourseLessonsTab({
                 {/* Title */}
                 <div>
                   <label className="block text-xs font-bold text-white/60 uppercase tracking-wider mb-2">
-                    Title
+                    Title {editMode && <span className="text-red-400">*</span>}
                   </label>
                   {editMode ? (
                     <input
@@ -98,7 +104,7 @@ export default function CourseLessonsTab({
                       onChange={(e) =>
                         updateLesson(index, "title", e.target.value)
                       }
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 hover:border-slate-600"
                     />
                   ) : (
                     <p className="text-white font-semibold text-lg">
@@ -120,10 +126,10 @@ export default function CourseLessonsTab({
                       onChange={(e) =>
                         updateLesson(index, "description", e.target.value)
                       }
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none"
+                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none hover:border-slate-600"
                     />
                   ) : (
-                    <p className="text-white/70">
+                    <p className="text-white/70 leading-relaxed">
                       {lesson.description || "No description"}
                     </p>
                   )}
@@ -141,7 +147,7 @@ export default function CourseLessonsTab({
                         onChange={(e) =>
                           updateLesson(index, "videoProvider", e.target.value)
                         }
-                        className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 hover:border-slate-600 cursor-pointer"
                       >
                         <option value="youtube">YouTube</option>
                         <option value="vimeo">Vimeo</option>
@@ -182,7 +188,7 @@ export default function CourseLessonsTab({
                             e.target.value
                           )
                         }
-                        className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 hover:border-slate-600"
                       />
                     ) : (
                       <p className="text-white font-mono text-sm break-all">
@@ -214,7 +220,7 @@ export default function CourseLessonsTab({
                               Number(e.target.value)
                             )
                           }
-                          className="flex-1 px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                          className="flex-1 px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 hover:border-slate-600"
                         />
                       </div>
                     ) : (
@@ -230,7 +236,7 @@ export default function CourseLessonsTab({
                       Free Preview
                     </label>
                     {editMode ? (
-                      <label className="flex items-center gap-3 px-4 py-3 bg-slate-800/30 rounded-xl cursor-pointer hover:bg-slate-800/50 transition-all duration-200">
+                      <label className="flex items-center gap-3 px-4 py-3 bg-slate-800/30 rounded-xl cursor-pointer hover:bg-slate-800/50 transition-all duration-200 border border-slate-700 hover:border-purple-500/50">
                         <input
                           type="checkbox"
                           checked={lesson.isFreePreview}
@@ -243,7 +249,7 @@ export default function CourseLessonsTab({
                           }
                           className="w-5 h-5 rounded accent-purple-500"
                         />
-                        <Eye className="w-5 h-5 text-purple-400" />
+                        <Eye className="w-5 h-5 text-purple-400" strokeWidth={2.5} />
                         <span className="text-white font-semibold">
                           Allow free preview
                         </span>
