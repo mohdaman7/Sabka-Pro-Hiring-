@@ -161,8 +161,9 @@ export default function JobListingsPage() {
         }
         
         // Add company names
-        if (job.employerId?.company?.toLowerCase().includes(query.toLowerCase())) {
-          uniqueSuggestions.add(JSON.stringify({ type: 'company', value: job.employerId.company, icon: 'building' }));
+        const companyName = job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || job?.company || "";
+        if (companyName?.toLowerCase().includes(query.toLowerCase())) {
+          uniqueSuggestions.add(JSON.stringify({ type: 'company', value: companyName, icon: 'building' }));
         }
         
         // Add skills
@@ -685,12 +686,16 @@ export default function JobListingsPage() {
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-white/25 to-transparent" />
                           <div className="absolute inset-0 bg-gradient-to-tl from-purple-400/20 to-transparent" />
-                          {job.employerId?.company ? (
-                            <span className="relative text-white font-black text-xl drop-shadow-2xl">
-                              {getInitials(job.employerId.company)}
-                            </span>
+                          {job?.employerId?.employerProfile?.company?.logo?.url ? (
+                            <img
+                              src={job.employerId.employerProfile.company.logo.url}
+                              alt={(job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || "Company") + " logo"}
+                              className="relative w-full h-full object-cover"
+                            />
                           ) : (
-                            <Building2 className="relative w-12 h-12 text-white drop-shadow-2xl" strokeWidth={2.5} />
+                            <span className="relative text-white font-black text-xl drop-shadow-2xl">
+                              {getInitials(job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || job?.company || "")}
+                            </span>
                           )}
                         </div>
                       </div>
@@ -717,7 +722,7 @@ export default function JobListingsPage() {
                           </div>
                           <p className="text-lg font-black text-white/90 flex items-center gap-2">
                             <Building2 className="w-5 h-5 text-purple-400" strokeWidth={2.5} />
-                            {job.employerId?.company || "Company Not Specified"}
+                            {job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || job?.company || "Company Not Specified"}
                           </p>
                         </div>
                         <button

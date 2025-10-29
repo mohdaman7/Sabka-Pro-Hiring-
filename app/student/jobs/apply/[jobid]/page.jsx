@@ -718,14 +718,20 @@ export default function ApplyJobPage() {
           <div className="relative p-6 sm:p-8">
             <div className="flex items-start gap-6">
               <div
-                className="w-20 h-20 rounded-3xl flex items-center justify-center shadow-2xl"
+                className="w-20 h-20 rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden"
                 style={{
                   background: "linear-gradient(135deg,#803791,#b87bd1)",
                 }}
               >
-                {job?.employerId?.company ? (
+                {job?.employerId?.employerProfile?.company?.logo?.url ? (
+                  <img
+                    src={job.employerId.employerProfile.company.logo.url}
+                    alt={(job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || "Company") + " logo"}
+                    className="w-full h-full object-cover"
+                  />
+                ) : job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name ? (
                   <span className="text-white font-bold text-2xl">
-                    {getInitials(job.employerId.company)}
+                    {getInitials(job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name)}
                   </span>
                 ) : (
                   <Building2 className="w-10 h-10 text-white" />
@@ -736,7 +742,7 @@ export default function ApplyJobPage() {
                   {job?.title || "Position"}
                 </h1>
                 <p className="text-[#b87bd1] font-semibold text-lg">
-                  {job?.employerId?.company || "Demo Company"}
+                  {job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || "Demo Company"}
                 </p>
               </div>
             </div>

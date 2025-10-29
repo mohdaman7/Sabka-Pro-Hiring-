@@ -152,7 +152,7 @@ export default function ApplyNowModal({ job, isOpen, onClose, onSubmit }) {
                   {job?.title || "Job Position"}
                 </span>
                 <span className="text-white/50">•</span>
-                <span>{job?.employerId?.company || "Company Name"}</span>
+                <span>{job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || "Company Name"}</span>
               </div>
             </div>
             <button

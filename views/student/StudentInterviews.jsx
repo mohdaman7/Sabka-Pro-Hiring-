@@ -59,7 +59,7 @@ export default function InterviewsPage() {
       .filter((a) => a.interview)
       .map((a) => {
         const when = a.interview?.scheduledAt ? new Date(a.interview.scheduledAt) : null;
-        const company = a.jobId?.employerId?.company?.name || a.jobId?.company?.name || "Company";
+        const company = a.jobId?.employerId?.employerProfile?.company?.name || a.jobId?.employerId?.company?.name || a.jobId?.company?.name || "Company";
         const position = a.jobId?.title || "Position";
         const type = a.interview?.type || "video";
         const status = a.interview?.status === "completed" ? "completed" : a.interview?.status === "cancelled" ? "pending" : "upcoming";

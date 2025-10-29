@@ -57,4 +57,16 @@ userSchema.index({ email: 1 });
 userSchema.index({ status: 1 });
 userSchema.index({ role: 1, status: 1 });
 
+// Virtual relation to Employer profile (one-to-one via userId)
+userSchema.virtual("employerProfile", {
+  ref: "Employer",
+  localField: "_id",
+  foreignField: "userId",
+  justOne: true,
+});
+
+// Ensure virtuals are included in outputs
+userSchema.set("toObject", { virtuals: true });
+userSchema.set("toJSON", { virtuals: true });
+
 export const UserModel = mongoose.model("User", userSchema);

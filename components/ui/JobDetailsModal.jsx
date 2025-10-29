@@ -142,9 +142,15 @@ export default function JobDetailsModal({
                 background: "linear-gradient(135deg, #803791, #b87bd1)",
               }}
             >
-              {job.employerId?.company ? (
+              {job?.employerId?.employerProfile?.company?.logo?.url ? (
+                <img
+                  src={job.employerId.employerProfile.company.logo.url}
+                  alt={(job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || "Company") + " logo"}
+                  className="w-full h-full object-cover"
+                />
+              ) : job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name ? (
                 <span className="text-white font-bold text-2xl">
-                  {getInitials(job.employerId.company)}
+                  {getInitials(job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name)}
                 </span>
               ) : (
                 <Building2 className="w-12 h-12 text-white" />
@@ -158,7 +164,7 @@ export default function JobDetailsModal({
                     {job.title}
                   </h2>
                   <p className="text-xl font-medium text-white/80">
-                    {job.employerId?.company || "Company Not Specified"}
+                    {job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || job?.company || "Company Not Specified"}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -365,7 +371,7 @@ export default function JobDetailsModal({
                   About the Company
                 </h3>
                 <p className="text-white/80 leading-relaxed mb-6">
-                  {job.employerId?.company || "Company Name"} is a leading
+                  {job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || "Company Name"} is a leading
                   organization committed to innovation and excellence. We foster
                   a collaborative environment where talent thrives and ideas
                   flourish.

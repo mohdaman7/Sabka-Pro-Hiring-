@@ -101,8 +101,16 @@ export const applyForJob = async (req, res, next) => {
       status: "applied",
     });
 
-    // Populate the application with job details for response
-    await application.populate("jobId", "title company");
+    // Populate the application with job and employer company details
+    await application.populate({
+      path: "jobId",
+      select: "title location salary jobType requirements",
+      populate: {
+        path: "employerId",
+        select: "firstName lastName email role",
+        populate: { path: "employerProfile", select: "company" },
+      },
+    });
 
     res.status(201).json({
       success: true,
@@ -140,10 +148,11 @@ export const getMyApplications = async (req, res, next) => {
     const applications = await ApplicationModel.find(filter)
       .populate({
         path: "jobId",
-        select: "title company location salary jobType requirements",
+        select: "title location salary jobType requirements",
         populate: {
           path: "employerId",
-          select: "company.name website industry",
+          select: "firstName lastName email role",
+          populate: { path: "employerProfile", select: "company" },
         },
       })
       .sort(sortOptions)
@@ -535,15 +544,25 @@ export const getApplicationById = async (req, res, next) => {
     }
 
     const application = await ApplicationModel.findOne(filter)
-      .populate(
-        "jobId",
-        "title description location salaryMin salaryMax jobType requirements benefits"
-      )
+      .populate({
+        path: "jobId",
+        select:
+          "title description location salaryMin salaryMax jobType requirements benefits",
+        populate: {
+          path: "employerId",
+          select: "firstName lastName email role",
+          populate: { path: "employerProfile", select: "company" },
+        },
+      })
       .populate(
         "studentId",
         "firstName lastName email profile skills education workExperience"
       )
-      .populate("employerId", "company.name website industry");
+      .populate({
+        path: "employerId",
+        select: "firstName lastName email role",
+        populate: { path: "employerProfile", select: "company" },
+      });
 
     if (!application) {
       return res.status(404).json({

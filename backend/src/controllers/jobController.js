@@ -130,7 +130,14 @@ export const getAllJobs = async (req, res, next) => {
     }
 
     const jobs = await JobModel.find(filter)
-      .populate("employerId", "firstName lastName company")
+      .populate({
+        path: "employerId",
+        select: "firstName lastName role email",
+        populate: {
+          path: "employerProfile",
+          select: "company contact",
+        },
+      })
       .sort({ createdAt: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit);
@@ -164,7 +171,14 @@ export const getMyJobs = async (req, res, next) => {
     }
 
     const jobs = await JobModel.find(filter)
-      .populate("employerId", "firstName lastName company")
+      .populate({
+        path: "employerId",
+        select: "firstName lastName role email",
+        populate: {
+          path: "employerProfile",
+          select: "company contact",
+        },
+      })
       .sort({ createdAt: -1 });
 
     res.json({
@@ -180,7 +194,14 @@ export const getMyJobs = async (req, res, next) => {
 export const getJobById = async (req, res, next) => {
   try {
     const job = await JobModel.findById(req.params.id)
-      .populate("employerId", "firstName lastName company website industry")
+      .populate({
+        path: "employerId",
+        select: "firstName lastName role email",
+        populate: {
+          path: "employerProfile",
+          select: "company contact",
+        },
+      })
       .populate("applications");
 
     if (!job) {
