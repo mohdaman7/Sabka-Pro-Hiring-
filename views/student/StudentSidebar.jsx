@@ -21,6 +21,9 @@ import {
   Zap,
   Crown,
   Star,
+  ChevronDown,
+  FileText,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -55,11 +58,32 @@ const navigation = [
     gradient: "from-orange-500 to-amber-500",
   },
   {
-    name: "Video Resume",
-    href: "/student/video-resume",
-    icon: Video,
+    name: "Resume Management",
+    icon: FileText,
     badge: null,
     gradient: "from-rose-500 to-pink-500",
+    isDropdown: true,
+    children: [
+      {
+        name: "ATS Resume",
+        href: "/student/ats-resume",
+        icon: FileText,
+        description: "Upload & optimize resumes",
+      },
+      {
+        name: "Video Resume",
+        href: "/student/video-resume",
+        icon: Video,
+        description: "Create video profiles",
+      },
+      {
+        name: "Analytics",
+        href: "/student/analytics",
+        icon: BarChart3,
+        description: "View performance metrics",
+        isPro: true,
+      },
+    ],
   },
   {
     name: "Interviews",
@@ -105,6 +129,7 @@ export default function StudentSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   return (
     <>
@@ -202,6 +227,260 @@ export default function StudentSidebar({ isOpen, onClose }) {
         <nav className="flex-1 flex flex-col p-3 overflow-hidden">
           <div className="space-y-2 h-full overflow-hidden hover:overflow-y-auto custom-scrollbar">
             {navigation.map((item, index) => {
+              // Check if this is a dropdown item
+              if (item.isDropdown) {
+                const Icon = item.icon;
+                const isOpen = openDropdown === item.name;
+                const isChildActive = item.children?.some(child => pathname === child.href);
+
+                return (
+                  <div key={item.name}>
+                    {/* Dropdown Parent Button */}
+                    <button
+                      onClick={() => setOpenDropdown(isOpen ? null : item.name)}
+                      onMouseEnter={() => setHoveredItem(item.name)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className={cn(
+                        "group relative flex items-center rounded-xl px-5 py-5 transition-all duration-300 overflow-hidden w-full",
+                        isCollapsed ? "justify-center" : "gap-3",
+                        isChildActive
+                          ? "shadow-md scale-[1.02]"
+                          : "hover:scale-[1.02] hover:shadow-md"
+                      )}
+                      style={{
+                        background: isChildActive
+                          ? "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))"
+                          : "rgba(255,255,255,0.02)",
+                        border: isChildActive
+                          ? "1px solid rgba(255,255,255,0.12)"
+                          : "1px solid rgba(255,255,255,0.04)",
+                        animationDelay: `${index * 50}ms`,
+                      }}
+                    >
+                      {/* Hover gradient overlay */}
+                      <div
+                        className={`absolute inset-1 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-lg`}
+                      ></div>
+
+                      {/* Active indicator */}
+                      {isChildActive && (
+                        <div
+                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-gradient-to-b"
+                          style={{
+                            background: `linear-gradient(to bottom, ${
+                              item.gradient.split(" ")[1]
+                            }, ${item.gradient.split(" ")[3]})`,
+                          }}
+                        ></div>
+                      )}
+
+                      {/* Icon */}
+                      <div
+                        className={cn(
+                          "relative flex items-center justify-center transition-all duration-300",
+                          isChildActive
+                            ? "scale-105 rotate-3"
+                            : "group-hover:scale-105 group-hover:rotate-3"
+                        )}
+                      >
+                        <Icon
+                          className={cn(
+                            "h-5 w-5 flex-shrink-0 relative z-10 transition-colors duration-300",
+                            isChildActive
+                              ? "text-white"
+                              : "text-white/70 group-hover:text-white"
+                          )}
+                        />
+                      </div>
+
+                      {!isCollapsed && (
+                        <>
+                          <span
+                            className={cn(
+                              "text-sm font-medium truncate transition-all duration-300 relative z-10 flex-1 text-left",
+                              isChildActive
+                                ? "text-white"
+                                : "text-white/70 group-hover:text-white"
+                            )}
+                          >
+                            {item.name}
+                          </span>
+
+                          {/* Dropdown Arrow */}
+                          <ChevronDown
+                            className={cn(
+                              "h-4 w-4 transition-all duration-300 relative z-10",
+                              isChildActive
+                                ? "text-white"
+                                : "text-white/70 group-hover:text-white",
+                              isOpen ? "rotate-180" : ""
+                            )}
+                          />
+                        </>
+                      )}
+                    </button>
+
+                    {/* Dropdown Children - Premium Design */}
+                    {isOpen && !isCollapsed && (
+                      <div className="mt-2 ml-2 space-y-1 overflow-hidden">
+                        <div
+                          className="relative rounded-xl p-1.5"
+                          style={{
+                            background: "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            backdropFilter: "blur(10px)",
+                          }}
+                        >
+                          {/* Decorative gradient edge */}
+                          <div
+                            className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full"
+                            style={{
+                              background: `linear-gradient(to bottom, ${
+                                item.gradient.split(" ")[1]
+                              }, ${item.gradient.split(" ")[3]})`,
+                            }}
+                          />
+
+                          <div className="space-y-0.5">
+                            {item.children?.map((child, childIndex) => {
+                              const isChildItemActive = pathname === child.href;
+                              const ChildIcon = child.icon;
+
+                              return (
+                                <Link
+                                  key={child.name}
+                                  href={child.href}
+                                  onClick={() => {
+                                    if (window.innerWidth < 768) {
+                                      onClose();
+                                    }
+                                  }}
+                                  className={cn(
+                                    "group relative flex items-center gap-3 rounded-lg px-3 py-3 transition-all duration-300 overflow-hidden",
+                                    isChildItemActive && "shadow-lg"
+                                  )}
+                                  style={{
+                                    background: isChildItemActive
+                                      ? "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))"
+                                      : "rgba(255,255,255,0.02)",
+                                    border: isChildItemActive
+                                      ? "1px solid rgba(255,255,255,0.15)"
+                                      : "1px solid transparent",
+                                    animationDelay: `${childIndex * 50}ms`,
+                                  }}
+                                >
+                                  {/* Hover gradient overlay */}
+                                  <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-[#b87bd1]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+
+                                  {/* Glow effect on active */}
+                                  {isChildItemActive && (
+                                    <>
+                                      <div
+                                        className="absolute inset-0 rounded-lg"
+                                        style={{
+                                          background: `linear-gradient(135deg, ${
+                                            item.gradient.split(" ")[1]
+                                          }20, ${item.gradient.split(" ")[3]}10)`,
+                                        }}
+                                      />
+                                      <div
+                                        className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full"
+                                        style={{
+                                          background: `linear-gradient(to bottom, ${
+                                            item.gradient.split(" ")[1]
+                                          }, ${item.gradient.split(" ")[3]})`,
+                                          boxShadow: `0 0 10px ${
+                                            item.gradient.split(" ")[1]
+                                          }50`,
+                                        }}
+                                      />
+                                    </>
+                                  )}
+
+                                  {/* Icon with glow */}
+                                  <div className="relative flex items-center justify-center">
+                                    {isChildItemActive && (
+                                      <div
+                                        className="absolute inset-0 rounded-lg blur-md opacity-40"
+                                        style={{
+                                          background: `linear-gradient(135deg, ${
+                                            item.gradient.split(" ")[1]
+                                          }, ${item.gradient.split(" ")[3]})`,
+                                        }}
+                                      />
+                                    )}
+                                    <ChildIcon
+                                      className={cn(
+                                        "h-4 w-4 shrink-0 relative z-10 transition-all duration-300",
+                                        isChildItemActive
+                                          ? "text-white scale-110"
+                                          : "text-white/60 group-hover:text-white group-hover:scale-105"
+                                      )}
+                                    />
+                                  </div>
+
+                                  {/* Content */}
+                                  <div className="flex-1 min-w-0 relative z-10">
+                                    <div
+                                      className={cn(
+                                        "text-sm font-semibold truncate transition-colors duration-300 flex items-center gap-2",
+                                        isChildItemActive
+                                          ? "text-white"
+                                          : "text-white/70 group-hover:text-white"
+                                      )}
+                                    >
+                                      {child.name}
+                                      {isChildItemActive && (
+                                        <span
+                                          className="w-1.5 h-1.5 rounded-full animate-pulse"
+                                          style={{
+                                            background: `linear-gradient(135deg, ${
+                                              item.gradient.split(" ")[1]
+                                            }, ${item.gradient.split(" ")[3]})`,
+                                          }}
+                                        />
+                                      )}
+                                    </div>
+                                    {child.description && (
+                                      <div
+                                        className={cn(
+                                          "text-xs truncate transition-colors duration-300 mt-0.5",
+                                          isChildItemActive
+                                            ? "text-white/70"
+                                            : "text-white/50 group-hover:text-white/60"
+                                        )}
+                                      >
+                                        {child.description}
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* PRO Badge */}
+                                  {child.isPro && (
+                                    <div className="shrink-0 relative z-10">
+                                      <div className="relative">
+                                        {/* Glow effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-md blur-sm opacity-40 animate-pulse" />
+                                        {/* Badge */}
+                                        <div className="relative px-2 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black rounded-md shadow-lg flex items-center gap-1">
+                                          <Crown className="w-3 h-3" />
+                                          PRO
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // Regular navigation item
               const isActive = pathname === item.href;
               const Icon = item.icon;
               const isHovered = hoveredItem === item.href;

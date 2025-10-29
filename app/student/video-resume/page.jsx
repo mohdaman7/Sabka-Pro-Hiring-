@@ -1,8 +1,7 @@
 "use client"
 
-import StudentVideoResume from "@/views/student/StudentVideoResume"
+import StudentVideoResume from "@/views/student/StudentVideoResume";
 
-export default function StudentVideoResumePage() {
-  return <StudentVideoResume/>
+export default function VideoResumePage() {
+  return <StudentVideoResume />;
 }
-

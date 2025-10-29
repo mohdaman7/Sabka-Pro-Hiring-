@@ -19,6 +19,7 @@ import employerRoutes from "./routes/employer.js";
 import userRoutes from "./routes/user.js";
 import courseRoutes from "./routes/courses.js";
 import purchaseRoutes from "./routes/purchases.js";
+import resumeRoutes from "./routes/resume.js";
 
 // Rate limiting configuration
 // const limiter = rateLimit({
@@ -122,6 +123,7 @@ async function bootstrap() {
     app.use("/api/purchases", purchaseRoutes);
     app.use("/api/employer", employerRoutes);
     app.use("/api/user", userRoutes);
+    app.use("/api/resume", resumeRoutes);
 
     // API documentation route (you can implement Swagger later)
     app.get("/api/docs", (_req, res) => {
@@ -139,6 +141,7 @@ async function bootstrap() {
           purchases: "/api/purchases",
           employer: "/api/employer",
           user: "/api/user",
+          resume: "/api/resume",
         },
       });
     });
