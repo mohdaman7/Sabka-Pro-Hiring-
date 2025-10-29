@@ -48,6 +48,14 @@ const userSchema = new Schema(
     lastLogin: {
       type: Date,
     },
+    mustChangePassword: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    passwordChangedAt: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

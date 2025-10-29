@@ -39,6 +39,15 @@ export const authService = {
     return response.data;
   },
 
+  // Change password (authenticated)
+  changePassword: async (currentPassword, newPassword) => {
+    const response = await api.post("/api/auth/change-password", {
+      currentPassword,
+      newPassword,
+    });
+    return response.data;
+  },
+
   // Get current user
   getCurrentUser: async () => {
     const response = await api.get("/api/auth/me");

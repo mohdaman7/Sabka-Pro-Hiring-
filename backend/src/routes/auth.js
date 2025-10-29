@@ -20,6 +20,7 @@ router.post("/register", authController.register);
 router.post("/login", authController.login);
 router.post("/admin/login", authController.adminLogin);
 router.post("/logout", authController.logout);
+router.post("/change-password", authenticate, authController.changePassword);
 
 // Additions to align with frontend services
 router.get("/me", authenticate, authController.me ?? ((req, res) => res.status(501).json({ success: false, message: "Not implemented" })));

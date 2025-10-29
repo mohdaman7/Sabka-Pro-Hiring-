@@ -14,6 +14,53 @@ import {
   sendRegistrationConfirmation,
 } from "../utils/mailer.js";
 
+// Change password (authenticated)
+export async function changePassword(req, res, next) {
+  try {
+    const schema = z.object({
+      currentPassword: z.string().min(6),
+      newPassword: z
+        .string()
+        .min(8, "New password must be at least 8 characters")
+        .regex(/[A-Z]/, "Must include an uppercase letter")
+        .regex(/[a-z]/, "Must include a lowercase letter")
+        .regex(/[0-9]/, "Must include a number"),
+    });
+
+    const parsed = schema.parse(req.body);
+
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const valid = await bcrypt.compare(parsed.currentPassword, user.passwordHash);
+    if (!valid) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Current password is incorrect" });
+    }
+
+    // Prevent reusing the same password
+    const sameAsOld = await bcrypt.compare(parsed.newPassword, user.passwordHash);
+    if (sameAsOld) {
+      return res
+        .status(400)
+        .json({ success: false, message: "New password cannot be same as old password" });
+    }
+
+    user.passwordHash = await bcrypt.hash(parsed.newPassword, 10);
+    user.mustChangePassword = false;
+    user.passwordChangedAt = new Date();
+    await user.save();
+
+    res.json({ success: true, message: "Password changed successfully. Please login again." });
+  } catch (err) {
+    console.error("❌ Change password error:", err);
+    next(err);
+  }
+}
+
 // Generate 6-digit OTP
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -189,6 +236,7 @@ export async function register(req, res, next) {
       firstName: parsed.firstName,
       lastName: parsed.lastName,
       status: "pending", // User is pending approval
+      mustChangePassword: true, // Force password change on first login
     });
 
     // Create profile based on role
@@ -312,6 +360,9 @@ export async function login(req, res, next) {
       });
     }
 
+    // Enforce password change if never changed before or flagged
+    const mustChange = !!(user.mustChangePassword || !user.passwordChangedAt);
+
     const token = jwt.sign(
       {
         id: user._id,
@@ -326,6 +377,9 @@ export async function login(req, res, next) {
 
     // Update last login
     user.lastLogin = new Date();
+    if (mustChange && !user.mustChangePassword) {
+      user.mustChangePassword = true;
+    }
     await user.save();
 
     // Get user profile based on role
@@ -340,7 +394,7 @@ export async function login(req, res, next) {
       success: true,
       message: "Login successful",
       data: {
-        user: serializeUser(user),
+        user: serializeUser({ ...user.toObject(), mustChangePassword: mustChange }),
         profile: profile || null,
         token,
       },
@@ -426,6 +480,8 @@ function serializeUser(user) {
     firstName: user.firstName,
     lastName: user.lastName,
     status: user.status,
+    mustChangePassword: !!user.mustChangePassword,
+    passwordChangedAt: user.passwordChangedAt || null,
     createdAt: user.createdAt,
   };
 }

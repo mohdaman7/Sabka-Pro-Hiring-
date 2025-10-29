@@ -9,6 +9,7 @@ import Link from "next/link";
 import Header from "@/views/login/Header";
 import RoleSelectionCards from "@/views/login/RoleSelectionCards";
 import LoginForm from "@/views/login/LoginForm";
+import ChangePasswordModal from "@/views/login/ChangePasswordModal";
 import FooterLinks from "@/views/login/FooterLinks";
 import { authService } from "@/services/authService";
 import { useApi } from "@/hooks/useApi";
@@ -20,6 +21,10 @@ function LoginContent() {
 
   const { loading, error, callApi } = useApi();
   const [serverError, setServerError] = useState("");
+  const [showChangeModal, setShowChangeModal] = useState(false);
+  const [changeSubmitting, setChangeSubmitting] = useState(false);
+  const [changeError, setChangeError] = useState("");
+  const [pendingUser, setPendingUser] = useState(null);
 
   const handleLogin = async (formData) => {
     try {
@@ -34,10 +39,14 @@ function LoginContent() {
             if (formData.rememberMe) {
               localStorage.setItem("rememberMe", "true");
             }
-
-            const redirectPath =
-              type === "candidate" ? "/student" : "/employer";
-            router.push(redirectPath);
+            // Enforce password change before dashboard if required
+            if (data?.data?.user?.mustChangePassword) {
+              setPendingUser({ email: formData.email, role: type });
+              setShowChangeModal(true);
+            } else {
+              const redirectPath = type === "candidate" ? "/student" : "/employer";
+              router.push(redirectPath);
+            }
           },
           onError: (error) => {
             // Additional error handling if needed
@@ -48,6 +57,33 @@ function LoginContent() {
     } catch (err) {
       // Error is already handled by useApi hook
       // You can add additional error handling here if needed
+    }
+  };
+
+  const handleChangePassword = async (form) => {
+    try {
+      setChangeSubmitting(true);
+      setChangeError("");
+      await callApi(
+        () => authService.changePassword(form.currentPassword, form.newPassword),
+        {
+          showLoading: false,
+          onSuccess: () => {
+            // Clear session and force re-login
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            setShowChangeModal(false);
+            const desiredType = pendingUser?.role || type;
+            router.replace(`/login?type=${desiredType || "candidate"}`);
+          },
+          onError: (e) => {
+            const msg = e?.response?.data?.message || e?.message || "Failed to change password";
+            setChangeError(msg);
+          },
+        }
+      );
+    } finally {
+      setChangeSubmitting(false);
     }
   };
 
@@ -111,6 +147,12 @@ function LoginContent() {
               />
 
               <FooterLinks />
+              <ChangePasswordModal
+                isOpen={showChangeModal}
+                onSubmit={handleChangePassword}
+                submitting={changeSubmitting}
+                error={changeError}
+              />
             </>
           )}
         </div>
