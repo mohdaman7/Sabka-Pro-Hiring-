@@ -8,16 +8,12 @@ import {
   Download,
   Eye,
   Trash2,
-  Edit3,
   Target,
   Copy,
   Crown,
-  FileCheck,
-  TrendingUp,
-  AlertCircle,
   CheckCircle2,
   Sparkles,
-  Zap,
+  ChevronDown,
 } from "lucide-react";
 import { resumeService } from "@/services/resumeService";
 
@@ -29,6 +25,37 @@ export default function StudentATSResume() {
   const [showBuilder, setShowBuilder] = useState(false);
   const [selectedResume, setSelectedResume] = useState(null);
   const fileInputRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [showUploadOptions, setShowUploadOptions] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setResumes([
+        {
+          id: 1,
+          name: "My Resume.pdf",
+          date: "2023-10-15",
+          atsScore: 85,
+          isPrimary: true,
+          views: 24,
+          downloads: 8,
+        },
+        {
+          id: 2,
+          name: "Updated Resume.pdf",
+          date: "2023-11-01",
+          atsScore: 92,
+          isPrimary: false,
+          views: 15,
+          downloads: 5,
+        },
+      ]);
+      setIsPro(true);
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const atsTemplates = [
     {
@@ -47,16 +74,23 @@ export default function StudentATSResume() {
     },
     {
       id: 3,
-      name: "Creative",
-      preview: "/templates/creative.jpg",
-      score: 89,
+      name: "Executive",
+      preview: "/templates/executive.jpg",
+      score: 94,
       free: false,
     },
     {
       id: 4,
-      name: "Executive",
-      preview: "/templates/executive.jpg",
-      score: 97,
+      name: "Minimal",
+      preview: "/templates/minimal.jpg",
+      score: 89,
+      free: true,
+    },
+    {
+      id: 5,
+      name: "Creative",
+      preview: "/templates/creative.jpg",
+      score: 89,
       free: false,
     },
   ];
@@ -81,17 +115,39 @@ export default function StudentATSResume() {
     }
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFileUpload({ target: { files } });
+    }
+  };
+
+  const handleFileChange = (e) => {
+    handleFileUpload(e);
+    setShowUploadOptions(false);
+  };
+
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
     try {
-      // In production, upload to S3 first, then send URL to backend
       const formData = new FormData();
       formData.append("file", file);
-      
-      // Simulated upload for now
+
       setTimeout(async () => {
         try {
           const response = await resumeService.uploadResume({
@@ -100,7 +156,7 @@ export default function StudentATSResume() {
             fileName: file.name,
             fileSize: file.size,
           });
-          
+
           if (response.success) {
             await fetchResumes();
           }
@@ -129,7 +185,7 @@ export default function StudentATSResume() {
 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this resume?")) return;
-    
+
     try {
       const response = await resumeService.deleteResume(id);
       if (response.success) {
@@ -156,308 +212,364 @@ export default function StudentATSResume() {
       const response = await resumeService.getATSSuggestions(id);
       if (response.success) {
         setSelectedResume(response.data);
-        // Show suggestions modal or panel
       }
     } catch (error) {
       console.error("Get suggestions error:", error);
     }
   };
 
+  const getScoreColor = (score) => {
+    if (score >= 80) return "text-green-400";
+    if (score >= 60) return "text-yellow-400";
+    return "text-red-400";
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-black text-white mb-2">
-              ATS Resume Manager
-            </h1>
-            <p className="text-white/60 text-lg">
-              Upload and optimize your resumes for Applicant Tracking Systems
-            </p>
-          </div>
-          {!isPro && (
-            <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-amber-500/30 transition-all hover:scale-105">
-              <Crown className="w-5 h-5" />
-              Upgrade to Pro
-            </button>
-          )}
+    <div className="relative p-4 md:p-6 lg:p-8 space-y-8 min-h-screen overflow-hidden">
+      {/* Enhanced Animated Background */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          style={{
+            background: "rgba(128,55,145,0.12)",
+            animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl animate-pulse"
+          style={{
+            background: "rgba(184,123,209,0.08)",
+            animation: "pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-2xl"
+          style={{
+            background: "rgba(240,194,238,0.04)",
+          }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]" />
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 justify-between items-center mb-8">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            ATS Resume Manager
+          </h1>
+          <p className="text-white/60 text-sm">
+            Upload, optimize, and track your resumes
+          </p>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="group p-6 bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/10 border-2 border-[#b87bd1]/30 rounded-2xl hover:border-[#b87bd1] transition-all hover:scale-105"
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              accept=".pdf,.doc,.docx"
-              onChange={handleFileUpload}
-            />
-            <Upload className="w-10 h-10 text-[#b87bd1] mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-lg font-bold text-white mb-1">Upload Resume</h3>
-            <p className="text-white/60 text-sm">PDF, DOC, DOCX (Max 5MB)</p>
-          </button>
-
-          <button
-            onClick={() => setShowBuilder(true)}
-            className="group p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl hover:border-blue-500 transition-all hover:scale-105"
-          >
-            <Edit3 className="w-10 h-10 text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-lg font-bold text-white mb-1">Build Resume</h3>
-            <p className="text-white/60 text-sm">Use professional templates</p>
-          </button>
-
-          <button
-            className={`group p-6 bg-gradient-to-br from-amber-500/20 to-orange-500/10 border-2 border-amber-500/30 rounded-2xl hover:border-amber-500 transition-all hover:scale-105 relative ${
-              !isPro && "opacity-60"
-            }`}
-            disabled={!isPro}
-          >
-            <Target className="w-10 h-10 text-amber-400 mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-lg font-bold text-white mb-1">ATS Optimizer</h3>
-            <p className="text-white/60 text-sm">Boost your score</p>
-            {!isPro && (
-              <div className="absolute top-2 right-2">
-                <Crown className="w-5 h-5 text-amber-400" />
-              </div>
-            )}
-          </button>
-        </div>
-
-        {/* Stats Card */}
-        {!loading && resumes.length > 0 && (
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
-                <div className="text-white/60 text-sm mb-1">Total Resumes</div>
-                <div className="text-3xl font-black text-white">
-                  {resumes.length}
-                  <span className="text-white/40 text-lg ml-2">
-                    / {isPro ? "∞" : "3"}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <div className="text-white/60 text-sm mb-1">Total Views</div>
-                <div className="text-3xl font-black text-white">
-                  {resumes.reduce((sum, r) => sum + (r.views || 0), 0)}
-                </div>
-              </div>
-              <div>
-                <div className="text-white/60 text-sm mb-1">Downloads</div>
-                <div className="text-3xl font-black text-white">
-                  {resumes.reduce((sum, r) => sum + (r.downloads || 0), 0)}
-                </div>
-              </div>
-              <div>
-                <div className="text-white/60 text-sm mb-1">Avg. ATS Score</div>
-                <div className="text-3xl font-black text-green-400">
-                  {Math.round(
-                    resumes.reduce((sum, r) => sum + (r.atsScore || 0), 0) /
-                      resumes.length
-                  )}
-                  %
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Resume List */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-white">My Resumes</h2>
-            {!isPro && (
-              <div className="text-white/60 text-sm">
-                {resumes.length} / 3 resumes
-              </div>
-            )}
-          </div>
-
-          {loading ? (
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
-              <div className="w-12 h-12 rounded-full border-4 border-[#b87bd1]/30 border-t-[#b87bd1] animate-spin mx-auto mb-4" />
-              <p className="text-white/60">Loading resumes...</p>
-            </div>
-          ) : resumes.length === 0 ? (
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
-              <FileText className="w-16 h-16 text-white/40 mx-auto mb-4" />
-              <p className="text-white/60 mb-4">No resumes uploaded yet</p>
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-bold hover:scale-105 transition-all"
-              >
-                Upload Your First Resume
-              </button>
-            </div>
-          ) : (
-            <div className="grid gap-4">
-              {resumes.map((resume) => (
-                <motion.div
-                  key={resume.id || resume._id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="group bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-[#b87bd1]/50 transition-all"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#803791] to-[#b87bd1] rounded-xl flex items-center justify-center shrink-0">
-                      <FileText className="w-7 h-7 text-white" />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4 mb-3">
-                        <div>
-                          <h4 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
-                            {resume.name}
-                            {resume.isPrimary && (
-                              <span className="px-2 py-0.5 bg-[#b87bd1]/20 border border-[#b87bd1]/30 rounded-full text-xs text-[#b87bd1]">
-                                Primary
-                              </span>
-                            )}
-                          </h4>
-                          <p className="text-white/60 text-sm">
-                            Uploaded {new Date(resume.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-
-                        {/* ATS Score */}
-                        <div className="text-right">
-                          <div
-                            className={`text-2xl font-black ${
-                              resume.atsScore >= 80
-                                ? "text-green-400"
-                                : resume.atsScore >= 60
-                                ? "text-yellow-400"
-                                : "text-red-400"
-                            }`}
-                          >
-                            {resume.atsScore || 0}%
-                          </div>
-                          <div className="text-white/60 text-xs">ATS Score</div>
-                        </div>
-                      </div>
-
-                      {/* Stats */}
-                      <div className="flex items-center gap-6 mb-4">
-                        <div className="flex items-center gap-2 text-white/60 text-sm">
-                          <Eye className="w-4 h-4" />
-                          {resume.views || 0} views
-                        </div>
-                        <div className="flex items-center gap-2 text-white/60 text-sm">
-                          <Download className="w-4 h-4" />
-                          {resume.downloads || 0} downloads
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                          <Eye className="w-4 h-4" />
-                          View
-                        </button>
-                        <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                          <Download className="w-4 h-4" />
-                          Download
-                        </button>
-                        <button
-                          onClick={() => handleDuplicate(resume.id || resume._id)}
-                          className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                        >
-                          <Copy className="w-4 h-4" />
-                          Duplicate
-                        </button>
-                        {!resume.isPrimary && (
-                          <button
-                            onClick={() => handleSetPrimary(resume.id || resume._id)}
-                            className="px-4 py-2 bg-[#b87bd1]/20 hover:bg-[#b87bd1]/30 text-[#b87bd1] rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                          >
-                            <CheckCircle2 className="w-4 h-4" />
-                            Set Primary
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleViewSuggestions(resume.id || resume._id)}
-                          className="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                        >
-                          <Zap className="w-4 h-4" />
-                          Optimize
-                        </button>
-                        <button
-                          onClick={() => handleDelete(resume.id || resume._id)}
-                          className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* ATS Templates */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-white">ATS-Optimized Templates</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {atsTemplates.map((template) => (
-              <div
-                key={template.id}
-                className="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-[#b87bd1]/50 transition-all cursor-pointer"
-              >
-                {!template.free && (
-                  <div className="absolute top-3 right-3 z-10 px-2 py-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg flex items-center gap-1">
-                    <Crown className="w-3 h-3 text-white" />
-                    <span className="text-xs font-bold text-white">PRO</span>
-                  </div>
-                )}
-                <div className="aspect-[3/4] bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
-                  <FileCheck className="w-16 h-16 text-white/40" />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-bold text-white mb-1">{template.name}</h4>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-white/60">
-                      Score: {template.score}%
-                    </span>
-                    <button className="text-xs text-[#b87bd1] font-semibold hover:underline">
-                      Use Template
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Upload Progress */}
-        <AnimatePresence>
-          {uploading && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
-              className="fixed bottom-6 right-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-2xl z-50"
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative">
+            <button
+              onClick={() => setShowUploadOptions(!showUploadOptions)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full border-4 border-[#b87bd1]/30 border-t-[#b87bd1] animate-spin" />
-                <div>
-                  <h4 className="font-bold text-white">Analyzing Resume...</h4>
-                  <p className="text-white/60 text-sm">
-                    Extracting keywords and calculating ATS score
+              <Upload className="w-4 h-4" />
+              <span>Upload Resume</span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  showUploadOptions ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {/* Upload Options Dropdown */}
+            {showUploadOptions && (
+              <div className="absolute right-0 mt-2 w-56 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl overflow-hidden z-10 animate-fadeIn">
+                <div
+                  className={`p-4 border-b border-white/10 ${
+                    isDragging ? "bg-[#b87bd1]/20" : "bg-transparent"
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-white/30 rounded-lg cursor-pointer hover:bg-[#b87bd1]/10 transition-colors">
+                    <Upload className="w-8 h-8 text-white/60 mb-2" />
+                    <p className="text-sm text-center text-white/80">
+                      {isDragging
+                        ? "Drop your file here"
+                        : "Click or drag & drop PDF file"}
+                    </p>
+                    <p className="text-xs text-white/60 mt-1">Max. 5MB</p>
+                  </div>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept=".pdf"
+                    className="hidden"
+                  />
+                </div>
+                <div className="p-2 bg-white/5 text-center">
+                  <p className="text-xs text-white/60">
+                    Supports: PDF (Max 5MB)
                   </p>
                 </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </div>
+
+          <button
+            onClick={() => setShowBuilder(true)}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Create New</span>
+          </button>
+        </div>
       </div>
+
+      {/* Resume List */}
+      <div className="space-y-4">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center h-96 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-sm">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-[#b87bd1]/30 rounded-full"></div>
+              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-[#b87bd1] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            <p className="mt-4 text-white/80 font-medium">
+              Loading your resumes...
+            </p>
+            <p className="text-sm text-white/60 mt-1">This may take a moment</p>
+          </div>
+        ) : resumes.length === 0 ? (
+          <div className="col-span-full flex flex-col items-center justify-center py-16 px-6 text-center bg-white/5 rounded-2xl border border-dashed border-white/20">
+            <FileText className="w-12 h-12 text-white/40 mb-3" />
+            <h3 className="text-lg font-medium text-white/90">
+              No Resumes Yet
+            </h3>
+            <p className="text-white/70 text-sm mt-1 mb-4 max-w-md">
+              Upload your first resume to get started with ATS optimization and
+              tracking.
+            </p>
+            <button
+              onClick={() => setShowUploadOptions(true)}
+              className="px-4 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white text-sm font-medium rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+            >
+              <Upload className="w-4 h-4" />
+              Upload Resume
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {resumes.map((resume) => (
+              <motion.div
+                key={resume.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className={`group relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 ${
+                  resume.isPrimary
+                    ? "ring-2 ring-[#b87bd1] ring-offset-2 ring-offset-slate-950"
+                    : ""
+                }`}
+              >
+                {resume.isPrimary && (
+                  <div className="absolute top-3 right-3 z-10">
+                    <div className="flex items-center gap-1.5 bg-[#b87bd1] text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Primary</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Score Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <div
+                    className={`flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full shadow-sm ${
+                      getScoreColor(resume.atsScore).includes("green")
+                        ? "text-green-400"
+                        : getScoreColor(resume.atsScore).includes("yellow")
+                        ? "text-yellow-400"
+                        : "text-red-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        getScoreColor(resume.atsScore).includes("green")
+                          ? "bg-green-500"
+                          : getScoreColor(resume.atsScore).includes("yellow")
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
+                      }`}
+                    ></div>
+                    <span>ATS Score: {resume.atsScore}/100</span>
+                  </div>
+                </div>
+
+                {/* Document Preview */}
+                <div className="relative h-40 bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
+                  <FileText className="w-16 h-16 text-white/30" />
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#803791] to-[#b87bd1]"></div>
+                </div>
+
+                <div className="p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/20 flex items-center justify-center shadow-inner">
+                        <FileText className="w-5 h-5 text-[#b87bd1]" />
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-white truncate">
+                        {resume.name}
+                      </h3>
+                      <p className="text-xs text-white/60 mt-0.5">
+                        Uploaded {formatDate(resume.date)}
+                      </p>
+
+                      {/* Stats */}
+                      <div className="flex items-center gap-4 mt-3 text-xs text-white/60">
+                        <div className="flex items-center gap-1">
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>{resume.views} views</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Download className="w-3.5 h-3.5" />
+                          <span>{resume.downloads} downloads</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => handleViewSuggestions(resume.id)}
+                        className="p-1.5 text-white/60 hover:text-[#b87bd1] hover:bg-[#b87bd1]/20 rounded-lg transition-colors"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button className="p-1.5 text-white/60 hover:text-green-400 hover:bg-green-400/20 rounded-lg transition-colors">
+                        <Download className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDuplicate(resume.id)}
+                        className="p-1.5 text-white/60 hover:text-purple-400 hover:bg-purple-400/20 rounded-lg transition-colors"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleSetPrimary(resume.id)}
+                        className="p-1.5 text-white/60 hover:text-amber-400 hover:bg-amber-400/20 rounded-lg transition-colors"
+                        title="Set as Primary"
+                      >
+                        <Target
+                          className={`w-4 h-4 ${
+                            resume.isPrimary
+                              ? "fill-amber-400 text-amber-400"
+                              : ""
+                          }`}
+                        />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(resume.id)}
+                        className="p-1.5 text-white/60 hover:text-red-400 hover:bg-red-400/20 rounded-lg transition-colors"
+                        title="Delete Resume"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ATS Templates */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold text-white mb-6">
+          ATS-Optimized Templates
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {atsTemplates.map((template) => (
+            <div
+              key={template.id}
+              className="group relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+            >
+              {!template.free && (
+                <div className="absolute top-2 right-2">
+                  <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                    <Crown className="w-3 h-3" />
+                    <span>PRO</span>
+                  </div>
+                </div>
+              )}
+
+              <div className="h-40 bg-white/10 relative overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-4/5 h-4/5 bg-white/5 shadow-inner rounded-sm border border-white/10 flex items-center justify-center">
+                    <FileText className="w-10 h-10 text-white/30" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-medium text-white">{template.name}</h3>
+                    <div className="flex items-center gap-1 mt-1">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span className="text-xs text-white/60">
+                        {template.score}% ATS Score
+                      </span>
+                    </div>
+                  </div>
+                  <button className="p-1.5 text-white/60 hover:text-[#b87bd1] hover:bg-[#b87bd1]/20 rounded-lg transition-colors">
+                    <Eye className="w-4 h-4" />
+                  </button>
+                </div>
+                <button className="w-full mt-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors">
+                  {template.free ? "Use Template" : "Upgrade to Pro"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Upload Progress */}
+      <AnimatePresence>
+        {uploading && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-6 right-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-2xl z-50"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full border-4 border-[#b87bd1]/30 border-t-[#b87bd1] animate-spin" />
+              <div>
+                <h4 className="font-bold text-white">Analyzing Resume...</h4>
+                <p className="text-white/60 text-sm">
+                  Extracting keywords and calculating ATS score
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
