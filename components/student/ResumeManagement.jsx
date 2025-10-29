@@ -30,7 +30,7 @@ import {
   Scissors,
 } from "lucide-react";
 
-export default function VideoResumePage({ isPro = false }) {
+export default function ResumeManagement({ isPro = false }) {
   const [activeTab, setActiveTab] = useState("ats");
   const [resumes, setResumes] = useState([
     {
