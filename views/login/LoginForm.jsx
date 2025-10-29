@@ -66,28 +66,35 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 }}
-      className="bg-gradient-to-br from-card via-card to-primary/5 rounded-2xl border border-border shadow-2xl p-8 relative overflow-hidden"
+      transition={{ delay: 0.5 }}
+      className="bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl p-8 md:p-10 relative overflow-hidden max-w-md mx-auto"
     >
       {/* Background decoration */}
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl opacity-50" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-accent/20 to-transparent rounded-full blur-3xl opacity-50" />
 
       <div className="relative mb-8 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"
+          transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
+          className={`w-20 h-20 bg-gradient-to-br ${
+            type === "candidate"
+              ? "from-purple-500 to-pink-500"
+              : "from-blue-500 to-cyan-500"
+          } rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-primary/40 ring-4 ring-white/10`}
         >
           {type === "candidate" ? (
-            <User className="w-8 h-8 text-white" />
+            <User className="w-10 h-10 text-white" />
           ) : (
-            <Building2 className="w-8 h-8 text-white" />
+            <Building2 className="w-10 h-10 text-white" />
           )}
         </motion.div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Welcome Back!
+        <h1 className="text-3xl font-bold text-white mb-3">
+          Welcome Back! ✨
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-white/60 text-base">
           Sign in to your {type === "candidate" ? "candidate" : "employer"}{" "}
           account
         </p>
@@ -102,10 +109,10 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
         >
           <label
             htmlFor="email"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-white mb-2.5 flex items-center gap-2"
           >
             <Mail className="w-4 h-4 text-primary" />
-            Email Address <span className="text-destructive">*</span>
+            Email Address <span className="text-red-400">*</span>
           </label>
           <input
             type="email"
@@ -115,13 +122,13 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
             onChange={handleChange}
             onFocus={() => setFocusedField("email")}
             onBlur={() => setFocusedField(null)}
-            className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
+            className={`w-full px-5 py-3.5 bg-white/5 backdrop-blur-sm border-2 ${
               errors.email
-                ? "border-destructive"
+                ? "border-red-500/70 bg-red-500/5"
                 : focusedField === "email"
-                ? "border-primary shadow-lg shadow-primary/20"
-                : "border-border"
-            } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200`}
+                ? "border-primary shadow-lg shadow-primary/30 bg-white/10"
+                : "border-white/20"
+            } rounded-xl text-white placeholder:text-white/40 focus:outline-none transition-all duration-300`}
             placeholder="your.email@example.com"
             disabled={loading}
           />
@@ -148,10 +155,10 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
         >
           <label
             htmlFor="password"
-            className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
+            className="text-sm font-semibold text-white mb-2.5 flex items-center gap-2"
           >
             <Lock className="w-4 h-4 text-primary" />
-            Password <span className="text-destructive">*</span>
+            Password <span className="text-red-400">*</span>
           </label>
           <div className="relative">
             <input
@@ -162,20 +169,20 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
               onChange={handleChange}
               onFocus={() => setFocusedField("password")}
               onBlur={() => setFocusedField(null)}
-              className={`w-full px-4 py-3.5 bg-background/50 backdrop-blur-sm border-2 ${
+              className={`w-full px-5 py-3.5 bg-white/5 backdrop-blur-sm border-2 ${
                 errors.password
-                  ? "border-destructive"
+                  ? "border-red-500/70 bg-red-500/5"
                   : focusedField === "password"
-                  ? "border-primary shadow-lg shadow-primary/20"
-                  : "border-border"
-              } rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-200 pr-12`}
+                  ? "border-primary shadow-lg shadow-primary/30 bg-white/10"
+                  : "border-white/20"
+              } rounded-xl text-white placeholder:text-white/40 focus:outline-none transition-all duration-300 pr-12`}
               placeholder="Enter your password"
               disabled={loading}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white transition-colors disabled:opacity-50"
               disabled={loading}
             >
               {showPassword ? (
@@ -207,20 +214,20 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
           transition={{ delay: 0.4 }}
           className="flex items-center justify-between"
         >
-          <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-2.5 cursor-pointer group">
             <input
               type="checkbox"
               name="rememberMe"
               checked={formData.rememberMe}
               onChange={handleChange}
-              className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary focus:ring-2 disabled:opacity-50"
+              className="w-4 h-4 text-primary bg-white/5 border-white/20 rounded focus:ring-primary focus:ring-2 disabled:opacity-50 transition-all"
               disabled={loading}
             />
-            <span className="text-sm text-muted-foreground">Remember me</span>
+            <span className="text-sm text-white/70 group-hover:text-white transition-colors">Remember me</span>
           </label>
           <Link
             href="/forgot-password"
-            className="text-sm text-primary hover:text-primary/80 font-medium transition-colors disabled:opacity-50"
+            className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors disabled:opacity-50 hover:underline"
           >
             Forgot password?
           </Link>
@@ -233,7 +240,7 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="text-sm text-destructive text-center bg-destructive/10 py-3 px-4 rounded-lg border border-destructive/20 flex items-center justify-center gap-2"
+              className="text-sm text-red-400 text-center bg-red-500/10 py-3 px-4 rounded-xl border border-red-500/30 flex items-center justify-center gap-2 backdrop-blur-sm"
             >
               <AlertCircle className="w-4 h-4" />
               {serverError}
@@ -250,7 +257,7 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
           whileTap={{ scale: loading ? 1 : 0.98 }}
           type="submit"
           disabled={loading}
-          className="w-full px-6 py-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-xl transition-all duration-200 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-primary/30"
+          className="w-full px-6 py-4 bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/95 hover:via-primary/90 hover:to-primary/80 text-white rounded-xl transition-all duration-300 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-2xl shadow-primary/40 ring-2 ring-primary/20 hover:ring-primary/40 hover:shadow-primary/50"
         >
           {loading ? (
             <>
@@ -275,7 +282,7 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-border" />
           </div>
-          <div className="relative bg-card px-4 text-sm text-muted-foreground">
+          <div className="relative bg-transparent px-4 text-sm text-white/50">
             New to Sabka Pro?
           </div>
         </motion.div>
@@ -287,11 +294,11 @@ export default function LoginForm({ type, onSubmit, loading, serverError }) {
           transition={{ delay: 0.7 }}
           className="text-center"
         >
-          <p className="text-muted-foreground">
+          <p className="text-white/60">
             Don't have an account?{" "}
             <Link
               href={`/register?type=${type}`}
-              className="text-primary hover:text-primary/80 font-semibold transition-colors"
+              className="text-primary hover:text-primary/80 font-bold transition-colors hover:underline"
             >
               Create account
             </Link>
