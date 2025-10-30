@@ -2,9 +2,109 @@
 import api from "@/lib/axios";
 
 export const adminService = {
-  // Get pending users
-  getPendingUsers: async () => {
-    const response = await api.get("/api/admin/pending");
+  // ============================================
+  // LEAD MANAGEMENT METHODS
+  // ============================================
+  
+  // Get all leads with filters
+  getLeads: async (params = {}) => {
+    const response = await api.get("/api/leads", { params });
+    return response.data;
+  },
+
+  // Get lead by ID
+  getLeadById: async (id) => {
+    const response = await api.get(`/api/leads/${id}`);
+    return response.data;
+  },
+
+  // Create new lead
+  createLead: async (data) => {
+    const response = await api.post("/api/leads", data);
+    return response.data;
+  },
+
+  // Update lead
+  updateLead: async (id, data) => {
+    const response = await api.put(`/api/leads/${id}`, data);
+    return response.data;
+  },
+
+  // Delete lead (soft delete)
+  deleteLead: async (id, reason) => {
+    const response = await api.delete(`/api/leads/${id}`, { data: { reason } });
+    return response.data;
+  },
+
+  // Assign lead to staff
+  assignLead: async (id, assignedTo, reason) => {
+    const response = await api.post(`/api/leads/${id}/assign`, { assignedTo, reason });
+    return response.data;
+  },
+
+  // Unassign lead
+  unassignLead: async (id) => {
+    const response = await api.post(`/api/leads/${id}/unassign`);
+    return response.data;
+  },
+
+  // Update lead status
+  updateLeadStatus: async (id, status, reason) => {
+    const response = await api.patch(`/api/leads/${id}/status`, { status, reason });
+    return response.data;
+  },
+
+  // Convert lead to user
+  convertLead: async (id, convertedTo, conversionValue) => {
+    const response = await api.post(`/api/leads/${id}/convert`, { convertedTo, conversionValue });
+    return response.data;
+  },
+
+  // Add follow-up to lead
+  addFollowUp: async (id, followUpData) => {
+    const response = await api.post(`/api/leads/${id}/follow-ups`, followUpData);
+    return response.data;
+  },
+
+  // Get follow-ups for a lead
+  getFollowUps: async (id) => {
+    const response = await api.get(`/api/leads/${id}/follow-ups`);
+    return response.data;
+  },
+
+  // Get lead statistics
+  getLeadStats: async (params = {}) => {
+    const response = await api.get("/api/leads/stats", { params });
+    return response.data;
+  },
+
+  // Get leads by source
+  getLeadsBySource: async (params = {}) => {
+    const response = await api.get("/api/leads/source-stats", { params });
+    return response.data;
+  },
+
+  // Get staff performance
+  getStaffPerformance: async (params = {}) => {
+    const response = await api.get("/api/leads/staff-performance", { params });
+    return response.data;
+  },
+
+  // Bulk assign leads
+  bulkAssignLeads: async (leadIds, assignedTo) => {
+    const response = await api.post("/api/leads/bulk/assign", { leadIds, assignedTo });
+    return response.data;
+  },
+
+  // Bulk update lead status
+  bulkUpdateLeadStatus: async (leadIds, status) => {
+    const response = await api.post("/api/leads/bulk/status", { leadIds, status });
+    return response.data;
+  },
+
+  // Auto-assign leads (round-robin)
+  autoAssignLeads: async (leadIds) => {
+    const response = await api.post("/api/leads/auto-assign", { leadIds });
     return response.data;
   },
 
@@ -24,6 +124,16 @@ export const adminService = {
   // Get user with profile/details
   getUserById: async (id) => {
     const response = await api.get(`/api/admin/users/${id}`);
+    return response.data;
+  },
+
+  // ============================================
+  // USER MANAGEMENT (LEGACY - Keep for existing users)
+  // ============================================
+  
+  // Get pending users (for existing approval workflow if needed)
+  getPendingUsers: async () => {
+    const response = await api.get("/api/admin/pending");
     return response.data;
   },
 
