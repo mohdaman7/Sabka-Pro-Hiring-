@@ -225,7 +225,7 @@ export default function StudentSidebar({ isOpen, onClose }) {
 
         {/* Main Navigation */}
         <nav className="flex-1 flex flex-col p-3 overflow-hidden">
-          <div className="space-y-2 h-full overflow-hidden hover:overflow-y-auto custom-scrollbar">
+          <div className="space-y-2 h-full overflow-hidden hover:overflow-y-auto premium-scrollbar">
             {navigation.map((item, index) => {
               // Check if this is a dropdown item
               if (item.isDropdown) {
@@ -320,28 +320,29 @@ export default function StudentSidebar({ isOpen, onClose }) {
                       )}
                     </button>
 
-                    {/* Dropdown Children - Premium Design */}
+                    {/* Dropdown Children - Ultra Premium Design */}
                     {isOpen && !isCollapsed && (
-                      <div className="mt-2 ml-2 space-y-1 overflow-hidden">
+                      <div className="mt-2 ml-4 space-y-1.5 overflow-hidden animate-in slide-in-from-top-2 fade-in duration-500">
                         <div
-                          className="relative rounded-xl p-1.5"
+                          className="relative rounded-2xl p-2 backdrop-blur-2xl"
                           style={{
-                            background: "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            backdropFilter: "blur(10px)",
+                            background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
+                            border: "1px solid rgba(255,255,255,0.18)",
+                            boxShadow: "0 8px 32px rgba(128, 55, 145, 0.25), inset 0 1px 0 rgba(255,255,255,0.2)",
                           }}
                         >
-                          {/* Decorative gradient edge */}
+                          {/* Decorative gradient edge with enhanced glow */}
                           <div
-                            className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full"
+                            className="absolute left-0 top-3 bottom-3 w-1 rounded-full"
                             style={{
                               background: `linear-gradient(to bottom, ${
                                 item.gradient.split(" ")[1]
                               }, ${item.gradient.split(" ")[3]})`,
+                              boxShadow: `0 0 16px ${item.gradient.split(" ")[1]}80, 0 0 32px ${item.gradient.split(" ")[1]}50`,
                             }}
                           />
 
-                          <div className="space-y-0.5">
+                          <div className="space-y-1">
                             {item.children?.map((child, childIndex) => {
                               const isChildItemActive = pathname === child.href;
                               const ChildIcon = child.icon;
@@ -356,87 +357,103 @@ export default function StudentSidebar({ isOpen, onClose }) {
                                     }
                                   }}
                                   className={cn(
-                                    "group relative flex items-center gap-3 rounded-lg px-3 py-3 transition-all duration-300 overflow-hidden",
-                                    isChildItemActive && "shadow-lg"
+                                    "group/child relative flex items-center gap-3 rounded-xl px-4 py-3.5 transition-all duration-300 overflow-hidden hover:scale-[1.01]",
+                                    isChildItemActive && "shadow-2xl scale-[1.01]"
                                   )}
                                   style={{
                                     background: isChildItemActive
-                                      ? "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))"
-                                      : "rgba(255,255,255,0.02)",
+                                      ? "linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.12) 100%)"
+                                      : "rgba(255,255,255,0.05)",
                                     border: isChildItemActive
-                                      ? "1px solid rgba(255,255,255,0.15)"
-                                      : "1px solid transparent",
+                                      ? "1px solid rgba(255,255,255,0.25)"
+                                      : "1px solid rgba(255,255,255,0.1)",
+                                    backdropFilter: "blur(16px)",
                                     animationDelay: `${childIndex * 50}ms`,
+                                    boxShadow: isChildItemActive
+                                      ? "0 8px 24px rgba(128, 55, 145, 0.3)"
+                                      : "none",
                                   }}
                                 >
-                                  {/* Hover gradient overlay */}
-                                  <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-[#b87bd1]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+                                  {/* Hover gradient overlay with shimmer */}
+                                  <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/15 to-[#b87bd1]/10 opacity-0 group-hover/child:opacity-100 transition-all duration-500 rounded-xl" />
+                                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover/child:translate-x-full transition-transform duration-1000 rounded-xl" />
 
-                                  {/* Glow effect on active */}
+                                  {/* Glow effect on active - Enhanced */}
                                   {isChildItemActive && (
                                     <>
                                       <div
-                                        className="absolute inset-0 rounded-lg"
+                                        className="absolute inset-0 rounded-xl animate-pulse"
                                         style={{
                                           background: `linear-gradient(135deg, ${
                                             item.gradient.split(" ")[1]
-                                          }20, ${item.gradient.split(" ")[3]}10)`,
+                                          }25, ${item.gradient.split(" ")[3]}15)`,
                                         }}
                                       />
                                       <div
-                                        className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full"
+                                        className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 rounded-r-full"
                                         style={{
                                           background: `linear-gradient(to bottom, ${
                                             item.gradient.split(" ")[1]
                                           }, ${item.gradient.split(" ")[3]})`,
-                                          boxShadow: `0 0 10px ${
+                                          boxShadow: `0 0 16px ${
                                             item.gradient.split(" ")[1]
-                                          }50`,
+                                          }80, 0 0 32px ${item.gradient.split(" ")[1]}50`,
                                         }}
                                       />
                                     </>
                                   )}
 
-                                  {/* Icon with glow */}
+                                  {/* Icon with enhanced glow */}
                                   <div className="relative flex items-center justify-center">
                                     {isChildItemActive && (
-                                      <div
-                                        className="absolute inset-0 rounded-lg blur-md opacity-40"
-                                        style={{
-                                          background: `linear-gradient(135deg, ${
-                                            item.gradient.split(" ")[1]
-                                          }, ${item.gradient.split(" ")[3]})`,
-                                        }}
-                                      />
+                                      <>
+                                        <div
+                                          className="absolute inset-0 rounded-xl blur-xl opacity-60 animate-pulse"
+                                          style={{
+                                            background: `linear-gradient(135deg, ${
+                                              item.gradient.split(" ")[1]
+                                            }, ${item.gradient.split(" ")[3]})`,
+                                          }}
+                                        />
+                                        <div
+                                          className="absolute inset-0 rounded-xl blur-md opacity-40"
+                                          style={{
+                                            background: `radial-gradient(circle at center, ${
+                                              item.gradient.split(" ")[1]
+                                            }90, transparent)`,
+                                          }}
+                                        />
+                                      </>
                                     )}
                                     <ChildIcon
                                       className={cn(
                                         "h-4 w-4 shrink-0 relative z-10 transition-all duration-300",
                                         isChildItemActive
-                                          ? "text-white scale-110"
-                                          : "text-white/60 group-hover:text-white group-hover:scale-105"
+                                          ? "text-white scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]"
+                                          : "text-white/70 group-hover/child:text-white group-hover/child:scale-110 group-hover/child:rotate-12"
                                       )}
                                     />
                                   </div>
 
-                                  {/* Content */}
+                                  {/* Content - Enhanced */}
                                   <div className="flex-1 min-w-0 relative z-10">
                                     <div
                                       className={cn(
-                                        "text-sm font-semibold truncate transition-colors duration-300 flex items-center gap-2",
+                                        "text-sm font-bold truncate transition-colors duration-300 flex items-center gap-2",
                                         isChildItemActive
                                           ? "text-white"
-                                          : "text-white/70 group-hover:text-white"
+                                          : "text-white/80 group-hover/child:text-white"
                                       )}
                                     >
                                       {child.name}
                                       {isChildItemActive && (
                                         <span
-                                          className="w-1.5 h-1.5 rounded-full animate-pulse"
+                                          className="w-2 h-2 rounded-full animate-pulse"
                                           style={{
                                             background: `linear-gradient(135deg, ${
                                               item.gradient.split(" ")[1]
                                             }, ${item.gradient.split(" ")[3]})`,
+                                            boxShadow: `0 0 8px ${item.gradient.split(" ")[1]}`,
                                           }}
                                         />
                                       )}
@@ -446,8 +463,8 @@ export default function StudentSidebar({ isOpen, onClose }) {
                                         className={cn(
                                           "text-xs truncate transition-colors duration-300 mt-0.5",
                                           isChildItemActive
-                                            ? "text-white/70"
-                                            : "text-white/50 group-hover:text-white/60"
+                                            ? "text-white/80"
+                                            : "text-white/60 group-hover/child:text-white/75"
                                         )}
                                       >
                                         {child.description}
@@ -455,16 +472,23 @@ export default function StudentSidebar({ isOpen, onClose }) {
                                     )}
                                   </div>
 
-                                  {/* PRO Badge */}
+                                  {/* PRO Badge - Ultra Premium */}
                                   {child.isPro && (
                                     <div className="shrink-0 relative z-10">
-                                      <div className="relative">
-                                        {/* Glow effect */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-md blur-sm opacity-40 animate-pulse" />
-                                        {/* Badge */}
-                                        <div className="relative px-2 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black rounded-md shadow-lg flex items-center gap-1">
-                                          <Crown className="w-3 h-3" />
-                                          PRO
+                                      <div className="relative group/badge">
+                                        {/* Multi-layer glow effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 rounded-lg blur-lg opacity-60 animate-pulse" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 rounded-lg blur-md opacity-50 group-hover/badge:opacity-70 transition-opacity" />
+                                        
+                                        {/* Badge with shine effect */}
+                                        <div className="relative px-3 py-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white text-xs font-black rounded-lg shadow-2xl flex items-center gap-1.5 overflow-hidden"
+                                          style={{
+                                            boxShadow: "0 4px 20px rgba(251, 146, 60, 0.5), inset 0 1px 0 rgba(255,255,255,0.3)",
+                                          }}
+                                        >
+                                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/badge:translate-x-full transition-transform duration-1000" />
+                                          <Crown className="w-3.5 h-3.5 relative z-10 animate-bounce" style={{ animationDuration: '2s' }} />
+                                          <span className="relative z-10 tracking-wider">PRO</span>
                                         </div>
                                       </div>
                                     </div>
@@ -763,6 +787,40 @@ export default function StudentSidebar({ isOpen, onClose }) {
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(135deg, #b87bd1, #803791);
+        }
+
+        .premium-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .premium-scrollbar::-webkit-scrollbar-track {
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+          border-radius: 12px;
+          margin: 8px 0;
+        }
+
+        .premium-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #803791, #9b55b0, #b87bd1);
+          border-radius: 12px;
+          box-shadow: 0 0 10px rgba(128, 55, 145, 0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        .premium-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(135deg, #b87bd1, #9b55b0, #803791);
+          box-shadow: 0 0 16px rgba(184, 123, 209, 0.7), inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
         }
       `}</style>
     </>
