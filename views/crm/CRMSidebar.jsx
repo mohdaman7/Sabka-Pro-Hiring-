@@ -185,10 +185,11 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
           isMobile ? (isOpen ? "translate-x-0" : "-translate-x-full") : ""
         }`}
         style={{
-          width: isCollapsed ? "80px" : "240px",
-          background: "rgba(255, 255, 255, 0.02)",
-          backdropFilter: "blur(20px)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
+          width: isCollapsed ? "90px" : "280px",
+          background: "linear-gradient(135deg, rgba(128, 55, 145, 0.08), rgba(184, 123, 209, 0.05))",
+          backdropFilter: "blur(24px)",
+          borderRight: "1px solid rgba(184, 123, 209, 0.15)",
+          boxShadow: "0 8px 32px rgba(128, 55, 145, 0.1)",
         }}
       >
         {/* Subtle gradient overlay */}

@@ -79,7 +79,9 @@ export default function LeadsInsights() {
   }, [stats]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#120223] via-[#1d0e34] to-[#0b0214] px-6 pb-10 pt-6">
+    <div className="min-h-screen px-6 pb-10 pt-6" style={{
+      background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
+    }}>
       <div className="mx-auto flex max-w-7xl flex-col gap-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-4">
