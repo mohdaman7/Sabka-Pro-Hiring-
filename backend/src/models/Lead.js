@@ -90,7 +90,15 @@ const leadSchema = new Schema(
     // Lead Status and Priority
     status: {
       type: String,
-      enum: ["new", "contacted", "follow_up", "qualified", "converted", "lost", "unqualified"],
+      enum: [
+        "new",
+        "contacted",
+        "follow_up",
+        "proposal_sent",
+        "negotiation",
+        "converted",
+        "lost"
+      ],
       default: "new",
     },
     priority: {

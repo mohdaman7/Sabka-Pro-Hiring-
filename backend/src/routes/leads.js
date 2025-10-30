@@ -18,6 +18,7 @@ import {
   getStaffPerformance,
   bulkAssignLeads,
   bulkUpdateStatus,
+  roundRobinAssignLeads,
 } from "../controllers/leadController.js";
 
 const router = Router();
@@ -60,5 +61,6 @@ router.get("/:id/follow-ups", getFollowUps);
 // ============================================
 router.post("/bulk/assign", bulkAssignLeads);
 router.post("/bulk/status", bulkUpdateStatus);
+router.post("/auto-assign", roundRobinAssignLeads);
 
 export default router;

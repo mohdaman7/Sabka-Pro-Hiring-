@@ -11,11 +11,15 @@ export const createLead = async (req, res, next) => {
   try {
     const leadData = req.body;
     
-    // Check if lead with email already exists
-    const existingLead = await LeadModel.findOne({ 
-      email: leadData.email, 
-      isDeleted: false 
-    });
+    // Enhanced duplicate detection by email OR phone OR whatsapp
+    const dupFilter = { isDeleted: false };
+    const $or = [];
+    if (leadData.email) $or.push({ email: leadData.email.toLowerCase() });
+    if (leadData.phone) $or.push({ phone: leadData.phone });
+    if (leadData.whatsapp) $or.push({ whatsapp: leadData.whatsapp });
+    const existingLead = $or.length
+      ? await LeadModel.findOne({ ...dupFilter, $or })
+      : null;
     
     if (existingLead) {
       return res.status(400).json({
@@ -40,6 +44,66 @@ export const createLead = async (req, res, next) => {
       success: true,
       data: lead,
       message: "Lead created successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================
+// AUTO ASSIGNMENT (ROUND-ROBIN / LOWEST LOAD)
+// ============================================
+
+export const roundRobinAssignLeads = async (req, res, next) => {
+  try {
+    const { leadIds = [] } = req.body;
+
+    if (!Array.isArray(leadIds) || leadIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "leadIds must be a non-empty array",
+      });
+    }
+
+    // Find candidate assignees: admins act as CRM staff for now
+    const staff = await UserModel.find({ role: "admin", status: { $in: ["active", "pending"] } }).select("_id firstName lastName email");
+    if (staff.length === 0) {
+      return res.status(400).json({ success: false, message: "No staff users available for assignment" });
+    }
+
+    // Precompute current load (open leads) for each staff
+    const loads = await Promise.all(
+      staff.map(async (u) => {
+        const count = await LeadModel.countDocuments({
+          assignedTo: u._id,
+          isDeleted: false,
+          status: { $nin: ["converted", "lost"] },
+        });
+        return { user: u, load: count };
+      })
+    );
+
+    const assigned = [];
+    for (const leadId of leadIds) {
+      // pick lowest load
+      loads.sort((a, b) => a.load - b.load);
+      const pick = loads[0];
+      const lead = await LeadModel.findOneAndUpdate(
+        { _id: leadId, isDeleted: false },
+        { assignedTo: pick.user._id, assignedBy: req.user?.id || pick.user._id, assignedAt: new Date() },
+        { new: true }
+      ).populate("assignedTo", "firstName lastName email");
+
+      if (lead) {
+        assigned.push(lead._id.toString());
+        pick.load += 1; // increase load for fairness
+      }
+    }
+
+    return res.json({
+      success: true,
+      data: { assignedCount: assigned.length, assignedIds: assigned },
+      message: `${assigned.length} leads assigned via round-robin`,
     });
   } catch (err) {
     next(err);

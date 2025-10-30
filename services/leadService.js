@@ -196,4 +196,16 @@ export const leadService = {
       throw new Error(error.response?.data?.message || "Failed to bulk update lead status");
     }
   },
+
+  // Auto-assign via round-robin
+  async autoAssignLeads(leadIds) {
+    try {
+      const response = await api.post("/api/leads/auto-assign", {
+        leadIds,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to auto-assign leads");
+    }
+  },
 };
