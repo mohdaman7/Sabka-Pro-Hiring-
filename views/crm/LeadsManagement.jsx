@@ -47,6 +47,8 @@ import { Input } from "@/components/ui/input";
 import { useLeadViewModel } from "@/viewmodels/LeadViewModel";
 import { adminService } from "@/services/adminService";
 import LeadDetailDrawer from "@/views/crm/LeadDetailDrawer";
+import UserManagementTab from "@/views/crm/components/UserManagementTab";
+import { cn } from "@/lib/utils";
 
 export default function LeadsManagement() {
   const {
@@ -65,6 +67,9 @@ export default function LeadsManagement() {
     autoAssignLeads,
   } = useLeadViewModel();
 
+  // Main section toggle: 'leads' or 'users'
+  const [mainSection, setMainSection] = useState("leads");
+  
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLead, setSelectedLead] = useState(null);
@@ -91,21 +96,10 @@ export default function LeadsManagement() {
     sortOrder: "desc",
   });
 
-  // Registration approvals state
-  const [registrationTab, setRegistrationTab] = useState("pending"); // 'pending' | 'accepted' | 'rejected'
-  const [registrationUsers, setRegistrationUsers] = useState([]);
-  const [registrationLoading, setRegistrationLoading] = useState(false);
-  const [registrationPagination, setRegistrationPagination] = useState(null);
-
   useEffect(() => {
     fetchLeadsData();
     fetchStats();
   }, [activeTab, filters]);
-
-  useEffect(() => {
-    // Load registration approvals when tab changes
-    loadRegistrations();
-  }, [registrationTab]);
 
   const fetchLeadsData = async () => {
     const queryFilters = { ...filters };
@@ -126,68 +120,6 @@ export default function LeadsManagement() {
     }
   };
 
-  const loadRegistrations = async () => {
-    setRegistrationLoading(true);
-    try {
-      let response;
-      if (registrationTab === "pending") {
-        response = await adminService.getPendingUsers();
-      } else {
-        const status = registrationTab === "accepted" ? "active" : "rejected";
-        response = await adminService.getUsers(status);
-      }
-
-      if (response?.success) {
-        setRegistrationUsers(response.data || []);
-        setRegistrationPagination(response.pagination || null);
-      } else {
-        setRegistrationUsers(response?.data || []);
-        setRegistrationPagination(response?.pagination || null);
-      }
-    } catch (err) {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Failed to load registrations";
-      customToast.error("Error", message);
-    } finally {
-      setRegistrationLoading(false);
-    }
-  };
-
-  const handleApproveUserReg = async (userId) => {
-    const toastId = customToast.loading("Approving user...");
-    try {
-      await adminService.approveUser(userId, true);
-      customToast.success("Approved", "User approved successfully");
-      await loadRegistrations();
-    } catch (err) {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Failed to approve user";
-      customToast.error("Approval Failed", message);
-    } finally {
-      toast.dismiss(toastId);
-    }
-  };
-
-  const handleRejectUserReg = async (userId) => {
-    const reason =
-      window.prompt("Enter rejection reason (optional):", "") || "";
-    const toastId = customToast.loading("Rejecting user...");
-    try {
-      await adminService.rejectUser(userId, reason);
-      customToast.success("Rejected", "User rejected successfully");
-      await loadRegistrations();
-    } catch (err) {
-      const message =
-        err?.response?.data?.message || err?.message || "Failed to reject user";
-      customToast.error("Rejection Failed", message);
-    } finally {
-      toast.dismiss(toastId);
-    }
-  };
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -771,13 +703,19 @@ export default function LeadsManagement() {
           <div className="max-w-2xl space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-sm font-semibold text-white/80 shadow-lg shadow-[#803791]/20">
               <Sparkles className="h-4 w-4 text-[#ffd6ff]" />
-              AI-assisted growth engine
+              {mainSection === "leads" ? "AI-assisted growth engine" : "User Management System"}
             </div>
             <h1 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">
-              Elevate your <span className="bg-gradient-to-r from-[#ffd6ff] to-[#cfa9ff] bg-clip-text text-transparent">lead lifecycle</span> with deep visibility.
+              {mainSection === "leads" ? (
+                <>Elevate your <span className="bg-gradient-to-r from-[#ffd6ff] to-[#cfa9ff] bg-clip-text text-transparent">lead lifecycle</span> with deep visibility.</>
+              ) : (
+                <>Manage your <span className="bg-gradient-to-r from-[#ffd6ff] to-[#cfa9ff] bg-clip-text text-transparent">users</span> with precision.</>
+              )}
             </h1>
             <p className="text-base text-white/80 md:text-lg">
-              Monitor every touchpoint, orchestrate smart follow-ups, and move prospects across stages with confidence. Switch views instantly between strategy, execution, and insights.
+              {mainSection === "leads" 
+                ? "Monitor every touchpoint, orchestrate smart follow-ups, and move prospects across stages with confidence."
+                : "Approve registrations, manage plans, and control user access with comprehensive tools."}
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <button
@@ -857,6 +795,43 @@ export default function LeadsManagement() {
         </div>
       </div>
 
+      {/* Main Section Toggle */}
+      <div className="flex gap-3 p-1.5 bg-white/5 rounded-2xl backdrop-blur-xl border border-white/10">
+        <button
+          onClick={() => setMainSection("leads")}
+          className={cn(
+            "flex-1 px-6 py-4 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3",
+            mainSection === "leads"
+              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl scale-105"
+              : "text-white/70 hover:text-white hover:bg-white/10"
+          )}
+        >
+          <Target className="w-6 h-6" />
+          Lead Management
+          <span className={cn(
+            "px-3 py-1 rounded-full text-sm font-black",
+            mainSection === "leads" ? "bg-white/20" : "bg-white/10"
+          )}>
+            {stats?.totalLeads || 0}
+          </span>
+        </button>
+        <button
+          onClick={() => setMainSection("users")}
+          className={cn(
+            "flex-1 px-6 py-4 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3",
+            mainSection === "users"
+              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl scale-105"
+              : "text-white/70 hover:text-white hover:bg-white/10"
+          )}
+        >
+          <Users className="w-6 h-6" />
+          User Management
+        </button>
+      </div>
+
+      {/* Conditional Rendering based on mainSection */}
+      {mainSection === "leads" ? (
+        <>
       {/* Quick navigation */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <Link
@@ -1667,6 +1642,11 @@ export default function LeadsManagement() {
             closeLeadDrawer();
           }}
         />
+      )}
+        </>
+      ) : (
+        /* User Management Section */
+        <UserManagementTab />
       )}
     </div>
   );
