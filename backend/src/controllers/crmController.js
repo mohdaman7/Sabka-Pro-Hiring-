@@ -173,6 +173,355 @@ export const rejectUser = async (req, res, next) => {
   }
 };
 
+// Get users by status
+export const getUsersByStatus = async (req, res, next) => {
+  try {
+    const { status } = req.params;
+    const { page = 1, limit = 20, role, search } = req.query;
+
+    const filter = { status };
+    
+    if (role) {
+      filter.role = role;
+    }
+
+    if (search) {
+      filter.$or = [
+        { firstName: new RegExp(search, "i") },
+        { lastName: new RegExp(search, "i") },
+        { email: new RegExp(search, "i") },
+      ];
+    }
+
+    const users = await UserModel.find(filter)
+      .select("-passwordHash")
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .lean();
+
+    const count = await UserModel.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: {
+        users,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+        total: count,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Reactivate user
+export const reactivateUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.status = "active";
+    user.rejectionReason = undefined;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "User reactivated successfully",
+      data: { id: user._id, status: user.status },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Deactivate user
+export const deactivateUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.status = "inactive";
+    user.deactivationReason = reason;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "User deactivated successfully",
+      data: { id: user._id, status: user.status },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Upgrade user plan
+export const upgradePlan = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { planType = "pro", duration, paymentDetails } = req.body;
+
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.planType = planType;
+    user.planUpgradedAt = new Date();
+    if (duration) {
+      user.planExpiresAt = new Date(Date.now() + duration * 24 * 60 * 60 * 1000);
+    }
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "User plan upgraded successfully",
+      data: {
+        id: user._id,
+        planType: user.planType,
+        planUpgradedAt: user.planUpgradedAt,
+        planExpiresAt: user.planExpiresAt,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Downgrade user plan
+export const downgradePlan = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.planType = "free";
+    user.planDowngradedAt = new Date();
+    user.planDowngradeReason = reason;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "User plan downgraded successfully",
+      data: { id: user._id, planType: user.planType },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Get user profile
+export const getUserProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const user = await UserModel.findById(id)
+      .select("-passwordHash")
+      .lean();
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Bulk approve users
+export const bulkApproveUsers = async (req, res, next) => {
+  try {
+    const { userIds } = req.body;
+
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide an array of user IDs",
+      });
+    }
+
+    const results = [];
+    for (const userId of userIds) {
+      try {
+        const user = await UserModel.findById(userId);
+        if (user && user.status === "pending") {
+          const newPassword = generatePassword();
+          const passwordHash = await bcrypt.hash(newPassword, 10);
+          user.status = "active";
+          user.passwordHash = passwordHash;
+          await user.save();
+          results.push({ id: userId, success: true });
+        } else {
+          results.push({ id: userId, success: false, reason: "Not pending" });
+        }
+      } catch (error) {
+        results.push({ id: userId, success: false, reason: error.message });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: "Bulk approval completed",
+      data: results,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Bulk reject users
+export const bulkRejectUsers = async (req, res, next) => {
+  try {
+    const { userIds, reason } = req.body;
+
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide an array of user IDs",
+      });
+    }
+
+    const result = await UserModel.updateMany(
+      { _id: { $in: userIds }, status: "pending" },
+      { 
+        $set: { 
+          status: "rejected",
+          rejectionReason: reason || "Application did not meet requirements"
+        }
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Bulk rejection completed",
+      data: {
+        modified: result.modifiedCount,
+        total: userIds.length,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Get user statistics
+export const getUserStats = async (req, res, next) => {
+  try {
+    const stats = await UserModel.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const roleStats = await UserModel.aggregate([
+      {
+        $group: {
+          _id: "$role",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const planStats = await UserModel.aggregate([
+      {
+        $group: {
+          _id: "$planType",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        byStatus: stats,
+        byRole: roleStats,
+        byPlan: planStats,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Search users
+export const searchUsers = async (req, res, next) => {
+  try {
+    const { q, role, status, planType, page = 1, limit = 20 } = req.query;
+
+    const filter = {};
+    
+    if (q) {
+      filter.$or = [
+        { firstName: new RegExp(q, "i") },
+        { lastName: new RegExp(q, "i") },
+        { email: new RegExp(q, "i") },
+      ];
+    }
+
+    if (role) filter.role = role;
+    if (status) filter.status = status;
+    if (planType) filter.planType = planType;
+
+    const users = await UserModel.find(filter)
+      .select("-passwordHash")
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .lean();
+
+    const count = await UserModel.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: {
+        users,
+        totalPages: Math.ceil(count / limit),
+        currentPage: parseInt(page),
+        total: count,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // ============================================
 // EXISTING FUNCTIONS (UPDATED)
 // ============================================

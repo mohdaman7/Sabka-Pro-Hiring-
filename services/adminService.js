@@ -128,9 +128,87 @@ export const adminService = {
   },
 
   // ============================================
+  // USER MANAGEMENT (Registration Approvals & User Actions)
+  // ============================================
+
+  // Get users by status (pending, active, rejected)
+  getUsersByStatus: async (status = "pending", params = {}) => {
+    const response = await api.get(`/api/admin/users/status/${status}`, { params });
+    return response.data;
+  },
+
+  // Approve user registration
+  approveUser: async (id, sendCredentials = true) => {
+    const response = await api.post(`/api/admin/approve/${id}`, { sendCredentials });
+    return response.data;
+  },
+
+  // Reject user registration
+  rejectUser: async (id, reason) => {
+    const response = await api.post(`/api/admin/reject/${id}`, { reason });
+    return response.data;
+  },
+
+  // Reactivate rejected user
+  reactivateUser: async (id) => {
+    const response = await api.post(`/api/admin/users/${id}/reactivate`);
+    return response.data;
+  },
+
+  // Deactivate active user
+  deactivateUser: async (id, reason) => {
+    const response = await api.post(`/api/admin/users/${id}/deactivate`, { reason });
+    return response.data;
+  },
+
+  // Upgrade user plan (Free to Pro)
+  upgradePlan: async (id, planDetails) => {
+    const response = await api.post(`/api/admin/users/${id}/upgrade-plan`, planDetails);
+    return response.data;
+  },
+
+  // Downgrade user plan (Pro to Free)
+  downgradePlan: async (id, reason) => {
+    const response = await api.post(`/api/admin/users/${id}/downgrade-plan`, { reason });
+    return response.data;
+  },
+
+  // Get user profile details
+  getUserProfile: async (id) => {
+    const response = await api.get(`/api/admin/users/${id}/profile`);
+    return response.data;
+  },
+
+  // Bulk approve users
+  bulkApproveUsers: async (userIds) => {
+    const response = await api.post("/api/admin/users/bulk/approve", { userIds });
+    return response.data;
+  },
+
+  // Bulk reject users
+  bulkRejectUsers: async (userIds, reason) => {
+    const response = await api.post("/api/admin/users/bulk/reject", { userIds, reason });
+    return response.data;
+  },
+
+  // Get user statistics
+  getUserStats: async (params = {}) => {
+    const response = await api.get("/api/admin/users/stats", { params });
+    return response.data;
+  },
+
+  // Search users
+  searchUsers: async (query, filters = {}) => {
+    const response = await api.get("/api/admin/users/search", { 
+      params: { q: query, ...filters } 
+    });
+    return response.data;
+  },
+
+  // ============================================
   // USER MANAGEMENT (LEGACY - Keep for existing users)
   // ============================================
-  
+
   // Get pending users (for existing approval workflow if needed)
   getPendingUsers: async () => {
     const response = await api.get("/api/admin/pending");
@@ -138,7 +216,7 @@ export const adminService = {
   },
 
   // Approve user
-  approveUser: async (userId, sendCredentials = true) => {
+  approveLegacyUser: async (userId, sendCredentials = true) => {
     const response = await api.post(`/api/admin/approve/${userId}`, {
       sendCredentials,
     });
@@ -146,7 +224,7 @@ export const adminService = {
   },
 
   // Reject user
-  rejectUser: async (userId, reason) => {
+  rejectLegacyUser: async (userId, reason) => {
     const response = await api.post(`/api/admin/reject/${userId}`, {
       reason,
     });

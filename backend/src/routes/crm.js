@@ -12,6 +12,16 @@ import {
   getPendingRegistrations,
   approveUser,
   rejectUser,
+  getUsersByStatus,
+  reactivateUser,
+  deactivateUser,
+  upgradePlan,
+  downgradePlan,
+  getUserProfile,
+  bulkApproveUsers,
+  bulkRejectUsers,
+  getUserStats,
+  searchUsers,
   updateEmployerVerification,
   updateEmployerPlanAdmin,
   updateEmployerDocumentStatus,
@@ -40,11 +50,23 @@ router.post("/approve/:id", approveUser);
 router.post("/reject/:id", rejectUser);
 
 // ============================================
-// User Management
+// User Management - Enhanced
 // ============================================
 router.get("/users", getAllUsers);
+router.get("/users/status/:status", getUsersByStatus);
+router.get("/users/search", searchUsers);
+router.get("/users/stats", getUserStats);
 router.get("/users/:id", getUserById);
+router.get("/users/:id/profile", getUserProfile);
 router.patch("/users/:id/status", updateUserStatus);
+router.post("/users/:id/reactivate", reactivateUser);
+router.post("/users/:id/deactivate", deactivateUser);
+router.post("/users/:id/upgrade-plan", upgradePlan);
+router.post("/users/:id/downgrade-plan", downgradePlan);
+
+// Bulk user operations
+router.post("/users/bulk/approve", bulkApproveUsers);
+router.post("/users/bulk/reject", bulkRejectUsers);
 
 // Candidates listing with filters
 router.get("/candidates", getCandidates);
