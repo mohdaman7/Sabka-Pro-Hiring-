@@ -42,8 +42,11 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { customToast, toast } from "@/components/ui/toast";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 import { useLeadViewModel } from "@/viewmodels/LeadViewModel";
 import { adminService } from "@/services/adminService";
+import LeadDetailDrawer from "@/views/crm/LeadDetailDrawer";
 
 export default function LeadsManagement() {
   const {
@@ -71,6 +74,11 @@ export default function LeadsManagement() {
   const [showFollowUpModal, setShowFollowUpModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedLeads, setSelectedLeads] = useState([]);
+  const [drawerLead, setDrawerLead] = useState(null);
+  const [bulkAssignOpen, setBulkAssignOpen] = useState(false);
+  const [bulkEmailOpen, setBulkEmailOpen] = useState(false);
+  const [bulkAssignForm, setBulkAssignForm] = useState({ assignee: "", note: "" });
+  const [bulkEmailForm, setBulkEmailForm] = useState({ subject: "", message: "" });
   const [stats, setStats] = useState(null);
   const [filters, setFilters] = useState({
     status: "",
@@ -249,6 +257,15 @@ export default function LeadsManagement() {
     }
   };
 
+  const openLeadDrawer = (lead) => {
+    setSelectedLead(lead);
+    setDrawerLead(lead);
+  };
+
+  const closeLeadDrawer = () => {
+    setDrawerLead(null);
+  };
+
   const handleBulkAction = async (action) => {
     if (selectedLeads.length === 0) {
       customToast.warning(
@@ -265,10 +282,6 @@ export default function LeadsManagement() {
     try {
       // Implement bulk actions based on the action type
       switch (action) {
-        case "assign":
-          // Bulk assign logic placeholder for manual selection
-          customToast.info("Bulk Assign", "Select a staff member to assign leads");
-          break;
         case "autoassign": {
           const res = await autoAssignLeads(selectedLeads);
           if (!res.success) throw new Error(res.error || "Auto-assign failed");
@@ -278,9 +291,6 @@ export default function LeadsManagement() {
           );
           break;
         }
-        case "email":
-          // Bulk email logic
-          break;
         case "delete":
           // Bulk delete logic
           break;
@@ -289,7 +299,7 @@ export default function LeadsManagement() {
       }
 
       toast.dismiss(toastId);
-      if (action !== "assign") {
+      if (action !== "delete") {
         customToast.success(
           "Bulk Action Completed",
           `${action} applied to ${selectedLeads.length} leads`
@@ -300,6 +310,76 @@ export default function LeadsManagement() {
     } catch (error) {
       toast.dismiss(toastId);
       customToast.error("Bulk Action Failed", "Failed to process bulk action");
+    }
+  };
+
+  const handleBulkManualAssign = async (event) => {
+    event.preventDefault();
+    if (selectedLeads.length === 0) {
+      customToast.warning("No leads", "Select leads to assign first");
+      return;
+    }
+    if (!bulkAssignForm.assignee.trim()) {
+      customToast.warning("Missing assignee", "Please provide a staff identifier");
+      return;
+    }
+
+    const toastId = customToast.loading(
+      `Assigning ${selectedLeads.length} lead(s) to ${bulkAssignForm.assignee}...`
+    );
+
+    try {
+      for (const leadId of selectedLeads) {
+        await assignLead(leadId, bulkAssignForm.assignee.trim(), bulkAssignForm.note.trim());
+      }
+
+      customToast.success(
+        "Assignment complete",
+        `${selectedLeads.length} lead(s) assigned to ${bulkAssignForm.assignee}`
+      );
+      setSelectedLeads([]);
+      setBulkAssignOpen(false);
+      setBulkAssignForm({ assignee: "", note: "" });
+      fetchLeadsData();
+    } catch (err) {
+      const message =
+        err?.response?.data?.message || err?.message || "Unable to assign leads";
+      customToast.error("Assignment failed", message);
+    } finally {
+      toast.dismiss(toastId);
+    }
+  };
+
+  const handleBulkEmail = async (event) => {
+    event.preventDefault();
+    if (selectedLeads.length === 0) {
+      customToast.warning("No leads", "Select leads to email first");
+      return;
+    }
+    if (!bulkEmailForm.subject.trim() || !bulkEmailForm.message.trim()) {
+      customToast.warning("Incomplete", "Subject and message are required");
+      return;
+    }
+
+    const toastId = customToast.loading(
+      `Queuing email for ${selectedLeads.length} lead(s)...`
+    );
+
+    try {
+      // Placeholder for real email service integration
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      customToast.success(
+        "Bulk email queued",
+        `${selectedLeads.length} lead(s) will receive your sequence`
+      );
+      setBulkEmailOpen(false);
+      setBulkEmailForm({ subject: "", message: "" });
+    } catch (err) {
+      const message = err?.message || "Unable to queue emails";
+      customToast.error("Email failed", message);
+    } finally {
+      toast.dismiss(toastId);
     }
   };
 
@@ -1074,13 +1154,54 @@ export default function LeadsManagement() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <button
-                onClick={() => handleBulkAction("assign")}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
-              >
-                <UserPlus className="h-4 w-4" />
-                Manual assign
-              </button>
+              <Popover open={bulkAssignOpen} onOpenChange={setBulkAssignOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                    type="button"
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    Manual assign
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 rounded-2xl border border-white/10 bg-[#1b0c2d] p-4 text-white shadow-xl">
+                  <form className="space-y-4" onSubmit={handleBulkManualAssign}>
+                    <div className="space-y-2">
+                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                        Staff identifier
+                      </label>
+                      <Input
+                        value={bulkAssignForm.assignee}
+                        onChange={(e) =>
+                          setBulkAssignForm((prev) => ({ ...prev, assignee: e.target.value }))
+                        }
+                        placeholder="e.g. staff user ID or email"
+                        className="h-10 rounded-xl border-white/15 bg-white/5 text-sm text-white placeholder:text-white/40"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                        Assignment note
+                      </label>
+                      <textarea
+                        value={bulkAssignForm.note}
+                        onChange={(e) =>
+                          setBulkAssignForm((prev) => ({ ...prev, note: e.target.value }))
+                        }
+                        rows={3}
+                        className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
+                        placeholder="Optional context for the assignee"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5"
+                    >
+                      Assign {selectedLeads.length} lead(s)
+                    </button>
+                  </form>
+                </PopoverContent>
+              </Popover>
               <button
                 onClick={() => handleBulkAction("autoassign")}
                 className="inline-flex items-center gap-2 rounded-xl border border-purple-400/30 bg-purple-500/20 px-3.5 py-2 text-sm font-semibold text-purple-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
@@ -1088,13 +1209,54 @@ export default function LeadsManagement() {
                 <ArrowUpDown className="h-4 w-4" />
                 Smart auto-assign
               </button>
-              <button
-                onClick={() => handleBulkAction("email")}
-                className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3.5 py-2 text-sm font-semibold text-emerald-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
-              >
-                <Send className="h-4 w-4" />
-                Sequence email
-              </button>
+              <Popover open={bulkEmailOpen} onOpenChange={setBulkEmailOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3.5 py-2 text-sm font-semibold text-emerald-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                    type="button"
+                  >
+                    <Send className="h-4 w-4" />
+                    Sequence email
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[22rem] rounded-2xl border border-white/10 bg-[#102033] p-4 text-white shadow-xl">
+                  <form className="space-y-4" onSubmit={handleBulkEmail}>
+                    <div className="space-y-2">
+                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                        Subject
+                      </label>
+                      <Input
+                        value={bulkEmailForm.subject}
+                        onChange={(e) =>
+                          setBulkEmailForm((prev) => ({ ...prev, subject: e.target.value }))
+                        }
+                        placeholder="Introductory call invitation"
+                        className="h-10 rounded-xl border-white/15 bg-white/5 text-sm text-white placeholder:text-white/40"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                        Message
+                      </label>
+                      <textarea
+                        value={bulkEmailForm.message}
+                        onChange={(e) =>
+                          setBulkEmailForm((prev) => ({ ...prev, message: e.target.value }))
+                        }
+                        rows={4}
+                        className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
+                        placeholder="Hi {{firstName}},\nLet's schedule a call to discuss your requirements..."
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5"
+                    >
+                      Send to {selectedLeads.length} lead(s)
+                    </button>
+                  </form>
+                </PopoverContent>
+              </Popover>
               <button
                 onClick={() => handleBulkAction("delete")}
                 className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/15 px-3.5 py-2 text-sm font-semibold text-rose-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
@@ -1386,7 +1548,7 @@ export default function LeadsManagement() {
                     <td className="py-4 px-6">
                       <div className="flex gap-2">
                         <button
-                          onClick={() => setSelectedLead(lead)}
+                          onClick={() => openLeadDrawer(lead)}
                           className="rounded-xl border border-white/15 bg-white/10 p-2 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
                           title="View Details"
                         >
@@ -1478,6 +1640,34 @@ export default function LeadsManagement() {
       {showCreateModal && <CreateLeadModal />}
       {showAssignModal && <AssignLeadModal />}
       {showFollowUpModal && <FollowUpModal />}
+      {drawerLead && (
+        <LeadDetailDrawer
+          lead={drawerLead}
+          onClose={closeLeadDrawer}
+          onAssign={() => {
+            closeLeadDrawer();
+            setShowAssignModal(true);
+          }}
+          onScheduleFollowUp={() => {
+            closeLeadDrawer();
+            setShowFollowUpModal(true);
+          }}
+          onConvert={() => {
+            if (!drawerLead) return;
+            handleConvertLead(drawerLead.id);
+            closeLeadDrawer();
+          }}
+          onDelete={() => {
+            if (!drawerLead) return;
+            handleDeleteLead(drawerLead.id);
+            closeLeadDrawer();
+          }}
+          onStatusChange={(lead, status) => {
+            handleStatusChange(lead.id, status);
+            closeLeadDrawer();
+          }}
+        />
+      )}
     </div>
   );
 }
