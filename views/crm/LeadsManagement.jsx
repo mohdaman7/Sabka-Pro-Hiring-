@@ -692,21 +692,13 @@ export default function LeadsManagement() {
   );
 
   return (
-    <div className="min-h-screen p-6 space-y-6" style={{
-      background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
-    }}>
+    <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6 space-y-6">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-3xl p-8 shadow-2xl" style={{
-        background: "linear-gradient(135deg, rgba(128, 55, 145, 0.25), rgba(184, 123, 209, 0.15))",
-        backdropFilter: "blur(20px)",
-        border: "1px solid rgba(184, 123, 209, 0.2)",
-        boxShadow: "0 8px 32px rgba(128, 55, 145, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)"
-      }}>
-        <div className="absolute inset-0 opacity-40" style={{
-          background: "radial-gradient(circle at top right, rgba(184, 123, 209, 0.3), transparent 60%)"
+      <div className="relative overflow-hidden rounded-3xl border border-[#803791]/20 bg-gradient-to-r from-[#803791]/40 via-[#9c54b1]/30 to-[#5c1f72]/40 p-6 md:p-8 shadow-2xl">
+        <div className="absolute inset-0 opacity-60 mix-blend-screen" style={{
+          background: "radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 55%)"
         }}></div>
-        <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-[#b87bd1]/20 blur-3xl"></div>
-        <div className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-[#803791]/15 blur-3xl"></div>
+        <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#b87bd1]/20 blur-3xl"></div>
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-sm font-semibold text-white/80 shadow-lg shadow-[#803791]/20">
@@ -765,53 +757,43 @@ export default function LeadsManagement() {
             </div>
           </div>
 
-          <div className="grid w-full max-w-sm grid-cols-1 gap-4">
-            <div className="relative overflow-hidden rounded-2xl p-5 group hover:scale-105 transition-all duration-300" style={{
-              background: "linear-gradient(135deg, rgba(184, 123, 209, 0.2), rgba(128, 55, 145, 0.15))",
-              backdropFilter: "blur(16px)",
-              border: "1px solid rgba(184, 123, 209, 0.3)",
-              boxShadow: "0 4px 20px rgba(128, 55, 145, 0.2)"
-            }}>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{
-                background: "linear-gradient(135deg, rgba(255,255,255,0.1), transparent)"
+          <div className="grid w-full max-w-sm grid-cols-1 gap-3">
+            <div className="relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/10 p-4">
+              <div className="absolute inset-0 opacity-50" style={{
+                background: "linear-gradient(135deg, rgba(255,255,255,0.35), transparent)"
               }}></div>
               <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-white/70 font-bold">Active Pipeline</p>
-                  <p className="mt-2 text-4xl font-black text-white">
+                  <p className="text-xs uppercase tracking-wide text-white/70">Active pipeline</p>
+                  <p className="mt-1 text-3xl font-semibold text-white">
                     {stats?.totalLeads || 0}
                   </p>
                 </div>
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#b87bd1]/30 to-[#803791]/20 shadow-lg">
-                  <Users className="h-6 w-6 text-[#ffd6ff]" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15">
+                  <Users className="h-5 w-5 text-[#ffd6ff]" />
                 </div>
               </div>
-              <p className="mt-4 text-xs text-white/70 font-medium">
+              <p className="mt-3 text-xs text-white/60">
                 {stats?.conversionRate ? `${stats.conversionRate}% overall win-rate` : "Track conversions in realtime"}
               </p>
             </div>
 
-            <div className="relative overflow-hidden rounded-2xl p-5 group hover:scale-105 transition-all duration-300" style={{
-              background: "linear-gradient(135deg, rgba(128, 55, 145, 0.2), rgba(92, 31, 114, 0.15))",
-              backdropFilter: "blur(16px)",
-              border: "1px solid rgba(128, 55, 145, 0.3)",
-              boxShadow: "0 4px 20px rgba(92, 31, 114, 0.2)"
-            }}>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{
-                background: "linear-gradient(135deg, rgba(150,91,214,0.2), transparent)"
+            <div className="relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-4">
+              <div className="absolute inset-0 opacity-40" style={{
+                background: "linear-gradient(135deg, rgba(150,91,214,0.4), transparent)"
               }}></div>
               <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-white/70 font-bold">Next Follow-ups</p>
-                  <p className="mt-2 text-4xl font-black text-white">
+                  <p className="text-xs uppercase tracking-wide text-white/70">Next follow-ups</p>
+                  <p className="mt-1 text-3xl font-semibold text-white">
                     {leads.filter((lead) => lead.nextFollowUpDate).length}
                   </p>
                 </div>
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#803791]/30 to-[#5c1f72]/20 shadow-lg">
-                  <CalendarClock className="h-6 w-6 text-white/90" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
+                  <CalendarClock className="h-5 w-5 text-white/70" />
                 </div>
               </div>
-              <p className="mt-4 text-xs text-white/70 font-medium">
+              <p className="mt-3 text-xs text-white/60">
                 Automated reminders keep owners aligned with the SLA.
               </p>
             </div>
@@ -819,56 +801,45 @@ export default function LeadsManagement() {
         </div>
       </div>
 
-      {/* Main Section Toggle */}
-      <div className="flex gap-4 p-2 rounded-2xl backdrop-blur-xl" style={{
-        background: "linear-gradient(135deg, rgba(128, 55, 145, 0.1), rgba(184, 123, 209, 0.05))",
-        border: "1px solid rgba(184, 123, 209, 0.2)",
-        boxShadow: "0 4px 20px rgba(128, 55, 145, 0.15)"
-      }}>
-        <button
-          onClick={() => setMainSection("leads")}
-          className={cn(
-            "flex-1 px-8 py-5 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group",
-            mainSection === "leads"
-              ? "text-white shadow-2xl scale-105"
-              : "text-white/70 hover:text-white hover:scale-102"
-          )}
-          style={mainSection === "leads" ? {
-            background: "linear-gradient(135deg, #803791 0%, #b87bd1 100%)",
-            boxShadow: "0 8px 32px rgba(128, 55, 145, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)"
-          } : {}}
-        >
-          {mainSection === "leads" && (
-            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          )}
-          <Target className="w-6 h-6 relative z-10" />
-          <span className="relative z-10">Lead Management</span>
-          <span className={cn(
-            "px-3 py-1.5 rounded-full text-sm font-black relative z-10",
-            mainSection === "leads" ? "bg-white/20" : "bg-white/10"
-          )}>
-            {stats?.totalLeads || 0}
-          </span>
-        </button>
-        <button
-          onClick={() => setMainSection("users")}
-          className={cn(
-            "flex-1 px-8 py-5 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group",
-            mainSection === "users"
-              ? "text-white shadow-2xl scale-105"
-              : "text-white/70 hover:text-white hover:scale-102"
-          )}
-          style={mainSection === "users" ? {
-            background: "linear-gradient(135deg, #803791 0%, #b87bd1 100%)",
-            boxShadow: "0 8px 32px rgba(128, 55, 145, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)"
-          } : {}}
-        >
-          {mainSection === "users" && (
-            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          )}
-          <Users className="w-6 h-6 relative z-10" />
-          <span className="relative z-10">User Management</span>
-        </button>
+      {/* Main Section Toggle - Premium Design */}
+      <div className="relative">
+        <div className="flex items-center gap-2 p-1 rounded-xl bg-white/5 border border-[#803791]/20 backdrop-blur-sm">
+          <button
+            onClick={() => setMainSection("leads")}
+            className={cn(
+              "flex-1 relative px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2",
+              mainSection === "leads"
+                ? "text-white"
+                : "text-white/60 hover:text-white/80"
+            )}
+          >
+            {mainSection === "leads" && (
+              <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-lg shadow-lg" />
+            )}
+            <Target className="w-4 h-4 relative z-10" />
+            <span className="relative z-10">Leads</span>
+            {mainSection === "leads" && (
+              <span className="relative z-10 ml-1 px-2 py-0.5 rounded-full text-xs font-bold bg-white/20">
+                {stats?.totalLeads || 0}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setMainSection("users")}
+            className={cn(
+              "flex-1 relative px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2",
+              mainSection === "users"
+                ? "text-white"
+                : "text-white/60 hover:text-white/80"
+            )}
+          >
+            {mainSection === "users" && (
+              <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-lg shadow-lg" />
+            )}
+            <Users className="w-4 h-4 relative z-10" />
+            <span className="relative z-10">Users</span>
+          </button>
+        </div>
       </div>
 
       {/* Conditional Rendering based on mainSection */}
@@ -878,24 +849,16 @@ export default function LeadsManagement() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Link
           href="/crm/leads"
-          className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-          style={{
-            background: "linear-gradient(135deg, rgba(128, 55, 145, 0.15), rgba(184, 123, 209, 0.08))",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(184, 123, 209, 0.2)",
-            boxShadow: "0 4px 20px rgba(128, 55, 145, 0.15)"
-          }}
+          className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          <div className="relative flex items-start gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl shadow-lg" style={{
-              background: "linear-gradient(135deg, rgba(184, 123, 209, 0.3), rgba(128, 55, 145, 0.2))"
-            }}>
-              <ListChecks className="h-6 w-6 text-white" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+          <div className="relative flex items-start gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#803791]/20 border border-[#803791]/30">
+              <ListChecks className="h-5 w-5 text-white" />
             </div>
-            <div className="space-y-2">
-              <p className="text-base font-bold text-white">Lead Workspace</p>
-              <p className="text-sm text-white/70 leading-relaxed">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-white">Lead Workspace</p>
+              <p className="text-xs text-white/65 leading-relaxed">
                 Filter, segment and perform bulk actions with confidence.
               </p>
             </div>
@@ -903,24 +866,16 @@ export default function LeadsManagement() {
         </Link>
         <Link
           href="/crm/leads/kanban"
-          className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-          style={{
-            background: "linear-gradient(135deg, rgba(184, 123, 209, 0.15), rgba(128, 55, 145, 0.08))",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(184, 123, 209, 0.2)",
-            boxShadow: "0 4px 20px rgba(184, 123, 209, 0.15)"
-          }}
+          className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/25 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          <div className="relative flex items-start gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl shadow-lg" style={{
-              background: "linear-gradient(135deg, rgba(184, 123, 209, 0.3), rgba(128, 55, 145, 0.2))"
-            }}>
-              <Kanban className="h-6 w-6 text-white" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+          <div className="relative flex items-start gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b87bd1]/20 border border-[#b87bd1]/30">
+              <Kanban className="h-5 w-5 text-white" />
             </div>
-            <div className="space-y-2">
-              <p className="text-base font-bold text-white">Pipeline Kanban</p>
-              <p className="text-sm text-white/70 leading-relaxed">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-white">Pipeline Kanban</p>
+              <p className="text-xs text-white/65 leading-relaxed">
                 Drag-and-drop deals across proposal, negotiation and win stages.
               </p>
             </div>
@@ -928,24 +883,16 @@ export default function LeadsManagement() {
         </Link>
         <Link
           href="/crm/leads/insights"
-          className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-          style={{
-            background: "linear-gradient(135deg, rgba(92, 31, 114, 0.15), rgba(128, 55, 145, 0.08))",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(128, 55, 145, 0.2)",
-            boxShadow: "0 4px 20px rgba(92, 31, 114, 0.15)"
-          }}
+          className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#5b1d72]/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          <div className="relative flex items-start gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl shadow-lg" style={{
-              background: "linear-gradient(135deg, rgba(128, 55, 145, 0.3), rgba(92, 31, 114, 0.2))"
-            }}>
-              <BarChart3 className="h-6 w-6 text-white" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#5b1d72]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+          <div className="relative flex items-start gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#5b1d72]/20 border border-[#5b1d72]/30">
+              <BarChart3 className="h-5 w-5 text-white" />
             </div>
-            <div className="space-y-2">
-              <p className="text-base font-bold text-white">Performance Insights</p>
-              <p className="text-sm text-white/70 leading-relaxed">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-white">Performance Insights</p>
+              <p className="text-xs text-white/65 leading-relaxed">
                 Conversion funnels, source attribution, and staff leaderboards.
               </p>
             </div>

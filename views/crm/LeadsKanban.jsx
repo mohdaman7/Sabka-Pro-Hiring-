@@ -152,9 +152,7 @@ export default function LeadsKanban() {
   };
 
   return (
-    <div className="min-h-screen px-6 pb-8 pt-4" style={{
-      background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
-    }}>
+    <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent px-6 pb-8 pt-4">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-3">
