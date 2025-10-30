@@ -9,211 +9,355 @@ import {
   Building,
   Briefcase,
   Users,
-  Globe,
+  Clock,
+  Sparkles,
+  Award,
+  Zap,
 } from "lucide-react";
 
-export default function EmployerLeadSuccess({ userData, onBackToHome }) {
+export default function EmployerLeadSuccess({ userData }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="bg-gradient-to-br from-card via-card to-accent/5 rounded-2xl border border-border shadow-2xl p-8 md:p-12 text-center relative overflow-hidden max-w-4xl mx-auto"
-    >
-      <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-100/30 rounded-full blur-3xl" />
+      </div>
 
-      {/* Success Icon */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-        className="relative w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/50"
-      >
-        <CheckCircle className="w-12 h-12 text-white" />
-      </motion.div>
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
 
-      {/* Main Success Message */}
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="text-3xl md:text-4xl font-bold text-foreground mb-4"
-      >
-        Registration Successful! 🎉
-      </motion.h2>
-
-      {/* HR Specialist Contact Message */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200/20 rounded-2xl p-6 mb-8 max-w-2xl mx-auto"
+        transition={{ duration: 0.6 }}
+        className="relative w-full max-w-5xl"
       >
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-            <Users className="w-6 h-6 text-white" />
+        {/* Main Card */}
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-indigo-100 shadow-2xl overflow-hidden">
+          {/* Header Section with Success Icon */}
+          <div className="relative bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 p-12 text-center border-b border-indigo-100">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{
+                delay: 0.3,
+                type: "spring",
+                stiffness: 150,
+                damping: 15,
+              }}
+              className="relative inline-block"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full blur-2xl opacity-30 animate-pulse" />
+              <div className="relative w-28 h-28 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-2xl">
+                <CheckCircle
+                  className="w-16 h-16 text-white"
+                  strokeWidth={2.5}
+                />
+              </div>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-8 text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3"
+            >
+              Registration Successful!
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-lg text-indigo-600 font-medium"
+            >
+              Welcome to Sabka ProHirin – Your Hiring Solution Awaits
+            </motion.p>
           </div>
-          <h3 className="text-xl font-bold text-foreground">
-            Dedicated Account Manager
-          </h3>
+
+          {/* Content Section */}
+          <div className="p-8 md:p-12 space-y-8">
+            {/* Pending Approval Status */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.7 }}
+              className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-200 rounded-2xl p-6 shadow-lg"
+            >
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  className="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg"
+                >
+                  <Clock className="w-7 h-7 text-white" />
+                </motion.div>
+                <div className="text-left">
+                  <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                    Awaiting CRM Approval
+                    <motion.span
+                      animate={{ opacity: [1, 0.5, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <Sparkles className="w-5 h-5 text-amber-500" />
+                    </motion.span>
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Your company profile is under review
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white/60 rounded-xl p-4 backdrop-blur-sm border border-amber-100">
+                <p className="text-sm text-gray-700 text-center leading-relaxed">
+                  Our CRM team is verifying your company details and setting up
+                  your premium employer account. Dashboard access will be
+                  granted upon approval.
+                </p>
+              </div>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Account Manager Contact */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-200 rounded-2xl p-6 shadow-lg"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-800">
+                    Dedicated Account Manager
+                  </h3>
+                </div>
+
+                <p className="text-sm text-gray-600 mb-4">
+                  <strong className="text-gray-800">
+                    Our HR solutions expert
+                  </strong>{" "}
+                  will provide you with:
+                </p>
+
+                <div className="space-y-2.5">
+                  {[
+                    "Personalized hiring strategy consultation",
+                    "Complete platform onboarding & setup",
+                    "Advanced candidate matching assistance",
+                    "Ongoing recruitment optimization support",
+                  ].map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.9 + idx * 0.1 }}
+                      className="flex items-start gap-2"
+                    >
+                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-sm text-gray-700">{item}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Company Details */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9 }}
+                className="bg-white/60 border border-indigo-200 rounded-2xl p-6 shadow-lg backdrop-blur-sm"
+              >
+                <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <Building className="w-5 h-5 text-purple-500" />
+                  Company Information
+                </h4>
+
+                <div className="space-y-4">
+                  {[
+                    {
+                      icon: User,
+                      label: "Contact Person",
+                      value: `${userData?.firstName} ${userData?.lastName}`,
+                    },
+                    { icon: Mail, label: "Email", value: userData?.email },
+                    { icon: Phone, label: "Phone", value: userData?.phone },
+                    {
+                      icon: Building,
+                      label: "Company",
+                      value: userData?.companyName,
+                    },
+                    {
+                      icon: Briefcase,
+                      label: "Position",
+                      value: userData?.position,
+                    },
+                  ].map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 1 + idx * 0.1 }}
+                      className="flex items-center justify-between py-2 border-b border-indigo-100 last:border-0"
+                    >
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <item.icon className="w-4 h-4" />
+                        <span>{item.label}</span>
+                      </div>
+                      <span className="text-sm font-medium text-gray-800 capitalize truncate ml-2 max-w-[200px]">
+                        {item.value}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Premium Features Preview */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0 }}
+              className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-2xl p-8 shadow-lg"
+            >
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <Award className="w-6 h-6 text-amber-500" />
+                <h4 className="text-xl font-bold text-gray-800">
+                  Premium Employer Benefits
+                </h4>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {[
+                  {
+                    icon: Zap,
+                    title: "Priority Listings",
+                    desc: "Your jobs appear first",
+                  },
+                  {
+                    icon: Users,
+                    title: "Advanced Matching",
+                    desc: "AI-powered candidate search",
+                  },
+                  {
+                    icon: Award,
+                    title: "Verified Badge",
+                    desc: "Build trust with candidates",
+                  },
+                ].map((feature, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.1 + idx * 0.1 }}
+                    className="bg-white/60 rounded-xl p-4 text-center border border-indigo-100 shadow-sm"
+                  >
+                    <feature.icon className="w-8 h-8 text-purple-500 mx-auto mb-3" />
+                    <h5 className="font-semibold text-gray-800 mb-1">
+                      {feature.title}
+                    </h5>
+                    <p className="text-xs text-gray-600">{feature.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Timeline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }}
+              className="bg-gradient-to-r from-slate-50 to-gray-50 border border-slate-200 rounded-2xl p-8 shadow-lg"
+            >
+              <h4 className="text-xl font-bold text-gray-800 mb-6 text-center">
+                What Happens Next?
+              </h4>
+
+              <div className="space-y-6">
+                {[
+                  {
+                    step: "1",
+                    time: "Within 2 Hours",
+                    desc: "Dedicated account manager reaches out for consultation",
+                  },
+                  {
+                    step: "2",
+                    time: "CRM Verification",
+                    desc: "Company profile and documents are verified by our team",
+                  },
+                  {
+                    step: "3",
+                    time: "Post Approval",
+                    desc: "Full employer dashboard access and job posting capabilities unlocked",
+                  },
+                ].map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.3 + idx * 0.15 }}
+                    className="flex items-start gap-4"
+                  >
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg">
+                      {item.step}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-800 mb-1">
+                        {item.time}
+                      </div>
+                      <div className="text-sm text-gray-600">{item.desc}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Contact Support */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5 }}
+              className="text-center space-y-2"
+            >
+              <p className="text-sm text-gray-600">
+                Need immediate assistance?
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
+                <a
+                  href="tel:+91XXXXXXXXXX"
+                  className="text-indigo-600 font-semibold hover:text-purple-600 transition-colors"
+                >
+                  📞 +91-XXXXX-XXXXX
+                </a>
+                <span className="hidden sm:inline text-gray-300">|</span>
+                <a
+                  href="mailto:employers@sabkaprohirin.com"
+                  className="text-indigo-600 font-semibold hover:text-purple-600 transition-colors"
+                >
+                  ✉️ employers@sabkaprohirin.com
+                </a>
+              </div>
+            </motion.div>
+          </div>
         </div>
-        <p className="text-lg text-foreground/80 mb-4">
-          <strong>Our Best HR Solutions Specialist</strong> will contact you
-          shortly to:
-        </p>
-        <div className="grid md:grid-cols-2 gap-3 text-left">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-sm">Understand your hiring needs</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-sm">Set up your company profile</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-sm">Guide you through the platform</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span className="text-sm">Help you post your first job</span>
-          </div>
-        </div>
-      </motion.div>
 
-      {/* Company Information Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-background/80 backdrop-blur-sm rounded-2xl p-6 border border-border shadow-inner max-w-md mx-auto mb-8"
-      >
-        <h4 className="text-lg font-semibold text-foreground mb-4 flex items-center justify-center gap-2">
-          <Building className="w-5 h-5 text-primary" />
-          Company Details
-        </h4>
-        <div className="space-y-4 text-left">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <User className="w-4 h-4" />
-              <span>Contact Person</span>
-            </div>
-            <span className="text-sm font-medium text-foreground">
-              {userData?.firstName} {userData?.lastName}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Mail className="w-4 h-4" />
-              <span>Email</span>
-            </div>
-            <span className="text-sm font-medium text-foreground truncate ml-2">
-              {userData?.email}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Phone className="w-4 h-4" />
-              <span>Phone</span>
-            </div>
-            <span className="text-sm font-medium text-foreground">
-              {userData?.phone}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Building className="w-4 h-4" />
-              <span>Company</span>
-            </div>
-            <span className="text-sm font-medium text-foreground capitalize">
-              {userData?.companyName}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Briefcase className="w-4 h-4" />
-              <span>Position</span>
-            </div>
-            <span className="text-sm font-medium text-foreground capitalize">
-              {userData?.position}
-            </span>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Next Steps */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="bg-primary/5 border border-primary/20 rounded-2xl p-6 mb-8 max-w-2xl mx-auto"
-      >
-        <h4 className="text-lg font-semibold text-foreground mb-3">
-          What Happens Next?
-        </h4>
-        <div className="space-y-3 text-sm text-foreground/70">
-          <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-              1
-            </div>
-            <p>
-              Account manager will contact you within <strong>2 hours</strong>
-            </p>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-              2
-            </div>
-            <p>Get your company profile verified and optimized</p>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-              3
-            </div>
-            <p>Start posting jobs and finding perfect candidates</p>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Action Buttons */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-        className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-      >
-        <button
-          onClick={() => onBackToHome && onBackToHome()}
-          className="px-8 py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:bg-primary/90 transition-colors flex items-center gap-2"
+        {/* Footer Note */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6 }}
+          className="text-center mt-6 text-sm text-indigo-400"
         >
-          Go to Employer Dashboard
-        </button>
-
-        <button
-          onClick={() => (window.location.href = "/jobs")}
-          className="px-8 py-3 bg-transparent border border-border text-foreground rounded-xl font-semibold hover:bg-accent transition-colors"
-        >
-          Browse Candidates
-        </button>
+          Transform your hiring process with Sabka ProHirin. Excellence in
+          recruitment starts here.
+        </motion.p>
       </motion.div>
-
-      {/* Support Info */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="mt-8 text-xs text-muted-foreground"
-      >
-        <p>
-          Need immediate assistance? Call us at <strong>+91-XXXXX-XXXXX</strong>
-        </p>
-        <p>
-          Or email us at <strong>employers@sabkaprohirin.com</strong>
-        </p>
-      </motion.div>
-    </motion.div>
+    </div>
   );
 }
