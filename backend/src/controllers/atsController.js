@@ -243,13 +243,13 @@ export const getATSJobs = async (req, res, next) => {
       ];
     }
 
-    if (assignedTo) {
-      filter.assignedStaff = assignedTo;
-    }
+    // Note: assignedStaff field not in Job schema, skipping filter
+    // if (assignedTo) {
+    //   filter.assignedStaff = assignedTo;
+    // }
 
     const jobs = await JobModel.find(filter)
       .populate("employerId", "firstName lastName email companyName")
-      .populate("assignedStaff", "firstName lastName email")
       .sort({ [sortBy]: sortOrder === "desc" ? -1 : 1 })
       .skip(skip)
       .limit(parseInt(limit))
@@ -478,11 +478,6 @@ export const searchCandidates = async (req, res, next) => {
         path: "studentId",
         match: userFilter,
         select: "firstName lastName email status planType createdAt",
-        populate: {
-          path: "studentId",
-          model: "Student",
-          select: "education skills experience location",
-        },
       })
       .sort({ atsScore: -1 })
       .skip(skip)
