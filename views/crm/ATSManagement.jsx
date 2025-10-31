@@ -26,6 +26,16 @@ import {
   MapPin,
   Award,
   GraduationCap,
+  Building,
+  Calendar,
+  Star,
+  Zap,
+  Activity,
+  TrendingDown,
+  AlertCircle,
+  Plus,
+  MoreHorizontal,
+  ExternalLink,
 } from "lucide-react";
 import { customToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
@@ -305,16 +315,20 @@ function DashboardContent({ stats }) {
 // Stat Card
 function StatCard({ title, value, subtitle, icon: Icon }) {
   return (
-    <div className="rounded-2xl border border-[#803791]/20 bg-white/5 p-5 hover:bg-white/10 transition-all">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-white/70">{title}</p>
-          <p className="mt-2 text-3xl font-bold text-white">{value}</p>
-          <p className="mt-2 text-xs text-white/60">{subtitle}</p>
+    <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
+      <div
+        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: "linear-gradient(135deg, rgba(128,55,145,0.45), transparent)",
+        }}
+      ></div>
+      <div className="relative flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-white/80">{title}</p>
+          <Icon className="h-5 w-5 text-white/80" />
         </div>
-        <div className="h-12 w-12 rounded-xl flex items-center justify-center bg-[#803791]/20">
-          <Icon className="h-6 w-6 text-white" />
-        </div>
+        <p className="text-3xl font-semibold text-white">{value}</p>
+        <p className="text-xs text-white/60">{subtitle}</p>
       </div>
     </div>
   );
@@ -344,28 +358,108 @@ function ResumesContent({ resumes, loading, search, setSearch, onRefresh }) {
 
       <div className="grid grid-cols-1 gap-4">
         {loading ? (
-          <div className="text-center py-10 text-white/60">Loading...</div>
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
+          </div>
         ) : resumes.length === 0 ? (
-          <div className="text-center py-10 text-white/60">No resumes found</div>
+          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 py-16 text-center">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/10">
+              <FileText className="h-10 w-10 text-white/50" />
+            </div>
+            <h3 className="text-lg font-semibold text-white/80">No resumes found</h3>
+            <p className="mt-2 text-sm text-white/50">Try adjusting your search criteria or upload new resumes.</p>
+          </div>
         ) : (
           resumes.map((resume) => (
-            <div key={resume._id} className="rounded-2xl border border-[#803791]/20 bg-white/5 p-5 hover:bg-white/10 transition-all">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold text-white">{resume.studentId?.firstName} {resume.studentId?.lastName}</h3>
-                    <span className="px-2 py-1 rounded-full text-xs font-bold bg-[#803791]/20 text-white">Score: {resume.atsScore}%</span>
-                  </div>
-                  <p className="text-sm text-white/60 mt-1">{resume.studentId?.email}</p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {resume.parsedData?.skills?.slice(0, 5).map((skill, idx) => (
-                      <span key={idx} className="px-2 py-1 rounded-lg text-xs bg-white/10 text-white">{skill}</span>
-                    ))}
+            <div key={resume._id} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:bg-white/8">
+              <div className="flex items-start gap-4">
+                {/* Avatar */}
+                <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-2xl">
+                  <div
+                    className="absolute inset-0 rounded-2xl blur-md"
+                    style={{
+                      background: "linear-gradient(135deg, #803791, #b87bd1)",
+                    }}
+                  ></div>
+                  <div className="relative flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-[#803791] via-[#9b55b0] to-[#5d1f73] text-white/90 text-sm font-semibold uppercase">
+                    {(resume.studentId?.firstName?.charAt(0) || "").concat(
+                      resume.studentId?.lastName?.charAt(0) || ""
+                    ) || "R"}
                   </div>
                 </div>
-                <button onClick={() => window.open(resume.fileUrl, "_blank")} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
-                  <Eye className="h-4 w-4 text-white" />
-                </button>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-base font-semibold text-white">
+                          {resume.studentId?.firstName} {resume.studentId?.lastName}
+                        </h3>
+                        <span
+                          className={cn(
+                            "px-2 py-0.5 rounded-full text-xs font-bold",
+                            resume.atsScore >= 70
+                              ? "bg-emerald-500/20 text-emerald-300"
+                              : resume.atsScore >= 40
+                              ? "bg-amber-500/20 text-amber-300"
+                              : "bg-rose-500/20 text-rose-300"
+                          )}
+                        >
+                          {resume.atsScore}% Match
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1 text-xs text-white/60">
+                        <Mail className="h-3 w-3" />
+                        <span>{resume.studentId?.email}</span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => window.open(resume.fileUrl, "_blank")}
+                        className="rounded-xl border border-white/15 bg-white/10 p-2 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                        title="View Resume"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => window.open(resume.fileUrl, "_blank")}
+                        className="rounded-xl border border-blue-400/30 bg-blue-500/15 p-2 text-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                        title="Download"
+                      >
+                        <Download className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Skills */}
+                  {resume.parsedData?.skills && resume.parsedData.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {resume.parsedData.skills.slice(0, 6).map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 rounded-lg text-xs bg-white/10 text-white/80 border border-white/10"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {resume.parsedData.skills.length > 6 && (
+                        <span className="px-2 py-1 rounded-lg text-xs text-white/60">
+                          +{resume.parsedData.skills.length - 6} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Experience */}
+                  {resume.parsedData?.experience && resume.parsedData.experience.length > 0 && (
+                    <div className="mt-3 text-xs text-white/60">
+                      <span className="font-medium">{resume.parsedData.experience.length}</span> years experience
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))
@@ -399,29 +493,111 @@ function JobsContent({ jobs, loading, search, setSearch, onRefresh }) {
 
       <div className="grid grid-cols-1 gap-4">
         {loading ? (
-          <div className="text-center py-10 text-white/60">Loading...</div>
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
+          </div>
         ) : jobs.length === 0 ? (
-          <div className="text-center py-10 text-white/60">No jobs found</div>
+          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 py-16 text-center">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/10">
+              <Briefcase className="h-10 w-10 text-white/50" />
+            </div>
+            <h3 className="text-lg font-semibold text-white/80">No jobs found</h3>
+            <p className="mt-2 text-sm text-white/50">Try adjusting your search or create a new job posting.</p>
+          </div>
         ) : (
           jobs.map((job) => (
-            <div key={job._id} className="rounded-2xl border border-[#803791]/20 bg-white/5 p-5 hover:bg-white/10 transition-all">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold text-white">{job.title}</h3>
-                    <span className={cn("px-2 py-1 rounded-full text-xs font-bold", job.status === "active" ? "bg-green-500/20 text-green-300" : "bg-gray-500/20 text-gray-300")}>
-                      {job.status}
-                    </span>
-                  </div>
-                  <p className="text-sm text-white/60 mt-1">{job.department} • {job.location}</p>
-                  <div className="flex items-center gap-4 mt-3 text-sm text-white/70">
-                    <span className="flex items-center gap-1"><Users className="h-4 w-4" />{job.applicationCount || 0} applications</span>
-                    <span className="flex items-center gap-1"><CheckCircle className="h-4 w-4" />{job.statusBreakdown?.reviewed || 0} reviewed</span>
+            <div key={job._id} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:bg-white/8">
+              <div className="flex items-start gap-4">
+                {/* Icon */}
+                <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-2xl">
+                  <div
+                    className="absolute inset-0 rounded-2xl blur-md"
+                    style={{
+                      background: "linear-gradient(135deg, #803791, #b87bd1)",
+                    }}
+                  ></div>
+                  <div className="relative flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-[#803791] via-[#9b55b0] to-[#5d1f73]">
+                    <Briefcase className="h-6 w-6 text-white/90" />
                   </div>
                 </div>
-                <Link href={`/crm/jobs/${job._id}`} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
-                  <Eye className="h-4 w-4 text-white" />
-                </Link>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-base font-semibold text-white">{job.title}</h3>
+                        <span
+                          className={cn(
+                            "px-2 py-0.5 rounded-full text-xs font-bold uppercase",
+                            job.status === "active"
+                              ? "bg-emerald-500/20 text-emerald-300"
+                              : job.status === "draft"
+                              ? "bg-amber-500/20 text-amber-300"
+                              : "bg-gray-500/20 text-gray-300"
+                          )}
+                        >
+                          {job.status}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 mt-1 text-xs text-white/60">
+                        <span className="flex items-center gap-1">
+                          <Building className="h-3 w-3" />
+                          {job.department}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          {job.location}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <Link
+                        href={`/crm/jobs/${job._id}`}
+                        className="rounded-xl border border-white/15 bg-white/10 p-2 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                        title="View Job"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        href={`/crm/jobs/${job._id}`}
+                        className="rounded-xl border border-blue-400/30 bg-blue-500/15 p-2 text-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                        title="View Details"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="flex items-center gap-4 mt-3">
+                    <div className="flex items-center gap-1.5 text-xs text-white/70">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10">
+                        <Users className="h-3.5 w-3.5" />
+                      </div>
+                      <span className="font-medium">{job.applicationCount || 0}</span>
+                      <span className="text-white/50">applications</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-white/70">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/10">
+                        <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
+                      </div>
+                      <span className="font-medium">{job.statusBreakdown?.reviewed || 0}</span>
+                      <span className="text-white/50">reviewed</span>
+                    </div>
+                    {job.statusBreakdown?.interview > 0 && (
+                      <div className="flex items-center gap-1.5 text-xs text-white/70">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-500/10">
+                          <Calendar className="h-3.5 w-3.5 text-blue-400" />
+                        </div>
+                        <span className="font-medium">{job.statusBreakdown.interview}</span>
+                        <span className="text-white/50">interviews</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ))
@@ -455,39 +631,139 @@ function CandidatesContent({ candidates, loading, search, setSearch, onRefresh }
 
       <div className="grid grid-cols-1 gap-4">
         {loading ? (
-          <div className="text-center py-10 text-white/60">Loading...</div>
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
+          </div>
         ) : candidates.length === 0 ? (
-          <div className="text-center py-10 text-white/60">No candidates found</div>
+          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 py-16 text-center">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/10">
+              <Users className="h-10 w-10 text-white/50" />
+            </div>
+            <h3 className="text-lg font-semibold text-white/80">No candidates found</h3>
+            <p className="mt-2 text-sm text-white/50">Try different search criteria or wait for new applications.</p>
+          </div>
         ) : (
           candidates.map((candidate) => (
-            <div key={candidate._id} className="rounded-2xl border border-[#803791]/20 bg-white/5 p-5 hover:bg-white/10 transition-all">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold text-white">{candidate.studentId?.firstName} {candidate.studentId?.lastName}</h3>
-                    {candidate.matchScore && (
-                      <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-300">Match: {candidate.matchScore}%</span>
-                    )}
-                    <span className="px-2 py-1 rounded-full text-xs font-bold bg-[#803791]/20 text-white">Score: {candidate.atsScore}%</span>
-                  </div>
-                  <p className="text-sm text-white/60 mt-1">{candidate.studentId?.email}</p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {candidate.parsedData?.skills?.slice(0, 5).map((skill, idx) => (
-                      <span key={idx} className="px-2 py-1 rounded-lg text-xs bg-white/10 text-white">{skill}</span>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-4 mt-3 text-xs text-white/60">
-                    <span>{candidate.applicationHistory?.length || 0} applications</span>
-                    <span>{candidate.parsedData?.experience?.length || 0} years exp</span>
+            <div key={candidate._id} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:bg-white/8">
+              <div className="flex items-start gap-4">
+                {/* Avatar */}
+                <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-2xl">
+                  <div
+                    className="absolute inset-0 rounded-2xl blur-md"
+                    style={{
+                      background: "linear-gradient(135deg, #803791, #b87bd1)",
+                    }}
+                  ></div>
+                  <div className="relative flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-[#803791] via-[#9b55b0] to-[#5d1f73] text-white/90 text-sm font-semibold uppercase">
+                    {(candidate.studentId?.firstName?.charAt(0) || "").concat(
+                      candidate.studentId?.lastName?.charAt(0) || ""
+                    ) || "C"}
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <button className="p-2 rounded-lg bg-green-500/20 hover:bg-green-500/30 transition-all">
-                    <CheckCircle className="h-4 w-4 text-green-300" />
-                  </button>
-                  <button className="p-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition-all">
-                    <XCircle className="h-4 w-4 text-red-300" />
-                  </button>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-base font-semibold text-white">
+                          {candidate.studentId?.firstName} {candidate.studentId?.lastName}
+                        </h3>
+                        {candidate.matchScore && (
+                          <span
+                            className={cn(
+                              "px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1",
+                              candidate.matchScore >= 80
+                                ? "bg-emerald-500/20 text-emerald-300"
+                                : candidate.matchScore >= 60
+                                ? "bg-blue-500/20 text-blue-300"
+                                : "bg-amber-500/20 text-amber-300"
+                            )}
+                          >
+                            <Star className="h-3 w-3" />
+                            {candidate.matchScore}% Match
+                          </span>
+                        )}
+                        <span
+                          className={cn(
+                            "px-2 py-0.5 rounded-full text-xs font-bold",
+                            candidate.atsScore >= 70
+                              ? "bg-emerald-500/20 text-emerald-300"
+                              : candidate.atsScore >= 40
+                              ? "bg-amber-500/20 text-amber-300"
+                              : "bg-rose-500/20 text-rose-300"
+                          )}
+                        >
+                          {candidate.atsScore}% ATS
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1 text-xs text-white/60">
+                        <Mail className="h-3 w-3" />
+                        <span>{candidate.studentId?.email}</span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <button
+                        className="rounded-xl border border-emerald-400/30 bg-emerald-500/15 p-2 text-emerald-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                        title="Shortlist"
+                      >
+                        <CheckCircle className="h-4 w-4" />
+                      </button>
+                      <button
+                        className="rounded-xl border border-rose-400/30 bg-rose-500/15 p-2 text-rose-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                        title="Reject"
+                      >
+                        <XCircle className="h-4 w-4" />
+                      </button>
+                      <button
+                        className="rounded-xl border border-white/15 bg-white/10 p-2 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                        title="More Options"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Skills */}
+                  {candidate.parsedData?.skills && candidate.parsedData.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {candidate.parsedData.skills.slice(0, 5).map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 rounded-lg text-xs bg-white/10 text-white/80 border border-white/10"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {candidate.parsedData.skills.length > 5 && (
+                        <span className="px-2 py-1 rounded-lg text-xs text-white/60">
+                          +{candidate.parsedData.skills.length - 5} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Stats */}
+                  <div className="flex items-center gap-4 mt-3">
+                    <div className="flex items-center gap-1.5 text-xs text-white/70">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10">
+                        <Activity className="h-3.5 w-3.5" />
+                      </div>
+                      <span className="font-medium">{candidate.applicationHistory?.length || 0}</span>
+                      <span className="text-white/50">applications</span>
+                    </div>
+                    {candidate.parsedData?.experience && candidate.parsedData.experience.length > 0 && (
+                      <div className="flex items-center gap-1.5 text-xs text-white/70">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-500/10">
+                          <Award className="h-3.5 w-3.5 text-blue-400" />
+                        </div>
+                        <span className="font-medium">{candidate.parsedData.experience.length}</span>
+                        <span className="text-white/50">years exp</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
