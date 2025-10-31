@@ -42,7 +42,11 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { customToast, toast } from "@/components/ui/toast";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { useLeadViewModel } from "@/viewmodels/LeadViewModel";
 import { adminService } from "@/services/adminService";
@@ -69,7 +73,7 @@ export default function LeadsManagement() {
 
   // Main section toggle: 'leads' or 'users'
   const [mainSection, setMainSection] = useState("leads");
-  
+
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLead, setSelectedLead] = useState(null);
@@ -82,8 +86,14 @@ export default function LeadsManagement() {
   const [drawerLead, setDrawerLead] = useState(null);
   const [bulkAssignOpen, setBulkAssignOpen] = useState(false);
   const [bulkEmailOpen, setBulkEmailOpen] = useState(false);
-  const [bulkAssignForm, setBulkAssignForm] = useState({ assignee: "", note: "" });
-  const [bulkEmailForm, setBulkEmailForm] = useState({ subject: "", message: "" });
+  const [bulkAssignForm, setBulkAssignForm] = useState({
+    assignee: "",
+    note: "",
+  });
+  const [bulkEmailForm, setBulkEmailForm] = useState({
+    subject: "",
+    message: "",
+  });
   const [stats, setStats] = useState(null);
   const [filters, setFilters] = useState({
     status: "",
@@ -119,7 +129,6 @@ export default function LeadsManagement() {
       console.error("Failed to fetch stats:", error);
     }
   };
-
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -219,7 +228,9 @@ export default function LeadsManagement() {
           if (!res.success) throw new Error(res.error || "Auto-assign failed");
           customToast.success(
             "Auto Assignment Complete",
-            `${res.result?.assignedCount || selectedLeads.length} lead(s) assigned to team`
+            `${
+              res.result?.assignedCount || selectedLeads.length
+            } lead(s) assigned to team`
           );
           break;
         }
@@ -252,7 +263,10 @@ export default function LeadsManagement() {
       return;
     }
     if (!bulkAssignForm.assignee.trim()) {
-      customToast.warning("Missing assignee", "Please provide a staff identifier");
+      customToast.warning(
+        "Missing assignee",
+        "Please provide a staff identifier"
+      );
       return;
     }
 
@@ -262,7 +276,11 @@ export default function LeadsManagement() {
 
     try {
       for (const leadId of selectedLeads) {
-        await assignLead(leadId, bulkAssignForm.assignee.trim(), bulkAssignForm.note.trim());
+        await assignLead(
+          leadId,
+          bulkAssignForm.assignee.trim(),
+          bulkAssignForm.note.trim()
+        );
       }
 
       customToast.success(
@@ -275,7 +293,9 @@ export default function LeadsManagement() {
       fetchLeadsData();
     } catch (err) {
       const message =
-        err?.response?.data?.message || err?.message || "Unable to assign leads";
+        err?.response?.data?.message ||
+        err?.message ||
+        "Unable to assign leads";
       customToast.error("Assignment failed", message);
     } finally {
       toast.dismiss(toastId);
@@ -695,25 +715,37 @@ export default function LeadsManagement() {
     <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6 space-y-6">
       {/* Hero */}
       <div className="relative overflow-hidden rounded-3xl border border-[#803791]/20 bg-gradient-to-r from-[#803791]/40 via-[#9c54b1]/30 to-[#5c1f72]/40 p-6 md:p-8 shadow-2xl">
-        <div className="absolute inset-0 opacity-60 mix-blend-screen" style={{
-          background: "radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 55%)"
-        }}></div>
+        <div
+          className="absolute inset-0 opacity-60 mix-blend-screen"
+          style={{
+            background:
+              "radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 55%)",
+          }}
+        ></div>
         <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#b87bd1]/20 blur-3xl"></div>
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-sm font-semibold text-white/80 shadow-lg shadow-[#803791]/20">
-              <Sparkles className="h-4 w-4 text-[#ffd6ff]" />
-              {mainSection === "leads" ? "AI-assisted growth engine" : "User Management System"}
-            </div>
             <h1 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">
               {mainSection === "leads" ? (
-                <>Elevate your <span className="bg-gradient-to-r from-[#ffd6ff] to-[#cfa9ff] bg-clip-text text-transparent">lead lifecycle</span> with deep visibility.</>
+                <>
+                  Elevate your{" "}
+                  <span className="bg-gradient-to-r from-[#ffd6ff] to-[#cfa9ff] bg-clip-text text-transparent">
+                    lead lifecycle
+                  </span>{" "}
+                  with deep visibility.
+                </>
               ) : (
-                <>Manage your <span className="bg-gradient-to-r from-[#ffd6ff] to-[#cfa9ff] bg-clip-text text-transparent">users</span> with precision.</>
+                <>
+                  Manage your{" "}
+                  <span className="bg-gradient-to-r from-[#ffd6ff] to-[#cfa9ff] bg-clip-text text-transparent">
+                    users
+                  </span>{" "}
+                  with precision.
+                </>
               )}
             </h1>
             <p className="text-base text-white/80 md:text-lg">
-              {mainSection === "leads" 
+              {mainSection === "leads"
                 ? "Monitor every touchpoint, orchestrate smart follow-ups, and move prospects across stages with confidence."
                 : "Approve registrations, manage plans, and control user access with comprehensive tools."}
             </p>
@@ -722,9 +754,10 @@ export default function LeadsManagement() {
                 onClick={() => setShowCreateModal(true)}
                 className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-bold shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl relative overflow-hidden group"
                 style={{
-                  background: "linear-gradient(135deg, #ffffff 0%, #f0e7ff 100%)",
+                  background:
+                    "linear-gradient(135deg, #ffffff 0%, #f0e7ff 100%)",
                   color: "#5b1d72",
-                  boxShadow: "0 4px 20px rgba(128, 55, 145, 0.4)"
+                  boxShadow: "0 4px 20px rgba(128, 55, 145, 0.4)",
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -751,7 +784,9 @@ export default function LeadsManagement() {
                 disabled={refreshing}
                 className="inline-flex items-center gap-2 rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-white/80 transition-all duration-300 hover:text-white disabled:opacity-50"
               >
-                <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+                <RefreshCw
+                  className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+                />
                 {refreshing ? "Refreshing" : "Sync data"}
               </button>
             </div>
@@ -759,12 +794,18 @@ export default function LeadsManagement() {
 
           <div className="grid w-full max-w-sm grid-cols-1 gap-3">
             <div className="relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/10 p-4">
-              <div className="absolute inset-0 opacity-50" style={{
-                background: "linear-gradient(135deg, rgba(255,255,255,0.35), transparent)"
-              }}></div>
+              <div
+                className="absolute inset-0 opacity-50"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(255,255,255,0.35), transparent)",
+                }}
+              ></div>
               <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-white/70">Active pipeline</p>
+                  <p className="text-xs uppercase tracking-wide text-white/70">
+                    Active pipeline
+                  </p>
                   <p className="mt-1 text-3xl font-semibold text-white">
                     {stats?.totalLeads || 0}
                   </p>
@@ -774,17 +815,25 @@ export default function LeadsManagement() {
                 </div>
               </div>
               <p className="mt-3 text-xs text-white/60">
-                {stats?.conversionRate ? `${stats.conversionRate}% overall win-rate` : "Track conversions in realtime"}
+                {stats?.conversionRate
+                  ? `${stats.conversionRate}% overall win-rate`
+                  : "Track conversions in realtime"}
               </p>
             </div>
 
             <div className="relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-4">
-              <div className="absolute inset-0 opacity-40" style={{
-                background: "linear-gradient(135deg, rgba(150,91,214,0.4), transparent)"
-              }}></div>
+              <div
+                className="absolute inset-0 opacity-40"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(150,91,214,0.4), transparent)",
+                }}
+              ></div>
               <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-white/70">Next follow-ups</p>
+                  <p className="text-xs uppercase tracking-wide text-white/70">
+                    Next follow-ups
+                  </p>
                   <p className="mt-1 text-3xl font-semibold text-white">
                     {leads.filter((lead) => lead.nextFollowUpDate).length}
                   </p>
@@ -845,693 +894,836 @@ export default function LeadsManagement() {
       {/* Conditional Rendering based on mainSection */}
       {mainSection === "leads" ? (
         <>
-      {/* Quick navigation */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Link
-          href="/crm/leads"
-          className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          <div className="relative flex items-start gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#803791]/20 border border-[#803791]/30">
-              <ListChecks className="h-5 w-5 text-white" />
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-white">Lead Workspace</p>
-              <p className="text-xs text-white/65 leading-relaxed">
-                Filter, segment and perform bulk actions with confidence.
-              </p>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="/crm/leads/kanban"
-          className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          <div className="relative flex items-start gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b87bd1]/20 border border-[#b87bd1]/30">
-              <Kanban className="h-5 w-5 text-white" />
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-white">Pipeline Kanban</p>
-              <p className="text-xs text-white/65 leading-relaxed">
-                Drag-and-drop deals across proposal, negotiation and win stages.
-              </p>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="/crm/leads/insights"
-          className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#5b1d72]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          <div className="relative flex items-start gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#5b1d72]/20 border border-[#5b1d72]/30">
-              <BarChart3 className="h-5 w-5 text-white" />
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-white">Performance Insights</p>
-              <p className="text-xs text-white/65 leading-relaxed">
-                Conversion funnels, source attribution, and staff leaderboards.
-              </p>
-            </div>
-          </div>
-        </Link>
-      </div>
-
-      {/* Stats Cards */}
-      {stats && (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
-            <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{
-              background: "linear-gradient(135deg, rgba(128,55,145,0.45), transparent)"
-            }}></div>
-            <div className="relative flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-white/80">Total Leads</p>
-                <Users className="h-5 w-5 text-white/80" />
-              </div>
-              <p className="text-3xl font-semibold text-white">{stats.totalLeads}</p>
-              <p className="text-xs text-white/60">Across all sources in the last 90 days.</p>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
-            <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{
-              background: "linear-gradient(135deg, rgba(46,213,115,0.35), transparent)"
-            }}></div>
-            <div className="relative flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-white/80">Converted Deals</p>
-                <CheckCircle className="h-5 w-5 text-emerald-300" />
-              </div>
-              <p className="text-3xl font-semibold text-white">{stats.convertedLeads}</p>
-              <p className="text-xs text-white/60">Total pipeline converted in the current quarter.</p>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
-            <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{
-              background: "linear-gradient(135deg, rgba(34,197,94,0.35), transparent)"
-            }}></div>
-            <div className="relative flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-white/80">Conversion Rate</p>
-                <TrendingUp className="h-5 w-5 text-emerald-400" />
-              </div>
-              <p className="text-3xl font-semibold text-white">{stats.conversionRate}%</p>
-              <p className="text-xs text-white/60">Benchmark: aim for 35%+ with optimized follow-ups.</p>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
-            <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{
-              background: "linear-gradient(135deg, rgba(186,123,209,0.4), transparent)"
-            }}></div>
-            <div className="relative flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-white/80">New this week</p>
-                <Calendar className="h-5 w-5 text-white/80" />
-              </div>
-              <p className="text-3xl font-semibold text-white">
-                {
-                  leads.filter((l) => {
-                    const weekAgo = new Date();
-                    weekAgo.setDate(weekAgo.getDate() - 7);
-                    return new Date(l.createdAt) > weekAgo;
-                  }).length
-                }
-              </p>
-              <p className="text-xs text-white/60">Fresh inbound and referral opportunities captured this week.</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Tabs */}
-      <div className="bg-white/5 rounded-xl border border-[#803791]/10 p-1">
-        <div className="flex gap-1 overflow-x-auto">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-3 px-6 py-3 font-medium transition-all duration-300 rounded-lg flex-1 justify-center whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg"
-                    : "text-white/75 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-                {tab.label}
-                <span
-                  className={`ml-1 px-2 py-1 rounded-full text-xs font-bold min-w-8 ${
-                    activeTab === tab.id
-                      ? "bg-white/20 text-white"
-                      : "bg-white/10 text-white/75"
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Bulk Actions */}
-      {selectedLeads.length > 0 && (
-        <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-r from-[#44225f]/70 via-[#35194c]/70 to-[#1b0c2d]/70 p-5 shadow-xl">
-          <div className="absolute inset-0 opacity-40" style={{
-            background: "radial-gradient(circle at top right, rgba(255,255,255,0.18), transparent 55%)"
-          }}></div>
-          <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-white/50">Bulk workflow</p>
-              <h3 className="text-lg font-semibold text-white">
-                {selectedLeads.length} lead{selectedLeads.length > 1 ? "s" : ""} in focus
-              </h3>
-              <p className="text-sm text-white/60">
-                Streamline engagement with fast assignments, nurture campaigns, or clean up inactive deals.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Popover open={bulkAssignOpen} onOpenChange={setBulkAssignOpen}>
-                <PopoverTrigger asChild>
-                  <button
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
-                    type="button"
-                  >
-                    <UserPlus className="h-4 w-4" />
-                    Manual assign
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 rounded-2xl border border-white/10 bg-[#1b0c2d] p-4 text-white shadow-xl">
-                  <form className="space-y-4" onSubmit={handleBulkManualAssign}>
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
-                        Staff identifier
-                      </label>
-                      <Input
-                        value={bulkAssignForm.assignee}
-                        onChange={(e) =>
-                          setBulkAssignForm((prev) => ({ ...prev, assignee: e.target.value }))
-                        }
-                        placeholder="e.g. staff user ID or email"
-                        className="h-10 rounded-xl border-white/15 bg-white/5 text-sm text-white placeholder:text-white/40"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
-                        Assignment note
-                      </label>
-                      <textarea
-                        value={bulkAssignForm.note}
-                        onChange={(e) =>
-                          setBulkAssignForm((prev) => ({ ...prev, note: e.target.value }))
-                        }
-                        rows={3}
-                        className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
-                        placeholder="Optional context for the assignee"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5"
-                    >
-                      Assign {selectedLeads.length} lead(s)
-                    </button>
-                  </form>
-                </PopoverContent>
-              </Popover>
-              <button
-                onClick={() => handleBulkAction("autoassign")}
-                className="inline-flex items-center gap-2 rounded-xl border border-purple-400/30 bg-purple-500/20 px-3.5 py-2 text-sm font-semibold text-purple-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
-              >
-                <ArrowUpDown className="h-4 w-4" />
-                Smart auto-assign
-              </button>
-              <Popover open={bulkEmailOpen} onOpenChange={setBulkEmailOpen}>
-                <PopoverTrigger asChild>
-                  <button
-                    className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3.5 py-2 text-sm font-semibold text-emerald-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
-                    type="button"
-                  >
-                    <Send className="h-4 w-4" />
-                    Sequence email
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[22rem] rounded-2xl border border-white/10 bg-[#102033] p-4 text-white shadow-xl">
-                  <form className="space-y-4" onSubmit={handleBulkEmail}>
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
-                        Subject
-                      </label>
-                      <Input
-                        value={bulkEmailForm.subject}
-                        onChange={(e) =>
-                          setBulkEmailForm((prev) => ({ ...prev, subject: e.target.value }))
-                        }
-                        placeholder="Introductory call invitation"
-                        className="h-10 rounded-xl border-white/15 bg-white/5 text-sm text-white placeholder:text-white/40"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-[0.35em] text-white/40">
-                        Message
-                      </label>
-                      <textarea
-                        value={bulkEmailForm.message}
-                        onChange={(e) =>
-                          setBulkEmailForm((prev) => ({ ...prev, message: e.target.value }))
-                        }
-                        rows={4}
-                        className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
-                        placeholder="Hi {{firstName}},\nLet's schedule a call to discuss your requirements..."
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5"
-                    >
-                      Send to {selectedLeads.length} lead(s)
-                    </button>
-                  </form>
-                </PopoverContent>
-              </Popover>
-              <button
-                onClick={() => handleBulkAction("delete")}
-                className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/15 px-3.5 py-2 text-sm font-semibold text-rose-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
-              >
-                <Trash2 className="h-4 w-4" />
-                Remove
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Search and Filters */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-xl">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="relative w-full md:flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
-            <input
-              type="text"
-              placeholder="Search by name, email, phone or assignment..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/10 py-3 pl-12 pr-4 text-sm text-white placeholder:text-white/50 shadow-inner focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
-            />
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-gradient-to-r from-[#803791]/50 to-[#b87bd1]/40 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+          {/* Quick navigation */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <Link
+              href="/crm/leads"
+              className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
             >
-              <Filter className="h-4 w-4" />
-              {showFilters ? "Hide filters" : "Advanced filters"}
-            </button>
-            <button
-              onClick={exportLeads}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white/80 transition-all duration-300 hover:-translate-y-0.5 hover:text-white"
-            >
-              <Download className="h-4 w-4" />
-              Export CSV
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters Panel */}
-      {showFilters && (
-        <div className="animate-in fade-in duration-300 rounded-2xl border border-white/15 bg-white/5 p-5 shadow-xl">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-5">
-            {[
-              {
-                label: "Status",
-                value: filters.status,
-                handler: (v) => setFilters({ ...filters, status: v }),
-                options: [
-                  ["", "All status"],
-                  ["new", "New"],
-                  ["contacted", "Contacted"],
-                  ["follow_up", "Follow-up"],
-                  ["proposal_sent", "Proposal sent"],
-                  ["negotiation", "Negotiation"],
-                  ["converted", "Converted"],
-                  ["lost", "Lost"],
-                ],
-              },
-              {
-                label: "Source",
-                value: filters.source,
-                handler: (v) => setFilters({ ...filters, source: v }),
-                options: [
-                  ["", "All sources"],
-                  ["website", "Website"],
-                  ["social_media", "Social media"],
-                  ["google_ads", "Google Ads"],
-                  ["facebook_ads", "Facebook Ads"],
-                  ["referral", "Referral"],
-                  ["walk_in", "Walk-in"],
-                  ["phone_call", "Phone"],
-                  ["email_campaign", "Email campaign"],
-                  ["event", "Event"],
-                  ["partnership", "Partnership"],
-                  ["other", "Other"],
-                ],
-              },
-              {
-                label: "Priority",
-                value: filters.priority,
-                handler: (v) => setFilters({ ...filters, priority: v }),
-                options: [
-                  ["", "All priorities"],
-                  ["low", "Low"],
-                  ["medium", "Medium"],
-                  ["high", "High"],
-                  ["urgent", "Urgent"],
-                ],
-              },
-            ].map((select) => (
-              <div key={select.label} className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-                  {select.label}
-                </p>
-                <div className="relative">
-                  <select
-                    value={select.value}
-                    onChange={(e) => select.handler(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-white/10 px-3 py-3 text-sm text-white shadow-inner transition-all duration-300 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
-                  >
-                    {select.options.map(([value, label]) => (
-                      <option key={value} value={value} className="bg-[#1b0c2d] text-white">
-                        {label}
-                      </option>
-                    ))}
-                  </select>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+              <div className="relative flex items-start gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#803791]/20 border border-[#803791]/30">
+                  <ListChecks className="h-5 w-5 text-white" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-white">
+                    Lead Workspace
+                  </p>
+                  <p className="text-xs text-white/65 leading-relaxed">
+                    Filter, segment and perform bulk actions with confidence.
+                  </p>
                 </div>
               </div>
-            ))}
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/40">Date from</p>
-              <input
-                type="date"
-                value={filters.dateFrom}
-                onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-white/10 px-3 py-3 text-sm text-white focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
-              />
-            </div>
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/40">Date to</p>
-              <input
-                type="date"
-                value={filters.dateTo}
-                onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-white/10 px-3 py-3 text-sm text-white focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
-              />
-            </div>
+            </Link>
+            <Link
+              href="/crm/leads/kanban"
+              className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+              <div className="relative flex items-start gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b87bd1]/20 border border-[#b87bd1]/30">
+                  <Kanban className="h-5 w-5 text-white" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-white">
+                    Pipeline Kanban
+                  </p>
+                  <p className="text-xs text-white/65 leading-relaxed">
+                    Drag-and-drop deals across proposal, negotiation and win
+                    stages.
+                  </p>
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/crm/leads/insights"
+              className="group relative overflow-hidden rounded-2xl border border-[#803791]/20 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#803791]/40 hover:bg-white/10 hover:shadow-xl"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#5b1d72]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+              <div className="relative flex items-start gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#5b1d72]/20 border border-[#5b1d72]/30">
+                  <BarChart3 className="h-5 w-5 text-white" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-white">
+                    Performance Insights
+                  </p>
+                  <p className="text-xs text-white/65 leading-relaxed">
+                    Conversion funnels, source attribution, and staff
+                    leaderboards.
+                  </p>
+                </div>
+              </div>
+            </Link>
           </div>
-        </div>
-      )}
 
-      {/* Leads Table */}
-      <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
-          </div>
-        ) : filteredLeads.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 py-16 text-center">
-            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/10">
-              <User className="h-10 w-10 text-white/50" />
+          {/* Stats Cards */}
+          {stats && (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
+                <div
+                  className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(128,55,145,0.45), transparent)",
+                  }}
+                ></div>
+                <div className="relative flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-white/80">
+                      Total Leads
+                    </p>
+                    <Users className="h-5 w-5 text-white/80" />
+                  </div>
+                  <p className="text-3xl font-semibold text-white">
+                    {stats.totalLeads}
+                  </p>
+                  <p className="text-xs text-white/60">
+                    Across all sources in the last 90 days.
+                  </p>
+                </div>
+              </div>
+
+              <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
+                <div
+                  className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(46,213,115,0.35), transparent)",
+                  }}
+                ></div>
+                <div className="relative flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-white/80">
+                      Converted Deals
+                    </p>
+                    <CheckCircle className="h-5 w-5 text-emerald-300" />
+                  </div>
+                  <p className="text-3xl font-semibold text-white">
+                    {stats.convertedLeads}
+                  </p>
+                  <p className="text-xs text-white/60">
+                    Total pipeline converted in the current quarter.
+                  </p>
+                </div>
+              </div>
+
+              <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
+                <div
+                  className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(34,197,94,0.35), transparent)",
+                  }}
+                ></div>
+                <div className="relative flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-white/80">
+                      Conversion Rate
+                    </p>
+                    <TrendingUp className="h-5 w-5 text-emerald-400" />
+                  </div>
+                  <p className="text-3xl font-semibold text-white">
+                    {stats.conversionRate}%
+                  </p>
+                  <p className="text-xs text-white/60">
+                    Benchmark: aim for 35%+ with optimized follow-ups.
+                  </p>
+                </div>
+              </div>
+
+              <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5">
+                <div
+                  className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(186,123,209,0.4), transparent)",
+                  }}
+                ></div>
+                <div className="relative flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-white/80">
+                      New this week
+                    </p>
+                    <Calendar className="h-5 w-5 text-white/80" />
+                  </div>
+                  <p className="text-3xl font-semibold text-white">
+                    {
+                      leads.filter((l) => {
+                        const weekAgo = new Date();
+                        weekAgo.setDate(weekAgo.getDate() - 7);
+                        return new Date(l.createdAt) > weekAgo;
+                      }).length
+                    }
+                  </p>
+                  <p className="text-xs text-white/60">
+                    Fresh inbound and referral opportunities captured this week.
+                  </p>
+                </div>
+              </div>
             </div>
-            <h3 className="text-lg font-semibold text-white/80">No leads found</h3>
-            <p className="mt-2 text-sm text-white/50">
-              {searchTerm
-                ? "Try refining your keywords or reset filters to widen the search."
-                : "Use filters or import new data to begin populating your CRM pipeline."}
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-white/10">
-                <tr>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    <input
-                      type="checkbox"
-                      className="rounded border-white/20 bg-white/5 text-[#b87bd1] focus:ring-[#b87bd1]"
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedLeads(
-                            filteredLeads.map((lead) => lead.id)
-                          );
-                        } else {
-                          setSelectedLeads([]);
-                        }
+          )}
+
+          {/* Tabs */}
+          <div className="bg-linear-to-b from-white/10 to-white/5 rounded-2xl border border-[#803791]/20 p-2 shadow-xl backdrop-blur-sm">
+            <div className="grid grid-cols-4 xl:grid-cols-8 gap-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={cn(
+                      "relative group flex items-center gap-2 px-4 py-3 font-medium transition-all duration-300 rounded-xl text-sm",
+                      "hover:shadow-lg hover:-translate-y-0.5",
+                      isActive
+                        ? "bg-linear-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg"
+                        : "text-white/75 hover:text-white hover:bg-white/10"
+                    )}
+                  >
+                    <div
+                      className="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{
+                        background: isActive
+                          ? "linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%)"
+                          : "linear-gradient(135deg, rgba(255,255,255,0.05), transparent 50%)",
                       }}
                     />
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Lead
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Source
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Status
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Priority
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Assigned To
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Score
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Created
-                  </th>
-                  <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredLeads.map((lead) => (
-                  <tr
-                    key={lead.id}
-                    className="group border-t border-white/10 transition-all duration-300 hover:bg-white/8"
-                  >
-                    <td className="py-4 px-6">
-                      <input
-                        type="checkbox"
-                        className="rounded border-white/20 bg-white/5 text-[#b87bd1] focus:ring-[#b87bd1]"
-                        checked={selectedLeads.includes(lead.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedLeads([...selectedLeads, lead.id]);
-                          } else {
-                            setSelectedLeads(
-                              selectedLeads.filter((id) => id !== lead.id)
-                            );
-                          }
-                        }}
-                      />
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="relative h-12 w-12 overflow-hidden rounded-2xl">
-                          <div className="absolute inset-0 rounded-2xl blur-md" style={{
-                            background: "linear-gradient(135deg, #803791, #b87bd1)",
-                          }}></div>
-                          <div className="relative flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-[#803791] via-[#9b55b0] to-[#5d1f73] text-white/90 text-sm font-semibold uppercase">
-                            {(lead.firstName?.charAt(0) || "").concat(lead.lastName?.charAt(0) || "") || "SP"}
-                          </div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-sm font-semibold text-white">
-                            {lead.firstName} {lead.lastName}
-                          </div>
-                          <div className="flex flex-wrap items-center gap-3 text-xs text-white/60">
-                            {lead.email && <span>{lead.email}</span>}
-                            {lead.phone && (
-                              <span className="inline-flex items-center gap-1">
-                                <Phone className="h-3 w-3" /> {lead.phone}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6">{getSourceBadge(lead.source)}</td>
-                    <td className="py-4 px-6">{getStatusBadge(lead.status)}</td>
-                    <td className="py-4 px-6">
-                      {getPriorityBadge(lead.priority)}
-                    </td>
-                    <td className="py-4 px-6">
-                      {lead.assignedTo ? (
-                        <div className="flex items-center gap-2">
-                          <User className="w-4 h-4 text-white/60" />
-                          <span className="text-xs font-medium text-white/75">
-                            {lead.assignedTo.firstName}{" "}
-                            {lead.assignedTo.lastName}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-white/50">
-                          Unassigned
-                        </span>
+                    <Icon
+                      className={cn(
+                        "w-5 h-5 transition-colors duration-300",
+                        isActive
+                          ? "text-white"
+                          : "text-white/60 group-hover:text-white"
                       )}
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-2">
-                        <div className="h-2 w-20 overflow-hidden rounded-full bg-white/10">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1]"
-                            style={{ width: `${lead.score}%` }}
-                          ></div>
+                    />
+                    <div className="flex flex-col items-start">
+                      <span className="relative z-10">{tab.label}</span>
+                      <span
+                        className={cn(
+                          "text-xs font-bold",
+                          isActive
+                            ? "text-white/90"
+                            : "text-white/50 group-hover:text-white/70"
+                        )}
+                      >
+                        {tab.count}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Bulk Actions */}
+          {selectedLeads.length > 0 && (
+            <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-r from-[#44225f]/70 via-[#35194c]/70 to-[#1b0c2d]/70 p-5 shadow-xl">
+              <div
+                className="absolute inset-0 opacity-40"
+                style={{
+                  background:
+                    "radial-gradient(circle at top right, rgba(255,255,255,0.18), transparent 55%)",
+                }}
+              ></div>
+              <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-white/50">
+                    Bulk workflow
+                  </p>
+                  <h3 className="text-lg font-semibold text-white">
+                    {selectedLeads.length} lead
+                    {selectedLeads.length > 1 ? "s" : ""} in focus
+                  </h3>
+                  <p className="text-sm text-white/60">
+                    Streamline engagement with fast assignments, nurture
+                    campaigns, or clean up inactive deals.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Popover
+                    open={bulkAssignOpen}
+                    onOpenChange={setBulkAssignOpen}
+                  >
+                    <PopoverTrigger asChild>
+                      <button
+                        className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                        type="button"
+                      >
+                        <UserPlus className="h-4 w-4" />
+                        Manual assign
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80 rounded-2xl border border-white/10 bg-[#1b0c2d] p-4 text-white shadow-xl">
+                      <form
+                        className="space-y-4"
+                        onSubmit={handleBulkManualAssign}
+                      >
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                            Staff identifier
+                          </label>
+                          <Input
+                            value={bulkAssignForm.assignee}
+                            onChange={(e) =>
+                              setBulkAssignForm((prev) => ({
+                                ...prev,
+                                assignee: e.target.value,
+                              }))
+                            }
+                            placeholder="e.g. staff user ID or email"
+                            className="h-10 rounded-xl border-white/15 bg-white/5 text-sm text-white placeholder:text-white/40"
+                          />
                         </div>
-                        <span className="text-xs font-semibold text-white/70">
-                          {lead.score}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 text-sm text-white/75">
-                      {new Date(lead.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex gap-2">
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                            Assignment note
+                          </label>
+                          <textarea
+                            value={bulkAssignForm.note}
+                            onChange={(e) =>
+                              setBulkAssignForm((prev) => ({
+                                ...prev,
+                                note: e.target.value,
+                              }))
+                            }
+                            rows={3}
+                            className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
+                            placeholder="Optional context for the assignee"
+                          />
+                        </div>
                         <button
-                          onClick={() => openLeadDrawer(lead)}
-                          className="rounded-xl border border-white/15 bg-white/10 p-2 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
-                          title="View Details"
+                          type="submit"
+                          className="w-full rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5"
                         >
-                          <Eye className="w-4 h-4" />
+                          Assign {selectedLeads.length} lead(s)
                         </button>
+                      </form>
+                    </PopoverContent>
+                  </Popover>
+                  <button
+                    onClick={() => handleBulkAction("autoassign")}
+                    className="inline-flex items-center gap-2 rounded-xl border border-purple-400/30 bg-purple-500/20 px-3.5 py-2 text-sm font-semibold text-purple-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                  >
+                    <ArrowUpDown className="h-4 w-4" />
+                    Smart auto-assign
+                  </button>
+                  <Popover open={bulkEmailOpen} onOpenChange={setBulkEmailOpen}>
+                    <PopoverTrigger asChild>
+                      <button
+                        className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3.5 py-2 text-sm font-semibold text-emerald-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                        type="button"
+                      >
+                        <Send className="h-4 w-4" />
+                        Sequence email
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[22rem] rounded-2xl border border-white/10 bg-[#102033] p-4 text-white shadow-xl">
+                      <form className="space-y-4" onSubmit={handleBulkEmail}>
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                            Subject
+                          </label>
+                          <Input
+                            value={bulkEmailForm.subject}
+                            onChange={(e) =>
+                              setBulkEmailForm((prev) => ({
+                                ...prev,
+                                subject: e.target.value,
+                              }))
+                            }
+                            placeholder="Introductory call invitation"
+                            className="h-10 rounded-xl border-white/15 bg-white/5 text-sm text-white placeholder:text-white/40"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-[0.35em] text-white/40">
+                            Message
+                          </label>
+                          <textarea
+                            value={bulkEmailForm.message}
+                            onChange={(e) =>
+                              setBulkEmailForm((prev) => ({
+                                ...prev,
+                                message: e.target.value,
+                              }))
+                            }
+                            rows={4}
+                            className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
+                            placeholder="Hi {{firstName}},\nLet's schedule a call to discuss your requirements..."
+                          />
+                        </div>
                         <button
-                          onClick={() => setShowAssignModal(true)}
-                          className="rounded-xl border border-blue-400/30 bg-blue-500/15 p-2 text-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
-                          title="Assign Lead"
+                          type="submit"
+                          className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5"
                         >
-                          <UserPlus className="w-4 h-4" />
+                          Send to {selectedLeads.length} lead(s)
                         </button>
-                        <button
-                          onClick={() => setShowFollowUpModal(true)}
-                          className="rounded-xl border border-emerald-400/30 bg-emerald-500/15 p-2 text-emerald-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
-                          title="Add Follow-up"
-                        >
-                          <MessageSquare className="w-4 h-4" />
-                        </button>
-                        <details className="relative">
-                          <summary className="flex cursor-pointer items-center justify-center rounded-xl border border-white/15 bg-white/10 p-2 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15">
-                            <MoreHorizontal className="w-4 h-4" />
-                          </summary>
-                          <div className="absolute right-0 top-full z-20 mt-2 w-52 overflow-hidden rounded-2xl border border-white/15 bg-[#1b0c2d]/95 shadow-2xl backdrop-blur-xl">
-                            <button
-                              onClick={() => handleStatusChange(lead.id, "contacted")}
-                              className="block w-full px-4 py-3 text-left text-sm text-white/70 transition-colors duration-200 hover:bg-white/10"
-                            >
-                              Mark as contacted
-                            </button>
-                            <button
-                              onClick={() => handleStatusChange(lead.id, "proposal_sent")}
-                              className="block w-full px-4 py-3 text-left text-sm text-white/70 transition-colors duration-200 hover:bg-white/10"
-                            >
-                              Move to proposal sent
-                            </button>
-                            <button
-                              onClick={() => handleConvertLead(lead.id)}
-                              className="block w-full px-4 py-3 text-left text-sm text-white/70 transition-colors duration-200 hover:bg-white/10"
-                            >
-                              Convert lead
-                            </button>
-                            <div className="h-px bg-white/10"></div>
-                            <button
-                              onClick={() => handleDeleteLead(lead.id)}
-                              className="block w-full px-4 py-3 text-left text-sm text-rose-300 transition-colors duration-200 hover:bg-rose-500/10"
-                            >
-                              Delete lead
-                            </button>
-                          </div>
-                        </details>
-                      </div>
-                    </td>
-                  </tr>
+                      </form>
+                    </PopoverContent>
+                  </Popover>
+                  <button
+                    onClick={() => handleBulkAction("delete")}
+                    className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/15 px-3.5 py-2 text-sm font-semibold text-rose-100 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Search and Filters */}
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-xl">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="relative w-full md:flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
+                <input
+                  type="text"
+                  placeholder="Search by name, email, phone or assignment..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-white/10 py-3 pl-12 pr-4 text-sm text-white placeholder:text-white/50 shadow-inner focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50"
+                />
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-gradient-to-r from-[#803791]/50 to-[#b87bd1]/40 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+                >
+                  <Filter className="h-4 w-4" />
+                  {showFilters ? "Hide filters" : "Advanced filters"}
+                </button>
+                <button
+                  onClick={exportLeads}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white/80 transition-all duration-300 hover:-translate-y-0.5 hover:text-white"
+                >
+                  <Download className="h-4 w-4" />
+                  Export CSV
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Filters Panel */}
+          {showFilters && (
+            <div className="animate-in fade-in duration-300 rounded-2xl border border-white/15 bg-white/5 p-5 shadow-xl">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-5">
+                {[
+                  {
+                    label: "Status",
+                    value: filters.status,
+                    handler: (v) => setFilters({ ...filters, status: v }),
+                    options: [
+                      ["", "All status"],
+                      ["new", "New"],
+                      ["contacted", "Contacted"],
+                      ["follow_up", "Follow-up"],
+                      ["proposal_sent", "Proposal sent"],
+                      ["negotiation", "Negotiation"],
+                      ["converted", "Converted"],
+                      ["lost", "Lost"],
+                    ],
+                  },
+                  {
+                    label: "Source",
+                    value: filters.source,
+                    handler: (v) => setFilters({ ...filters, source: v }),
+                    options: [
+                      ["", "All sources"],
+                      ["website", "Website"],
+                      ["social_media", "Social media"],
+                      ["google_ads", "Google Ads"],
+                      ["facebook_ads", "Facebook Ads"],
+                      ["referral", "Referral"],
+                      ["walk_in", "Walk-in"],
+                      ["phone_call", "Phone"],
+                      ["email_campaign", "Email campaign"],
+                      ["event", "Event"],
+                      ["partnership", "Partnership"],
+                      ["other", "Other"],
+                    ],
+                  },
+                  {
+                    label: "Priority",
+                    value: filters.priority,
+                    handler: (v) => setFilters({ ...filters, priority: v }),
+                    options: [
+                      ["", "All priorities"],
+                      ["low", "Low"],
+                      ["medium", "Medium"],
+                      ["high", "High"],
+                      ["urgent", "Urgent"],
+                    ],
+                  },
+                ].map((select) => (
+                  <div key={select.label} className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                      {select.label}
+                    </p>
+                    <div className="relative">
+                      <select
+                        value={select.value}
+                        onChange={(e) => select.handler(e.target.value)}
+                        className="w-full rounded-xl border border-white/15 bg-white/10 px-3 py-3 text-sm text-white shadow-inner transition-all duration-300 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
+                      >
+                        {select.options.map(([value, label]) => (
+                          <option
+                            key={value}
+                            value={value}
+                            className="bg-[#1b0c2d] text-white"
+                          >
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+                <div className="space-y-2">
+                  <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                    Date from
+                  </p>
+                  <input
+                    type="date"
+                    value={filters.dateFrom}
+                    onChange={(e) =>
+                      setFilters({ ...filters, dateFrom: e.target.value })
+                    }
+                    className="w-full rounded-xl border border-white/15 bg-white/10 px-3 py-3 text-sm text-white focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+                    Date to
+                  </p>
+                  <input
+                    type="date"
+                    value={filters.dateTo}
+                    onChange={(e) =>
+                      setFilters({ ...filters, dateTo: e.target.value })
+                    }
+                    className="w-full rounded-xl border border-white/15 bg-white/10 px-3 py-3 text-sm text-white focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/40"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
-      {/* Pagination */}
-      {filteredLeads.length > 0 && (
-        <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-sm text-white/70">
-          <div>
-            Displaying {filteredLeads.length} of {leads.length} leads
+          {/* Leads Table */}
+          <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl">
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b87bd1]"></div>
+              </div>
+            ) : filteredLeads.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 py-16 text-center">
+                <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/10">
+                  <User className="h-10 w-10 text-white/50" />
+                </div>
+                <h3 className="text-lg font-semibold text-white/80">
+                  No leads found
+                </h3>
+                <p className="mt-2 text-sm text-white/50">
+                  {searchTerm
+                    ? "Try refining your keywords or reset filters to widen the search."
+                    : "Use filters or import new data to begin populating your CRM pipeline."}
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-white/10">
+                    <tr>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        <div className="relative group">
+                          <input
+                            type="checkbox"
+                            className="peer h-5 w-5 appearance-none rounded-md border-2 border-white/20 bg-white/5 transition-all duration-300 
+                              checked:border-[#b87bd1] checked:bg-[#b87bd1] hover:border-[#b87bd1]/50 focus:ring-2 focus:ring-[#b87bd1]/30 focus:ring-offset-0"
+                            checked={
+                              selectedLeads.length === filteredLeads.length &&
+                              filteredLeads.length > 0
+                            }
+                            onChange={(e) => {
+                              const allIds = filteredLeads.map(
+                                (lead) => lead.id
+                              );
+                              setSelectedLeads(e.target.checked ? allIds : []);
+                            }}
+                          />
+                          <svg
+                            className="pointer-events-none absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 fill-current text-white opacity-0 peer-checked:opacity-100"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z" />
+                          </svg>
+                        </div>
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Lead
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Source
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Status
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Priority
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Assigned To
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Score
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Created
+                      </th>
+                      <th className="py-4 px-6 text-left text-xs uppercase tracking-wider text-white/60">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredLeads.map((lead) => (
+                      <tr
+                        key={lead.id}
+                        className="group border-t border-white/10 transition-all duration-300 hover:bg-white/8"
+                      >
+                        <td className="py-4 px-6">
+                          <div className="relative group">
+                            <input
+                              type="checkbox"
+                              className="peer h-5 w-5 appearance-none rounded-md border-2 border-white/20 bg-white/5 transition-all duration-300
+                                checked:border-[#b87bd1] checked:bg-[#b87bd1] hover:border-[#b87bd1]/50 focus:ring-2 focus:ring-[#b87bd1]/30 focus:ring-offset-0"
+                              checked={selectedLeads.includes(lead.id)}
+                              onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                setSelectedLeads((prev) =>
+                                  isChecked
+                                    ? [...prev, lead.id]
+                                    : prev.filter((id) => id !== lead.id)
+                                );
+                              }}
+                            />
+                            <div className="absolute inset-0 rounded-md bg-white/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                            <svg
+                              className="pointer-events-none absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 fill-current text-white opacity-0 peer-checked:opacity-100"
+                              viewBox="0 0 16 16"
+                            >
+                              <path d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z" />
+                            </svg>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-3">
+                            <div className="relative h-12 w-12 overflow-hidden rounded-2xl">
+                              <div
+                                className="absolute inset-0 rounded-2xl blur-md"
+                                style={{
+                                  background:
+                                    "linear-gradient(135deg, #803791, #b87bd1)",
+                                }}
+                              ></div>
+                              <div className="relative flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-[#803791] via-[#9b55b0] to-[#5d1f73] text-white/90 text-sm font-semibold uppercase">
+                                {(lead.firstName?.charAt(0) || "").concat(
+                                  lead.lastName?.charAt(0) || ""
+                                ) || "SP"}
+                              </div>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="text-sm font-semibold text-white">
+                                {lead.firstName} {lead.lastName}
+                              </div>
+                              <div className="flex flex-wrap items-center gap-3 text-xs text-white/60">
+                                {lead.email && <span>{lead.email}</span>}
+                                {lead.phone && (
+                                  <span className="inline-flex items-center gap-1">
+                                    <Phone className="h-3 w-3" /> {lead.phone}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6">
+                          {getSourceBadge(lead.source)}
+                        </td>
+                        <td className="py-4 px-6">
+                          {getStatusBadge(lead.status)}
+                        </td>
+                        <td className="py-4 px-6">
+                          {getPriorityBadge(lead.priority)}
+                        </td>
+                        <td className="py-4 px-6">
+                          {lead.assignedTo ? (
+                            <div className="flex items-center gap-2">
+                              <User className="w-4 h-4 text-white/60" />
+                              <span className="text-xs font-medium text-white/75">
+                                {lead.assignedTo.firstName}{" "}
+                                {lead.assignedTo.lastName}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-sm text-white/50">
+                              Unassigned
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-2">
+                            <div className="h-2 w-20 overflow-hidden rounded-full bg-white/10">
+                              <div
+                                className="h-full rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1]"
+                                style={{ width: `${lead.score}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-xs font-semibold text-white/70">
+                              {lead.score}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 text-sm text-white/75">
+                          {new Date(lead.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )}
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => openLeadDrawer(lead)}
+                              className="rounded-xl border border-white/15 bg-white/10 p-2 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                              title="View Details"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => setShowAssignModal(true)}
+                              className="rounded-xl border border-blue-400/30 bg-blue-500/15 p-2 text-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                              title="Assign Lead"
+                            >
+                              <UserPlus className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => setShowFollowUpModal(true)}
+                              className="rounded-xl border border-emerald-400/30 bg-emerald-500/15 p-2 text-emerald-200 transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                              title="Add Follow-up"
+                            >
+                              <MessageSquare className="w-4 h-4" />
+                            </button>
+                            <details className="relative">
+                              <summary className="flex cursor-pointer items-center justify-center rounded-xl border border-white/15 bg-white/10 p-2 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15">
+                                <MoreHorizontal className="w-4 h-4" />
+                              </summary>
+                              <div className="absolute right-0 top-full z-20 mt-2 w-52 overflow-hidden rounded-2xl border border-white/15 bg-[#1b0c2d]/95 shadow-2xl backdrop-blur-xl">
+                                <button
+                                  onClick={() =>
+                                    handleStatusChange(lead.id, "contacted")
+                                  }
+                                  className="block w-full px-4 py-3 text-left text-sm text-white/70 transition-colors duration-200 hover:bg-white/10"
+                                >
+                                  Mark as contacted
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleStatusChange(lead.id, "proposal_sent")
+                                  }
+                                  className="block w-full px-4 py-3 text-left text-sm text-white/70 transition-colors duration-200 hover:bg-white/10"
+                                >
+                                  Move to proposal sent
+                                </button>
+                                <button
+                                  onClick={() => handleConvertLead(lead.id)}
+                                  className="block w-full px-4 py-3 text-left text-sm text-white/70 transition-colors duration-200 hover:bg-white/10"
+                                >
+                                  Convert lead
+                                </button>
+                                <div className="h-px bg-white/10"></div>
+                                <button
+                                  onClick={() => handleDeleteLead(lead.id)}
+                                  className="block w-full px-4 py-3 text-left text-sm text-rose-300 transition-colors duration-200 hover:bg-rose-500/10"
+                                >
+                                  Delete lead
+                                </button>
+                              </div>
+                            </details>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
-          <div className="flex gap-2">
-            <button
-              disabled={!pagination?.hasPrev}
-              className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <button className="rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] px-3 py-2 text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5">
-              {pagination?.currentPage || 1}
-            </button>
-            <button
-              disabled={!pagination?.hasNext}
-              className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
 
-      {/* Modals */}
-      {showCreateModal && <CreateLeadModal />}
-      {showAssignModal && <AssignLeadModal />}
-      {showFollowUpModal && <FollowUpModal />}
-      {drawerLead && (
-        <LeadDetailDrawer
-          lead={drawerLead}
-          onClose={closeLeadDrawer}
-          onAssign={() => {
-            closeLeadDrawer();
-            setShowAssignModal(true);
-          }}
-          onScheduleFollowUp={() => {
-            closeLeadDrawer();
-            setShowFollowUpModal(true);
-          }}
-          onConvert={() => {
-            if (!drawerLead) return;
-            handleConvertLead(drawerLead.id);
-            closeLeadDrawer();
-          }}
-          onDelete={() => {
-            if (!drawerLead) return;
-            handleDeleteLead(drawerLead.id);
-            closeLeadDrawer();
-          }}
-          onStatusChange={(lead, status) => {
-            handleStatusChange(lead.id, status);
-            closeLeadDrawer();
-          }}
-        />
-      )}
+          {/* Pagination */}
+          {filteredLeads.length > 0 && (
+            <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-sm text-white/70">
+              <div>
+                Displaying {filteredLeads.length} of {leads.length} leads
+              </div>
+              <div className="flex gap-2">
+                <button
+                  disabled={!pagination?.hasPrev}
+                  className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <button className="rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] px-3 py-2 text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+                  {pagination?.currentPage || 1}
+                </button>
+                <button
+                  disabled={!pagination?.hasNext}
+                  className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Modals */}
+          {showCreateModal && <CreateLeadModal />}
+          {showAssignModal && <AssignLeadModal />}
+          {showFollowUpModal && <FollowUpModal />}
+          {drawerLead && (
+            <LeadDetailDrawer
+              lead={drawerLead}
+              onClose={closeLeadDrawer}
+              onAssign={() => {
+                closeLeadDrawer();
+                setShowAssignModal(true);
+              }}
+              onScheduleFollowUp={() => {
+                closeLeadDrawer();
+                setShowFollowUpModal(true);
+              }}
+              onConvert={() => {
+                if (!drawerLead) return;
+                handleConvertLead(drawerLead.id);
+                closeLeadDrawer();
+              }}
+              onDelete={() => {
+                if (!drawerLead) return;
+                handleDeleteLead(drawerLead.id);
+                closeLeadDrawer();
+              }}
+              onStatusChange={(lead, status) => {
+                handleStatusChange(lead.id, status);
+                closeLeadDrawer();
+              }}
+            />
+          )}
         </>
       ) : (
         /* User Management Section */
