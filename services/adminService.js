@@ -304,4 +304,82 @@ export const adminService = {
     const response = await api.patch(`/api/admin/employers/${userId}/documents/${docId}`, payload);
     return response.data;
   },
+
+  // ============================================
+  // ATS (APPLICANT TRACKING SYSTEM) METHODS
+  // ============================================
+
+  // Dashboard Stats
+  getATSDashboardStats: async () => {
+    const response = await api.get("/api/admin/ats/dashboard/stats");
+    return response.data;
+  },
+
+  // Resume Collection & Parsing
+  getResumes: async (params = {}) => {
+    const response = await api.get("/api/admin/ats/resumes", { params });
+    return response.data;
+  },
+
+  getResumeById: async (id) => {
+    const response = await api.get(`/api/admin/ats/resumes/${id}`);
+    return response.data;
+  },
+
+  getResumeStats: async () => {
+    const response = await api.get("/api/admin/ats/resumes/stats");
+    return response.data;
+  },
+
+  parseResume: async (id) => {
+    const response = await api.post(`/api/admin/ats/resumes/${id}/parse`);
+    return response.data;
+  },
+
+  // Job Management
+  getATSJobs: async (params = {}) => {
+    const response = await api.get("/api/admin/ats/jobs", { params });
+    return response.data;
+  },
+
+  getATSJobById: async (id) => {
+    const response = await api.get(`/api/admin/ats/jobs/${id}`);
+    return response.data;
+  },
+
+  getJobStats: async () => {
+    const response = await api.get("/api/admin/ats/jobs/stats");
+    return response.data;
+  },
+
+  assignJobToStaff: async (jobId, staffId, note) => {
+    const response = await api.post(`/api/admin/ats/jobs/${jobId}/assign`, { staffId, note });
+    return response.data;
+  },
+
+  // Candidate Search & Filtering
+  searchCandidates: async (params = {}) => {
+    const response = await api.get("/api/admin/ats/candidates/search", { params });
+    return response.data;
+  },
+
+  getCandidateById: async (id) => {
+    const response = await api.get(`/api/admin/ats/candidates/${id}`);
+    return response.data;
+  },
+
+  shortlistCandidate: async (candidateId, jobId, note) => {
+    const response = await api.post(`/api/admin/ats/candidates/${candidateId}/shortlist`, { jobId, note });
+    return response.data;
+  },
+
+  rejectCandidate: async (candidateId, jobId, reason) => {
+    const response = await api.post(`/api/admin/ats/candidates/${candidateId}/reject`, { jobId, reason });
+    return response.data;
+  },
+
+  addCandidateNote: async (candidateId, note) => {
+    const response = await api.post(`/api/admin/ats/candidates/${candidateId}/notes`, { note });
+    return response.data;
+  },
 };
