@@ -215,7 +215,8 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
         }`}
         style={{
           width: isCollapsed ? "90px" : "280px",
-          background: "linear-gradient(135deg, rgba(128, 55, 145, 0.08), rgba(184, 123, 209, 0.05))",
+          background:
+            "linear-gradient(135deg, rgba(128, 55, 145, 0.08), rgba(184, 123, 209, 0.05))",
           backdropFilter: "blur(24px)",
           borderRight: "1px solid rgba(184, 123, 209, 0.15)",
           boxShadow: "0 8px 32px rgba(128, 55, 145, 0.1)",
@@ -317,9 +318,10 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
             const hasChildren =
               Array.isArray(item.children) && item.children.length > 0;
             const Icon = item.icon;
-            const isActive = hasChildren
-              ? item.children.some((child) => pathname === child.href)
-              : pathname === item.href;
+            const isActive = pathname === item.href; // Only show active state for exact matches
+            const isChildActive =
+              hasChildren &&
+              item.children.some((child) => pathname === child.href);
             const isHovered = hoveredItem === item.id;
             const isExpanded = expandedMenus[item.id];
             const colors = colorSchemes[item.color] || colorSchemes.blue;
@@ -395,7 +397,9 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
                         <div className="flex-1 text-left min-w-0">
                           <span
                             className={`text-sm font-semibold truncate block ${
-                              isActive ? "text-white" : "text-white/80"
+                              isActive || isChildActive
+                                ? "text-white"
+                                : "text-white/80"
                             }`}
                           >
                             {item.name}
@@ -430,7 +434,7 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
                   className="relative w-full group"
                   title={isCollapsed ? item.name : ""}
                 >
-                  {(isActive || isHovered) && (
+                  {isHovered && (
                     <div
                       className="absolute inset-0 rounded-xl blur-xl opacity-40 transition-opacity duration-300"
                       style={{
@@ -658,7 +662,7 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
                 background: "linear-gradient(135deg, #f59e0b, #f97316)",
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
             <div className="absolute top-2 right-2">
               <Sparkles className="w-4 h-4 text-yellow-200 animate-pulse" />
             </div>
