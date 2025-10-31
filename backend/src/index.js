@@ -13,6 +13,7 @@ import authRoutes from "./routes/auth.js";
 import jobRoutes from "./routes/jobs.js";
 import applicationRoutes from "./routes/applications.js";
 import crmRoutes from "./routes/crm.js";
+import atsRoutes from "./routes/ats.js";
 import leadRoutes from "./routes/leads.js";
 import studentRoutes from "./routes/student.js";
 import employerRoutes from "./routes/employer.js";
@@ -117,6 +118,7 @@ async function bootstrap() {
     app.use("/api/jobs", jobRoutes);
     app.use("/api/applications", applicationRoutes);
     app.use("/api/admin", crmRoutes); // Changed from /api/crm to /api/admin for better semantics
+    app.use("/api/admin/ats", atsRoutes); // ATS routes
     app.use("/api/leads", leadRoutes);
     app.use("/api/student", studentRoutes);
     app.use("/api/courses", courseRoutes);

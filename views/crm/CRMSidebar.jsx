@@ -92,10 +92,39 @@ const navigation = [
   {
     id: "ats",
     name: "ATS",
-    href: "/crm/ats",
     icon: Target,
     badge: "8",
     color: "indigo",
+    children: [
+      {
+        id: "ats-dashboard",
+        name: "ATS Dashboard",
+        href: "/crm/ats",
+        icon: BarChart3,
+        description: "Overview & statistics",
+      },
+      {
+        id: "ats-resumes",
+        name: "Resume Collection",
+        href: "/crm/ats?section=resumes",
+        icon: FileText,
+        description: "Parse & manage resumes",
+      },
+      {
+        id: "ats-jobs",
+        name: "Job Management",
+        href: "/crm/ats?section=jobs",
+        icon: Briefcase,
+        description: "Track job postings",
+      },
+      {
+        id: "ats-candidates",
+        name: "Candidate Search",
+        href: "/crm/ats?section=candidates",
+        icon: Users,
+        description: "Filter & shortlist",
+      },
+    ],
   },
   {
     id: "courses",
