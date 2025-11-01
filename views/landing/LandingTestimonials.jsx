@@ -5,7 +5,24 @@ import { useState } from "react";
 
 export default function LandingTestimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const cardsPerPage = 3;
+  const [cardsPerPage, setCardsPerPage] = useState(3);
+
+  // Adjust cards per page based on screen size
+  useState(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setCardsPerPage(1);
+      } else if (window.innerWidth < 1024) {
+        setCardsPerPage(2);
+      } else {
+        setCardsPerPage(3);
+      }
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const testimonials = [
     {
@@ -87,7 +104,7 @@ export default function LandingTestimonials() {
   );
 
   return (
-    <section id="testimonials" className="relative py-24 overflow-hidden">
+    <section id="testimonials" className="relative py-12 sm:py-16 lg:py-24 overflow-hidden">
       {/* Animated background elements (subtle) */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -141,7 +158,7 @@ export default function LandingTestimonials() {
 
       <div className="relative max-w-[95%] mx-auto px-4 lg:px-6">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20">
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 backdrop-blur-sm"
             style={{
@@ -155,30 +172,30 @@ export default function LandingTestimonials() {
               Success Stories
             </span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2">
             Trusted by <span className="gradient-text-blue">Thousands</span>
           </h2>
-          <p className="text-xl text-gray-400">
+          <p className="text-base sm:text-lg md:text-xl text-gray-400 px-4">
             Real stories from professionals who transformed their careers with
             us
           </p>
         </div>
 
-        <div className="relative flex items-center justify-center gap-8">
+        <div className="relative flex items-center justify-center gap-2 sm:gap-4 lg:gap-8">
           {/* Left Arrow */}
           {testimonials.length > cardsPerPage && (
             <button
               onClick={handlePrevious}
-              className="flex-shrink-0 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 hover:scale-110 transition-all duration-300 shadow-xl"
+              className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 hover:scale-110 transition-all duration-300 shadow-xl"
               aria-label="Previous testimonials"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           )}
 
           {/* Testimonials Grid */}
           <div className="flex-1 max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {visibleTestimonials.map((testimonial, index) => (
                 <div
                   key={currentIndex + index}
@@ -199,16 +216,16 @@ export default function LandingTestimonials() {
                   </div>
 
                   {/* Content */}
-                  <div className="relative p-8 min-h-[420px] flex flex-col">
+                  <div className="relative p-6 sm:p-8 min-h-[380px] sm:min-h-[420px] flex flex-col">
                     {/* Quote Icon */}
-                    <div className="mb-6">
-                      <div className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 transition-all duration-300 group-hover:bg-white/20 group-hover:scale-110 group-hover:rotate-6 shadow-xl">
-                        <Quote className="w-7 h-7 text-white" />
+                    <div className="mb-4 sm:mb-6">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/20 transition-all duration-300 group-hover:bg-white/20 group-hover:scale-110 group-hover:rotate-6 shadow-xl">
+                        <Quote className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                       </div>
                     </div>
 
                     {/* Rating */}
-                    <div className="flex gap-1 mb-6">
+                    <div className="flex gap-1 mb-4 sm:mb-6">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star
                           key={i}
@@ -218,26 +235,26 @@ export default function LandingTestimonials() {
                     </div>
 
                     {/* Testimonial Text */}
-                    <p className="text-white text-lg leading-relaxed mb-auto flex-grow">
+                    <p className="text-white text-sm sm:text-base lg:text-lg leading-relaxed mb-auto flex-grow">
                       "{testimonial.content}"
                     </p>
 
                     {/* Author Info */}
-                    <div className="mt-8 pt-6 border-t border-white/20">
-                      <div className="flex items-center gap-4">
-                        <div className="relative">
+                    <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/20">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="relative flex-shrink-0">
                           <img
                             src={testimonial.image || "/placeholder.svg"}
                             alt={testimonial.name}
-                            className="w-14 h-14 rounded-full object-cover ring-4 ring-white/30 transition-transform duration-300 group-hover:scale-110"
+                            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-4 ring-white/30 transition-transform duration-300 group-hover:scale-110"
                           />
                           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent"></div>
                         </div>
                         <div>
-                          <div className="font-bold text-white text-lg">
+                          <div className="font-bold text-white text-base sm:text-lg">
                             {testimonial.name}
                           </div>
-                          <div className="text-sm text-gray-200">
+                          <div className="text-xs sm:text-sm text-gray-200">
                             {testimonial.role}
                           </div>
                           <div className="text-xs text-gray-300 mt-0.5">
@@ -259,17 +276,17 @@ export default function LandingTestimonials() {
           {testimonials.length > cardsPerPage && (
             <button
               onClick={handleNext}
-              className="flex-shrink-0 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 hover:scale-110 transition-all duration-300 shadow-xl"
+              className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 hover:scale-110 transition-all duration-300 shadow-xl"
               aria-label="Next testimonials"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           )}
         </div>
 
         {/* Pagination dots */}
         {testimonials.length > cardsPerPage && (
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-2 mt-6 sm:mt-8">
             {[...Array(totalPages)].map((_, index) => (
               <button
                 key={index}
@@ -286,25 +303,25 @@ export default function LandingTestimonials() {
         )}
 
         {/* Bottom CTA */}
-        <div className="mt-20 text-center">
+        <div className="mt-12 sm:mt-16 lg:mt-20 text-center">
           <div className="max-w-2xl mx-auto">
-            <p className="text-gray-400 mb-8 text-lg">
+            <p className="text-gray-400 mb-6 sm:mb-8 text-base sm:text-lg px-4">
               Join thousands of satisfied users
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
               {/* Primary button */}
-              <button className="group relative px-8 py-4 bg-white text-slate-900 rounded-lg font-semibold text-base transition-all duration-300 hover:shadow-xl hover:shadow-white/20 hover:-translate-y-0.5 min-w-[200px]">
+              <button className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-white text-slate-900 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 hover:shadow-xl hover:shadow-white/20 hover:-translate-y-0.5 w-full sm:w-auto sm:min-w-[200px]">
                 <span className="relative z-10">Get Started Today</span>
               </button>
 
               {/* Secondary button */}
-              <button className="group relative px-8 py-4 bg-transparent text-white rounded-lg font-semibold text-base border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:bg-white/5 hover:-translate-y-0.5 min-w-[200px]">
+              <button className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white rounded-lg font-semibold text-sm sm:text-base border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:bg-white/5 hover:-translate-y-0.5 w-full sm:w-auto sm:min-w-[200px]">
                 <span className="relative z-10">View All Stories</span>
               </button>
             </div>
 
-            <p className="text-gray-500 text-sm mt-6">
+            <p className="text-gray-500 text-xs sm:text-sm mt-4 sm:mt-6 px-4">
               No credit card required • Free forever plan available
             </p>
           </div>

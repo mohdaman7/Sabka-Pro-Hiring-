@@ -67,7 +67,7 @@ export default function LandingPlans() {
   ];
 
   return (
-    <section id="plans" className="relative py-24 overflow-hidden">
+    <section id="plans" className="relative py-12 sm:py-16 lg:py-24 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
         <div
@@ -104,7 +104,7 @@ export default function LandingPlans() {
 
       <div className="relative max-w-[95%] mx-auto px-4 lg:px-6">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20">
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 backdrop-blur-sm"
             style={{
@@ -118,7 +118,7 @@ export default function LandingPlans() {
               Simple Pricing
             </span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 leading-tight tracking-tight px-2">
             Choose Your Perfect{" "}
             <span
               className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-500"
@@ -127,14 +127,14 @@ export default function LandingPlans() {
               Career Plan
             </span>
           </h2>
-          <p className="text-xl text-gray-400">
+          <p className="text-base sm:text-lg md:text-xl text-gray-400 px-4">
             Start free or unlock premium features to accelerate your career
             growth
           </p>
         </div>
 
         {/* Plans Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
             return (
@@ -147,11 +147,11 @@ export default function LandingPlans() {
               >
                 {/* Popular badge */}
                 {plan.badge && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
+                  <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20">
                     <div
-                      className={`px-6 py-2 bg-gradient-to-r ${plan.gradient} text-white rounded-full text-sm font-bold shadow-xl flex items-center gap-2`}
+                      className={`px-4 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r ${plan.gradient} text-white rounded-full text-xs sm:text-sm font-bold shadow-xl flex items-center gap-1.5 sm:gap-2`}
                     >
-                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
                       {plan.badge}
                     </div>
                   </div>
@@ -176,40 +176,40 @@ export default function LandingPlans() {
                   ></div>
 
                   {/* Content */}
-                  <div className="relative p-8">
+                  <div className="relative p-6 sm:p-8">
                     {/* Icon */}
-                    <div className="mb-6">
+                    <div className="mb-4 sm:mb-6">
                       <div
-                        className={`w-16 h-16 bg-gradient-to-br ${plan.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500 group-hover:rotate-6`}
+                        className={`w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br ${plan.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500 group-hover:rotate-6`}
                       >
-                        <Icon className="w-8 h-8 text-white" />
+                        <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
                       </div>
                     </div>
 
                     {/* Plan name */}
-                    <h3 className="text-2xl font-bold text-white mb-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
                       {plan.name}
                     </h3>
-                    <p className="text-gray-400 text-sm mb-6 min-h-[40px]">
+                    <p className="text-gray-400 text-xs sm:text-sm mb-4 sm:mb-6 min-h-[40px]">
                       {plan.description}
                     </p>
 
                     {/* Price */}
-                    <div className="mb-8">
+                    <div className="mb-6 sm:mb-8">
                       <div className="flex items-baseline gap-2">
                         <span
-                          className={`text-5xl font-bold bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`}
+                          className={`text-4xl sm:text-5xl font-bold bg-gradient-to-r ${plan.gradient} bg-clip-text text-transparent`}
                         >
                           {plan.price}
                         </span>
                         {plan.period !== "Forever" && (
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-gray-400 text-xs sm:text-sm">
                             /{plan.period}
                           </span>
                         )}
                       </div>
                       {plan.period === "Forever" && (
-                        <span className="text-gray-400 text-sm">
+                        <span className="text-gray-400 text-xs sm:text-sm">
                           {plan.period}
                         </span>
                       )}
@@ -217,7 +217,7 @@ export default function LandingPlans() {
 
                     {/* CTA Button */}
                     <button
-                      className={`w-full py-4 rounded-xl font-semibold text-white mb-8 transition-all duration-300 relative overflow-hidden group/btn ${
+                      className={`w-full py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base text-white mb-6 sm:mb-8 transition-all duration-300 relative overflow-hidden group/btn ${
                         plan.popular
                           ? `bg-gradient-to-r ${plan.gradient} shadow-lg hover:shadow-2xl hover:shadow-purple-500/50`
                           : "bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500"
@@ -230,23 +230,23 @@ export default function LandingPlans() {
                     </button>
 
                     {/* Features */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-gray-300 text-sm font-semibold mb-4">
-                        <Award className="w-4 h-4" />
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="flex items-center gap-2 text-gray-300 text-xs sm:text-sm font-semibold mb-3 sm:mb-4">
+                        <Award className="w-3 h-3 sm:w-4 sm:h-4" />
                         <span>What's included:</span>
                       </div>
                       {plan.features.map((feature, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-3 text-gray-300 group-hover:translate-x-1 transition-transform duration-300"
+                          className="flex items-start gap-2 sm:gap-3 text-gray-300 group-hover:translate-x-1 transition-transform duration-300"
                           style={{ transitionDelay: `${idx * 50}ms` }}
                         >
                           <div
-                            className={`flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-r ${plan.gradient} flex items-center justify-center mt-0.5`}
+                            className={`flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-r ${plan.gradient} flex items-center justify-center mt-0.5`}
                           >
-                            <Check className="w-3 h-3 text-white" />
+                            <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                           </div>
-                          <span className="text-sm leading-relaxed">
+                          <span className="text-xs sm:text-sm leading-relaxed">
                             {feature}
                           </span>
                         </div>

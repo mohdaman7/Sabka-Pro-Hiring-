@@ -83,10 +83,10 @@ export default function LandingHero() {
       <LandingNavbar />
 
       {/* Hero Content */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-34 pb-24">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-24">
         {/* Main Heading Section */}
-        <div className="text-center mb-20">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
+        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight px-2">
             Welcome To The
             <br />
             <AuroraText>Professional Recruitment</AuroraText>
@@ -94,7 +94,7 @@ export default function LandingHero() {
             Service of Sabka World
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto mb-8 sm:mb-10 leading-relaxed px-4">
             Your gateway to career success and business growth
           </p>
 
@@ -102,7 +102,7 @@ export default function LandingHero() {
         </div>
 
         {/* Services Grid - 3 columns */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20">
           {/* Are You Looking For Jobs */}
           <a
             href="/register?type=candidate"
@@ -114,23 +114,23 @@ export default function LandingHero() {
               alt="Looking for Jobs"
               className="w-full h-full object-cover absolute inset-0 opacity-30 transition-transform duration-700 group-hover:scale-110"
             />
-            <div className="relative p-8 min-h-[380px] flex flex-col">
-              <div className="mb-6">
-                <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  <Users className="w-10 h-10 text-white" />
+            <div className="relative p-6 sm:p-8 min-h-[320px] sm:min-h-[380px] flex flex-col">
+              <div className="mb-4 sm:mb-6">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-4 sm:mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <Users className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-4 group-hover:translate-x-1 transition-transform duration-300">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 group-hover:translate-x-1 transition-transform duration-300">
                   Are You Looking For Jobs?
                 </h3>
-                <p className="text-white/90 text-base leading-relaxed mb-4">
+                <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
                   Access thousands of verified job opportunities and connect
                   with top employers
                 </p>
               </div>
               <div className="mt-auto">
-                <div className="flex items-center gap-3 text-white font-bold text-lg group-hover:gap-4 transition-all">
+                <div className="flex items-center gap-2 sm:gap-3 text-white font-bold text-base sm:text-lg group-hover:gap-4 transition-all">
                   <span>Start Your Journey</span>
-                  <ArrowRight className="w-6 h-6" />
+                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
               </div>
             </div>
@@ -148,23 +148,23 @@ export default function LandingHero() {
               alt="Looking for Employees"
               className="w-full h-full object-cover absolute inset-0 opacity-30 transition-transform duration-700 group-hover:scale-110"
             />
-            <div className="relative p-8 min-h-[380px] flex flex-col">
-              <div className="mb-6">
-                <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  <Building2 className="w-10 h-10 text-white" />
+            <div className="relative p-6 sm:p-8 min-h-[320px] sm:min-h-[380px] flex flex-col">
+              <div className="mb-4 sm:mb-6">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-4 sm:mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <Building2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-4 group-hover:translate-x-1 transition-transform duration-300">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 group-hover:translate-x-1 transition-transform duration-300">
                   Are You Looking For Employees?
                 </h3>
-                <p className="text-white/90 text-base leading-relaxed mb-4">
+                <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
                   Hire verified talent from our curated database of skilled
                   professionals
                 </p>
               </div>
               <div className="mt-auto">
-                <div className="flex items-center gap-3 text-white font-bold text-lg group-hover:gap-4 transition-all">
+                <div className="flex items-center gap-2 sm:gap-3 text-white font-bold text-base sm:text-lg group-hover:gap-4 transition-all">
                   <span>Post Jobs</span>
-                  <ArrowRight className="w-6 h-6" />
+                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
               </div>
             </div>
@@ -182,23 +182,23 @@ export default function LandingHero() {
               alt="Sabka Skill Academy"
               className="w-full h-full object-cover absolute inset-0 opacity-30 transition-transform duration-700 group-hover:scale-110"
             />
-            <div className="relative p-8 min-h-[380px] flex flex-col">
-              <div className="mb-6">
-                <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  <GraduationCap className="w-10 h-10 text-white" />
+            <div className="relative p-6 sm:p-8 min-h-[320px] sm:min-h-[380px] flex flex-col">
+              <div className="mb-4 sm:mb-6">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-4 sm:mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <GraduationCap className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-4 group-hover:translate-x-1 transition-transform duration-300">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 group-hover:translate-x-1 transition-transform duration-300">
                   Sabka Skill Academy
                 </h3>
-                <p className="text-white/90 text-base leading-relaxed mb-4">
+                <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
                   Upskill yourself with industry-leading courses and
                   certifications
                 </p>
               </div>
               <div className="mt-auto">
-                <div className="flex items-center gap-3 text-white font-bold text-lg group-hover:gap-4 transition-all">
+                <div className="flex items-center gap-2 sm:gap-3 text-white font-bold text-base sm:text-lg group-hover:gap-4 transition-all">
                   <span>Explore Courses</span>
-                  <ArrowRight className="w-6 h-6" />
+                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
               </div>
             </div>
@@ -217,24 +217,24 @@ export default function LandingHero() {
             alt="Sabka Visa"
             className="w-full h-full object-cover absolute inset-0 opacity-20 transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="relative p-12 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-8">
-              <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                <Plane className="w-12 h-12 text-white" />
+          <div className="relative p-6 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 lg:gap-8 text-center sm:text-left">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 flex-shrink-0">
+                <Plane className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
               </div>
               <div>
-                <h3 className="text-4xl lg:text-5xl font-bold text-white mb-3">
+                <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3">
                   Sabka Visa
                 </h3>
-                <p className="text-white/90 text-lg lg:text-xl max-w-2xl">
+                <p className="text-white/90 text-base sm:text-lg lg:text-xl max-w-2xl">
                   Your global mobility partner - Visa assistance and immigration
                   services
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-4 text-white font-bold text-xl group-hover:gap-5 transition-all">
+            <div className="flex items-center gap-3 sm:gap-4 text-white font-bold text-lg sm:text-xl group-hover:gap-5 transition-all">
               <span>Learn More</span>
-              <ArrowRight className="w-8 h-8" />
+              <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
           </div>
         </a>

@@ -81,7 +81,7 @@ export default function LandingFeatures() {
   ];
 
   return (
-    <section id="features" className="relative py-24 overflow-hidden">
+    <section id="features" className="relative py-12 sm:py-16 lg:py-24 overflow-hidden">
       {/* Animated subtle pulse blobs to match background */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -148,7 +148,7 @@ export default function LandingFeatures() {
 
       <div className="relative max-w-[95%] mx-auto px-4 lg:px-6">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20 select-none">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20 select-none">
           <div
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full border mb-6 backdrop-blur-sm border-purple-600 bg-gradient-to-r from-purple-700/30 to-indigo-900/30"
             aria-label="Section introduction"
@@ -161,7 +161,7 @@ export default function LandingFeatures() {
               Why Choose Us
             </span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 leading-tight tracking-tight px-2">
             Everything You Need to{" "}
             <span
               className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500"
@@ -170,14 +170,14 @@ export default function LandingFeatures() {
               Succeed
             </span>
           </h2>
-          <p className="text-lg md:text-xl text-purple-300 max-w-xl mx-auto select-text">
+          <p className="text-base sm:text-lg md:text-xl text-purple-300 max-w-xl mx-auto select-text px-4">
             Comprehensive features designed to make hiring and job searching
             seamless and effective
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
@@ -205,19 +205,19 @@ export default function LandingFeatures() {
                 </div>
 
                 {/* Content */}
-                <div className="relative p-8 min-h-[320px] flex flex-col text-white">
+                <div className="relative p-6 sm:p-8 min-h-[280px] sm:min-h-[320px] flex flex-col text-white">
                   {/* Icon */}
                   <div
-                    className={`mb-6 w-16 h-16 rounded-2xl flex items-center justify-center border border-white/20 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 ${feature.iconBg}`}
+                    className={`mb-4 sm:mb-6 w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/20 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 ${feature.iconBg}`}
                     style={{ backdropFilter: "blur(8px)" }}
                   >
-                    <Icon className="w-8 h-8 text-white drop-shadow-lg" />
+                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-lg" />
                   </div>
 
                   {/* Title */}
                   <h3
                     id={`feature-title-${index}`}
-                    className="text-2xl font-extrabold mb-3 tracking-wide transition-transform duration-300 group-hover:translate-x-2"
+                    className="text-xl sm:text-2xl font-extrabold mb-2 sm:mb-3 tracking-wide transition-transform duration-300 group-hover:translate-x-2"
                   >
                     {feature.title}
                   </h3>
@@ -225,14 +225,14 @@ export default function LandingFeatures() {
                   {/* Description */}
                   <p
                     id={`feature-desc-${index}`}
-                    className="text-gray-300 leading-relaxed flex-grow select-text"
+                    className="text-sm sm:text-base text-gray-300 leading-relaxed flex-grow select-text"
                   >
                     {feature.description}
                   </p>
 
                   {/* Hover indicator */}
-                  <div className="mt-6 flex items-center gap-2 text-white font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 select-none">
-                    <span className="text-sm tracking-wide">Learn more</span>
+                  <div className="mt-4 sm:mt-6 flex items-center gap-2 text-white font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 select-none">
+                    <span className="text-xs sm:text-sm tracking-wide">Learn more</span>
                     <svg
                       className="w-5 h-5 transition-transform group-hover:translate-x-2"
                       fill="none"
@@ -259,7 +259,7 @@ export default function LandingFeatures() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-24 text-center select-none">
+        <div className="mt-12 sm:mt-16 lg:mt-24 text-center select-none">
           <div className="max-w-2xl mx-auto relative">
             {/* Subtle gradient glow */}
             <div
@@ -270,14 +270,14 @@ export default function LandingFeatures() {
               }}
             />
 
-            <p className="text-purple-300 mb-8 text-lg tracking-wide">
+            <p className="text-purple-300 mb-6 sm:mb-8 text-base sm:text-lg tracking-wide px-4">
               Ready to experience these features?
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
               {/* Primary button with brand gradient and subtle shine */}
               <button
-                className="group relative px-8 py-4 text-white rounded-xl font-extrabold text-base transition-transform duration-300 hover:shadow-[0_10px_40px_rgba(128,55,145,0.4)] hover:scale-105 min-w-[200px] overflow-hidden"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 text-white rounded-xl font-extrabold text-sm sm:text-base transition-transform duration-300 hover:shadow-[0_10px_40px_rgba(128,55,145,0.4)] hover:scale-105 w-full sm:w-auto sm:min-w-[200px] overflow-hidden"
                 style={{
                   background: "linear-gradient(90deg,#803791,#b87bd1)",
                   boxShadow: "0 10px 40px rgba(128,55,145,0.35)",
@@ -292,7 +292,7 @@ export default function LandingFeatures() {
 
               {/* Secondary button with subtle border glow */}
               <button
-                className="group relative px-8 py-4 bg-slate-900/90 backdrop-blur-md text-white rounded-xl font-semibold text-base transition-transform duration-300 hover:scale-105 min-w-[200px] border-2 border-white/30 hover:border-white/50 shadow-sm"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-slate-900/90 backdrop-blur-md text-white rounded-xl font-semibold text-sm sm:text-base transition-transform duration-300 hover:scale-105 w-full sm:w-auto sm:min-w-[200px] border-2 border-white/30 hover:border-white/50 shadow-sm"
                 aria-label="Schedule a demo"
               >
                 <span className="relative z-10 tracking-wide">
@@ -301,7 +301,7 @@ export default function LandingFeatures() {
               </button>
             </div>
 
-            <p className="text-purple-400 text-sm mt-6 select-text tracking-wide">
+            <p className="text-purple-400 text-xs sm:text-sm mt-4 sm:mt-6 select-text tracking-wide px-4">
               No credit card required • Free forever plan available
             </p>
           </div>

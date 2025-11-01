@@ -11,24 +11,24 @@ export default function LandingFooter() {
       {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
       <div className="absolute top-0 left-1/3 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div> */}
 
-      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6 py-12">
-        <div className="grid md:grid-cols-4 gap-8">
+      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6 py-8 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-[rgba(184,123,209,0.18)] transition-all duration-300 group-hover:scale-105 bg-white">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-lg shadow-[rgba(184,123,209,0.18)] transition-all duration-300 group-hover:scale-105 bg-white flex-shrink-0">
                 <img
                   src="/sabka-logo.png"
                   alt="Sabka Pro"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-xl font-bold text-white">Sabka Pro</span>
+              <span className="text-lg sm:text-xl font-bold text-white">Sabka Pro</span>
             </div>
-            <p className="text-white/75 text-sm leading-relaxed">
+            <p className="text-white/75 text-xs sm:text-sm leading-relaxed">
               Your trusted partner in career growth and talent acquisition.
             </p>
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-2 sm:gap-3 pt-2">
               <a
                 href="#"
                 className="w-9 h-9 rounded-lg bg-white/4 border border-[#b87bd1]/10 flex items-center justify-center transition-all duration-200 group hover:bg-white/6"
@@ -70,12 +70,12 @@ export default function LandingFooter() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Quick Links</h3>
-            <ul className="space-y-2.5">
+            <h3 className="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">Quick Links</h3>
+            <ul className="space-y-2 sm:space-y-2.5">
               <li>
                 <Link
                   href="/about"
-                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-sm flex items-center gap-2 group"
+                  className="text-white/75 hover:text-[#b87bd1] transition-colors text-xs sm:text-sm flex items-center gap-2 group"
                 >
                   <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
                   About Us
@@ -113,8 +113,8 @@ export default function LandingFooter() {
 
           {/* For Candidates */}
           <div>
-            <h3 className="font-semibold text-white mb-4">For Candidates</h3>
-            <ul className="space-y-2.5">
+            <h3 className="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">For Candidates</h3>
+            <ul className="space-y-2 sm:space-y-2.5">
               <li>
                 <Link
                   href="/jobs"
@@ -156,23 +156,23 @@ export default function LandingFooter() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Contact Us</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3 text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
-                  <Mail className="w-4 h-4 text-white/75" />
+            <h3 className="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">Contact Us</h3>
+            <ul className="space-y-2 sm:space-y-3">
+              <li className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
+                  <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/75" />
                 </div>
                 <span className="mt-1 text-white/75">info@sabkapro.com</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
-                  <Phone className="w-4 h-4 text-white/75" />
+              <li className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
+                  <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/75" />
                 </div>
                 <span className="mt-1 text-white/75">+91 98765 43210</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
-                  <MapPin className="w-4 h-4 text-white/75" />
+              <li className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-white/75 group hover:text-[#b87bd1] transition-colors cursor-pointer">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/6 border border-[#b87bd1]/8 flex items-center justify-center flex-shrink-0 transition-all">
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/75" />
                 </div>
                 <span className="mt-1 text-white/75">
                   Mumbai, Maharashtra, India
@@ -184,22 +184,22 @@ export default function LandingFooter() {
 
         {/* Bottom Bar */}
         <div
-          className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4"
+          className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4"
           style={{ borderColor: "rgba(128,55,145,0.04)" }}
         >
-          <p className="text-sm text-white/70">
+          <p className="text-xs sm:text-sm text-white/70 text-center md:text-left">
             © 2025 Sabka Pro HIRIN. All rights reserved.
           </p>
-          <div className="flex gap-6">
+          <div className="flex gap-4 sm:gap-6">
             <Link
               href="/privacy"
-              className="text-sm text-white/70 hover:text-[#b87bd1] transition-colors"
+              className="text-xs sm:text-sm text-white/70 hover:text-[#b87bd1] transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-sm text-white/70 hover:text-[#b87bd1] transition-colors"
+              className="text-xs sm:text-sm text-white/70 hover:text-[#b87bd1] transition-colors"
             >
               Terms of Service
             </Link>

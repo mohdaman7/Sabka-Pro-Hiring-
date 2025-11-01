@@ -13,8 +13,8 @@ export default function LandingNavbar() {
       <div className="max-w-[95%] mx-auto px-4 lg:px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 bg-white">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 bg-white flex-shrink-0">
               <img
                 src="/sabka-logo.png"
                 alt="Sabka Pro"
@@ -22,10 +22,10 @@ export default function LandingNavbar() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-white tracking-tight">
+              <span className="text-base sm:text-lg font-bold text-white tracking-tight">
                 Sabka Pro Hiring
               </span>
-              <span className="text-[10px] text-muted-foreground -mt-1">
+              <span className="text-[9px] sm:text-[10px] text-muted-foreground -mt-1 hidden xs:block">
                 Your Career Partner
               </span>
             </div>
@@ -139,111 +139,104 @@ export default function LandingNavbar() {
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-2xl border-t border-border/20">
-          <div className="px-6 py-6 space-y-2">
-            <Link href="#">
-              <a
-                onClick={() => {
-                  setActive("home");
-                  setMobileMenuOpen(false);
-                }}
-                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
-                  active === "home"
-                    ? "text-white font-semibold bg-white/5"
-                    : "text-gray-300 hover:text-white hover:bg-white/6"
-                }`}
-              >
-                Home
-              </a>
+          <div className="px-4 py-4 space-y-2">
+            <Link
+              href="#"
+              onClick={() => {
+                setActive("home");
+                setMobileMenuOpen(false);
+              }}
+              className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                active === "home"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
+            >
+              Home
             </Link>
 
-            <Link href="#features">
-              <a
-                onClick={() => {
-                  setActive("features");
-                  setMobileMenuOpen(false);
-                }}
-                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
-                  active === "features"
-                    ? "text-white font-semibold bg-white/5"
-                    : "text-gray-300 hover:text-white hover:bg-white/6"
-                }`}
-              >
-                Features
-              </a>
+            <Link
+              href="#features"
+              onClick={() => {
+                setActive("features");
+                setMobileMenuOpen(false);
+              }}
+              className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                active === "features"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
+            >
+              Features
             </Link>
 
-            <Link href="#about">
-              <a
-                onClick={() => {
-                  setActive("about");
-                  setMobileMenuOpen(false);
-                }}
-                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
-                  active === "about"
-                    ? "text-white font-semibold bg-white/5"
-                    : "text-gray-300 hover:text-white hover:bg-white/6"
-                }`}
-              >
-                About Us
-              </a>
+            <Link
+              href="#about"
+              onClick={() => {
+                setActive("about");
+                setMobileMenuOpen(false);
+              }}
+              className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                active === "about"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
+            >
+              About Us
             </Link>
 
-            <Link href="#how-it-works">
-              <a
-                onClick={() => {
-                  setActive("how");
-                  setMobileMenuOpen(false);
-                }}
-                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
-                  active === "how"
-                    ? "text-white font-semibold bg-white/5"
-                    : "text-gray-300 hover:text-white hover:bg-white/6"
-                }`}
-              >
-                How It Works
-              </a>
+            <Link
+              href="#plans"
+              onClick={() => {
+                setActive("how");
+                setMobileMenuOpen(false);
+              }}
+              className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                active === "how"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
+            >
+              Plans
             </Link>
 
-            <Link href="#testimonials">
-              <a
-                onClick={() => {
-                  setActive("testimonials");
-                  setMobileMenuOpen(false);
-                }}
-                className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
-                  active === "testimonials"
-                    ? "text-white font-semibold bg-white/5"
-                    : "text-gray-300 hover:text-white hover:bg-white/6"
-                }`}
-              >
-                Testimonials
-              </a>
+            <Link
+              href="#testimonials"
+              onClick={() => {
+                setActive("testimonials");
+                setMobileMenuOpen(false);
+              }}
+              className={`block px-4 py-3 text-sm rounded-lg transition-all duration-200 ${
+                active === "testimonials"
+                  ? "text-white font-semibold bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/6"
+              }`}
+            >
+              Testimonials
             </Link>
 
             <div className="h-px bg-border/20 my-4"></div>
 
-            <Link href="/login">
-              <a
-                onClick={() => {
-                  setActive("login");
-                  setMobileMenuOpen(false);
-                }}
-                className="block px-4 py-3 text-sm rounded-lg text-gray-300 hover:text-white hover:bg-white/6 transition-all duration-200"
-              >
-                Login
-              </a>
+            <Link
+              href="/login"
+              onClick={() => {
+                setActive("login");
+                setMobileMenuOpen(false);
+              }}
+              className="block px-4 py-3 text-sm rounded-lg text-gray-300 hover:text-white hover:bg-white/6 transition-all duration-200"
+            >
+              Login
             </Link>
 
-            <Link href="/register">
-              <a
-                onClick={() => {
-                  setActive("register");
-                  setMobileMenuOpen(false);
-                }}
-                className="block px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg transition-all duration-200 text-sm font-semibold text-center shadow-lg"
-              >
-                Get Started
-              </a>
+            <Link
+              href="/register"
+              onClick={() => {
+                setActive("register");
+                setMobileMenuOpen(false);
+              }}
+              className="block px-4 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg transition-all duration-200 text-sm font-semibold text-center shadow-lg"
+            >
+              Get Started
             </Link>
           </div>
         </div>

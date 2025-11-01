@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function LandingCTA() {
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
       {/* Subtle grid pattern overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
@@ -20,7 +20,7 @@ export default function LandingCTA() {
       />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 sm:mb-16">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -45,7 +45,7 @@ export default function LandingCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-balance leading-tight px-2"
           >
             Ready to Transform Your Career?
           </motion.h2>
@@ -56,7 +56,7 @@ export default function LandingCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg md:text-xl text-white/80 mb-12 text-pretty max-w-2xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-white/80 mb-8 sm:mb-12 text-pretty max-w-2xl mx-auto leading-relaxed px-4"
           >
             Join thousands of professionals and employers who trust Sabka Pro
             HIRING for their recruitment needs.
@@ -72,22 +72,22 @@ export default function LandingCTA() {
           >
             <a
               href="/register?type=candidate"
-              className="group relative px-8 py-4 rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 min-w-[260px] overflow-hidden"
+              className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 w-full sm:w-auto sm:min-w-[260px] overflow-hidden text-sm sm:text-base"
               style={{
                 background: "linear-gradient(90deg,#803791,#b87bd1)",
                 color: "white",
               }}
             >
               <span className="relative z-10">Get Started as Candidate</span>
-              <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
               href="/register?type=employer"
-              className="group relative px-8 py-4 bg-transparent border-2 text-white rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 hover:bg-white/10 hover:-translate-y-0.5 min-w-[260px] backdrop-blur-sm"
+              className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 text-white rounded-lg transition-all duration-300 font-semibold inline-flex items-center justify-center gap-2 hover:bg-white/10 hover:-translate-y-0.5 w-full sm:w-auto sm:min-w-[260px] backdrop-blur-sm text-sm sm:text-base"
               style={{ borderColor: "rgba(255,255,255,0.18)" }}
             >
               <span>Post Jobs as Employer</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </a>
           </motion.div>
         </div>
@@ -98,35 +98,35 @@ export default function LandingCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto"
         >
-          <div className="flex flex-col items-center gap-3 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
-            <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
-              <Users className="w-6 h-6 text-cyan-400" />
+          <div className="flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+              <Users className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white mb-1">10,000+</div>
-              <div className="text-sm text-white/70">Success Stories</div>
+              <div className="text-xl sm:text-2xl font-bold text-white mb-1">10,000+</div>
+              <div className="text-xs sm:text-sm text-white/70">Success Stories</div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-3 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
-            <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
-              <CheckCircle2 className="w-6 h-6 text-green-400" />
+          <div className="flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white mb-1">Verified</div>
-              <div className="text-sm text-white/70">Trusted Platform</div>
+              <div className="text-xl sm:text-2xl font-bold text-white mb-1">Verified</div>
+              <div className="text-xs sm:text-sm text-white/70">Trusted Platform</div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-3 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
-            <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
-              <Zap className="w-6 h-6 text-blue-400" />
+          <div className="flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+              <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white mb-1">Fast</div>
-              <div className="text-sm text-white/70">Quick Placements</div>
+              <div className="text-xl sm:text-2xl font-bold text-white mb-1">Fast</div>
+              <div className="text-xs sm:text-sm text-white/70">Quick Placements</div>
             </div>
           </div>
         </motion.div>
