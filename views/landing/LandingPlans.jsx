@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Check,
   Zap,
@@ -141,8 +142,12 @@ export default function LandingPlans() {
           {plans.map((plan, index) => {
             const Icon = plan.icon;
             return (
-              <div
+              <motion.div
                 key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
                 className={`relative group transition-all duration-700 hover:scale-105 ${
                   plan.popular ? "lg:-translate-y-4" : ""
                 }`}
@@ -262,7 +267,7 @@ export default function LandingPlans() {
                     className={`absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl ${plan.gradient} opacity-10 group-hover:opacity-20 blur-3xl transition-opacity duration-500 rounded-tl-full`}
                   ></div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Target,
   Eye,
@@ -59,24 +60,40 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <section id="about" className="relative py-12 sm:py-16 lg:py-20 px-4 sm:px-6 max-w-6xl mx-auto text-center select-none">
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
           className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full mb-8 font-semibold text-purple-200 shadow-lg backdrop-blur-sm bg-gradient-to-r from-purple-700/20 to-indigo-900/20 border border-purple-600"
           aria-label="About us badge"
         >
           <Sparkles className="w-5 h-5 animate-pulse text-purple-300" />
           About Us
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 sm:mb-6 px-2">
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 sm:mb-6 px-2"
+        >
           Empowering Careers,{" "}
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
             Building Futures
           </span>
-        </h1>
-        <p className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-purple-300 font-light leading-relaxed tracking-wide px-4">
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-purple-300 font-light leading-relaxed tracking-wide px-4"
+        >
           Sabka Pro HIRING connects talented professionals with career
           opportunities while providing comprehensive skill development and
           personalized support.
-        </p>
+        </motion.p>
       </section>
 
       {/* Pillars Section */}
@@ -94,8 +111,12 @@ export default function AboutPage() {
               },
               i
             ) => (
-              <article
+              <motion.article
                 key={i}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
                 className={`relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 ${bgColor} border border-white/20 backdrop-blur-xl shadow-xl hover:shadow-purple-700/50 transition-shadow duration-500 cursor-default group`}
                 tabIndex={0}
                 aria-labelledby={`pillar-title-${i}`}
@@ -131,7 +152,7 @@ export default function AboutPage() {
                 >
                   {description}
                 </p>
-              </article>
+              </motion.article>
             )
           )}
         </div>

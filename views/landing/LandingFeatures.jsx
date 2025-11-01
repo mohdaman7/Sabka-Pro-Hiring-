@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Briefcase,
   Users,
@@ -151,8 +152,18 @@ export default function LandingFeatures() {
 
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20 select-none">
-          <div
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20 select-none"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full border mb-6 backdrop-blur-sm border-purple-600 bg-gradient-to-r from-purple-700/30 to-indigo-900/30"
             aria-label="Section introduction"
           >
@@ -163,8 +174,14 @@ export default function LandingFeatures() {
             <span className="text-sm font-semibold text-purple-200 tracking-wide">
               Why Choose Us
             </span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 leading-tight tracking-tight px-2">
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 leading-tight tracking-tight px-2"
+          >
             Everything You Need to{" "}
             <span
               className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500"
@@ -172,20 +189,30 @@ export default function LandingFeatures() {
             >
               Succeed
             </span>
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-purple-300 max-w-xl mx-auto select-text px-4">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-base sm:text-lg md:text-xl text-purple-300 max-w-xl mx-auto select-text px-4"
+          >
             Comprehensive features designed to make hiring and job searching
             seamless and effective
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div
+              <motion.div
                 key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group relative overflow-hidden rounded-3xl shadow-lg shadow-purple-900/40 transition-transform duration-500 hover:scale-[1.07] hover:-translate-y-3 hover:shadow-xl hover:shadow-purple-700/60 cursor-pointer"
                 aria-labelledby={`feature-title-${index}`}
                 aria-describedby={`feature-desc-${index}`}
@@ -258,7 +285,7 @@ export default function LandingFeatures() {
 
                 {/* Decorative corner accent */}
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-70 transition-opacity duration-500 rounded-bl-full pointer-events-none" />
-              </div>
+              </motion.div>
             );
           })}
         </div>
