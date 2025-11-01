@@ -1,15 +1,16 @@
 "use client";
 
 import { Star, Quote, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function LandingTestimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsPerPage, setCardsPerPage] = useState(3);
 
   // Adjust cards per page based on screen size
-  useState(() => {
+  useEffect(() => {
     const handleResize = () => {
+      if (typeof window === "undefined") return;
       if (window.innerWidth < 640) {
         setCardsPerPage(1);
       } else if (window.innerWidth < 1024) {
@@ -18,10 +19,10 @@ export default function LandingTestimonials() {
         setCardsPerPage(3);
       }
     };
-    
+
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const testimonials = [
@@ -104,7 +105,10 @@ export default function LandingTestimonials() {
   );
 
   return (
-    <section id="testimonials" className="relative py-12 sm:py-16 lg:py-24 overflow-hidden">
+    <section
+      id="testimonials"
+      className="relative py-12 sm:py-16 lg:py-24 overflow-hidden"
+    >
       {/* Animated background elements (subtle) */}
       <div className="absolute inset-0 pointer-events-none">
         <div
