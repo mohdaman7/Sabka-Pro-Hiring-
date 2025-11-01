@@ -9,14 +9,11 @@ export default function LandingNavbar() {
   const [active, setActive] = useState("home");
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-sm border-b border-border/30 shadow-lg overflow-hidden">
-      <div className="w-full max-w-full lg:max-w-[95%] mx-auto px-2 sm:px-4 lg:px-6">
-        <div className="flex items-center justify-between h-20 min-w-0">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-sm border-b border-border/30 shadow-lg">
+      <div className="max-w-[95%] mx-auto px-4 lg:px-6">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex flex-1 min-w-0 items-center gap-2 sm:gap-3 group overflow-hidden"
-          >
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 bg-white flex-shrink-0">
               <img
                 src="/sabka-logo.png"
@@ -24,8 +21,8 @@ export default function LandingNavbar() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex flex-col min-w-0 max-w-[60vw] sm:max-w-none">
-              <span className="text-base sm:text-lg font-bold text-white tracking-tight truncate">
+            <div className="flex flex-col">
+              <span className="text-base sm:text-lg font-bold text-white tracking-tight">
                 Sabka Pro Hiring
               </span>
               <span className="text-[9px] sm:text-[10px] text-muted-foreground -mt-1 hidden sm:block truncate">

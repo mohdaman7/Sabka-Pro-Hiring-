@@ -81,7 +81,10 @@ export default function LandingFeatures() {
   ];
 
   return (
-    <section id="features" className="relative py-12 sm:py-16 lg:py-24 overflow-hidden">
+    <section
+      id="features"
+      className="relative py-12 sm:py-16 lg:py-24 overflow-hidden"
+    >
       {/* Animated subtle pulse blobs to match background */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -146,7 +149,7 @@ export default function LandingFeatures() {
         }
       `}</style>
 
-      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20 select-none">
           <div
@@ -232,7 +235,9 @@ export default function LandingFeatures() {
 
                   {/* Hover indicator */}
                   <div className="mt-4 sm:mt-6 flex items-center gap-2 text-white font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 select-none">
-                    <span className="text-xs sm:text-sm tracking-wide">Learn more</span>
+                    <span className="text-xs sm:text-sm tracking-wide">
+                      Learn more
+                    </span>
                     <svg
                       className="w-5 h-5 transition-transform group-hover:translate-x-2"
                       fill="none"

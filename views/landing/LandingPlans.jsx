@@ -67,7 +67,10 @@ export default function LandingPlans() {
   ];
 
   return (
-    <section id="plans" className="relative py-12 sm:py-16 lg:py-24 overflow-hidden">
+    <section
+      id="plans"
+      className="relative py-12 sm:py-16 lg:py-24 overflow-hidden"
+    >
       {/* Animated background elements */}
       <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
         <div
@@ -102,7 +105,7 @@ export default function LandingPlans() {
         }
       `}</style>
 
-      <div className="relative max-w-[95%] mx-auto px-4 lg:px-6">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20">
           <div
