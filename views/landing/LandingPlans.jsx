@@ -144,54 +144,102 @@ export default function LandingPlans() {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className={`relative group transition-all duration-700 hover:scale-105 ${
+                transition={{ 
+                  duration: 0.7, 
+                  delay: index * 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                whileHover={{ 
+                  scale: 1.03, 
+                  y: -8,
+                  transition: { duration: 0.3 }
+                }}
+                className={`relative group ${
                   plan.popular ? "lg:-translate-y-4" : ""
                 }`}
                 style={{ animationDelay: plan.delay }}
               >
-                {/* Popular badge */}
+                {/* Popular badge with animation */}
                 {plan.badge && (
-                  <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20">
-                    <div
-                      className={`px-4 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r ${plan.gradient} text-white rounded-full text-xs sm:text-sm font-bold shadow-xl flex items-center gap-1.5 sm:gap-2`}
+                  <motion.div 
+                    className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20"
+                    initial={{ scale: 0, rotate: -180 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    transition={{ 
+                      delay: index * 0.2 + 0.3,
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 15
+                    }}
+                  >
+                    <motion.div
+                      className={`px-4 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r ${plan.gradient} text-white rounded-full text-xs sm:text-sm font-bold shadow-2xl flex items-center gap-1.5 sm:gap-2`}
+                      whileHover={{ scale: 1.1 }}
+                      animate={{ 
+                        boxShadow: [
+                          "0 10px 30px -10px rgba(168, 85, 247, 0.5)",
+                          "0 10px 40px -10px rgba(168, 85, 247, 0.8)",
+                          "0 10px 30px -10px rgba(168, 85, 247, 0.5)"
+                        ]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
                     >
-                      <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
+                      </motion.div>
                       {plan.badge}
-                    </div>
-                  </div>
+                    </motion.div>
+                  </motion.div>
                 )}
 
                 {/* Card */}
                 <div
-                  className={`relative h-full bg-slate-900/50 backdrop-blur-xl rounded-3xl overflow-hidden border-2 transition-all duration-500 ${
+                  className={`relative h-full bg-slate-900/60 rounded-3xl overflow-hidden border-2 transition-all duration-500 ${
                     plan.popular
-                      ? "border-purple-400/50 shadow-2xl shadow-purple-500/20"
-                      : "border-slate-700/50 hover:border-blue-400/50"
+                      ? "border-purple-400/60 shadow-[0_20px_70px_-15px_rgba(168,85,247,0.4)]"
+                      : "border-slate-700/50 hover:border-blue-400/60 hover:shadow-[0_20px_50px_-15px_rgba(59,130,246,0.3)]"
                   }`}
                 >
                   {/* Gradient background overlay */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${plan.bgGradient} opacity-50 group-hover:opacity-70 transition-opacity duration-500`}
+                    className={`absolute inset-0 bg-gradient-to-br ${plan.bgGradient} opacity-40 group-hover:opacity-60 transition-opacity duration-500`}
                   ></div>
 
                   {/* Animated gradient border on hover */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-r ${plan.borderGradient} opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`}
+                    className={`absolute inset-0 bg-gradient-to-r ${plan.borderGradient} opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-500`}
                   ></div>
+                  
+                  {/* Premium shine effect */}
+                  <motion.div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100"
+                    style={{
+                      background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
+                    }}
+                    transition={{ duration: 0.6 }}
+                  />
 
                   {/* Content */}
                   <div className="relative p-6 sm:p-8">
-                    {/* Icon */}
+                    {/* Icon with premium animation */}
                     <div className="mb-4 sm:mb-6">
-                      <div
-                        className={`w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br ${plan.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-500 group-hover:rotate-6`}
+                      <motion.div
+                        className={`w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br ${plan.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl border-2 border-white/20`}
+                        whileHover={{ 
+                          scale: 1.15, 
+                          rotate: 12,
+                          boxShadow: "0 25px 50px -12px rgba(168, 85, 247, 0.5)"
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
                       >
-                        <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
-                      </div>
+                        <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-lg" />
+                      </motion.div>
                     </div>
 
                     {/* Plan name */}
@@ -223,19 +271,31 @@ export default function LandingPlans() {
                       )}
                     </div>
 
-                    {/* CTA Button */}
-                    <button
-                      className={`w-full py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base text-white mb-6 sm:mb-8 transition-all duration-300 relative overflow-hidden group/btn ${
+                    {/* CTA Button with premium effects */}
+                    <motion.button
+                      className={`w-full py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base text-white mb-6 sm:mb-8 relative overflow-hidden group/btn ${
                         plan.popular
-                          ? `bg-gradient-to-r ${plan.gradient} shadow-lg hover:shadow-2xl hover:shadow-purple-500/50`
-                          : "bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500"
+                          ? `bg-gradient-to-r ${plan.gradient} shadow-xl`
+                          : "bg-slate-800 border-2 border-slate-600"
                       }`}
+                      whileHover={{ 
+                        scale: 1.02,
+                        boxShadow: plan.popular 
+                          ? "0 20px 40px -12px rgba(168, 85, 247, 0.6)"
+                          : "0 10px 30px -10px rgba(100, 116, 139, 0.5)"
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
                     >
                       <span className="relative z-10">{plan.cta}</span>
                       {plan.popular && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
+                        <motion.div 
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                          animate={{ x: ["-100%", "100%"] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        />
                       )}
-                    </button>
+                    </motion.button>
 
                     {/* Features */}
                     <div className="space-y-3 sm:space-y-4">

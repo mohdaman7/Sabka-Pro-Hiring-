@@ -209,53 +209,81 @@ export default function LandingFeatures() {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-3xl shadow-lg shadow-purple-900/40 transition-transform duration-500 hover:scale-[1.07] hover:-translate-y-3 hover:shadow-xl hover:shadow-purple-700/60 cursor-pointer"
+                transition={{ 
+                  duration: 0.6, 
+                  delay: index * 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -12,
+                  transition: { duration: 0.3, ease: "easeOut" }
+                }}
+                className="group relative overflow-hidden rounded-3xl shadow-2xl shadow-purple-900/50 transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(147,51,234,0.5)] cursor-pointer"
                 aria-labelledby={`feature-title-${index}`}
                 aria-describedby={`feature-desc-${index}`}
               >
                 {/* Background Image */}
                 <div className="absolute inset-0">
-                  <img
+                  <motion.img
                     src={feature.bgImage || "/placeholder.svg"}
                     alt={feature.title}
-                    className="w-full h-full object-cover brightness-75 transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover brightness-75"
                     loading="lazy"
                     decoding="async"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
                   />
                   {/* Gradient Overlay */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} transition-opacity duration-500`}
+                    className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} transition-all duration-500 group-hover:opacity-95`}
                   />
                   {/* Dark overlay for text contrast */}
-                  <div className="absolute inset-0 bg-black/50" />
+                  <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-colors duration-500" />
+                  
+                  {/* Premium shine effect on hover */}
+                  <motion.div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                    style={{
+                      background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)'
+                    }}
+                  />
                 </div>
 
                 {/* Content */}
                 <div className="relative p-6 sm:p-8 min-h-[280px] sm:min-h-[320px] flex flex-col text-white">
-                  {/* Icon */}
-                  <div
-                    className={`mb-4 sm:mb-6 w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/20 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 ${feature.iconBg}`}
-                    style={{ backdropFilter: "blur(8px)" }}
+                  {/* Icon with premium animation */}
+                  <motion.div
+                    className={`mb-4 sm:mb-6 w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center border-2 border-white/30 shadow-2xl ${feature.iconBg} bg-white/10`}
+                    whileHover={{ 
+                      scale: 1.15, 
+                      rotate: 12,
+                      boxShadow: "0 20px 40px -12px rgba(255,255,255,0.3)"
+                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   >
-                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-lg" />
-                  </div>
+                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-2xl" />
+                  </motion.div>
 
-                  {/* Title */}
-                  <h3
+                  {/* Title with premium animation */}
+                  <motion.h3
                     id={`feature-title-${index}`}
-                    className="text-xl sm:text-2xl font-extrabold mb-2 sm:mb-3 tracking-wide transition-transform duration-300 group-hover:translate-x-2"
+                    className="text-xl sm:text-2xl font-extrabold mb-2 sm:mb-3 tracking-wide"
+                    whileHover={{ x: 8 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    {feature.title}
-                  </h3>
+                    <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent group-hover:from-purple-100 group-hover:via-white group-hover:to-purple-100 transition-all duration-500">
+                      {feature.title}
+                    </span>
+                  </motion.h3>
 
                   {/* Description */}
                   <p
                     id={`feature-desc-${index}`}
-                    className="text-sm sm:text-base text-gray-300 leading-relaxed flex-grow select-text"
+                    className="text-sm sm:text-base text-purple-100/90 group-hover:text-white leading-relaxed mb-auto transition-colors duration-300"
                   >
                     {feature.description}
                   </p>
@@ -283,8 +311,14 @@ export default function LandingFeatures() {
                   </div>
                 </div>
 
-                {/* Decorative corner accent */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-70 transition-opacity duration-500 rounded-bl-full pointer-events-none" />
+                {/* Premium decorative elements */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-bl-full pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-400/20 to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-700 rounded-tr-full pointer-events-none" />
+                
+                {/* Animated border glow */}
+                <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{
+                  boxShadow: 'inset 0 0 20px rgba(168, 85, 247, 0.4)'
+                }} />
               </motion.div>
             );
           })}
