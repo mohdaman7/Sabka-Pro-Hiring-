@@ -555,42 +555,42 @@ export default function EmployerJobs() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-4">
-                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-xl sm:rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                          <div className="group/stat flex items-center gap-2 sm:gap-3 md:gap-4 px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-3 rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl">
                             <div
-                              className="p-3 rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300"
+                              className="p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300 flex-shrink-0"
                               style={{
                                 background:
                                   "linear-gradient(135deg, #10b981, #06b6d4)",
                               }}
                             >
-                              <Users className="w-6 h-6 text-white" />
+                              <Users className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
                             </div>
-                            <div>
-                              <p className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
+                            <div className="min-w-0">
+                              <p className="text-lg sm:text-xl md:text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
                                 {job.applications}
                               </p>
-                              <p className="text-xs text-white/60 font-semibold">
+                              <p className="text-xs text-white/60 font-semibold truncate">
                                 Applications
                               </p>
                             </div>
                           </div>
 
-                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-xl sm:rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
+                          <div className="group/stat flex items-center gap-2 sm:gap-3 md:gap-4 px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-3 rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl">
                             <div
-                              className="p-3 rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300"
+                              className="p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300 flex-shrink-0"
                               style={{
                                 background:
                                   "linear-gradient(135deg, #f59e0b, #ef4444)",
                               }}
                             >
-                              <Eye className="w-6 h-6 text-white" />
+                              <Eye className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
                             </div>
-                            <div>
-                              <p className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
+                            <div className="min-w-0">
+                              <p className="text-lg sm:text-xl md:text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
                                 {job.views}
                               </p>
-                              <p className="text-xs text-white/60 font-semibold">
+                              <p className="text-xs text-white/60 font-semibold truncate">
                                 Views
                               </p>
                             </div>
@@ -600,41 +600,63 @@ export default function EmployerJobs() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-3">
-                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                  <div className="hidden lg:flex flex-col gap-2 sm:gap-3">
+                    <button className="group/btn relative p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
                       <div className="absolute inset-0 bg-blue-500/10 group-hover/btn:bg-blue-500/20 transition-colors duration-300"></div>
-                      <Edit2 className="w-5 h-5 text-blue-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
+                      <Edit2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
                     </button>
 
-                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                    <button className="group/btn relative p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
                       <div className="absolute inset-0 bg-emerald-500/10 group-hover/btn:bg-emerald-500/20 transition-colors duration-300"></div>
-                      <Share2 className="w-5 h-5 text-emerald-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
+                      <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
                     </button>
 
-                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                    <button className="group/btn relative p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
                       <div className="absolute inset-0 bg-red-500/10 group-hover/btn:bg-red-500/20 transition-colors duration-300"></div>
-                      <Trash2 className="w-5 h-5 text-red-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
+                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
                     </button>
 
-                    <button className="group/btn relative p-3 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                    <button className="group/btn relative p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-xl">
                       <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-colors duration-300"></div>
-                      <MoreVertical className="w-5 h-5 text-white/80 relative z-10 group-hover/btn:scale-125 transition-transform duration-300" />
+                      <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 relative z-10 group-hover/btn:scale-125 transition-transform duration-300" />
                     </button>
                   </div>
                 </div>
 
+                {/* Mobile Action Buttons */}
+                <div className="lg:hidden flex items-center gap-2 pt-3 sm:pt-4 border-t border-white/10 mt-3 sm:mt-4">
+                  <button className="flex-1 group/btn relative px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30">
+                    <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 text-blue-400 font-semibold text-xs sm:text-sm">
+                      <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </span>
+                  </button>
+                  <button className="flex-1 group/btn relative px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30">
+                    <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 text-emerald-400 font-semibold text-xs sm:text-sm">
+                      <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">Share</span>
+                    </span>
+                  </button>
+                  <button className="group/btn relative p-2 sm:p-2.5 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30">
+                    <Trash2 className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-red-400 relative z-10" />
+                  </button>
+                  <button className="group/btn relative p-2 sm:p-2.5 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 bg-white/5 hover:bg-white/10 border border-white/10">
+                    <MoreVertical className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white/80 relative z-10" />
+                  </button>
+                </div>
+
                 {job.status === "Expiring Soon" && (
-                  <div className="mt-6 relative overflow-hidden rounded-xl sm:rounded-2xl">
+                  <div className="mt-4 sm:mt-5 md:mt-6 relative overflow-hidden rounded-lg sm:rounded-xl">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 animate-pulse"></div>
-                    <div className="relative flex items-center gap-4 p-5 border-2 border-orange-500/30 bg-orange-500/10 backdrop-blur-sm">
-                      <div className="p-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg">
-                        <AlertCircle className="w-6 h-6 text-white animate-bounce-subtle" />
+                    <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 border-2 border-orange-500/30 bg-orange-500/10 backdrop-blur-sm">
+                      <div className="p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg flex-shrink-0">
+                        <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white animate-bounce-subtle" />
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-bold text-orange-300 mb-1">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs sm:text-sm font-bold text-orange-300 mb-1">
                           ⚠️ Expiring Soon
                         </p>
-                        <p className="text-sm text-orange-400/90">
+                        <p className="text-xs sm:text-sm text-orange-400/90">
                           This job expires on{" "}
                           <span className="font-bold">
                             {new Date(job.expiryDate).toLocaleDateString()}
@@ -642,7 +664,7 @@ export default function EmployerJobs() {
                           . Renew now to keep it active and visible.
                         </p>
                       </div>
-                      <button className="px-3 py-2 sm:px-4 sm:py-2.5 sm:px-6 sm:py-3 rounded-xl font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 transition-transform duration-300 shadow-lg">
+                      <button className="w-full sm:w-auto px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 transition-transform duration-300 shadow-lg flex-shrink-0">
                         Renew Now
                       </button>
                     </div>
