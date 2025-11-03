@@ -278,18 +278,18 @@ export default function JobListingsPage() {
   const statIcons = [TrendingUp, Users, Award];
 
   return (
-    <div className="relative min-h-screen p-4 md:p-6 lg:p-8 overflow-x-hidden overflow-y-auto">
+    <div className="relative min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 overflow-x-hidden overflow-y-auto">
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
           style={{
             background: "rgba(128,55,145,0.12)",
             animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl animate-pulse"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-64 h-64 md:w-[500px] md:h-[500px] rounded-full blur-2xl md:blur-3xl animate-pulse"
           style={{
             background: "rgba(184,123,209,0.08)",
             animation: "pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -331,7 +331,7 @@ export default function JobListingsPage() {
 
       {/* Premium Header Section */}
       <div
-        className="relative overflow-visible rounded-3xl p-10 md:p-12 text-white shadow-2xl backdrop-blur-xl border border-white/15 mb-10 group transition-all duration-500 hover:shadow-purple-500/30"
+        className="relative overflow-visible rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 lg:p-12 text-white shadow-xl sm:shadow-2xl backdrop-blur-xl border border-white/15 mb-6 sm:mb-8 md:mb-10 group transition-all duration-500 hover:shadow-purple-500/30"
         style={{
           background:
             "linear-gradient(135deg, rgba(128,55,145,0.18) 0%, rgba(184,123,209,0.12) 50%, rgba(240,194,238,0.08) 100%)",
@@ -349,31 +349,31 @@ export default function JobListingsPage() {
           style={{ animationDelay: "1s" }}
         />
 
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 sm:mb-8 md:mb-10 gap-4 sm:gap-6">
           <div className="flex-1">
-            <div className="flex items-center gap-5 mb-4">
+            <div className="flex items-center gap-3 sm:gap-4 md:gap-5 mb-3 sm:mb-4">
               <div className="relative">
                 <div className="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30 animate-pulse" />
-                <div className="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/50 group-hover:scale-110 transition-all duration-500">
+                <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/50 group-hover:scale-110 transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-3xl" />
-                  <Zap className="relative w-10 h-10 text-white animate-pulse" strokeWidth={3} />
+                  <Zap className="relative w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white animate-pulse" strokeWidth={3} />
                 </div>
               </div>
               <div>
-                <h1 className="text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent drop-shadow-2xl">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-2 sm:mb-3 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent drop-shadow-2xl">
                   Discover Your Future
                 </h1>
-                <p className="text-purple-100 text-xl font-bold">
+                <p className="text-purple-100 text-sm sm:text-base md:text-lg lg:text-xl font-bold">
                   Find opportunities that match your ambitions
                 </p>
               </div>
             </div>
           </div>
           <button
-            className="md:hidden px-8 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white rounded-2xl transition-all duration-300 font-black text-base border-2 border-white/30 flex items-center gap-3 shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95"
+            className="md:hidden px-6 py-3 sm:px-8 sm:py-4 bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white rounded-xl sm:rounded-2xl transition-all duration-300 font-black text-sm sm:text-base border-2 border-white/30 flex items-center gap-2 sm:gap-3 shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95"
             onClick={() => setShowFilters(!showFilters)}
           >
-            <Filter className="h-6 w-6" strokeWidth={2.5} />
+            <Filter className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
             Filters
           </button>
         </div>
@@ -382,15 +382,15 @@ export default function JobListingsPage() {
         <div className="relative group/search">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-3xl blur-2xl opacity-0 group-hover/search:opacity-100 transition-opacity duration-500 pointer-events-none" />
           <div className="relative" ref={searchWrapperRef}>
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-7 w-7 text-purple-300 group-hover/search:text-purple-100 transition-colors" strokeWidth={2.5} />
+            <Search className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-purple-300 group-hover/search:text-purple-100 transition-colors" strokeWidth={2.5} />
             <input
               type="text"
-              placeholder="Search by job title, company, or skills..."
+              placeholder="Search jobs..."
               value={filters.searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               onFocus={() => { if (filters.searchQuery && suggestions.length > 0) setShowSuggestions(true); }}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              className="w-full pl-20 pr-8 py-6 text-lg border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white placeholder:text-white/60 focus:border-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-400/30 rounded-3xl transition-all duration-300 font-semibold shadow-2xl hover:shadow-purple-500/20 hover:bg-white/15"
+              className="w-full pl-12 sm:pl-16 md:pl-20 pr-4 sm:pr-6 md:pr-8 py-4 sm:py-5 md:py-6 text-sm sm:text-base md:text-lg border-2 border-white/20 bg-white/10 backdrop-blur-xl text-white placeholder:text-white/60 focus:border-purple-400 focus:outline-none focus:ring-4 focus:ring-purple-400/30 rounded-2xl sm:rounded-3xl transition-all duration-300 font-semibold shadow-2xl hover:shadow-purple-500/20 hover:bg-white/15"
             />
 
             {/* Suggestions Dropdown via portal */}
@@ -438,14 +438,14 @@ export default function JobListingsPage() {
         </div>
       </div>
 
-      {/* Premium Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+      {/* Premium Stats Cards - Responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8 md:mb-10">
         {stats.map((stat, index) => {
           const Icon = statIcons[index % statIcons.length];
           return (
             <div
               key={index}
-              className="group relative rounded-3xl p-8 shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-purple-500/30 cursor-pointer overflow-hidden"
+              className="group relative rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl transition-all duration-500 hover:-translate-y-2 sm:hover:-translate-y-3 hover:shadow-purple-500/30 cursor-pointer overflow-hidden"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))",
@@ -471,21 +471,21 @@ export default function JobListingsPage() {
 
               <div className="relative flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-base font-black text-white/80 mb-3 uppercase tracking-wider">
+                  <p className="text-xs sm:text-sm md:text-base font-black text-white/80 mb-2 sm:mb-3 uppercase tracking-wider">
                     {stat.label}
                   </p>
-                  <p suppressHydrationWarning className="text-6xl font-black text-white mb-2 group-hover:scale-110 transition-transform duration-300 inline-block drop-shadow-2xl">
+                  <p suppressHydrationWarning className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-2 group-hover:scale-110 transition-transform duration-300 inline-block drop-shadow-2xl">
                     {stat.value}
                   </p>
-                  <div className="flex items-center gap-2 text-emerald-300 text-base font-black animate-pulse">
-                    <TrendingUp className="w-5 h-5" strokeWidth={2.5} />
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-emerald-300 text-xs sm:text-sm md:text-base font-black animate-pulse">
+                    <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                     <span>+12% this week</span>
                   </div>
                 </div>
                 <div className="relative">
                   <div className="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl blur-lg opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                   <div
-                    className="relative h-24 w-24 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 overflow-hidden"
+                    className="relative h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 overflow-hidden"
                     style={{
                       background:
                         "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
@@ -493,7 +493,7 @@ export default function JobListingsPage() {
                     }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent" />
-                    <Icon className="relative h-12 w-12 text-white drop-shadow-2xl" strokeWidth={2.5} />
+                    <Icon className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-white drop-shadow-2xl" strokeWidth={2.5} />
                   </div>
                 </div>
               </div>
@@ -502,39 +502,39 @@ export default function JobListingsPage() {
         })}
       </div>
 
-      <div className="flex gap-8 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 items-start">
         {/* Premium Filters Sidebar */}
         <aside
-          className={`w-80 flex-shrink-0 transition-all duration-300 ${
+          className={`w-full lg:w-80 flex-shrink-0 transition-all duration-300 ${
             showFilters ? "block" : "hidden lg:block"
           }`}
         >
           <div
-            className="p-8 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/15 transition-all duration-300 hover:shadow-purple-500/30"
+            className="p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl backdrop-blur-xl border border-white/15 transition-all duration-300 hover:shadow-purple-500/30"
             style={{
               background:
                 "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))",
             }}
           >
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="font-black text-white text-2xl flex items-center gap-3">
-                <Filter className="w-6 h-6 text-purple-400" strokeWidth={2.5} />
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h3 className="font-black text-white text-lg sm:text-xl md:text-2xl flex items-center gap-2 sm:gap-3">
+                <Filter className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" strokeWidth={2.5} />
                 Filters
               </h3>
               {showFilters && (
                 <button
-                  className="lg:hidden text-white/80 hover:text-white hover:bg-white/15 p-3 rounded-xl transition-all hover:scale-110"
+                  className="lg:hidden text-white/80 hover:text-white hover:bg-white/15 p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all hover:scale-110"
                   onClick={() => setShowFilters(false)}
                 >
-                  <X className="h-6 w-6" strokeWidth={2.5} />
+                  <X className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
                 </button>
               )}
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               <div>
-                <label className="text-base font-black text-white mb-5 block uppercase tracking-wider flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-purple-400" strokeWidth={2.5} />
+                <label className="text-sm sm:text-base font-black text-white mb-4 sm:mb-5 block uppercase tracking-wider flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" strokeWidth={2.5} />
                   Job Type
                 </label>
                 <div className="space-y-3">
@@ -549,7 +549,7 @@ export default function JobListingsPage() {
                     <button
                       key={type}
                       onClick={() => handleTypeChange(type)}
-                      className={`relative w-full text-left px-6 py-4 rounded-2xl text-base font-bold transition-all duration-300 group overflow-hidden ${
+                      className={`relative w-full text-left px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold transition-all duration-300 group overflow-hidden ${
                         filters.selectedType === type
                           ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl shadow-purple-500/40 scale-105"
                           : "bg-white/8 text-white/80 hover:bg-white/15 hover:scale-105 hover:text-white border border-white/10"
@@ -642,13 +642,13 @@ export default function JobListingsPage() {
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               {paginatedJobs.map((job, index) => (
                 <div
                   key={job._id}
                   onMouseEnter={() => setHoveredJob(job._id)}
                   onMouseLeave={() => setHoveredJob(null)}
-                  className="group relative rounded-3xl p-8 shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-purple-500/30 cursor-pointer overflow-hidden"
+                  className="group relative rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-purple-500/30 cursor-pointer overflow-hidden"
                   style={{
                     background:
                       hoveredJob === job._id
@@ -671,13 +671,13 @@ export default function JobListingsPage() {
                     </div>
                   )}
 
-                  <div className="relative flex flex-col sm:flex-row gap-6">
+                  <div className="relative flex flex-col sm:flex-row gap-4 sm:gap-5 md:gap-6">
                     {/* Company Logo */}
                     <div className="flex-shrink-0">
                       <div className="relative">
                         <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         <div
-                          className="relative w-24 h-24 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500"
+                          className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl sm:rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500"
                           style={{
                             background:
                               "linear-gradient(135deg,#803791,#b87bd1,#f0c2ee)",
@@ -706,7 +706,7 @@ export default function JobListingsPage() {
                       <div className="flex items-start justify-between gap-4 mb-5">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start gap-3 mb-3">
-                            <h3 className="text-3xl font-black text-white group-hover:text-purple-200 transition-colors leading-tight drop-shadow-lg">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white group-hover:text-purple-200 transition-colors leading-tight drop-shadow-lg">
                               {job.title}
                             </h3>
                             {index < 3 && (
@@ -720,7 +720,7 @@ export default function JobListingsPage() {
                               </span>
                             )}
                           </div>
-                          <p className="text-lg font-black text-white/90 flex items-center gap-2">
+                          <p className="text-sm sm:text-base md:text-lg font-black text-white/90 flex items-center gap-2">
                             <Building2 className="w-5 h-5 text-purple-400" strokeWidth={2.5} />
                             {job?.employerId?.employerProfile?.company?.name || job?.employerId?.company?.name || job?.company?.name || job?.company || "Company Not Specified"}
                           </p>

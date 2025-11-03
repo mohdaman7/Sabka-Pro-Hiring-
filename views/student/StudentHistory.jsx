@@ -185,13 +185,13 @@ export default function StudentHistory() {
   };
 
   return (
-    <div className="min-h-screen p-6 space-y-6 bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent">
+    <div className="min-h-screen p-6 space-y-4 sm:space-y-5 md:space-y-6 bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent">
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl p-8 bg-white/5 backdrop-blur-md border border-[#803791]/10 text-white shadow-xl">
         <div className="absolute -right-8 -top-10 w-64 h-64 bg-[#803791]/25 rounded-full blur-3xl"></div>
         <div className="absolute -left-6 bottom-6 w-48 h-48 bg-[#b87bd1]/12 rounded-full blur-2xl"></div>
         <div className="relative flex items-center justify-between">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 sm:gap-3 sm:gap-4 md:gap-6">
             <div className="w-20 h-20 bg-gradient-to-br from-[#803791] to-[#b87bd1] rounded-2xl flex items-center justify-center shadow-lg">
               <Clock className="w-10 h-10 text-white" />
             </div>
@@ -212,7 +212,7 @@ export default function StudentHistory() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {[
           {
             label: "Jobs Applied",
@@ -280,7 +280,7 @@ export default function StudentHistory() {
             ))}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
               <input
@@ -305,7 +305,7 @@ export default function StudentHistory() {
 
       {/* Content based on active tab */}
       {activeTab === "applications" && (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6">
           {applicationHistory.map((application) => (
             <div
               key={application.id}
@@ -319,7 +319,7 @@ export default function StudentHistory() {
                       background: "linear-gradient(135deg,#803791,#b87bd1)",
                     }}
                   >
-                    <Briefcase className="w-6 h-6 text-white" />
+                    <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
@@ -328,7 +328,7 @@ export default function StudentHistory() {
                     <p className="text-white/80 text-lg mb-2">
                       {application.company}
                     </p>
-                    <div className="flex items-center gap-4 text-sm text-white/70">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-sm text-white/70">
                       <span className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
                         {application.location}
@@ -343,7 +343,7 @@ export default function StudentHistory() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <div className="flex items-center gap-1 px-3 py-1 bg-emerald-900/10 rounded-full border border-emerald-800/10">
                     <span className="text-sm font-semibold text-emerald-300">
                       {application.matchScore}% Match
@@ -411,7 +411,7 @@ export default function StudentHistory() {
       )}
 
       {activeTab === "courses" && (
-        <div className="grid gap-6">
+        <div className="grid gap-3 sm:gap-4 md:gap-6">
           {courseHistory.map((course) => (
             <div
               key={course.id}
@@ -425,14 +425,14 @@ export default function StudentHistory() {
                       background: "linear-gradient(135deg,#803791,#b87bd1)",
                     }}
                   >
-                    <GraduationCap className="w-6 h-6 text-white" />
+                    <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
                       {course.title}
                     </h3>
                     <p className="text-white/80 mb-2">{course.category}</p>
-                    <div className="flex items-center gap-4 text-sm text-white/70">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-sm text-white/70">
                       <span>{course.duration}</span>
                       <span>
                         {course.completedLessons}/{course.totalLessons} lessons
@@ -441,7 +441,7 @@ export default function StudentHistory() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   {course.certificate && (
                     <button className="px-4 py-2 bg-amber-900/10 hover:bg-amber-900/15 text-amber-300 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 border border-amber-900/10">
                       <Download className="w-4 h-4" />
@@ -481,7 +481,7 @@ export default function StudentHistory() {
       )}
 
       {activeTab === "interviews" && (
-        <div className="grid gap-6">
+        <div className="grid gap-3 sm:gap-4 md:gap-6">
           {interviewHistory.map((interview) => (
             <div
               key={interview.id}
@@ -495,7 +495,7 @@ export default function StudentHistory() {
                       background: "linear-gradient(135deg,#803791,#b87bd1)",
                     }}
                   >
-                    <Calendar className="w-6 h-6 text-white" />
+                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
@@ -504,7 +504,7 @@ export default function StudentHistory() {
                     <p className="text-white/80 text-lg mb-2">
                       {interview.company}
                     </p>
-                    <div className="flex items-center gap-4 text-sm text-white/70">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-sm text-white/70">
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {interview.date} at {interview.time}
@@ -533,7 +533,7 @@ export default function StudentHistory() {
                 </div>
               )}
 
-              <div className="flex items-center gap-3 mt-4">
+              <div className="flex items-center gap-2 sm:gap-3 mt-4">
                 <button className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
                   <Eye className="w-4 h-4" />
                   View Details

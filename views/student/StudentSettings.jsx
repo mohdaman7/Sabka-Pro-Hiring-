@@ -199,14 +199,14 @@ export default function StudentSettings() {
               "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
           }}
         >
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-8">
             <div
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shadow-lg"
               style={{
                 background: "linear-gradient(135deg,#803791,#b87bd1)",
               }}
             >
-              <SettingsIcon className="w-6 h-6 text-white" />
+              <SettingsIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
             <div>
               <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white">Settings</h1>
@@ -281,7 +281,7 @@ export default function StudentSettings() {
         <div className="flex-1 p-8 overflow-auto">
           {/* Profile Section */}
           {activeSection === "profile" && (
-            <div className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="max-w-4xl space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
@@ -314,7 +314,7 @@ export default function StudentSettings() {
                 </div>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Personal Information */}
                 <div
                   className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
@@ -331,7 +331,7 @@ export default function StudentSettings() {
                     Personal Information
                   </h3>
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-white/90 mb-2">
                           First Name
@@ -407,7 +407,7 @@ export default function StudentSettings() {
                 </div>
 
                 {/* Right Column */}
-                <div className="space-y-4 sm:space-y-6 md:space-y-8">
+                <div className="space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
                   {/* Professional Information */}
                   <div
                     className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
@@ -481,7 +481,7 @@ export default function StudentSettings() {
                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6">
                       Profile Photo
                     </h3>
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2 sm:gap-3 sm:gap-4 md:gap-6">
                       <div
                         className="w-20 h-20 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg"
                         style={{
@@ -519,7 +519,7 @@ export default function StudentSettings() {
 
           {/* Preferences Section */}
           {activeSection === "preferences" && (
-            <div className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="max-w-4xl space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
@@ -543,7 +543,7 @@ export default function StudentSettings() {
                 </button>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Theme Preferences */}
                 <div
                   className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
@@ -564,7 +564,7 @@ export default function StudentSettings() {
                       <label className="block text-sm font-medium text-white/90 mb-4">
                         Select Theme
                       </label>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {themes.map((theme) => (
                           <button
                             key={theme.id}
@@ -700,7 +700,7 @@ export default function StudentSettings() {
 
           {/* Security Section */}
           {activeSection === "security" && (
-            <div className="max-w-2xl space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="max-w-2xl space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
               <div>
                 <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Security Settings
@@ -821,7 +821,7 @@ export default function StudentSettings() {
               </div>
 
               {/* Security Features */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 <div
                   className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
@@ -871,7 +871,7 @@ export default function StudentSettings() {
 
           {/* Notifications Section */}
           {activeSection === "notifications" && (
-            <div className="max-w-2xl space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="max-w-2xl space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
               <div>
                 <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Notification Settings
@@ -895,7 +895,7 @@ export default function StudentSettings() {
                   </div>
                   Notification Preferences
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-5 md:space-y-6">
                   {[
                     {
                       category: "Email Notifications",
@@ -993,7 +993,7 @@ export default function StudentSettings() {
 
           {/* Billing Section */}
           {activeSection === "billing" && (
-            <div className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="max-w-4xl space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
               <div>
                 <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Billing & Subscription
@@ -1003,7 +1003,7 @@ export default function StudentSettings() {
                 </p>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Current Plan */}
                 <div
                   className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
@@ -1078,7 +1078,7 @@ export default function StudentSettings() {
                         background: "rgba(255,255,255,0.02)",
                       }}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3">
                         <div className="w-10 h-10 bg-[#b87bd1] rounded-lg flex items-center justify-center">
                           <CreditCard className="w-5 h-5 text-white" />
                         </div>
@@ -1150,7 +1150,7 @@ export default function StudentSettings() {
                           {invoice.date}
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                         <div className="font-semibold text-white">
                           {invoice.amount}
                         </div>
@@ -1170,7 +1170,7 @@ export default function StudentSettings() {
 
           {/* Privacy Section */}
           {activeSection === "privacy" && (
-            <div className="max-w-2xl space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="max-w-2xl space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
               <div>
                 <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Privacy Settings
@@ -1194,7 +1194,7 @@ export default function StudentSettings() {
                   </div>
                   Data & Privacy
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-5 md:space-y-6">
                   {[
                     {
                       title: "Profile Visibility",
