@@ -230,41 +230,23 @@ export default function EmployerApplications() {
         />
       </div>
 
-      {/* Ultra Premium Header */}
+      {/* Modern Clean Header */}
       <div
-        className="relative overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-[32px] shadow-[0_20px_80px_-20px_rgba(128,55,145,0.5)] backdrop-blur-xl group transition-all duration-700 hover:shadow-[0_30px_100px_-20px_rgba(128,55,145,0.6)]"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
-          borderImage:
-            "linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05)) 1",
-        }}
+        className="relative overflow-hidden rounded-xl sm:rounded-2xl shadow-xl group transition-all duration-300 bg-gradient-to-br from-[#803791] to-[#6a2a6f] border border-[#b87bd1]/20"
       >
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#803791]/10 via-transparent to-[#b87bd1]/10 animate-gradient-shift" />
-        </div>
+        {/* Subtle overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/5 to-transparent opacity-50" />
 
-        {/* Shimmer effect */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
-        </div>
-
-        <div className="relative p-4 sm:p-6 md:p-8 lg:p-10">
+        <div className="relative p-4 sm:p-5 md:p-6 lg:p-8">
           <div className="flex flex-col lg:flex-row items-start justify-between gap-4 sm:gap-6">
             <div className="space-y-3 sm:space-y-4 flex-1">
               <div className="flex items-center gap-3 sm:gap-4">
-                {/* Premium icon container */}
-                <div className="relative group/icon">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl sm:rounded-[24px] blur-xl opacity-50 group-hover/icon:opacity-75 transition-all duration-500" />
+                {/* Clean icon container */}
+                <div className="relative">
                   <div
-                    className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-[20px] flex items-center justify-center shadow-2xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-500"
-                    style={{
-                      background:
-                        "linear-gradient(135deg,#803791 0%,#b87bd1 100%)",
-                    }}
+                    className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center shadow-lg bg-white/10 border border-white/20"
                   >
-                    <Users className="w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 text-white" strokeWidth={2.5} />
+                    <Users className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
                   </div>
                 </div>
 
@@ -295,27 +277,18 @@ export default function EmployerApplications() {
               </div>
             </div>
 
-            {/* Premium action buttons */}
+            {/* Clean action buttons */}
             <div className="flex items-center gap-2 sm:gap-3 w-full lg:w-auto">
-              <button className="group/btn relative px-4 py-2.5 sm:px-5 sm:py-3 md:px-7 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30 flex-1 lg:flex-initial">
-                <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-all duration-500" />
-                <span className="relative flex items-center justify-center gap-1.5 sm:gap-2.5">
-                  <Download
-                    className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:rotate-12 transition-transform duration-500"
-                    strokeWidth={2.5}
-                  />
+              <button className="group/btn px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-lg text-sm sm:text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all flex-1 lg:flex-initial">
+                <span className="flex items-center justify-center gap-1.5 sm:gap-2">
+                  <Download className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                   <span className="hidden sm:inline">Export</span>
                 </span>
               </button>
 
-              <button className="group/btn relative px-4 py-2.5 sm:px-5 sm:py-3 md:px-7 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)] flex-1 lg:flex-initial">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] transition-transform group-hover/btn:scale-110 duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
-                <span className="relative flex items-center justify-center gap-1.5 sm:gap-2.5">
-                  <Filter
-                    className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:rotate-180 transition-transform duration-700"
-                    strokeWidth={2.5}
-                  />
+              <button className="group/btn px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-lg text-sm sm:text-base font-semibold text-white bg-white/20 hover:bg-white/30 border border-white/30 transition-all flex-1 lg:flex-initial">
+                <span className="flex items-center justify-center gap-1.5 sm:gap-2">
+                  <Filter className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                   <span className="hidden sm:inline">Filters</span>
                 </span>
               </button>
@@ -333,16 +306,11 @@ export default function EmployerApplications() {
           return (
             <div
               key={stat.value}
-              className="group relative rounded-[24px] p-7 shadow-xl transition-all duration-700 cursor-pointer hover:scale-105"
-              style={{
-                background: isActive
-                  ? "linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08))"
-                  : "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
-                border: isActive
-                  ? "2px solid rgba(184,123,209,0.4)"
-                  : "1px solid rgba(255,255,255,0.1)",
-                animationDelay: `${index * 80}ms`,
-              }}
+              className={`group relative rounded-xl p-4 sm:p-5 md:p-6 shadow-lg transition-all cursor-pointer hover:shadow-xl ${
+                isActive
+                  ? "bg-gradient-to-br from-[#803791] to-[#6a2a6f] border-2 border-[#b87bd1] scale-105"
+                  : "bg-white/5 border border-white/10 hover:bg-white/8"
+              }`}
               onClick={() => setStage(stat.value)}
             >
               {/* Glow effect */}
@@ -377,25 +345,12 @@ export default function EmployerApplications() {
                 </div>
 
                 <div>
-                  <div
-                    className={`text-4xl font-black mb-2 transition-all duration-500 ${
-                      isActive
-                        ? "bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent"
-                        : "text-white group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/80 group-hover:bg-clip-text group-hover:text-transparent"
-                    }`}
-                  >
-                    {stat.count}
-                  </div>
-
-                  <div
-                    className={`text-sm font-bold transition-colors duration-500 ${
-                      isActive
-                        ? "text-white"
-                        : "text-white/60 group-hover:text-white/90"
-                    }`}
-                  >
+                  <h3 className="text-xs sm:text-sm font-bold text-white/70 uppercase tracking-wider mb-1">
                     {stat.label}
-                  </div>
+                  </h3>
+                  <p className="text-white/50 text-xs font-medium">
+                    Click to filter
+                  </p>
                 </div>
 
                 {/* Animated progress bar */}
@@ -524,14 +479,12 @@ export default function EmployerApplications() {
           return (
             <div
               key={app._id}
-              className="group relative rounded-[28px] overflow-hidden transition-all duration-700 hover:scale-[1.01]"
+              className="group relative rounded-xl overflow-hidden transition-all hover:shadow-xl cursor-pointer bg-white/5 border border-white/10 hover:border-white/20"
               style={{
-                background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))",
-                border: "1px solid rgba(255,255,255,0.12)",
-                boxShadow: isHovered
-                  ? "0 30px 80px -20px rgba(128,55,145,0.4)"
-                  : "0 10px 40px -10px rgba(0,0,0,0.3)",
+                boxShadow:
+                  isHovered
+                    ? "0 30px 80px -20px rgba(128,55,145,0.4)"
+                    : "0 10px 40px -10px rgba(0,0,0,0.3)",
                 animationDelay: `${index * 60}ms`,
               }}
               onMouseEnter={() => setHoveredCard(app._id)}
@@ -549,47 +502,43 @@ export default function EmployerApplications() {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
               </div>
 
-              <div className="relative backdrop-blur-xl p-8">
+              <div className="relative p-4 sm:p-5 md:p-6">
                 {/* Header Section */}
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3 sm:gap-4 md:gap-6">
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 sm:gap-5">
                   {/* Candidate Info */}
-                  <div className="flex-1 flex items-start gap-3 sm:gap-4 md:gap-6">
-                    {/* Premium Avatar */}
-                    <div className="relative group/avatar flex-shrink-0">
-                      <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[20px] blur-xl opacity-40 group-hover/avatar:opacity-70 transition-opacity duration-500" />
+                  <div className="flex-1 flex items-start gap-3 sm:gap-4">
+                    {/* Clean Avatar */}
+                    <div className="relative flex-shrink-0">
                       <div
-                        className="relative w-20 h-20 rounded-[18px] flex items-center justify-center shadow-2xl transform group-hover/avatar:scale-110 group-hover/avatar:rotate-6 transition-all duration-500"
-                        style={{
-                          background: "linear-gradient(135deg,#803791,#b87bd1)",
-                        }}
+                        className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-[#803791] to-[#b87bd1] border-2 border-white/20"
                       >
-                        <span className="text-white font-black text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl">
+                        <span className="text-white font-black text-base sm:text-lg md:text-xl">
                           {app.studentId?.firstName?.charAt(0)}
                           {app.studentId?.lastName?.charAt(0)}
                         </span>
                       </div>
                       {/* Status indicator */}
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-400 rounded-full border-4 border-[#0a0118] animate-pulse" />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-emerald-400 rounded-full border-2 sm:border-4 border-[#0a0118]" />
                     </div>
 
                     {/* Candidate Details */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-4 mb-3">
-                        <h3 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">
                           {app.studentId?.firstName} {app.studentId?.lastName}
                         </h3>
                         <StageBadge value={app.status} />
                       </div>
 
-                      <p className="text-[#b87bd1] font-bold text-lg mb-4 flex items-center gap-2.5">
-                        <div className="p-2 rounded-xl bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/20 border border-[#b87bd1]/30">
-                          <Briefcase className="w-4 h-4" strokeWidth={2.5} />
+                      <p className="text-[#b87bd1] font-semibold text-sm sm:text-base mb-3 sm:mb-4 flex items-center gap-2">
+                        <div className="p-1.5 sm:p-2 rounded-lg bg-[#803791]/20 border border-[#b87bd1]/30">
+                          <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
                         </div>
-                        {app.jobId?.title}
+                        <span className="truncate">{app.jobId?.title}</span>
                       </p>
 
-                      {/* Premium Info Grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Info Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                         <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-all duration-500">
                           <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover/detail:bg-gradient-to-br group-hover/detail:from-[#803791]/20 group-hover/detail:to-[#b87bd1]/20 group-hover/detail:border-[#b87bd1]/30 transition-all duration-500">
                             <Mail className="w-4 h-4" strokeWidth={2.5} />
