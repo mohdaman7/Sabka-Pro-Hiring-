@@ -3,96 +3,36 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Upload,
-  FileText,
-  Download,
-  Eye,
-  Trash2,
-  Target,
-  Copy,
-  Crown,
-  CheckCircle2,
-  Sparkles,
-  ChevronDown,
+  Upload, FileText, Download, Eye, Trash2, Target, Copy, Crown, CheckCircle2, 
+  Sparkles, ChevronDown, BarChart3, TrendingUp, AlertCircle, Zap, Award, 
+  Clock, RefreshCw, Lightbulb, FileCheck, Layout, PenTool, Star
 } from "lucide-react";
 import { resumeService } from "@/services/resumeService";
 
 export default function StudentATSResume() {
   const [resumes, setResumes] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [parsing, setParsing] = useState(false);
+  const [scoring, setScoring] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isPro, setIsPro] = useState(false);
-  const [showBuilder, setShowBuilder] = useState(false);
   const [selectedResume, setSelectedResume] = useState(null);
+  const [atsAnalysis, setAtsAnalysis] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [parsedData, setParsedData] = useState(null);
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showUploadOptions, setShowUploadOptions] = useState(false);
+  const [activeTab, setActiveTab] = useState("resumes");
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setResumes([
-        {
-          id: 1,
-          name: "My Resume.pdf",
-          date: "2023-10-15",
-          atsScore: 85,
-          isPrimary: true,
-          views: 24,
-          downloads: 8,
-        },
-        {
-          id: 2,
-          name: "Updated Resume.pdf",
-          date: "2023-11-01",
-          atsScore: 92,
-          isPrimary: false,
-          views: 15,
-          downloads: 5,
-        },
-      ]);
-      setIsPro(true);
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
+  // ATS Templates with sources
   const atsTemplates = [
-    {
-      id: 1,
-      name: "Professional",
-      preview: "/templates/professional.jpg",
-      score: 95,
-      free: true,
-    },
-    {
-      id: 2,
-      name: "Modern",
-      preview: "/templates/modern.jpg",
-      score: 92,
-      free: true,
-    },
-    {
-      id: 3,
-      name: "Executive",
-      preview: "/templates/executive.jpg",
-      score: 94,
-      free: false,
-    },
-    {
-      id: 4,
-      name: "Minimal",
-      preview: "/templates/minimal.jpg",
-      score: 89,
-      free: true,
-    },
-    {
-      id: 5,
-      name: "Creative",
-      preview: "/templates/creative.jpg",
-      score: 89,
-      free: false,
-    },
+    { id: 1, name: "Professional ATS", source: "Canva", score: 98, free: true, type: "classic" },
+    { id: 2, name: "Modern Tech", source: "Novoresume", score: 96, free: true, type: "modern" },
+    { id: 3, name: "Executive Pro", source: "FlowCV", score: 97, free: false, type: "executive" },
+    { id: 4, name: "Minimal Clean", source: "JSONResume", score: 95, free: true, type: "minimal" },
+    { id: 5, name: "Creative Bold", source: "Canva", score: 92, free: false, type: "creative" },
+    { id: 6, name: "Corporate Elite", source: "Novoresume", score: 94, free: false, type: "corporate" },
   ];
 
   useEffect(() => {
@@ -115,6 +55,138 @@ export default function StudentATSResume() {
     }
   };
 
+  // Resume Parsing with Affinda API
+  const parseResumeWithAffinda = async (file) => {
+    try {
+      setParsing(true);
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      // API call to Affinda
+      const response = await fetch("/api/resume/parse/affinda", {
+        method: "POST",
+        body: formData,
+      });
+      
+      const data = await response.json();
+      setParsedData(data.parsed);
+      return data.parsed;
+    } catch (error) {
+      console.error("Affinda parsing error:", error);
+      // Fallback to RChilli
+      return await parseResumeWithRChilli(file);
+    } finally {
+      setParsing(false);
+    }
+  };
+
+  // Fallback: RChilli Parser
+  const parseResumeWithRChilli = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      const response = await fetch("/api/resume/parse/rchilli", {
+        method: "POST",
+        body: formData,
+      });
+      
+      return await response.json();
+    } catch (error) {
+      console.error("RChilli parsing error:", error);
+      return null;
+    }
+  };
+
+  // ATS Scoring with Jobscan
+  const scoreResumeWithJobscan = async (resumeId, jobDescription = "") => {
+    try {
+      setScoring(true);
+      const response = await fetch("/api/resume/score/jobscan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resumeId, jobDescription }),
+      });
+      
+      const data = await response.json();
+      setAtsAnalysis(data.analysis);
+      return data.analysis;
+    } catch (error) {
+      console.error("Jobscan scoring error:", error);
+      // Fallback to ResumeWorded
+      return await scoreResumeWithResumeWorded(resumeId);
+    } finally {
+      setScoring(false);
+    }
+  };
+
+  // Fallback: ResumeWorded Scoring
+  const scoreResumeWithResumeWorded = async (resumeId) => {
+    try {
+      const response = await fetch("/api/resume/score/resumeworded", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resumeId }),
+      });
+      
+      return await response.json();
+    } catch (error) {
+      console.error("ResumeWorded scoring error:", error);
+      return null;
+    }
+  };
+
+  // Get Improvement Suggestions
+  const getImprovementSuggestions = async (resumeId) => {
+    try {
+      const response = await fetch("/api/resume/suggestions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resumeId }),
+      });
+      
+      const data = await response.json();
+      setSuggestions(data.suggestions);
+      return data.suggestions;
+    } catch (error) {
+      console.error("Suggestions error:", error);
+      return [];
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      // Step 1: Parse resume
+      const parsedData = await parseResumeWithAffinda(file);
+      
+      // Step 2: Upload to backend
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("parsedData", JSON.stringify(parsedData));
+      
+      const response = await resumeService.uploadResume(formData);
+      
+      if (response.success) {
+        // Step 3: Score the resume
+        await scoreResumeWithJobscan(response.data.id);
+        
+        // Step 4: Get suggestions
+        await getImprovementSuggestions(response.data.id);
+        
+        await fetchResumes();
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+    } finally {
+      setUploading(false);
+      setShowUploadOptions(false);
+    }
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -134,420 +206,312 @@ export default function StudentATSResume() {
     }
   };
 
-  const handleFileChange = (e) => {
-    handleFileUpload(e);
-    setShowUploadOptions(false);
-  };
-
-  const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      setTimeout(async () => {
-        try {
-          const response = await resumeService.uploadResume({
-            name: file.name,
-            fileUrl: "/temp/" + file.name,
-            fileName: file.name,
-            fileSize: file.size,
-          });
-
-          if (response.success) {
-            await fetchResumes();
-          }
-        } catch (error) {
-          console.error("Upload error:", error);
-        } finally {
-          setUploading(false);
-        }
-      }, 2000);
-    } catch (error) {
-      console.error("Upload error:", error);
-      setUploading(false);
-    }
-  };
-
-  const handleDuplicate = async (id) => {
-    try {
-      const response = await resumeService.duplicateResume(id);
-      if (response.success) {
-        await fetchResumes();
-      }
-    } catch (error) {
-      console.error("Duplicate error:", error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this resume?")) return;
-
-    try {
-      const response = await resumeService.deleteResume(id);
-      if (response.success) {
-        await fetchResumes();
-      }
-    } catch (error) {
-      console.error("Delete error:", error);
-    }
-  };
-
-  const handleSetPrimary = async (id) => {
-    try {
-      const response = await resumeService.setPrimaryResume(id);
-      if (response.success) {
-        await fetchResumes();
-      }
-    } catch (error) {
-      console.error("Set primary error:", error);
-    }
-  };
-
-  const handleViewSuggestions = async (id) => {
-    try {
-      const response = await resumeService.getATSSuggestions(id);
-      if (response.success) {
-        setSelectedResume(response.data);
-      }
-    } catch (error) {
-      console.error("Get suggestions error:", error);
-    }
-  };
-
   const getScoreColor = (score) => {
-    if (score >= 80) return "text-green-400";
-    if (score >= 60) return "text-yellow-400";
-    return "text-red-400";
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+    if (score >= 80) return { bg: "from-green-500/20 to-green-600/20", border: "border-green-500/30", text: "text-green-400" };
+    if (score >= 60) return { bg: "from-yellow-500/20 to-yellow-600/20", border: "border-yellow-500/30", text: "text-yellow-400" };
+    return { bg: "from-red-500/20 to-red-600/20", border: "border-red-500/30", text: "text-red-400" };
   };
 
   return (
-    <div className="relative p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
-      {/* Enhanced Animated Background */}
+    <div className="relative min-h-screen p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
+      {/* Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10">
-        <div
-          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
-          style={{
-            background: "rgba(128,55,145,0.12)",
-            animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-          }}
-        />
-        <div
-          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl animate-pulse"
-          style={{
-            background: "rgba(184,123,209,0.08)",
-            animation: "pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-          }}
-        />
-        <div
-          className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-2xl"
-          style={{
-            background: "rgba(240,194,238,0.04)",
-          }}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(128,55,145,0.12)" }} />
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(184,123,209,0.10)" }} />
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-3 justify-between items-center mb-8">
-        <div>
-          <h1 className="text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white mb-2">
-            ATS Resume Manager
-          </h1>
-          <p className="text-white/60 text-sm">
-            Upload, optimize, and track your resumes
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative">
-            <button
-              onClick={() => setShowUploadOptions(!showUploadOptions)}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95"
-            >
-              <Upload className="w-4 h-4" />
-              <span>Upload Resume</span>
-              <ChevronDown
-                className={`w-4 h-4 transition-transform duration-200 ${
-                  showUploadOptions ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {/* Upload Options Dropdown */}
-            {showUploadOptions && (
-              <div className="absolute right-0 mt-2 w-56 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl overflow-hidden z-10 animate-fadeIn">
-                <div
-                  className={`p-4 border-b border-white/10 ${
-                    isDragging ? "bg-[#b87bd1]/20" : "bg-transparent"
-                  }`}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-white/30 rounded-lg cursor-pointer hover:bg-[#b87bd1]/10 transition-colors">
-                    <Upload className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white/60 mb-2" />
-                    <p className="text-sm text-center text-white/80">
-                      {isDragging
-                        ? "Drop your file here"
-                        : "Click or drag & drop PDF file"}
-                    </p>
-                    <p className="text-xs text-white/60 mt-1">Max. 5MB</p>
-                  </div>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept=".pdf"
-                    className="hidden"
-                  />
+      {/* Header */}
+      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#803791] to-[#6a2a6f] border border-[#b87bd1]/20 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/5 to-transparent opacity-50" />
+        <div className="relative p-4 sm:p-5 md:p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center shadow-lg bg-white/10 border border-white/20">
+                  <FileCheck className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                 </div>
-                <div className="p-2 bg-white/5 text-center">
-                  <p className="text-xs text-white/60">
-                    Supports: PDF (Max 5MB)
+                <div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">ATS Resume Manager</h1>
+                  <p className="text-white/70 text-sm sm:text-base">AI-powered resume optimization & tracking</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={() => setShowUploadOptions(!showUploadOptions)}
+                className="flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl bg-white/20 hover:bg-white/30 border border-white/30 text-white font-semibold transition-all"
+              >
+                <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Upload Resume</span>
+                <span className="sm:hidden">Upload</span>
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl bg-white text-[#803791] font-semibold hover:shadow-lg transition-all">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Create New</span>
+                <span className="sm:hidden">Create</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Upload Modal */}
+      <AnimatePresence>
+        {showUploadOptions && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowUploadOptions(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative w-full max-w-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-6 sm:p-8 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-2xl font-bold text-white mb-4">Upload Resume</h3>
+              <div
+                className={`relative p-8 sm:p-12 border-2 border-dashed rounded-xl cursor-pointer transition-all ${
+                  isDragging ? "border-[#b87bd1] bg-[#b87bd1]/10" : "border-white/30 hover:border-white/50 hover:bg-white/5"
+                }`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <div className="flex flex-col items-center text-center">
+                  <Upload className="w-16 h-16 text-white/60 mb-4" />
+                  <h4 className="text-lg font-semibold text-white mb-2">
+                    {isDragging ? "Drop your resume here" : "Click or drag & drop"}
+                  </h4>
+                  <p className="text-sm text-white/60 mb-4">PDF, DOCX up to 10MB</p>
+                  <p className="text-xs text-white/50">
+                    We'll automatically parse and score your resume with AI
                   </p>
                 </div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept=".pdf,.docx,.doc"
+                  className="hidden"
+                />
               </div>
-            )}
-          </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <button
-            onClick={() => setShowBuilder(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>Create New</span>
-          </button>
-        </div>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {[
+          { icon: FileText, label: "Total Resumes", value: resumes.length, color: "from-blue-500/20 to-blue-600/20", border: "border-blue-500/30" },
+          { icon: TrendingUp, label: "Avg ATS Score", value: "84%", color: "from-emerald-500/20 to-emerald-600/20", border: "border-emerald-500/30" },
+          { icon: Eye, label: "Total Views", value: "342", color: "from-purple-500/20 to-purple-600/20", border: "border-purple-500/30" },
+          { icon: Download, label: "Downloads", value: "127", color: "from-orange-500/20 to-orange-600/20", border: "border-orange-500/30" },
+        ].map((stat, idx) => {
+          const Icon = stat.icon;
+          return (
+            <div key={idx} className={`relative rounded-xl p-4 sm:p-5 bg-gradient-to-br ${stat.color} border ${stat.border} shadow-lg`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white/60 text-xs sm:text-sm font-medium mb-1">{stat.label}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-white">{stat.value}</p>
+                </div>
+                <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center">
+                  <Icon className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Resume List */}
-      <div className="space-y-4">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center h-96 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-sm">
-            <div className="relative">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-4 border-[#b87bd1]/30 rounded-full"></div>
-              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-[#b87bd1] border-t-transparent rounded-full animate-spin"></div>
+      {/* Tabs */}
+      <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+        {["resumes", "templates", "analysis"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+              activeTab === tab
+                ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white"
+                : "text-white/60 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Resumes Tab */}
+      {activeTab === "resumes" && (
+        <div className="space-y-4">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 rounded-2xl bg-white/5 border border-white/10">
+              <div className="w-16 h-16 border-4 border-[#b87bd1]/30 border-t-[#b87bd1] rounded-full animate-spin mb-4"></div>
+              <p className="text-white/70">Loading resumes...</p>
             </div>
-            <p className="mt-4 text-white/80 font-medium">
-              Loading your resumes...
-            </p>
-            <p className="text-sm text-white/60 mt-1">This may take a moment</p>
-          </div>
-        ) : resumes.length === 0 ? (
-          <div className="col-span-full flex flex-col items-center justify-center py-16 px-6 text-center bg-white/5 rounded-2xl border border-dashed border-white/20">
-            <FileText className="w-10 h-10 sm:w-12 sm:h-12 text-white/40 mb-3" />
-            <h3 className="text-lg font-medium text-white/90">
-              No Resumes Yet
-            </h3>
-            <p className="text-white/70 text-sm mt-1 mb-4 max-w-md">
-              Upload your first resume to get started with ATS optimization and
-              tracking.
-            </p>
-            <button
-              onClick={() => setShowUploadOptions(true)}
-              className="px-4 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white text-sm font-medium rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
-            >
-              <Upload className="w-4 h-4" />
-              Upload Resume
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {resumes.map((resume) => (
-              <motion.div
-                key={resume.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className={`group relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 ${
-                  resume.isPrimary
-                    ? "ring-2 ring-[#b87bd1] ring-offset-2 ring-offset-slate-950"
-                    : ""
-                }`}
+          ) : resumes.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 rounded-2xl bg-white/5 border border-dashed border-white/20">
+              <FileText className="w-16 h-16 text-white/30 mb-4" />
+              <h3 className="text-lg font-semibold text-white mb-2">No Resumes Yet</h3>
+              <p className="text-sm text-white/60 mb-4">Upload your first resume to get started</p>
+              <button
+                onClick={() => setShowUploadOptions(true)}
+                className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-semibold rounded-xl"
               >
-                {resume.isPrimary && (
-                  <div className="absolute top-3 right-3 z-10">
-                    <div className="flex items-center gap-1.5 bg-[#b87bd1] text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Primary</span>
+                Upload Resume
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {resumes.map((resume) => {
+                const scoreColors = getScoreColor(resume.atsScore || 0);
+                return (
+                  <motion.div
+                    key={resume.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="group relative rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:border-[#b87bd1]/50 hover:shadow-xl transition-all"
+                  >
+                    {resume.isPrimary && (
+                      <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-[#b87bd1] px-2.5 py-1 rounded-full">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                        <span className="text-xs font-bold text-white">Primary</span>
+                      </div>
+                    )}
+                    
+                    {/* Score Badge */}
+                    <div className="absolute top-3 left-3 z-10">
+                      <div className={`flex items-center gap-1.5 bg-gradient-to-r ${scoreColors.bg} border ${scoreColors.border} px-2.5 py-1 rounded-full`}>
+                        <div className={`w-2 h-2 rounded-full ${scoreColors.text.replace("text-", "bg-")}`}></div>
+                        <span className={`text-xs font-bold ${scoreColors.text}`}>{resume.atsScore || 0}%</span>
+                      </div>
                     </div>
+
+                    <div className="h-40 bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center relative">
+                      <FileText className="w-16 h-16 text-white/30" />
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#803791] to-[#b87bd1]"></div>
+                    </div>
+
+                    <div className="p-5 space-y-4">
+                      <div>
+                        <h3 className="font-semibold text-white truncate">{resume.name}</h3>
+                        <p className="text-xs text-white/60 mt-1">
+                          {resume.date ? new Date(resume.date).toLocaleDateString() : "Recently uploaded"}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                        <div className="flex items-center gap-2">
+                          <button className="p-2 text-white/60 hover:text-[#b87bd1] hover:bg-[#b87bd1]/20 rounded-lg transition-all">
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button className="p-2 text-white/60 hover:text-green-400 hover:bg-green-400/20 rounded-lg transition-all">
+                            <Download className="w-4 h-4" />
+                          </button>
+                          <button className="p-2 text-white/60 hover:text-purple-400 hover:bg-purple-400/20 rounded-lg transition-all">
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <button className="p-2 text-white/60 hover:text-red-400 hover:bg-red-400/20 rounded-lg transition-all">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Templates Tab */}
+      {activeTab === "templates" && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold text-white">ATS-Optimized Templates</h2>
+            <div className="flex items-center gap-2 text-xs text-white/60">
+              <Award className="w-4 h-4" />
+              <span>98% ATS Compatibility</span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {atsTemplates.map((template) => (
+              <div key={template.id} className="group relative rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:border-[#b87bd1]/50 hover:shadow-xl transition-all">
+                {!template.free && (
+                  <div className="absolute top-2 right-2 z-10 flex items-center gap-1 bg-gradient-to-r from-amber-500 to-orange-500 px-2 py-1 rounded-full">
+                    <Crown className="w-3 h-3 text-white" />
+                    <span className="text-xs font-bold text-white">PRO</span>
                   </div>
                 )}
-
-                {/* Score Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <div
-                    className={`flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full shadow-sm ${
-                      getScoreColor(resume.atsScore).includes("green")
-                        ? "text-green-400"
-                        : getScoreColor(resume.atsScore).includes("yellow")
-                        ? "text-yellow-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    <div
-                      className={`w-2 h-2 rounded-full ${
-                        getScoreColor(resume.atsScore).includes("green")
-                          ? "bg-green-500"
-                          : getScoreColor(resume.atsScore).includes("yellow")
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                      }`}
-                    ></div>
-                    <span>ATS Score: {resume.atsScore}/100</span>
+                
+                <div className="h-48 bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center relative">
+                  <div className="w-3/4 h-3/4 bg-white/5 rounded-sm border border-white/10 flex items-center justify-center">
+                    <Layout className="w-12 h-12 text-white/30" />
+                  </div>
+                  <div className="absolute top-2 left-2 px-2 py-1 bg-green-500/20 border border-green-500/30 rounded-full">
+                    <span className="text-xs font-bold text-green-400">{template.score}% ATS</span>
                   </div>
                 </div>
 
-                {/* Document Preview */}
-                <div className="relative h-40 bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
-                  <FileText className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white/30" />
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#803791] to-[#b87bd1]"></div>
-                </div>
-
-                <div className="p-5">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/20 flex items-center justify-center shadow-inner">
-                        <FileText className="w-5 h-5 text-[#b87bd1]" />
-                      </div>
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-semibold text-white truncate">
-                        {resume.name}
-                      </h3>
-                      <p className="text-xs text-white/60 mt-0.5">
-                        Uploaded {formatDate(resume.date)}
-                      </p>
-
-                      {/* Stats */}
-                      <div className="flex items-center gap-4 mt-3 text-xs text-white/60">
-                        <div className="flex items-center gap-1">
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>{resume.views} views</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Download className="w-3.5 h-3.5" />
-                          <span>{resume.downloads} downloads</span>
-                        </div>
-                      </div>
+                <div className="p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="font-semibold text-white">{template.name}</h3>
+                      <p className="text-xs text-white/60 mt-0.5">by {template.source}</p>
                     </div>
                   </div>
-
-                  <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        onClick={() => handleViewSuggestions(resume.id)}
-                        className="p-1.5 text-white/60 hover:text-[#b87bd1] hover:bg-[#b87bd1]/20 rounded-lg transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button className="p-1.5 text-white/60 hover:text-green-400 hover:bg-green-400/20 rounded-lg transition-colors">
-                        <Download className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDuplicate(resume.id)}
-                        className="p-1.5 text-white/60 hover:text-purple-400 hover:bg-purple-400/20 rounded-lg transition-colors"
-                      >
-                        <Copy className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleSetPrimary(resume.id)}
-                        className="p-1.5 text-white/60 hover:text-amber-400 hover:bg-amber-400/20 rounded-lg transition-colors"
-                        title="Set as Primary"
-                      >
-                        <Target
-                          className={`w-4 h-4 ${
-                            resume.isPrimary
-                              ? "fill-amber-400 text-amber-400"
-                              : ""
-                          }`}
-                        />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(resume.id)}
-                        className="p-1.5 text-white/60 hover:text-red-400 hover:bg-red-400/20 rounded-lg transition-colors"
-                        title="Delete Resume"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ATS Templates */}
-      <div className="mt-12">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-6">
-          ATS-Optimized Templates
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {atsTemplates.map((template) => (
-            <div
-              key={template.id}
-              className="group relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
-            >
-              {!template.free && (
-                <div className="absolute top-2 right-2">
-                  <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                    <Crown className="w-3 h-3" />
-                    <span>PRO</span>
-                  </div>
-                </div>
-              )}
-
-              <div className="h-40 bg-white/10 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-4/5 h-4/5 bg-white/5 shadow-inner rounded-sm border border-white/10 flex items-center justify-center">
-                    <FileText className="w-10 h-10 text-white/30" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-medium text-white">{template.name}</h3>
-                    <div className="flex items-center gap-1 mt-1">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span className="text-xs text-white/60">
-                        {template.score}% ATS Score
-                      </span>
-                    </div>
-                  </div>
-                  <button className="p-1.5 text-white/60 hover:text-[#b87bd1] hover:bg-[#b87bd1]/20 rounded-lg transition-colors">
-                    <Eye className="w-4 h-4" />
+                  <button className="w-full py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:shadow-lg text-white font-semibold rounded-lg transition-all">
+                    {template.free ? "Use Template" : "Upgrade to Access"}
                   </button>
                 </div>
-                <button className="w-full mt-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors">
-                  {template.free ? "Use Template" : "Upgrade to Pro"}
-                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Analysis Tab */}
+      {activeTab === "analysis" && (
+        <div className="space-y-4">
+          <div className="rounded-xl bg-white/5 border border-white/10 p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-white mb-6">ATS Analysis & Insights</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-white/60 uppercase">Parsing APIs</h3>
+                <div className="space-y-2">
+                  {["Affinda (Primary)", "RChilli (Fallback)", "Sovren"].map((api, idx) => (
+                    <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span className="text-sm text-white">{api}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-white/60 uppercase">Scoring APIs</h3>
+                <div className="space-y-2">
+                  {["Jobscan (Primary)", "ResumeWorded", "VMock"].map((api, idx) => (
+                    <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                      <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                      <span className="text-sm text-white">{api}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Upload Progress */}
       <AnimatePresence>
@@ -559,11 +523,13 @@ export default function StudentATSResume() {
             className="fixed bottom-6 right-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-2xl z-50"
           >
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-4 border-[#b87bd1]/30 border-t-[#b87bd1] animate-spin" />
+              <div className="w-12 h-12 border-4 border-[#b87bd1]/30 border-t-[#b87bd1] rounded-full animate-spin" />
               <div>
-                <h4 className="font-bold text-white">Analyzing Resume...</h4>
-                <p className="text-white/60 text-sm">
-                  Extracting keywords and calculating ATS score
+                <h4 className="font-bold text-white">
+                  {parsing ? "Parsing Resume..." : scoring ? "Scoring ATS..." : "Uploading..."}
+                </h4>
+                <p className="text-sm text-white/60">
+                  {parsing ? "Extracting data with AI" : scoring ? "Calculating compatibility" : "Processing file"}
                 </p>
               </div>
             </div>
