@@ -188,19 +188,19 @@ export default function PostNewJob() {
     const isOpen = openDropdown === name;
     return (
       <div className="relative">
-        <label className="block text-sm font-medium text-white/90 mb-2">
+        <label className="block text-xs sm:text-sm font-medium text-white/90 mb-2">
           {label} <span className="text-red-500">*</span>
         </label>
         <button
           type="button"
           onClick={() => setOpenDropdown(isOpen ? null : name)}
-          className="w-full flex items-center justify-between pl-10 pr-4 py-3 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all bg-transparent hover:border-white/20 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-between pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all bg-transparent hover:border-white/20 text-white disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
           disabled={loading}
         >
-          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" />
-          <span className="text-white">{value}</span>
+          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
+          <span className="text-white truncate">{value}</span>
           <ChevronDown
-            className={`w-5 h-5 text-white/70 transition-transform ${
+            className={`w-4 h-4 sm:w-5 sm:h-5 text-white/70 transition-transform flex-shrink-0 ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -212,17 +212,17 @@ export default function PostNewJob() {
                 key={option}
                 type="button"
                 onClick={() => handleSelectChange(name, option)}
-                className="w-full px-4 py-3 text-left hover:bg-white/6 transition-all flex items-center justify-between group"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-left hover:bg-white/6 transition-all flex items-center justify-between group text-sm sm:text-base"
               >
                 <span
-                  className={`font-medium ${
+                  className={`font-medium truncate ${
                     value === option ? "text-[#b87bd1]" : "text-white/90"
                   }`}
                 >
                   {option}
                 </span>
                 {value === option && (
-                  <Check className="w-5 h-5 text-[#b87bd1]" />
+                  <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#b87bd1] flex-shrink-0" />
                 )}
               </button>
             ))}
@@ -580,33 +580,35 @@ export default function PostNewJob() {
           </div>
 
           {/* Action Buttons */}
-          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-4 sm:p-5 md:p-6 lg:p-8 shadow-md">
-            <div className="flex flex-col sm:flex-row gap-4 justify-end">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-4 sm:p-5 md:p-6 shadow-md">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-end">
               <button
                 type="button"
                 onClick={() => handleSubmit("draft")}
                 disabled={loading}
-                className="px-6 py-3 sm:px-8 sm:py-4 bg-transparent border border-white/10 text-white/90 rounded-xl hover:bg-white/6 transition-all font-semibold flex items-center justify-center gap-3 shadow-sm hover:shadow-md hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                className="px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-transparent border border-white/10 text-white/90 rounded-lg sm:rounded-xl hover:bg-white/6 transition-all font-semibold flex items-center justify-center gap-2 sm:gap-3 shadow-sm hover:shadow-md hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 text-sm sm:text-base"
               >
                 {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                 ) : (
-                  <Save className="w-5 h-5 text-white/90" />
+                  <Save className="w-4 h-4 sm:w-5 sm:h-5 text-white/90" />
                 )}
-                {loading ? "Saving..." : "Save as Draft"}
+                <span className="hidden sm:inline">{loading ? "Saving..." : "Save as Draft"}</span>
+                <span className="sm:hidden">{loading ? "Save..." : "Draft"}</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleSubmit("publish")}
                 disabled={loading}
-                className="px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                className="px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg sm:rounded-xl hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold flex items-center justify-center gap-2 sm:gap-3 shadow-xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 text-sm sm:text-base"
               >
                 {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                 ) : (
-                  <Send className="w-5 h-5" />
+                  <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                 )}
-                {loading ? "Publishing..." : "Publish Job"}
+                <span className="hidden sm:inline">{loading ? "Publishing..." : "Publish Job"}</span>
+                <span className="sm:hidden">{loading ? "Publish..." : "Publish"}</span>
               </button>
             </div>
           </div>

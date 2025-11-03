@@ -160,7 +160,7 @@ export default function PremiumEmployerDashboard() {
   ];
 
   return (
-    <div className="relative p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
+    <div className="relative p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
       {/* Original Decorative background orbs */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
@@ -178,9 +178,9 @@ export default function PremiumEmployerDashboard() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
       </div>
 
-      <div className="relative z-10 p-4 md:p-8 space-y-4 sm:space-y-5 md:space-y-6 max-w-[1600px] mx-auto">
+      <div className="relative z-10 p-0 sm:p-2 md:p-4 lg:p-8 space-y-4 sm:space-y-5 md:space-y-6 max-w-[1600px] mx-auto">
         {/* Premium Welcome Section */}
-        <div className="relative overflow-hidden rounded-xl sm:rounded-2xl sm:rounded-3xl group">
+        <div className="relative overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl group">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/90 via-purple-700/90 to-blue-600/90 backdrop-blur-xl" />
           <div className="absolute inset-0 opacity-20">
             <div
@@ -188,20 +188,20 @@ export default function PremiumEmployerDashboard() {
               style={{ mixBlendMode: "overlay" }}
             />
           </div>
-          <div className="relative p-8 md:p-10">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4 md:gap-6">
+          <div className="relative p-5 sm:p-6 md:p-8 lg:p-10">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-5 md:gap-6">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <Award className="w-8 h-8 text-amber-300" />
-                  <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-xl text-white text-sm font-medium border border-white/30">
+                <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                  <Award className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-amber-300" />
+                  <span className="px-2 py-1 sm:px-3 rounded-full bg-white/20 backdrop-blur-xl text-white text-xs sm:text-sm font-medium border border-white/30">
                     Premium Account
                   </span>
                 </div>
-                <h1 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl sm:text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl md:text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-2 sm:mb-3 tracking-tight">
                   Welcome back, Tech Solutions!
                 </h1>
-                <p className="text-white/90 text-lg mb-6 flex items-center gap-2">
-                  <Target className="w-5 h-5" />
+                <p className="text-white/90 text-sm sm:text-base md:text-lg mb-4 sm:mb-6 flex flex-wrap items-center gap-1 sm:gap-2">
+                  <Target className="w-4 h-4 sm:w-5 sm:h-5" />
                   You have{" "}
                   <span className="font-bold text-amber-300">
                     23 new applications
@@ -211,27 +211,28 @@ export default function PremiumEmployerDashboard() {
                     12 active job postings
                   </span>
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <button className="group/btn relative px-6 py-3 bg-white text-purple-700 rounded-xl font-semibold shadow-2xl shadow-white/20 transition-all hover:scale-105 hover:shadow-white/30 flex items-center gap-2 overflow-hidden">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <button className="group/btn relative px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 bg-white text-purple-700 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold shadow-2xl shadow-white/20 transition-all hover:scale-105 hover:shadow-white/30 flex items-center gap-1.5 sm:gap-2 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-white to-purple-50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                    <Plus className="w-5 h-5 relative z-10" />
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" />
                     <span className="relative z-10">Post New Job</span>
                   </button>
-                  <button className="px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white rounded-xl font-semibold border border-white/30 transition-all hover:scale-105 flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    Browse Candidates
+                  <button className="px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold border border-white/30 transition-all hover:scale-105 flex items-center gap-1.5 sm:gap-2">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="hidden sm:inline">Browse Candidates</span>
+                    <span className="sm:hidden">Candidates</span>
                   </button>
-                  <button className="px-6 py-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl text-white rounded-xl font-semibold border border-white/20 transition-all hover:scale-105 flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5" />
+                  <button className="px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl text-white rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold border border-white/20 transition-all hover:scale-105 flex items-center gap-1.5 sm:gap-2">
+                    <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
                     Analytics
                   </button>
                 </div>
               </div>
               <div className="hidden lg:block">
-                <div className="relative w-32 h-32">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-xl sm:rounded-2xl sm:rounded-3xl backdrop-blur-xl border border-white/30 shadow-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-xl sm:rounded-2xl sm:rounded-3xl backdrop-blur-xl border border-white/40 shadow-2xl flex items-center justify-center transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
-                    <TrendingUp className="w-16 h-16 text-white" />
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-xl sm:rounded-2xl backdrop-blur-xl border border-white/30 shadow-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-xl sm:rounded-2xl backdrop-blur-xl border border-white/40 shadow-2xl flex items-center justify-center transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
+                    <TrendingUp className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white" />
                   </div>
                 </div>
               </div>
@@ -249,7 +250,7 @@ export default function PremiumEmployerDashboard() {
                 key={index}
                 onMouseEnter={() => setHoveredStat(index)}
                 onMouseLeave={() => setHoveredStat(null)}
-                className="group relative rounded-xl sm:rounded-2xl p-6 transition-all duration-300 cursor-pointer"
+                className="group relative rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 transition-all duration-300 cursor-pointer"
                 style={{
                   background:
                     hoveredStat === index
@@ -273,9 +274,9 @@ export default function PremiumEmployerDashboard() {
                 />
 
                 <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start justify-between mb-3 sm:mb-4">
                     <div
-                      className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6`}
+                      className={`w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6`}
                       style={{
                         boxShadow:
                           hoveredStat === index
@@ -283,10 +284,10 @@ export default function PremiumEmployerDashboard() {
                             : "none",
                       }}
                     >
-                      <Icon className="w-7 h-7 text-white" />
+                      <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                     </div>
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-500/20 backdrop-blur-xl border border-emerald-500/30">
-                      <TrendIcon className="w-3 h-3 text-emerald-400" />
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg bg-emerald-500/20 backdrop-blur-xl border border-emerald-500/30">
+                      <TrendIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400" />
                       <span className="text-xs font-bold text-emerald-400">
                         {stat.percentage}
                       </span>
@@ -294,13 +295,13 @@ export default function PremiumEmployerDashboard() {
                   </div>
 
                   <div className="space-y-1">
-                    <div className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl sm:text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl md:text-4xl font-black text-white tracking-tight">
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
                       {stat.value}
                     </div>
-                    <div className="text-sm font-medium text-slate-300">
+                    <div className="text-xs sm:text-sm font-medium text-slate-300">
                       {stat.label}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-400 pt-2 border-t border-white/10">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-slate-400 pt-1.5 sm:pt-2 border-t border-white/10">
                       <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       {stat.change}
                     </div>
@@ -308,7 +309,7 @@ export default function PremiumEmployerDashboard() {
                 </div>
 
                 {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/5 to-transparent rounded-xl sm:rounded-2xl transform translate-x-6 -translate-y-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute top-0 right-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-white/5 to-transparent rounded-xl sm:rounded-2xl transform translate-x-4 -translate-y-4 sm:translate-x-6 sm:-translate-y-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             );
           })}

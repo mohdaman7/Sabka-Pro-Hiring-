@@ -185,7 +185,7 @@ export default function EmployerApplications() {
   }, [applications, search, stage, sortBy]);
 
   return (
-    <div className="relative p-8 space-y-8 min-h-screen overflow-hidden">
+    <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8 min-h-screen overflow-hidden">
       {/* Sophisticated Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         {/* Primary gradient orbs */}
@@ -232,7 +232,7 @@ export default function EmployerApplications() {
 
       {/* Ultra Premium Header */}
       <div
-        className="relative overflow-hidden rounded-[32px] shadow-[0_20px_80px_-20px_rgba(128,55,145,0.5)] backdrop-blur-xl group transition-all duration-700 hover:shadow-[0_30px_100px_-20px_rgba(128,55,145,0.6)]"
+        className="relative overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-[32px] shadow-[0_20px_80px_-20px_rgba(128,55,145,0.5)] backdrop-blur-xl group transition-all duration-700 hover:shadow-[0_30px_100px_-20px_rgba(128,55,145,0.6)]"
         style={{
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
@@ -250,73 +250,73 @@ export default function EmployerApplications() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
         </div>
 
-        <div className="relative p-10">
-          <div className="flex items-start justify-between">
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
+        <div className="relative p-4 sm:p-6 md:p-8 lg:p-10">
+          <div className="flex flex-col lg:flex-row items-start justify-between gap-4 sm:gap-6">
+            <div className="space-y-3 sm:space-y-4 flex-1">
+              <div className="flex items-center gap-3 sm:gap-4">
                 {/* Premium icon container */}
                 <div className="relative group/icon">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[24px] blur-xl opacity-50 group-hover/icon:opacity-75 transition-all duration-500" />
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl sm:rounded-[24px] blur-xl opacity-50 group-hover/icon:opacity-75 transition-all duration-500" />
                   <div
-                    className="relative w-20 h-20 rounded-[20px] flex items-center justify-center shadow-2xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-500"
+                    className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-[20px] flex items-center justify-center shadow-2xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-500"
                     style={{
                       background:
                         "linear-gradient(135deg,#803791 0%,#b87bd1 100%)",
                     }}
                   >
-                    <Users className="w-9 h-9 text-white" strokeWidth={2.5} />
+                    <Users className="w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 text-white" strokeWidth={2.5} />
                   </div>
                 </div>
 
                 <div>
-                  <h1 className="text-5xl font-black tracking-tight mb-2">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-1 sm:mb-2">
                     <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
                       Applications Dashboard
                     </span>
                   </h1>
-                  <p className="text-white/60 text-lg font-medium">
+                  <p className="text-white/60 text-sm sm:text-base md:text-lg font-medium">
                     Advanced candidate management with real-time insights
                   </p>
                 </div>
               </div>
 
               {/* Live stats ticker */}
-              <div className="flex items-center gap-3 sm:gap-4 md:gap-6 pl-24">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 pl-0 sm:pl-16 md:pl-20 lg:pl-24">
                 <div className="flex items-center gap-2 text-white/70">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                  <span className="text-sm font-semibold">
+                  <span className="text-xs sm:text-sm font-semibold">
                     {applications.length} Active
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-white/70">
-                  <TrendingUp className="w-4 h-4" />
-                  <span className="text-sm font-semibold">Live Updates</span>
+                  <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="text-xs sm:text-sm font-semibold">Live Updates</span>
                 </div>
               </div>
             </div>
 
             {/* Premium action buttons */}
-            <div className="flex items-center gap-3">
-              <button className="group/btn relative px-7 py-4 rounded-xl sm:rounded-2xl font-bold text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30">
+            <div className="flex items-center gap-2 sm:gap-3 w-full lg:w-auto">
+              <button className="group/btn relative px-4 py-2.5 sm:px-5 sm:py-3 md:px-7 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30 flex-1 lg:flex-initial">
                 <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-all duration-500" />
-                <span className="relative flex items-center gap-2.5">
+                <span className="relative flex items-center justify-center gap-1.5 sm:gap-2.5">
                   <Download
-                    className="w-5 h-5 group-hover/btn:rotate-12 transition-transform duration-500"
+                    className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:rotate-12 transition-transform duration-500"
                     strokeWidth={2.5}
                   />
-                  Export
+                  <span className="hidden sm:inline">Export</span>
                 </span>
               </button>
 
-              <button className="group/btn relative px-7 py-4 rounded-xl sm:rounded-2xl font-bold text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]">
+              <button className="group/btn relative px-4 py-2.5 sm:px-5 sm:py-3 md:px-7 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)] flex-1 lg:flex-initial">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] transition-transform group-hover/btn:scale-110 duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
-                <span className="relative flex items-center gap-2.5">
+                <span className="relative flex items-center justify-center gap-1.5 sm:gap-2.5">
                   <Filter
-                    className="w-5 h-5 group-hover/btn:rotate-180 transition-transform duration-700"
+                    className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:rotate-180 transition-transform duration-700"
                     strokeWidth={2.5}
                   />
-                  Filters
+                  <span className="hidden sm:inline">Filters</span>
                 </span>
               </button>
             </div>
@@ -325,7 +325,7 @@ export default function EmployerApplications() {
       </div>
 
       {/* Premium Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
         {stages.map((stat, index) => {
           const Icon = stat.icon;
           const isActive = stage === stat.value;
