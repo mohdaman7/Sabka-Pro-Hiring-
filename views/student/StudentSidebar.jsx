@@ -224,8 +224,8 @@ export default function StudentSidebar({ isOpen, onClose }) {
         </div>
 
         {/* Main Navigation */}
-        <nav className="flex-1 flex flex-col p-3 overflow-y-auto">
-          <div className="space-y-2 overflow-y-auto premium-scrollbar">
+        <nav className="flex-1 flex flex-col p-3 overflow-y-auto overflow-x-hidden">
+          <div className="space-y-2 overflow-y-auto overflow-x-hidden premium-scrollbar">
             {navigation.map((item, index) => {
               // Check if this is a dropdown item
               if (item.isDropdown) {
