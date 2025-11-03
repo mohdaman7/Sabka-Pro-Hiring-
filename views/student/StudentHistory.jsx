@@ -185,34 +185,34 @@ export default function StudentHistory() {
   };
 
   return (
-    <div className="min-h-screen p-6 space-y-4 sm:space-y-5 md:space-y-6 bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent">
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-5 md:space-y-6 bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent">
       {/* Header */}
-      <div className="relative overflow-hidden rounded-2xl p-8 bg-white/5 backdrop-blur-md border border-[#803791]/10 text-white shadow-xl">
-        <div className="absolute -right-8 -top-10 w-64 h-64 bg-[#803791]/25 rounded-full blur-3xl"></div>
-        <div className="absolute -left-6 bottom-6 w-48 h-48 bg-[#b87bd1]/12 rounded-full blur-2xl"></div>
-        <div className="relative flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3 sm:gap-4 md:gap-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-[#803791] to-[#b87bd1] rounded-2xl flex items-center justify-center shadow-lg">
-              <Clock className="w-10 h-10 text-white" />
+      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 bg-white/5 backdrop-blur-md border border-[#803791]/10 text-white shadow-xl">
+        <div className="absolute -right-4 -top-5 sm:-right-8 sm:-top-10 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-[#803791]/25 rounded-full blur-2xl sm:blur-3xl"></div>
+        <div className="absolute -left-3 bottom-3 sm:-left-6 sm:bottom-6 w-24 h-24 sm:w-36 sm:h-36 md:w-48 md:h-48 bg-[#b87bd1]/12 rounded-full blur-xl sm:blur-2xl"></div>
+        <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
+          <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#803791] to-[#b87bd1] rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg">
+              <Clock className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" />
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-white">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2 text-white">
                 Activity History
               </h1>
-              <p className="text-white/80 text-lg">
+              <p className="text-white/80 text-sm sm:text-base md:text-lg">
                 Track your job applications, course progress, and interviews
               </p>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white/90 mb-2">47</div>
-            <div className="text-white/70">Total Activities</div>
+          <div className="text-left sm:text-right">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white/90 mb-1 sm:mb-2">47</div>
+            <div className="text-white/70 text-xs sm:text-sm">Total Activities</div>
           </div>
         </div>
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {[
           {
             label: "Jobs Applied",
@@ -231,23 +231,23 @@ export default function StudentHistory() {
         ].map((stat, index) => (
           <div
             key={index}
-            className="bg-white/5 backdrop-blur-sm border border-[#803791]/8 rounded-2xl p-5 shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
+            className="bg-white/5 backdrop-blur-sm border border-[#803791]/8 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
           >
             <div className="flex items-center justify-between mb-3">
               <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center`}
+                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center`}
                 style={{
                   background: "linear-gradient(135deg,#803791,#b87bd1)",
                 }}
               >
-                <stat.icon className={`w-6 h-6 text-white`} />
+                <stat.icon className={`w-5 h-5 sm:w-6 sm:h-6 text-white`} />
               </div>
               <div className="flex items-center gap-1 text-emerald-400 text-sm font-semibold">
                 <TrendingUp className="w-4 h-4" />
                 {stat.change}
               </div>
             </div>
-            <div className="text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white mb-1">
+            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1">
               {stat.value}
             </div>
             <div className="text-sm text-white/80">{stat.label}</div>
@@ -258,7 +258,7 @@ export default function StudentHistory() {
       {/* Tabs and Filters */}
       <div className="bg-white/5 backdrop-blur-sm border border-[#803791]/8 rounded-2xl p-3 shadow-md">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex space-x-2 flex-1">
+          <div className="grid grid-cols-2 lg:flex lg:space-x-2 gap-2 lg:gap-0 flex-1">
             {[
               { id: "applications", name: "Job Applications", icon: Briefcase },
               { id: "courses", name: "Course Progress", icon: GraduationCap },
@@ -268,31 +268,32 @@ export default function StudentHistory() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-3 px-4 py-2 rounded-lg font-semibold transition-all flex-1 justify-center ${
+                className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm transition-all flex-1 justify-center ${
                   activeTab === tab.id
                     ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg"
                     : "text-white/80 hover:bg-white/5"
                 }`}
               >
-                <tab.icon className="w-5 h-5" />
-                {tab.name}
+                <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">{tab.name}</span>
+                <span className="sm:hidden">{tab.name.split(' ')[0]}</span>
               </button>
             ))}
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+              <Search className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
               <input
                 type="text"
-                placeholder="Search history..."
-                className="pl-10 pr-4 py-2 bg-white/5 text-white placeholder-white/60 border border-[#803791]/8 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all"
+                placeholder="Search..."
+                className="pl-8 sm:pl-10 pr-2 sm:pr-4 py-2 text-sm bg-white/5 text-white placeholder-white/60 border border-[#803791]/8 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all w-full sm:w-auto"
               />
             </div>
             <select
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="px-4 py-2 bg-fuchsia-900 text-white border border-[#803791]/8 rounded-lg focus:ring-2 focus:ring-[#803791]/30 transition-all"
+              className="px-3 py-2 text-sm bg-fuchsia-900 text-white border border-[#803791]/8 rounded-lg focus:ring-2 focus:ring-[#803791]/30 transition-all"
             >
               <option value="all">All Time</option>
               <option value="week">This Week</option>
@@ -309,10 +310,10 @@ export default function StudentHistory() {
           {applicationHistory.map((application) => (
             <div
               key={application.id}
-              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300"
+              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300"
             >
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-start gap-4">
+              <div className="flex flex-col sm:flex-row items-start justify-between mb-4 sm:mb-5 md:mb-6 gap-3 sm:gap-0">
+                <div className="flex items-start gap-3 sm:gap-4">
                   <div
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center"
                     style={{
@@ -325,10 +326,10 @@ export default function StudentHistory() {
                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
                       {application.jobTitle}
                     </h3>
-                    <p className="text-white/80 text-lg mb-2">
+                    <p className="text-white/80 text-sm sm:text-base mb-2">
                       {application.company}
                     </p>
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-sm text-white/70">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm text-white/70">
                       <span className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
                         {application.location}
@@ -343,14 +344,14 @@ export default function StudentHistory() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="flex items-center gap-1 px-3 py-1 bg-emerald-900/10 rounded-full border border-emerald-800/10">
-                    <span className="text-sm font-semibold text-emerald-300">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <div className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1 bg-emerald-900/10 rounded-full border border-emerald-800/10">
+                    <span className="text-xs sm:text-sm font-semibold text-emerald-300">
                       {application.matchScore}% Match
                     </span>
                   </div>
                   <div
-                    className={`px-4 py-2 rounded-full border text-sm font-semibold flex items-center gap-2 ${getStatusColor(
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs sm:text-sm font-semibold flex items-center gap-1.5 sm:gap-2 ${getStatusColor(
                       application.status
                     )}`}
                   >
@@ -361,11 +362,42 @@ export default function StudentHistory() {
               </div>
 
               {/* Timeline */}
-              <div className="border-t border-[#803791]/6 pt-6">
-                <h4 className="text-lg font-semibold text-white mb-4">
+              <div className="border-t border-[#803791]/6 pt-4 sm:pt-6">
+                <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
                   Application Timeline
                 </h4>
-                <div className="flex items-center justify-between relative">
+                
+                {/* Mobile Timeline - Vertical */}
+                <div className="sm:hidden space-y-3">
+                  {application.timeline.map((step, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          step.status === "completed"
+                            ? "bg-emerald-500 text-white"
+                            : step.status === "upcoming"
+                            ? "bg-[#803791] text-white"
+                            : "bg-slate-500 text-white"
+                        }`}
+                      >
+                        {step.status === "completed" ? (
+                          <CheckCircle className="w-4 h-4" />
+                        ) : step.status === "upcoming" ? (
+                          <Clock4 className="w-4 h-4" />
+                        ) : (
+                          <div className="w-2 h-2 bg-slate-300 rounded-full"></div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-white">{step.action}</div>
+                        <div className="text-xs text-white/70">{step.date}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Desktop Timeline - Horizontal */}
+                <div className="hidden sm:flex items-center justify-between relative">
                   {application.timeline.map((step, index) => (
                     <div
                       key={index}
@@ -388,7 +420,7 @@ export default function StudentHistory() {
                           <div className="w-2 h-2 bg-slate-300 rounded-full"></div>
                         )}
                       </div>
-                      <div className="text-sm font-medium text-white mb-1">
+                      <div className="text-xs sm:text-sm font-medium text-white mb-1">
                         {step.action}
                       </div>
                       <div className="text-xs text-white/70">{step.date}</div>
@@ -415,9 +447,9 @@ export default function StudentHistory() {
           {courseHistory.map((course) => (
             <div
               key={course.id}
-              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-md hover:shadow-lg transition-all duration-300"
             >
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex flex-col sm:flex-row items-start justify-between mb-4 sm:mb-5 md:mb-6 gap-3 sm:gap-0">
                 <div className="flex items-start gap-4">
                   <div
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center"
@@ -431,7 +463,7 @@ export default function StudentHistory() {
                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
                       {course.title}
                     </h3>
-                    <p className="text-white/80 mb-2">{course.category}</p>
+                    <p className="text-white/80 text-sm sm:text-base mb-2">{course.category}</p>
                     <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-sm text-white/70">
                       <span>{course.duration}</span>
                       <span>
@@ -443,12 +475,12 @@ export default function StudentHistory() {
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3">
                   {course.certificate && (
-                    <button className="px-4 py-2 bg-amber-900/10 hover:bg-amber-900/15 text-amber-300 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 border border-amber-900/10">
+                    <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-amber-900/10 hover:bg-amber-900/15 text-amber-300 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 border border-amber-900/10">
                       <Download className="w-4 h-4" />
                       Certificate
                     </button>
                   )}
-                  <button className="px-4 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                  <button className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all flex items-center gap-2">
                     <PlayCircle className="w-4 h-4" />
                     Continue
                   </button>
@@ -485,7 +517,7 @@ export default function StudentHistory() {
           {interviewHistory.map((interview) => (
             <div
               key={interview.id}
-              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+              className="bg-white/5 backdrop-blur-md border border-[#803791]/8 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-md hover:shadow-lg transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">
@@ -501,7 +533,7 @@ export default function StudentHistory() {
                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
                       {interview.position}
                     </h3>
-                    <p className="text-white/80 text-lg mb-2">
+                    <p className="text-white/80 text-sm sm:text-base mb-2">
                       {interview.company}
                     </p>
                     <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-sm text-white/70">
@@ -515,7 +547,7 @@ export default function StudentHistory() {
                   </div>
                 </div>
                 <div
-                  className={`px-4 py-2 rounded-full border text-sm font-semibold flex items-center gap-2 ${getStatusColor(
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs sm:text-sm font-semibold flex items-center gap-1.5 sm:gap-2 ${getStatusColor(
                     interview.status
                   )}`}
                 >
@@ -525,7 +557,7 @@ export default function StudentHistory() {
               </div>
 
               {interview.feedback && (
-                <div className="bg-white/5 rounded-xl p-4 border border-[#803791]/6">
+                <div className="bg-white/5 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-[#803791]/6">
                   <h4 className="font-semibold text-white mb-2">
                     Interview Feedback
                   </h4>
@@ -534,12 +566,12 @@ export default function StudentHistory() {
               )}
 
               <div className="flex items-center gap-2 sm:gap-3 mt-4">
-                <button className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                <button className="px-3 py-1.5 sm:px-4 sm:py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all flex items-center gap-2">
                   <Eye className="w-4 h-4" />
                   View Details
                 </button>
                 {interview.status === "Upcoming" && (
-                  <button className="px-4 py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                  <button className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all flex items-center gap-2">
                     <Video className="w-4 h-4" />
                     Join Interview
                   </button>
