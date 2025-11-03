@@ -364,30 +364,31 @@ export default function StudentDashboard() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <button className="p-3 rounded-xl bg-white/8 hover:bg-white/12 border border-white/15 transition-all hover:scale-110 shadow-lg">
-                  <Filter className="w-5 h-5 text-slate-200" strokeWidth={2.5} />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white/8 hover:bg-white/12 border border-white/15 transition-all hover:scale-110 shadow-lg">
+                  <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-slate-200" strokeWidth={2.5} />
                 </button>
-                <button className="p-3 rounded-xl bg-white/8 hover:bg-white/12 border border-white/15 transition-all hover:scale-110 shadow-lg">
+                <button className="hidden sm:block p-3 rounded-xl bg-white/8 hover:bg-white/12 border border-white/15 transition-all hover:scale-110 shadow-lg">
                   <Search className="w-5 h-5 text-slate-200" strokeWidth={2.5} />
                 </button>
                 <a
                   href="/student/jobs"
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-purple-600/25 hover:bg-purple-600/35 border border-purple-500/40 text-purple-200 text-sm font-black transition-all hover:scale-110 shadow-lg"
+                  className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-5 sm:py-3 rounded-lg sm:rounded-xl bg-purple-600/25 hover:bg-purple-600/35 border border-purple-500/40 text-purple-200 text-xs sm:text-sm font-black transition-all hover:scale-110 shadow-lg"
                 >
-                  View All
-                  <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
+                  <span className="hidden sm:inline">View All</span>
+                  <span className="sm:hidden">All</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                 </a>
               </div>
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-3 sm:space-y-4 md:space-y-5">
               {recommendedJobs.map((job) => (
                 <div
                   key={job.id}
                   onMouseEnter={() => setHoveredJob(job.id)}
                   onMouseLeave={() => setHoveredJob(null)}
-                  className="group relative rounded-2xl p-6 bg-white/5 hover:bg-white/8 border border-white/15 transition-all duration-300 cursor-pointer"
+                  className="group relative rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 bg-white/5 hover:bg-white/8 border border-white/15 transition-all duration-300 cursor-pointer"
                   style={{
                     transform:
                       hoveredJob === job.id
@@ -399,10 +400,10 @@ export default function StudentDashboard() {
                         : "0 6px 20px rgba(0,0,0,0.3)",
                   }}
                 >
-                  <div className="flex items-start justify-between mb-5">
-                    <div className="flex items-start gap-5">
+                  <div className="flex flex-col sm:flex-row items-start justify-between mb-3 sm:mb-4 md:mb-5 gap-3 sm:gap-0">
+                    <div className="flex items-start gap-3 sm:gap-4 md:gap-5">
                       <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black text-base shadow-2xl group-hover:scale-110 transition-transform"
+                        className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-black text-sm sm:text-base shadow-2xl group-hover:scale-110 transition-transform"
                         style={{
                           background:
                             "linear-gradient(135deg, #803791, #b87bd1)",
@@ -411,62 +412,62 @@ export default function StudentDashboard() {
                         {job.companyInitials}
                       </div>
                       <div>
-                        <h3 className="font-black text-white mb-2 text-xl group-hover:text-purple-200 transition-colors">
+                        <h3 className="font-black text-white mb-1 sm:mb-2 text-base sm:text-lg md:text-xl group-hover:text-purple-200 transition-colors">
                           {job.title}
                         </h3>
-                        <p className="text-base text-slate-300 font-semibold">
+                        <p className="text-sm sm:text-base text-slate-300 font-semibold">
                           {job.company}
                         </p>
                       </div>
                     </div>
                     <div
-                      className="flex items-center gap-2 px-4 py-2 rounded-2xl backdrop-blur-sm shadow-lg"
+                      className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl backdrop-blur-sm shadow-lg"
                       style={{
                         background:
                           "linear-gradient(135deg, rgba(184,123,209,0.2), rgba(128,55,145,0.15))",
                         border: "1.5px solid rgba(184,123,209,0.4)",
                       }}
                     >
-                      <Sparkles className="w-5 h-5 text-yellow-300" strokeWidth={2.5} />
-                      <span className="text-base font-black text-white">
+                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-300" strokeWidth={2.5} />
+                      <span className="text-sm sm:text-base font-black text-white">
                         {job.matchScore}%
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-3 mb-5">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-5">
                     {job.tags.map((tag, i) => (
                       <span
                         key={i}
-                        className="px-4 py-2 rounded-xl text-sm font-bold text-white border bg-purple-500/15 border-purple-500/30 shadow-lg"
+                        className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold text-white border bg-purple-500/15 border-purple-500/30 shadow-lg"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  <div className="flex flex-wrap gap-3 text-base text-slate-200 mb-5">
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/8 backdrop-blur-xl border border-white/10 font-semibold">
-                      <MapPin className="w-5 h-5 text-purple-400" strokeWidth={2.5} />
+                  <div className="flex flex-wrap gap-2 sm:gap-3 text-sm sm:text-base text-slate-200 mb-3 sm:mb-4 md:mb-5">
+                    <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-white/8 backdrop-blur-xl border border-white/10 font-semibold">
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" strokeWidth={2.5} />
                       {job.location}
                     </div>
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/8 backdrop-blur-xl border border-white/10 font-semibold">
-                      <Briefcase className="w-5 h-5 text-blue-400" strokeWidth={2.5} />
+                    <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-white/8 backdrop-blur-xl border border-white/10 font-semibold">
+                      <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" strokeWidth={2.5} />
                       {job.type}
                     </div>
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/8 backdrop-blur-xl border border-white/10 font-semibold">
-                      <Clock className="w-5 h-5 text-emerald-400" strokeWidth={2.5} />
+                    <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-white/8 backdrop-blur-xl border border-white/10 font-semibold">
+                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" strokeWidth={2.5} />
                       {job.postedDate}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-5 border-t border-white/15">
-                    <span className="text-2xl font-black text-white">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-3 sm:pt-4 md:pt-5 border-t border-white/15 gap-3 sm:gap-0">
+                    <span className="text-lg sm:text-xl md:text-2xl font-black text-white">
                       {job.salary}
                     </span>
-                    <button className="group/btn px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white rounded-2xl transition-all font-black text-base shadow-2xl hover:shadow-purple-500/50 hover:scale-110 flex items-center gap-2">
+                    <button className="group/btn w-full sm:w-auto px-6 py-2.5 sm:px-8 sm:py-3 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white rounded-xl sm:rounded-2xl transition-all font-black text-sm sm:text-base shadow-2xl hover:shadow-purple-500/50 hover:scale-105 sm:hover:scale-110 flex items-center justify-center gap-2">
                       Apply Now
-                      <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" strokeWidth={2.5} />
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform" strokeWidth={2.5} />
                     </button>
                   </div>
 
@@ -476,33 +477,33 @@ export default function StudentDashboard() {
             </div>
           </div>
 
-          {/* Upcoming Interviews - Enhanced */}
-          <div className="rounded-3xl p-8 md:p-10 bg-white/8 backdrop-blur-xl border border-white/15 shadow-2xl">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center shadow-2xl">
-                  <Calendar className="w-6 h-6 text-white" strokeWidth={2.5} />
+          {/* Upcoming Interviews - Enhanced & Responsive */}
+          <div className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 bg-white/8 backdrop-blur-xl border border-white/15 shadow-2xl">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center shadow-2xl">
+                  <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white">Interviews</h2>
-                  <p className="text-sm font-medium text-slate-300">Stay prepared</p>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-black text-white">Interviews</h2>
+                  <p className="text-xs sm:text-sm font-medium text-slate-300">Stay prepared</p>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-3 sm:space-y-4 md:space-y-5">
               {upcomingInterviews.map((interview) => (
                 <div
                   key={interview.id}
-                  className="group relative rounded-2xl p-6 bg-white/5 hover:bg-white/8 border border-white/15 transition-all duration-300 cursor-pointer hover:scale-[1.02]"
+                  className="group relative rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 bg-white/5 hover:bg-white/8 border border-white/15 transition-all duration-300 cursor-pointer hover:scale-[1.02]"
                   style={{
                     boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
                   }}
                 >
-                  <div className="flex items-start gap-4 mb-5">
+                  <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4 md:mb-5">
                     <div className="relative">
                       <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 font-black text-base text-white shadow-2xl group-hover:scale-110 transition-transform"
+                        className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 font-black text-sm sm:text-base text-white shadow-2xl group-hover:scale-110 transition-transform"
                         style={{
                           background:
                             "linear-gradient(135deg, #803791, #b87bd1)",
@@ -510,49 +511,49 @@ export default function StudentDashboard() {
                       >
                         {interview.avatar}
                       </div>
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center border-2 border-slate-950 shadow-lg">
-                        <Calendar className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+                      <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center border-2 border-slate-950 shadow-lg">
+                        <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" strokeWidth={2.5} />
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-white text-lg mb-2 group-hover:text-emerald-200 transition-colors">
+                      <h3 className="font-black text-white text-base sm:text-lg mb-1 sm:mb-2 group-hover:text-emerald-200 transition-colors">
                         {interview.position}
                       </h3>
-                      <p className="text-base text-slate-300 truncate font-semibold">
+                      <p className="text-sm sm:text-base text-slate-300 truncate font-semibold">
                         {interview.company}
                       </p>
                     </div>
                   </div>
 
-                  <div className="space-y-3 text-base">
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-white/8 border border-white/10">
-                      <span className="text-slate-300 flex items-center gap-2 font-semibold">
-                        <Calendar className="w-5 h-5" strokeWidth={2.5} />
+                  <div className="space-y-2 sm:space-y-3 text-sm sm:text-base">
+                    <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-white/8 border border-white/10">
+                      <span className="text-slate-300 flex items-center gap-1.5 sm:gap-2 font-semibold">
+                        <Calendar className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                         Date
                       </span>
                       <span className="font-black text-white">
                         {interview.date}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-white/8 border border-white/10">
-                      <span className="text-slate-300 flex items-center gap-2 font-semibold">
-                        <Clock className="w-5 h-5" strokeWidth={2.5} />
+                    <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-white/8 border border-white/10">
+                      <span className="text-slate-300 flex items-center gap-1.5 sm:gap-2 font-semibold">
+                        <Clock className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                         Time
                       </span>
                       <span className="font-black text-white">
                         {interview.time}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-white/8 border border-white/10">
+                    <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-white/8 border border-white/10">
                       <span className="text-slate-300 font-semibold">Mode</span>
-                      <span className="px-4 py-2 rounded-xl text-sm font-black bg-purple-500/25 text-purple-200 border border-purple-500/40 shadow-lg">
+                      <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-black bg-purple-500/25 text-purple-200 border border-purple-500/40 shadow-lg">
                         {interview.type}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-white/8 border border-white/10">
+                    <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-white/8 border border-white/10">
                       <span className="text-slate-300 font-semibold">Status</span>
                       <span
-                        className={`px-4 py-2 rounded-xl text-sm font-black ${
+                        className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-black ${
                           interview.status === "Confirmed"
                             ? "bg-emerald-500/25 text-emerald-200 border border-emerald-500/40 shadow-lg"
                             : "bg-amber-500/25 text-amber-200 border border-amber-500/40 shadow-lg"
@@ -563,17 +564,17 @@ export default function StudentDashboard() {
                     </div>
                   </div>
 
-                  <button className="w-full mt-6 px-5 py-3.5 bg-white/10 hover:bg-white/15 text-white rounded-2xl transition-all font-black border border-white/15 hover:border-emerald-500/40 group-hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2">
+                  <button className="w-full mt-4 sm:mt-5 md:mt-6 px-4 py-2.5 sm:px-5 sm:py-3.5 bg-white/10 hover:bg-white/15 text-white rounded-xl sm:rounded-2xl transition-all font-black text-sm sm:text-base border border-white/15 hover:border-emerald-500/40 group-hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2">
                     View Details
-                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
                   </button>
                 </div>
               ))}
             </div>
 
-            <button className="w-full mt-5 py-4 rounded-2xl bg-gradient-to-r from-emerald-600/25 to-blue-600/25 hover:from-emerald-600/35 hover:to-blue-600/35 border border-emerald-500/40 text-white font-black text-base transition-all hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+            <button className="w-full mt-4 sm:mt-5 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-600/25 to-blue-600/25 hover:from-emerald-600/35 hover:to-blue-600/35 border border-emerald-500/40 text-white font-black text-sm sm:text-base transition-all hover:scale-105 shadow-lg flex items-center justify-center gap-2">
               Schedule More
-              <Plus className="w-5 h-5" strokeWidth={2.5} />
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
             </button>
           </div>
         </div>
