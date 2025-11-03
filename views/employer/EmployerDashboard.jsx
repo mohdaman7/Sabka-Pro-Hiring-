@@ -164,11 +164,11 @@ export default function PremiumEmployerDashboard() {
       {/* Original Decorative background orbs */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -top-24 -left-24 w-96 h-80 sm:h-88 md:h-96 rounded-full blur-3xl"
           style={{ background: "rgba(128,55,145,0.08)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -bottom-32 -right-32 w-96 h-80 sm:h-88 md:h-96 rounded-full blur-3xl"
           style={{ background: "rgba(184,123,209,0.06)" }}
         />
         <div
@@ -479,7 +479,7 @@ export default function PremiumEmployerDashboard() {
                 >
                   <div className="flex items-start gap-3 mb-3">
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                         <span className="text-white font-bold text-lg">
                           {application.candidateName.charAt(0)}
                         </span>

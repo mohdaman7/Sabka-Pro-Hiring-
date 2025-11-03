@@ -333,7 +333,7 @@ export default function EmployerAnalytics() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
         <div className="group">
-          <h1 className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <Activity className="w-10 h-10 text-[#b87bd1] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
             Analytics Dashboard
           </h1>
@@ -341,7 +341,7 @@ export default function EmployerAnalytics() {
             Track your hiring performance and candidate engagement
           </p>
         </div>
-        <div className="flex gap-3 mt-4 lg:mt-0">
+        <div className="flex flex-wrap gap-2 sm:gap-3 mt-4 lg:mt-0">
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
@@ -768,7 +768,7 @@ export default function EmployerAnalytics() {
                 <TrendingUp className="w-8 h-8" />
               </div>
               <div>
-                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold">124%</div>
+                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-2xl sm:text-3xl md:text-4xl font-bold">124%</div>
                 <div className="text-white/90 font-semibold">
                   Growth in Applications
                 </div>
@@ -807,7 +807,7 @@ export default function EmployerAnalytics() {
                 <Users className="w-8 h-8" />
               </div>
               <div>
-                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold">2.3x</div>
+                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-2xl sm:text-3xl md:text-4xl font-bold">2.3x</div>
                 <div className="text-white/90 font-semibold">
                   More Qualified Candidates
                 </div>
@@ -846,7 +846,7 @@ export default function EmployerAnalytics() {
                 <DollarSign className="w-8 h-8" />
               </div>
               <div>
-                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold">₹1.2L</div>
+                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-2xl sm:text-3xl md:text-4xl font-bold">₹1.2L</div>
                 <div className="text-white/90 font-semibold">
                   Saved on Hiring
                 </div>

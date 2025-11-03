@@ -233,20 +233,20 @@ export default function PostNewJob() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-3 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Enhanced Header */}
-        <div className="relative bg-gradient-to-br from-[#803791] via-[#6a2a6f] to-[#b87bd1] rounded-xl sm:rounded-2xl p-10 text-white shadow-2xl mb-8 overflow-hidden transform-gpu will-change-transform hover:scale-[1.01] transition-transform">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#b87bd1]/20 rounded-full -translate-y-32 translate-x-32 blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#803791]/12 rounded-full translate-y-32 -translate-x-32 blur-3xl"></div>
+        <div className="relative bg-gradient-to-br from-[#803791] via-[#6a2a6f] to-[#b87bd1] rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 lg:p-10 text-white shadow-2xl mb-8 overflow-hidden transform-gpu will-change-transform hover:scale-[1.01] transition-transform">
+          <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-[#b87bd1]/20 rounded-full -translate-y-16 translate-x-16 sm:-translate-y-24 sm:translate-x-24 md:-translate-y-32 md:translate-x-32 blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-[#803791]/12 rounded-full translate-y-16 -translate-x-16 sm:translate-y-24 sm:-translate-x-24 md:translate-y-32 md:-translate-x-32 blur-3xl"></div>
           <div className="relative z-10">
-            <div className="flex items-center gap-4 mb-3">
-              <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center ring-2 ring-white/30">
-                <Briefcase className="w-7 h-7" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-3">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center ring-2 ring-white/30">
+                <Briefcase className="w-6 h-6 sm:w-7 sm:h-7" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold">Post a New Job</h1>
-                <p className="text-white/90 text-lg mt-1">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Post a New Job</h1>
+                <p className="text-white/90 text-sm sm:text-base md:text-lg mt-1">
                   Create an attractive job posting to find the best talent
                 </p>
               </div>
@@ -256,29 +256,29 @@ export default function PostNewJob() {
 
         <div className="space-y-4 sm:space-y-5 md:space-y-6">
           {/* Basic Information */}
-          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
-            <div className="flex items-center gap-3 mb-8">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-4 sm:p-5 md:p-6 lg:p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
                 style={{
                   background: "linear-gradient(135deg,#803791,#b87bd1)",
                 }}
               >
-                <FileText className="w-6 h-6 text-white" />
+                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white">
                   Basic Information
                 </h2>
-                <p className="text-sm text-white/75">
+                <p className="text-xs sm:text-sm text-white/75">
                   Essential details about the position
                 </p>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Job Title <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -289,14 +289,14 @@ export default function PostNewJob() {
                     value={formData.jobTitle}
                     onChange={handleInputChange}
                     placeholder="e.g. Senior Frontend Developer"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Department <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -307,14 +307,14 @@ export default function PostNewJob() {
                     value={formData.department}
                     onChange={handleInputChange}
                     placeholder="e.g. Engineering"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Location <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -325,7 +325,7 @@ export default function PostNewJob() {
                     value={formData.location}
                     onChange={handleInputChange}
                     placeholder="e.g. Mumbai, Maharashtra"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
@@ -350,29 +350,29 @@ export default function PostNewJob() {
           </div>
 
           {/* Job Requirements */}
-          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
-            <div className="flex items-center gap-3 mb-8">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-4 sm:p-5 md:p-6 lg:p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
                 style={{
                   background: "linear-gradient(135deg,#803791,#b87bd1)",
                 }}
               >
-                <Award className="w-6 h-6 text-white" />
+                <Award className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white">
                   Job Requirements
                 </h2>
-                <p className="text-sm text-white/75">
+                <p className="text-xs sm:text-sm text-white/75">
                   Qualifications and experience needed
                 </p>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Experience Required <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -383,14 +383,14 @@ export default function PostNewJob() {
                     value={formData.experience}
                     onChange={handleInputChange}
                     placeholder="e.g. 3-5 years"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Education <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -401,14 +401,14 @@ export default function PostNewJob() {
                     value={formData.education}
                     onChange={handleInputChange}
                     placeholder="e.g. Bachelor's in Computer Science"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Salary Range <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -419,14 +419,14 @@ export default function PostNewJob() {
                     value={formData.salary}
                     onChange={handleInputChange}
                     placeholder="e.g. ₹8-12 LPA"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Number of Vacancies <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -437,14 +437,14 @@ export default function PostNewJob() {
                     value={formData.vacancies}
                     onChange={handleInputChange}
                     min="1"
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Application Deadline <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
@@ -454,14 +454,14 @@ export default function PostNewJob() {
                     name="deadline"
                     value={formData.deadline}
                     onChange={handleInputChange}
-                    className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                   />
                 </div>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-white/90 mb-3">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-3">
                   Required Skills <span className="text-red-500">*</span>
                 </label>
                 <div className="flex gap-3 mb-4">
@@ -475,7 +475,7 @@ export default function PostNewJob() {
                         e.key === "Enter" && (e.preventDefault(), addSkill())
                       }
                       placeholder="Type a skill and press Enter"
-                      className="w-full pl-11 pr-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={loading}
                     />
                   </div>
@@ -493,7 +493,7 @@ export default function PostNewJob() {
                     {formData.skills.map((skill, index) => (
                       <span
                         key={index}
-                        className="px-4 py-2 bg-white/6 text-white rounded-full text-sm font-semibold border border-[#803791]/12 flex items-center gap-2 hover:border-[#803791]/20 hover:shadow-md transition-all group"
+                        className="px-4 py-2 bg-white/6 text-white rounded-full text-xs sm:text-sm font-semibold border border-[#803791]/12 flex items-center gap-2 hover:border-[#803791]/20 hover:shadow-md transition-all group"
                       >
                         {skill}
                         <button
@@ -513,19 +513,19 @@ export default function PostNewJob() {
           </div>
 
           {/* Job Details */}
-          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
-            <div className="flex items-center gap-3 mb-8">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-4 sm:p-5 md:p-6 lg:p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
                 style={{
                   background: "linear-gradient(135deg,#803791,#b87bd1)",
                 }}
               >
-                <FileText className="w-6 h-6 text-white" />
+                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">Job Details</h2>
-                <p className="text-sm text-white/75">
+                <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white">Job Details</h2>
+                <p className="text-xs sm:text-sm text-white/75">
                   Comprehensive role information
                 </p>
               </div>
@@ -533,7 +533,7 @@ export default function PostNewJob() {
 
             <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Job Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -542,13 +542,13 @@ export default function PostNewJob() {
                   onChange={handleInputChange}
                   rows="6"
                   placeholder="Provide a detailed description of the role, company culture, and what makes this opportunity unique..."
-                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Key Responsibilities <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -557,13 +557,13 @@ export default function PostNewJob() {
                   onChange={handleInputChange}
                   rows="6"
                   placeholder="• Responsibility 1&#10;• Responsibility 2&#10;• Responsibility 3"
-                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/90 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-white/90 mb-2">
                   Additional Requirements
                 </label>
                 <textarea
@@ -572,7 +572,7 @@ export default function PostNewJob() {
                   onChange={handleInputChange}
                   rows="5"
                   placeholder="Any additional requirements, certifications, or nice-to-have qualifications..."
-                  className="w-full px-4 py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 sm:py-3 md:py-3.5 border-2 border-white/10 rounded-lg focus:ring-2 focus:ring-[#803791]/30 focus:border-[#803791]/40 transition-all resize-none text-white placeholder-white/60 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={loading}
                 />
               </div>
@@ -580,13 +580,13 @@ export default function PostNewJob() {
           </div>
 
           {/* Action Buttons */}
-          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-4 sm:p-5 md:p-6 lg:p-8 shadow-md">
             <div className="flex flex-col sm:flex-row gap-4 justify-end">
               <button
                 type="button"
                 onClick={() => handleSubmit("draft")}
                 disabled={loading}
-                className="px-8 py-4 bg-transparent border border-white/10 text-white/90 rounded-xl hover:bg-white/6 transition-all font-semibold flex items-center justify-center gap-3 shadow-sm hover:shadow-md hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                className="px-6 py-3 sm:px-8 sm:py-4 bg-transparent border border-white/10 text-white/90 rounded-xl hover:bg-white/6 transition-all font-semibold flex items-center justify-center gap-3 shadow-sm hover:shadow-md hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -599,7 +599,7 @@ export default function PostNewJob() {
                 type="button"
                 onClick={() => handleSubmit("publish")}
                 disabled={loading}
-                className="px-8 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                className="px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl hover:from-[#6a2a6f] hover:to-[#a36bc2] transition-all font-semibold flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

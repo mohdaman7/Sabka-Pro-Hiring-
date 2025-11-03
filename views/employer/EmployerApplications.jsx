@@ -828,7 +828,7 @@ export default function EmployerApplications() {
                             {app.studentId.education.map((edu, index) => (
                               <div
                                 key={index}
-                                className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#b87bd1]/30 transition-all duration-500"
+                                className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#b87bd1]/30 transition-all duration-500"
                               >
                                 <div className="p-3 rounded-xl bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/20 border border-[#b87bd1]/30 flex-shrink-0">
                                   <BookOpen

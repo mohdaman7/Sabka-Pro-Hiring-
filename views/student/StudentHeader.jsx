@@ -48,10 +48,10 @@ export default function StudentHeader({ onMenuClick }) {
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden hover:bg-slate-100/80 transition-all hover:scale-105 h-9 w-9 sm:h-10 sm:w-10"
+          className="lg:hidden hover:bg-white/10 transition-all hover:scale-105 h-9 w-9 sm:h-10 sm:w-10 bg-white/5 border border-white/10"
           onClick={onMenuClick}
         >
-          <Menu className="h-5 w-5 text-slate-700" />
+          <Menu className="h-6 w-6 text-white" />
         </Button>
 
         {/* Desktop Search */}
