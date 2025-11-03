@@ -58,7 +58,7 @@ export default function EmployerUpgrade() {
   }
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+    <div className="relative p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl" style={{ background: "rgba(128,55,145,0.08)" }} />
         <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl" style={{ background: "rgba(184,123,209,0.06)" }} />
@@ -68,7 +68,7 @@ export default function EmployerUpgrade() {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Upgrade Plan</h1>
+          <h1 className="text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white mb-2">Upgrade Plan</h1>
           <p className="text-white/80">Unlock advanced features to scale your hiring</p>
         </div>
       </div>
@@ -79,7 +79,7 @@ export default function EmployerUpgrade() {
         </div>
       )}
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-2">
         {plans.map((plan) => (
           <Card
             key={plan.key}
@@ -107,7 +107,7 @@ export default function EmployerUpgrade() {
               </div>
               <div className="text-right">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold text-white">{plan.price}</span>
+                  <span className="text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl font-extrabold text-white">{plan.price}</span>
                   <span className="text-sm text-white/60">{plan.period}</span>
                 </div>
               </div>

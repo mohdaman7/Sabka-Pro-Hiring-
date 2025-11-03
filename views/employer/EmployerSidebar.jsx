@@ -146,7 +146,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
                       background: "linear-gradient(135deg,#803791,#b87bd1)",
                     }}
                   >
-                    <Briefcase className="w-6 h-6 text-white" />
+                    <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                 </div>
                 <div>
@@ -168,7 +168,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
                     background: "linear-gradient(135deg,#803791,#b87bd1)",
                   }}
                 >
-                  <Briefcase className="w-6 h-6 text-white" />
+                  <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
               </div>
             )}
@@ -200,7 +200,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
 
         {/* Post New Job Button - Premium Design */}
         {!isCollapsed && (
-          <div className="relative p-4 border-b border-white/10">
+          <div className="relative p-2.5 sm:p-3 sm:p-4 border-b border-white/10">
             <Link
               href="/employer/jobs/new"
               className="group relative w-full px-5 py-4 text-white rounded-2xl transition-all font-bold flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl overflow-hidden"
@@ -225,7 +225,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
         )}
 
         {isCollapsed && (
-          <div className="relative p-3 border-b border-white/10">
+          <div className="relative p-2.5 sm:p-3 border-b border-white/10">
             <Link
               href="/employer/jobs/new"
               className="group relative w-full h-12 flex items-center justify-center rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 shadow-lg"
@@ -242,7 +242,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
         )}
 
         {/* Main Navigation */}
-        <nav className="flex-1 flex flex-col p-3 overflow-hidden">
+        <nav className="flex-1 flex flex-col p-2.5 sm:p-3 overflow-hidden">
           <div className="space-y-2 h-full overflow-hidden hover:overflow-y-auto custom-scrollbar">
             {navigation.map((item, index) => {
               const isActive = pathname === item.href;
@@ -328,7 +328,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
                     <>
                       <span
                         className={cn(
-                          "text-sm font-medium truncate transition-all duration-300 relative z-10",
+                          "text-xs sm:text-sm font-medium truncate transition-all duration-300 relative z-10",
                           isActive
                             ? "text-white"
                             : "text-white/70 group-hover:text-white"
@@ -364,7 +364,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
         </nav>
 
         {/* Bottom Navigation */}
-        <div className="flex-shrink-0 border-t border-white/10 p-3 space-y-2">
+        <div className="flex-shrink-0 border-t border-white/10 p-2.5 sm:p-3 space-y-2">
           {bottomNavigation.map((item, index) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -439,7 +439,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
                 {!isCollapsed && (
                   <span
                     className={cn(
-                      "text-sm font-medium truncate transition-all duration-300 relative z-10",
+                      "text-xs sm:text-sm font-medium truncate transition-all duration-300 relative z-10",
                       item.highlight || isActive
                         ? "text-white"
                         : "text-white/70 group-hover:text-white"
@@ -461,8 +461,8 @@ export default function EmployerSidebar({ isOpen, onClose }) {
 
         {/* User Profile Section */}
         {!isCollapsed && (
-          <div className="flex-shrink-0 border-t border-white/10 p-4">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer group">
+          <div className="flex-shrink-0 border-t border-white/10 p-2.5 sm:p-3 sm:p-4">
+            <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer group">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
                 <div
@@ -494,7 +494,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
         )}
 
         {isCollapsed && (
-          <div className="flex-shrink-0 border-t border-white/10 p-3">
+          <div className="flex-shrink-0 border-t border-white/10 p-2.5 sm:p-3">
             <div className="relative group cursor-pointer">
               <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
               <div

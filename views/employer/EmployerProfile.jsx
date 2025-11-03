@@ -71,8 +71,8 @@ const CompanyProfileSkeleton = () => {
             "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08))",
         }}
       >
-        <div className="h-10 bg-white/25 rounded-2xl w-1/3 mb-3"></div>
-        <div className="h-6 bg-white/25 rounded-2xl w-1/2"></div>
+        <div className="h-10 bg-white/25 rounded-xl sm:rounded-2xl w-1/3 mb-3"></div>
+        <div className="h-6 bg-white/25 rounded-xl sm:rounded-2xl w-1/2"></div>
       </div>
 
       <div className="grid grid-cols-12 gap-8">
@@ -86,17 +86,17 @@ const CompanyProfileSkeleton = () => {
                   "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
               }}
             >
-              <div className="h-8 bg-white/25 rounded-2xl w-48 mb-6"></div>
+              <div className="h-8 bg-white/25 rounded-xl sm:rounded-2xl w-48 mb-6"></div>
               <div className="space-y-4">
                 {[1, 2].map((j) => (
-                  <div key={j} className="h-16 bg-white/25 rounded-2xl"></div>
+                  <div key={j} className="h-16 bg-white/25 rounded-xl sm:rounded-2xl"></div>
                 ))}
               </div>
             </div>
           ))}
         </div>
 
-        <div className="col-span-12 lg:col-span-4 space-y-6">
+        <div className="col-span-12 lg:col-span-4 space-y-4 sm:space-y-5 md:space-y-6">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
@@ -548,7 +548,7 @@ export default function CompanyProfile() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-6 pl-24">
+              <div className="flex items-center gap-3 sm:gap-4 md:gap-6 pl-24">
                 <div className="flex items-center gap-2 text-white/70">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                   <span className="text-sm font-semibold">Active Profile</span>
@@ -561,12 +561,12 @@ export default function CompanyProfile() {
             </div>
 
             {/* Profile Completeness Indicator */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
               <div className="text-right">
                 <div className="text-sm text-white/80 font-medium">
                   Profile Completeness
                 </div>
-                <div className="text-3xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                <div className="text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl font-black text-white bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
                   {completeness}%
                 </div>
               </div>
@@ -633,8 +633,8 @@ export default function CompanyProfile() {
               borderColor: "rgba(255,255,255,0.12)",
             }}
           >
-            <h2 className="text-2xl font-black text-white mb-8 flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+            <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white mb-8 flex items-center gap-4">
+              <div className="p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
                 <Building2 className="w-6 h-6 text-white" strokeWidth={2.5} />
               </div>
               <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
@@ -642,8 +642,8 @@ export default function CompanyProfile() {
               </span>
             </h2>
 
-            <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-white/90">
                     Company Name <span className="text-red-400">*</span>
@@ -706,8 +706,8 @@ export default function CompanyProfile() {
               borderColor: "rgba(255,255,255,0.12)",
             }}
           >
-            <h2 className="text-2xl font-black text-white mb-8 flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+            <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white mb-8 flex items-center gap-4">
+              <div className="p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
                 <Phone className="w-6 h-6 text-white" strokeWidth={2.5} />
               </div>
               <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
@@ -715,8 +715,8 @@ export default function CompanyProfile() {
               </span>
             </h2>
 
-            <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-white/90">
                     Phone Number
@@ -756,7 +756,7 @@ export default function CompanyProfile() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-white/90">
                     City
@@ -796,7 +796,7 @@ export default function CompanyProfile() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-white/90">
                     Country
@@ -845,8 +845,8 @@ export default function CompanyProfile() {
               borderColor: "rgba(255,255,255,0.12)",
             }}
           >
-            <h2 className="text-2xl font-black text-white mb-8 flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
+            <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white mb-8 flex items-center gap-4">
+              <div className="p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-lg">
                 <Globe className="w-6 h-6 text-white" strokeWidth={2.5} />
               </div>
               <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
@@ -854,7 +854,7 @@ export default function CompanyProfile() {
               </span>
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div className="space-y-2">
                 <label className="block text-sm font-bold text-white/90">
                   LinkedIn
@@ -919,7 +919,7 @@ export default function CompanyProfile() {
         </div>
 
         {/* Sidebar - Right Side (4 columns) */}
-        <div className="col-span-12 lg:col-span-4 space-y-6">
+        <div className="col-span-12 lg:col-span-4 space-y-4 sm:space-y-5 md:space-y-6">
           {/* Company Logo Card */}
           <div
             className="rounded-[24px] p-6 shadow-xl backdrop-blur-xl border transition-all duration-500 hover:shadow-2xl hover:border-[#b87bd1]/30 hover:scale-[1.02] group"
@@ -940,7 +940,7 @@ export default function CompanyProfile() {
             <div className="flex flex-col items-center">
               <div className="relative group/logo mb-6 transform transition-all duration-500 hover:scale-105">
                 <div
-                  className="w-40 h-40 rounded-2xl flex items-center justify-center text-white text-4xl font-bold shadow-2xl overflow-hidden border-2 border-white/10 transition-all duration-500 group-hover/logo:border-[#b87bd1]"
+                  className="w-40 h-40 rounded-xl sm:rounded-2xl flex items-center justify-center text-white text-4xl font-bold shadow-2xl overflow-hidden border-2 border-white/10 transition-all duration-500 group-hover/logo:border-[#b87bd1]"
                   style={{
                     background: "linear-gradient(135deg,#803791,#b87bd1)",
                   }}
@@ -959,7 +959,7 @@ export default function CompanyProfile() {
                   )}
                 </div>
                 <label
-                  className="absolute -bottom-2 -right-2 w-14 h-14 rounded-2xl flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl group/upload"
+                  className="absolute -bottom-2 -right-2 w-14 h-14 rounded-xl sm:rounded-2xl flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl group/upload"
                   style={{
                     background: "linear-gradient(135deg,#803791,#b87bd1)",
                     boxShadow: "0 8px 32px rgba(128,55,145,0.4)",
@@ -976,7 +976,7 @@ export default function CompanyProfile() {
                     onChange={handleLogoUpload}
                   />
                 </label>
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] opacity-0 group-hover/logo:opacity-20 blur-xl transition-all duration-500 -z-10" />
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] opacity-0 group-hover/logo:opacity-20 blur-xl transition-all duration-500 -z-10" />
               </div>
               <p className="text-sm text-white/70 text-center font-semibold">
                 Max size: 5MB • PNG, JPG, WEBP
@@ -1046,7 +1046,7 @@ export default function CompanyProfile() {
                         <div className="text-xs text-white/70 font-semibold">
                           {stat.label}
                         </div>
-                        <div className="text-xl font-black text-white">
+                        <div className="text-base sm:text-lg md:text-xl font-black text-white">
                           {stat.value}
                         </div>
                       </div>
@@ -1241,12 +1241,12 @@ export default function CompanyProfile() {
           borderColor: "rgba(255,255,255,0.15)",
         }}
       >
-        <div className="flex items-center justify-between gap-6">
+        <div className="flex items-center justify-between gap-3 sm:gap-4 md:gap-6">
           <div className="flex-1">
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full px-8 py-5 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#703181] hover:to-[#a86bc1] text-white rounded-2xl font-black shadow-2xl hover:shadow-3xl transition-all duration-500 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] group"
+              className="w-full px-8 py-5 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#703181] hover:to-[#a86bc1] text-white rounded-xl sm:rounded-2xl font-black shadow-2xl hover:shadow-3xl transition-all duration-500 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] group"
             >
               {loading ? (
                 <>

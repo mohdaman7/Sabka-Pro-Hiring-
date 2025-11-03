@@ -69,13 +69,13 @@ export default function EmployerTeam() {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
+    <div className="p-4 sm:p-5 md:p-6 max-w-5xl mx-auto space-y-4 sm:space-y-5 md:space-y-6">
       <div className="flex items-center gap-3">
         <div className="p-3 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-xl">
           <Users className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-white">Team</h1>
+          <h1 className="text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white">Team</h1>
           <p className="text-white/70 text-sm">Manage members and roles</p>
         </div>
       </div>

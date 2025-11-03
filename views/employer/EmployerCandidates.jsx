@@ -257,7 +257,7 @@ export default function CandidatesPage() {
 
       <div className="relative p-8 space-y-8 max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 sm:gap-4 md:gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-xl">
@@ -297,7 +297,7 @@ export default function CandidatesPage() {
         </div>
 
         {/* Saved Views + Search and Stats */}
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="grid lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           <div
             className="lg:col-span-3 rounded-xl p-1 group transition-all duration-300 hover:shadow-xl hover:shadow-[#803791]/20"
             style={{
@@ -355,7 +355,7 @@ export default function CandidatesPage() {
               border: "1px solid rgba(255,255,255,0.1)",
             }}
           >
-            <div className="text-3xl font-bold bg-gradient-to-r from-[#803791] to-[#b87bd1] bg-clip-text text-transparent">
+            <div className="text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#803791] to-[#b87bd1] bg-clip-text text-transparent">
               {filteredApps.length}
             </div>
             <div className="text-xs text-white/70 mt-1 font-medium">
@@ -441,7 +441,7 @@ export default function CandidatesPage() {
 
         {/* Candidates Grid */}
         {!loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {filteredApps.length > 0 ? (
               filteredApps.map((app, index) => {
                 const candidate = app?.studentId || {};
@@ -454,7 +454,7 @@ export default function CandidatesPage() {
                 return (
                   <div
                     key={app._id}
-                    className="group relative rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl transform hover:-translate-y-2 cursor-pointer"
+                    className="group relative rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl transform hover:-translate-y-2 cursor-pointer"
                     style={{
                       background:
                         "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))",
@@ -464,7 +464,7 @@ export default function CandidatesPage() {
                     onMouseLeave={() => setHoveredCard(null)}
                   >
                     {/* Animated gradient border */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#803791]/20 to-[#b87bd1]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                    <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#803791]/20 to-[#b87bd1]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
 
                     {/* Shine effect */}
                     <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-1000 transform -skew-x-12 group-hover:translate-x-full" />
@@ -472,7 +472,7 @@ export default function CandidatesPage() {
                     <div className="relative p-6 space-y-4">
                       {/* Header with avatar and favorite */}
                       <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-4 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 flex-1">
                           <div
                             className={`w-16 h-16 rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 bg-gradient-to-br ${getInitialColor(
                               index
@@ -524,7 +524,7 @@ export default function CandidatesPage() {
                       </div>
 
                       {/* Quick Info */}
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="p-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#803791]/50 transition-all duration-300">
                           <div className="text-xs text-white/60 mb-1">
                             Company

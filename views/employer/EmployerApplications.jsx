@@ -281,7 +281,7 @@ export default function EmployerApplications() {
               </div>
 
               {/* Live stats ticker */}
-              <div className="flex items-center gap-6 pl-24">
+              <div className="flex items-center gap-3 sm:gap-4 md:gap-6 pl-24">
                 <div className="flex items-center gap-2 text-white/70">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                   <span className="text-sm font-semibold">
@@ -297,7 +297,7 @@ export default function EmployerApplications() {
 
             {/* Premium action buttons */}
             <div className="flex items-center gap-3">
-              <button className="group/btn relative px-7 py-4 rounded-2xl font-bold text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30">
+              <button className="group/btn relative px-7 py-4 rounded-xl sm:rounded-2xl font-bold text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30">
                 <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-all duration-500" />
                 <span className="relative flex items-center gap-2.5">
                   <Download
@@ -308,7 +308,7 @@ export default function EmployerApplications() {
                 </span>
               </button>
 
-              <button className="group/btn relative px-7 py-4 rounded-2xl font-bold text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]">
+              <button className="group/btn relative px-7 py-4 rounded-xl sm:rounded-2xl font-bold text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] transition-transform group-hover/btn:scale-110 duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1] to-[#803791] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
                 <span className="relative flex items-center gap-2.5">
@@ -357,7 +357,7 @@ export default function EmployerApplications() {
               <div className="relative space-y-5">
                 <div className="flex items-center justify-between">
                   <div
-                    className={`p-4 rounded-2xl shadow-lg transform ${
+                    className={`p-4 rounded-xl sm:rounded-2xl shadow-lg transform ${
                       isActive
                         ? "scale-110 rotate-6"
                         : "group-hover:scale-110 group-hover:rotate-6"
@@ -425,7 +425,7 @@ export default function EmployerApplications() {
           borderColor: "rgba(255,255,255,0.12)",
         }}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4 md:gap-6">
           {/* Premium search input */}
           <div className="flex-1 relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[20px] opacity-0 group-focus-within:opacity-25 blur-lg transition-opacity duration-500" />
@@ -475,7 +475,7 @@ export default function EmployerApplications() {
               <button
                 key={s.value}
                 onClick={() => setStage(s.value)}
-                className={`group relative px-6 py-3.5 rounded-2xl font-bold text-sm transition-all duration-500 flex items-center gap-3 overflow-hidden ${
+                className={`group relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm transition-all duration-500 flex items-center gap-3 overflow-hidden ${
                   isActive
                     ? "text-white shadow-2xl scale-105"
                     : "text-white/60 hover:text-white hover:scale-105"
@@ -516,7 +516,7 @@ export default function EmployerApplications() {
       </div>
 
       {/* Ultra Premium Applications List */}
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-5 md:space-y-6">
         {filtered.map((app, index) => {
           const isOpen = expandedId === app._id;
           const isHovered = hoveredCard === app._id;
@@ -551,9 +551,9 @@ export default function EmployerApplications() {
 
               <div className="relative backdrop-blur-xl p-8">
                 {/* Header Section */}
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3 sm:gap-4 md:gap-6">
                   {/* Candidate Info */}
-                  <div className="flex-1 flex items-start gap-6">
+                  <div className="flex-1 flex items-start gap-3 sm:gap-4 md:gap-6">
                     {/* Premium Avatar */}
                     <div className="relative group/avatar flex-shrink-0">
                       <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[20px] blur-xl opacity-40 group-hover/avatar:opacity-70 transition-opacity duration-500" />
@@ -563,7 +563,7 @@ export default function EmployerApplications() {
                           background: "linear-gradient(135deg,#803791,#b87bd1)",
                         }}
                       >
-                        <span className="text-white font-black text-2xl">
+                        <span className="text-white font-black text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl">
                           {app.studentId?.firstName?.charAt(0)}
                           {app.studentId?.lastName?.charAt(0)}
                         </span>
@@ -575,7 +575,7 @@ export default function EmployerApplications() {
                     {/* Candidate Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-4 mb-3">
-                        <h3 className="text-2xl font-black text-white group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">
+                        <h3 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">
                           {app.studentId?.firstName} {app.studentId?.lastName}
                         </h3>
                         <StageBadge value={app.status} />
@@ -644,7 +644,7 @@ export default function EmployerApplications() {
                       app.status === "interview") && (
                       <button
                         onClick={() => setScheduleApp(app)}
-                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
+                        className="group/btn relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
                         style={{
                           background:
                             "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
@@ -668,7 +668,7 @@ export default function EmployerApplications() {
                         href={app.resumeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial text-center"
+                        className="group/btn relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial text-center"
                         style={{
                           background:
                             "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
@@ -689,7 +689,7 @@ export default function EmployerApplications() {
                     {/* Expand Button */}
                     <button
                       onClick={() => setExpandedId(isOpen ? null : app._id)}
-                      className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
+                      className="group/btn relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
                       style={{
                         background: isOpen
                           ? "linear-gradient(135deg,#803791,#b87bd1)"
@@ -724,7 +724,7 @@ export default function EmployerApplications() {
 
                 {/* Expanded Details with Premium Animations */}
                 {isOpen && (
-                  <div className="mt-8 space-y-6 border-t border-white/10 pt-8 animate-slide-down">
+                  <div className="mt-8 space-y-4 sm:space-y-5 md:space-y-6 border-t border-white/10 pt-8 animate-slide-down">
                     {/* Previous Experience Card */}
                     {(app.meta?.previousCompany ||
                       app.meta?.previousPosition) && (
@@ -748,7 +748,7 @@ export default function EmployerApplications() {
                             </div>
                             <span className="text-lg">Previous Experience</span>
                           </h4>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                             {app.meta.previousPosition && (
                               <div className="group/item flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#b87bd1]/30 transition-all duration-500">
                                 <Target
@@ -881,7 +881,7 @@ export default function EmployerApplications() {
                     )}
 
                     {/* Status Update Section */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-white/10 gap-6">
+                    <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-white/10 gap-3 sm:gap-4 md:gap-6">
                       <div className="flex items-center gap-3 text-white/60 font-semibold">
                         <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
                           <Clock className="w-4 h-4" strokeWidth={2.5} />
@@ -935,7 +935,7 @@ export default function EmployerApplications() {
               setSearch("");
               setStage("all");
             }}
-            className="group relative px-10 py-5 rounded-2xl font-black text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]"
+            className="group relative px-10 py-5 rounded-xl sm:rounded-2xl font-black text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] transition-transform group-hover:scale-110 duration-500" />
             <span className="relative flex items-center gap-3">
@@ -1138,7 +1138,7 @@ function StatusUpdateButtons({ currentStatus, onUpdateStatus }) {
           <button
             key={status}
             onClick={() => onUpdateStatus(status)}
-            className="group relative px-5 py-3 rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl"
+            className="group relative px-5 py-3 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl"
             style={{
               background:
                 "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
@@ -1211,7 +1211,7 @@ function StageBadge({ value }) {
 
   return (
     <span
-      className={`group relative inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl text-sm font-black border-2 ${config.bgClass} ${config.textClass} ${config.borderClass} overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-lg`}
+      className={`group relative inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl sm:rounded-2xl text-sm font-black border-2 ${config.bgClass} ${config.textClass} ${config.borderClass} overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-lg`}
     >
       <div
         className={`absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-0 group-hover:opacity-25 transition-opacity duration-500`}

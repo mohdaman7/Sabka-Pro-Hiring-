@@ -73,7 +73,7 @@ export default function EmployerSettings() {
   };
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+    <div className="relative p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
       {/* Decorative background orbs */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
@@ -92,7 +92,7 @@ export default function EmployerSettings() {
 
       {/* Header */}
       <div className="relative">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2">
+        <h1 className="text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl md:text-4xl font-extrabold text-white mb-2">
           Settings
         </h1>
         <p className="text-white/80">
@@ -117,7 +117,7 @@ export default function EmployerSettings() {
         </div>
       )}
 
-      <div className="grid lg:grid-cols-4 gap-6">
+      <div className="grid lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {/* Sidebar Tabs */}
         <div
           className="lg:col-span-1 rounded-xl p-4 shadow-xl h-fit"
@@ -159,9 +159,9 @@ export default function EmployerSettings() {
         >
           {/* Company Profile Tab */}
           {activeTab === "profile" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-bold text-white mb-2">
                   Company Profile
                 </h2>
                 <p className="text-white/70">
@@ -170,7 +170,7 @@ export default function EmployerSettings() {
               </div>
 
               {/* Company Logo */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
                 <div
                   className="w-24 h-24 rounded-xl flex items-center justify-center shadow-lg"
                   style={{
@@ -191,7 +191,7 @@ export default function EmployerSettings() {
               </div>
 
               {/* Form Fields */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 <div>
                   <label className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
                     <Building className="w-4 h-4 text-[#b87bd1]" />
@@ -289,9 +289,9 @@ export default function EmployerSettings() {
 
           {/* Account Settings Tab */}
           {activeTab === "account" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-bold text-white mb-2">
                   Account Settings
                 </h2>
                 <p className="text-white/70">
@@ -299,7 +299,7 @@ export default function EmployerSettings() {
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 <div>
                   <label className="text-sm font-semibold text-white mb-2 block">
                     First Name
@@ -357,9 +357,9 @@ export default function EmployerSettings() {
 
           {/* Notifications Tab */}
           {activeTab === "notifications" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-bold text-white mb-2">
                   Notification Preferences
                 </h2>
                 <p className="text-white/70">
@@ -422,15 +422,15 @@ export default function EmployerSettings() {
 
           {/* Security Tab */}
           {activeTab === "security" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-bold text-white mb-2">
                   Security Settings
                 </h2>
                 <p className="text-white/70">Keep your account secure</p>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-5 md:space-y-6">
                 <div>
                   <label className="text-sm font-semibold text-white mb-2 block">
                     Current Password
@@ -516,9 +516,9 @@ export default function EmployerSettings() {
 
           {/* Billing Tab */}
           {activeTab === "billing" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-bold text-white mb-2">
                   Billing & Subscription
                 </h2>
                 <p className="text-white/70">
@@ -528,7 +528,7 @@ export default function EmployerSettings() {
 
               {/* Current Plan */}
               <div
-                className="p-6 rounded-lg border"
+                className="p-4 sm:p-5 md:p-6 rounded-lg border"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(128,55,145,0.15), rgba(184,123,209,0.10))",
@@ -537,7 +537,7 @@ export default function EmployerSettings() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-white">Pro Plan</h3>
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">Pro Plan</h3>
                     <p className="text-white/70">₹2,999/month</p>
                   </div>
                   <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-sm font-medium">
@@ -583,9 +583,9 @@ export default function EmployerSettings() {
 
           {/* Privacy Tab */}
           {activeTab === "privacy" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-bold text-white mb-2">
                   Privacy Settings
                 </h2>
                 <p className="text-white/70">Control your privacy and data</p>

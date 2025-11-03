@@ -12,11 +12,11 @@ export default function EmployerLayout({ children }) {
       {/* Shared employer background (matching student theme) */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-3xl"
           style={{ background: "rgba(128,55,145,0.08)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-48 h-48 md:w-96 md:h-96 rounded-full blur-3xl"
           style={{ background: "rgba(184,123,209,0.06)" }}
         />
         <div
@@ -26,19 +26,35 @@ export default function EmployerLayout({ children }) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
       </div>
 
-      {/* Sidebar */}
-      <div className="flex-shrink-0 h-screen">
+      {/* Sidebar - Hidden on mobile, overlay when open */}
+      <div className="hidden lg:block flex-shrink-0 h-screen">
         <EmployerSidebar
-          isOpen={sidebarOpen}
+          isOpen={false}
           onClose={() => setSidebarOpen(false)}
         />
       </div>
+      
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div className="lg:hidden fixed inset-0 z-50">
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <div className="relative">
+            <EmployerSidebar
+              isOpen={sidebarOpen}
+              onClose={() => setSidebarOpen(false)}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0 h-screen">
         <EmployerHeader onMenuClick={() => setSidebarOpen(true)} />
         <main className="flex-1 overflow-hidden">
-          <div className="h-full overflow-auto p-6">{children}</div>
+          <div className="h-full overflow-auto p-3 sm:p-4 md:p-6">{children}</div>
         </main>
       </div>
     </div>

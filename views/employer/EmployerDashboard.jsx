@@ -160,7 +160,7 @@ export default function PremiumEmployerDashboard() {
   ];
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+    <div className="relative p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
       {/* Original Decorative background orbs */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
@@ -178,9 +178,9 @@ export default function PremiumEmployerDashboard() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
       </div>
 
-      <div className="relative z-10 p-4 md:p-8 space-y-6 max-w-[1600px] mx-auto">
+      <div className="relative z-10 p-4 md:p-8 space-y-4 sm:space-y-5 md:space-y-6 max-w-[1600px] mx-auto">
         {/* Premium Welcome Section */}
-        <div className="relative overflow-hidden rounded-3xl group">
+        <div className="relative overflow-hidden rounded-xl sm:rounded-2xl sm:rounded-3xl group">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/90 via-purple-700/90 to-blue-600/90 backdrop-blur-xl" />
           <div className="absolute inset-0 opacity-20">
             <div
@@ -189,7 +189,7 @@ export default function PremiumEmployerDashboard() {
             />
           </div>
           <div className="relative p-8 md:p-10">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4 md:gap-6">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
                   <Award className="w-8 h-8 text-amber-300" />
@@ -197,7 +197,7 @@ export default function PremiumEmployerDashboard() {
                     Premium Account
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
+                <h1 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl sm:text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl md:text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
                   Welcome back, Tech Solutions!
                 </h1>
                 <p className="text-white/90 text-lg mb-6 flex items-center gap-2">
@@ -229,8 +229,8 @@ export default function PremiumEmployerDashboard() {
               </div>
               <div className="hidden lg:block">
                 <div className="relative w-32 h-32">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-3xl backdrop-blur-xl border border-white/30 shadow-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-3xl backdrop-blur-xl border border-white/40 shadow-2xl flex items-center justify-center transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-xl sm:rounded-2xl sm:rounded-3xl backdrop-blur-xl border border-white/30 shadow-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-xl sm:rounded-2xl sm:rounded-3xl backdrop-blur-xl border border-white/40 shadow-2xl flex items-center justify-center transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
                     <TrendingUp className="w-16 h-16 text-white" />
                   </div>
                 </div>
@@ -249,7 +249,7 @@ export default function PremiumEmployerDashboard() {
                 key={index}
                 onMouseEnter={() => setHoveredStat(index)}
                 onMouseLeave={() => setHoveredStat(null)}
-                className="group relative rounded-2xl p-6 transition-all duration-300 cursor-pointer"
+                className="group relative rounded-xl sm:rounded-2xl p-6 transition-all duration-300 cursor-pointer"
                 style={{
                   background:
                     hoveredStat === index
@@ -268,7 +268,7 @@ export default function PremiumEmployerDashboard() {
               >
                 {/* Animated background glow */}
                 <div
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
+                  className="absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
                   style={{ background: stat.bgGlow }}
                 />
 
@@ -294,7 +294,7 @@ export default function PremiumEmployerDashboard() {
                   </div>
 
                   <div className="space-y-1">
-                    <div className="text-4xl font-black text-white tracking-tight">
+                    <div className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl sm:text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl md:text-4xl font-black text-white tracking-tight">
                       {stat.value}
                     </div>
                     <div className="text-sm font-medium text-slate-300">
@@ -308,23 +308,23 @@ export default function PremiumEmployerDashboard() {
                 </div>
 
                 {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/5 to-transparent rounded-2xl transform translate-x-6 -translate-y-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/5 to-transparent rounded-xl sm:rounded-2xl transform translate-x-6 -translate-y-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             );
           })}
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {/* Active Jobs - Enhanced */}
-          <div className="lg:col-span-2 rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <div className="lg:col-span-2 rounded-xl sm:rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg">
                   <Briefcase className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold text-white">
                     Active Job Postings
                   </h2>
                   <p className="text-xs text-slate-400">
@@ -413,7 +413,7 @@ export default function PremiumEmployerDashboard() {
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                    <div className="flex gap-6">
+                    <div className="flex gap-3 sm:gap-4 md:gap-6">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-purple-600/20 flex items-center justify-center">
                           <FileText className="w-4 h-4 text-purple-400" />
@@ -453,14 +453,14 @@ export default function PremiumEmployerDashboard() {
           </div>
 
           {/* Recent Applications - Enhanced */}
-          <div className="rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <div className="rounded-xl sm:rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center shadow-lg">
                   <Users className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold text-white">
                     Recent Applications
                   </h2>
                   <p className="text-xs text-slate-400">Latest candidates</p>
@@ -568,7 +568,7 @@ export default function PremiumEmployerDashboard() {
 
         {/* Quick Actions - Premium Version */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <div className="group relative rounded-2xl p-6 bg-gradient-to-br from-purple-600/10 to-purple-800/5 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02]">
+          <div className="group relative rounded-xl sm:rounded-2xl p-6 bg-gradient-to-br from-purple-600/10 to-purple-800/5 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02]">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
 
@@ -589,7 +589,7 @@ export default function PremiumEmployerDashboard() {
             </div>
           </div>
 
-          <div className="group relative rounded-2xl p-6 bg-gradient-to-br from-blue-600/10 to-blue-800/5 border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02]">
+          <div className="group relative rounded-xl sm:rounded-2xl p-6 bg-gradient-to-br from-blue-600/10 to-blue-800/5 border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02]">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
 
@@ -610,7 +610,7 @@ export default function PremiumEmployerDashboard() {
             </div>
           </div>
 
-          <div className="group relative rounded-2xl p-6 bg-gradient-to-br from-emerald-600/10 to-emerald-800/5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02]">
+          <div className="group relative rounded-xl sm:rounded-2xl p-6 bg-gradient-to-br from-emerald-600/10 to-emerald-800/5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02]">
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/0 to-emerald-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
 
@@ -633,8 +633,8 @@ export default function PremiumEmployerDashboard() {
         </div>
 
         {/* Analytics Overview - New Premium Section */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+          <div className="rounded-xl sm:rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 to-amber-800 flex items-center justify-center shadow-lg">
@@ -664,7 +664,7 @@ export default function PremiumEmployerDashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-black text-purple-400">156</div>
+                  <div className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-purple-400">156</div>
                   <div className="text-xs text-slate-500">Total</div>
                 </div>
               </div>
@@ -680,7 +680,7 @@ export default function PremiumEmployerDashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-black text-emerald-400">34</div>
+                  <div className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-emerald-400">34</div>
                   <div className="text-xs text-slate-500">Shortlisted</div>
                 </div>
               </div>
@@ -696,14 +696,14 @@ export default function PremiumEmployerDashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-black text-amber-400">8</div>
+                  <div className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-amber-400">8</div>
                   <div className="text-xs text-slate-500">Hired</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <div className="rounded-xl sm:rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">

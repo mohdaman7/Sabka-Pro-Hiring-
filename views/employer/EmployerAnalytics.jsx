@@ -137,7 +137,7 @@ export default function EmployerAnalytics() {
             )}
           </div>
           <div
-            className="text-3xl font-bold text-white mb-2 transition-all duration-300"
+            className="text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white mb-2 transition-all duration-300"
             style={{
               transform: isHovered ? "scale(1.05)" : "scale(1)",
             }}
@@ -249,7 +249,7 @@ export default function EmployerAnalytics() {
 
   if (loading) {
     return (
-      <div className="p-6 flex items-center justify-center min-h-screen">
+      <div className="p-4 sm:p-5 md:p-6 flex items-center justify-center min-h-screen">
         <div className="text-white/70 flex items-center gap-3">
           <div className="w-8 h-8 border-4 border-[#b87bd1] border-t-transparent rounded-full animate-spin" />
           Loading analytics...
@@ -259,11 +259,11 @@ export default function EmployerAnalytics() {
   }
 
   if (error) {
-    return <div className="p-6 text-red-300">{error}</div>;
+    return <div className="p-4 sm:p-5 md:p-6 text-red-300">{error}</div>;
   }
 
   return (
-    <div className="relative p-6 space-y-8 min-h-screen overflow-hidden">
+    <div className="relative p-6 space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
       <style jsx>{`
         @keyframes shine {
           0% {
@@ -333,7 +333,7 @@ export default function EmployerAnalytics() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
         <div className="group">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <Activity className="w-10 h-10 text-[#b87bd1] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
             Analytics Dashboard
           </h1>
@@ -389,9 +389,9 @@ export default function EmployerAnalytics() {
 
       {/* Overview Tab */}
       {activeTab === "overview" && (
-        <div className="space-y-8">
+        <div className="space-y-4 sm:space-y-4 sm:space-y-5 md:space-y-6 md:space-y-8">
           {/* Key Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             <StatCard
               icon={FileText}
               label="Total Applications"
@@ -421,7 +421,7 @@ export default function EmployerAnalytics() {
           </div>
 
           {/* Charts Grid */}
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             {/* Application Trends */}
             <div
               className="rounded-2xl p-8 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] group"
@@ -535,7 +535,7 @@ export default function EmployerAnalytics() {
           </div>
 
           {/* Bottom Grid */}
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             {/* Candidate Sources */}
             <div
               className="rounded-2xl p-8 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]"
@@ -636,7 +636,7 @@ export default function EmployerAnalytics() {
 
       {/* Performance Tab */}
       {activeTab === "performance" && (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6">
           <div
             className="rounded-2xl p-8 backdrop-blur-sm"
             style={{
@@ -747,7 +747,7 @@ export default function EmployerAnalytics() {
       )}
 
       {/* Premium Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         <div
           className="relative rounded-2xl p-8 text-white overflow-hidden group cursor-pointer transition-all duration-500 hover:scale-105"
           style={{
@@ -768,7 +768,7 @@ export default function EmployerAnalytics() {
                 <TrendingUp className="w-8 h-8" />
               </div>
               <div>
-                <div className="text-4xl font-bold">124%</div>
+                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold">124%</div>
                 <div className="text-white/90 font-semibold">
                   Growth in Applications
                 </div>
@@ -807,7 +807,7 @@ export default function EmployerAnalytics() {
                 <Users className="w-8 h-8" />
               </div>
               <div>
-                <div className="text-4xl font-bold">2.3x</div>
+                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold">2.3x</div>
                 <div className="text-white/90 font-semibold">
                   More Qualified Candidates
                 </div>
@@ -846,7 +846,7 @@ export default function EmployerAnalytics() {
                 <DollarSign className="w-8 h-8" />
               </div>
               <div>
-                <div className="text-4xl font-bold">₹1.2L</div>
+                <div className="text-lg sm:text-xl md:text-2xl sm:text-xl sm:text-lg sm:text-xl md:text-2xl md:text-3xl md:text-4xl font-bold">₹1.2L</div>
                 <div className="text-white/90 font-semibold">
                   Saved on Hiring
                 </div>
@@ -867,7 +867,7 @@ export default function EmployerAnalytics() {
       </div>
 
       {/* Additional Insights Section */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         <div
           className="rounded-2xl p-6 backdrop-blur-sm group hover:scale-105 transition-all duration-300"
           style={{
@@ -882,7 +882,7 @@ export default function EmployerAnalytics() {
               <Calendar className="w-6 h-6 text-white" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">42</div>
+              <div className="text-lg sm:text-xl md:text-2xl font-bold text-white">42</div>
               <div className="text-sm text-white/70">Days Avg. Open</div>
             </div>
           </div>
@@ -905,7 +905,7 @@ export default function EmployerAnalytics() {
               <Eye className="w-6 h-6 text-white" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">8.2K</div>
+              <div className="text-lg sm:text-xl md:text-2xl font-bold text-white">8.2K</div>
               <div className="text-sm text-white/70">Total Job Views</div>
             </div>
           </div>
@@ -928,7 +928,7 @@ export default function EmployerAnalytics() {
               <Award className="w-6 h-6 text-white" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">94%</div>
+              <div className="text-lg sm:text-xl md:text-2xl font-bold text-white">94%</div>
               <div className="text-sm text-white/70">Satisfaction Rate</div>
             </div>
           </div>

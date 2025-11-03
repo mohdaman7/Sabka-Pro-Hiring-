@@ -236,7 +236,7 @@ export default function PostNewJob() {
     <div className="min-h-screen bg-gradient-to-b from-[#803791]/8 via-[#b87bd1]/6 to-transparent p-6">
       <div className="max-w-7xl mx-auto">
         {/* Enhanced Header */}
-        <div className="relative bg-gradient-to-br from-[#803791] via-[#6a2a6f] to-[#b87bd1] rounded-2xl p-10 text-white shadow-2xl mb-8 overflow-hidden transform-gpu will-change-transform hover:scale-[1.01] transition-transform">
+        <div className="relative bg-gradient-to-br from-[#803791] via-[#6a2a6f] to-[#b87bd1] rounded-xl sm:rounded-2xl p-10 text-white shadow-2xl mb-8 overflow-hidden transform-gpu will-change-transform hover:scale-[1.01] transition-transform">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#b87bd1]/20 rounded-full -translate-y-32 translate-x-32 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#803791]/12 rounded-full translate-y-32 -translate-x-32 blur-3xl"></div>
           <div className="relative z-10">
@@ -254,9 +254,9 @@ export default function PostNewJob() {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6">
           {/* Basic Information */}
-          <div className="bg-white/5 rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
             <div className="flex items-center gap-3 mb-8">
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
@@ -267,7 +267,7 @@ export default function PostNewJob() {
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                   Basic Information
                 </h2>
                 <p className="text-sm text-white/75">
@@ -276,7 +276,7 @@ export default function PostNewJob() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-white/90 mb-2">
                   Job Title <span className="text-red-500">*</span>
@@ -350,7 +350,7 @@ export default function PostNewJob() {
           </div>
 
           {/* Job Requirements */}
-          <div className="bg-white/5 rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
             <div className="flex items-center gap-3 mb-8">
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
@@ -361,7 +361,7 @@ export default function PostNewJob() {
                 <Award className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                   Job Requirements
                 </h2>
                 <p className="text-sm text-white/75">
@@ -370,7 +370,7 @@ export default function PostNewJob() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               <div>
                 <label className="block text-sm font-semibold text-white/90 mb-2">
                   Experience Required <span className="text-red-500">*</span>
@@ -513,7 +513,7 @@ export default function PostNewJob() {
           </div>
 
           {/* Job Details */}
-          <div className="bg-white/5 rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all">
             <div className="flex items-center gap-3 mb-8">
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
@@ -524,14 +524,14 @@ export default function PostNewJob() {
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">Job Details</h2>
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">Job Details</h2>
                 <p className="text-sm text-white/75">
                   Comprehensive role information
                 </p>
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-white/90 mb-2">
                   Job Description <span className="text-red-500">*</span>
@@ -580,7 +580,7 @@ export default function PostNewJob() {
           </div>
 
           {/* Action Buttons */}
-          <div className="bg-white/5 rounded-2xl border border-[#803791]/8 p-8 shadow-md">
+          <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-[#803791]/8 p-8 shadow-md">
             <div className="flex flex-col sm:flex-row gap-4 justify-end">
               <button
                 type="button"

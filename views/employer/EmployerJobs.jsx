@@ -211,7 +211,7 @@ export default function EmployerJobs() {
   };
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+    <div className="relative p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
@@ -231,7 +231,7 @@ export default function EmployerJobs() {
 
       {/* Premium Header */}
       <div
-        className="group relative overflow-hidden rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(128,55,145,0.3)]"
+        className="group relative overflow-hidden rounded-xl sm:rounded-2xl sm:rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(128,55,145,0.3)]"
         style={{
           background:
             "linear-gradient(135deg, rgba(128,55,145,0.16), rgba(184,123,209,0.12))",
@@ -240,11 +240,11 @@ export default function EmployerJobs() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#803791]/10 to-[#b87bd1]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
         <div className="relative flex items-center justify-between">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
             <div className="relative">
-              <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+              <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl sm:rounded-2xl sm:rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
               <div
-                className="relative p-4 rounded-3xl shadow-2xl"
+                className="relative p-4 rounded-xl sm:rounded-2xl sm:rounded-3xl shadow-2xl"
                 style={{
                   background: "linear-gradient(135deg,#803791,#b87bd1)",
                 }}
@@ -264,7 +264,7 @@ export default function EmployerJobs() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="group/btn relative px-6 py-3 rounded-xl font-semibold text-white border border-white/20 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl">
+            <button className="group/btn relative px-3 py-2 sm:px-4 sm:py-2.5 sm:px-6 sm:py-3 rounded-xl font-semibold text-white border border-white/20 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl">
               <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-colors duration-300"></div>
               <span className="relative flex items-center gap-2">
                 <Download className="w-5 h-5 group-hover/btn:translate-y-1 transition-transform duration-300" />
@@ -295,11 +295,11 @@ export default function EmployerJobs() {
       </div>
 
       {/* Premium Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="group relative rounded-3xl p-6 shadow-xl transition-all duration-500 cursor-pointer hover:scale-105 hover:shadow-2xl"
+            className="group relative rounded-xl sm:rounded-2xl sm:rounded-3xl p-6 shadow-xl transition-all duration-500 cursor-pointer hover:scale-105 hover:shadow-2xl"
             style={{
               background:
                 "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
@@ -310,15 +310,15 @@ export default function EmployerJobs() {
             onMouseLeave={() => setHoveredStat(null)}
           >
             <div
-              className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+              className={`absolute inset-0 rounded-xl sm:rounded-2xl sm:rounded-3xl bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
             ></div>
 
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500"></div>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl sm:rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500"></div>
 
             <div className="relative">
               <div className="flex items-start justify-between mb-6">
                 <div
-                  className={`p-4 rounded-2xl shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 bg-gradient-to-br ${stat.gradient}`}
+                  className={`p-4 rounded-xl sm:rounded-2xl shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 bg-gradient-to-br ${stat.gradient}`}
                 >
                   <stat.icon className="w-7 h-7 text-white" />
                 </div>
@@ -360,22 +360,22 @@ export default function EmployerJobs() {
 
       {/* Premium Search Section */}
       <div
-        className="rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10"
+        className="rounded-xl sm:rounded-2xl sm:rounded-3xl p-8 shadow-2xl backdrop-blur-md border border-white/10"
         style={{
           background:
             "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
         }}
       >
-        <div className="flex flex-col gap-6 md:flex-row md:items-center">
+        <div className="flex flex-col gap-3 sm:gap-4 md:gap-6 md:flex-row md:items-center">
           <div className="relative flex-1 group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl opacity-0 group-focus-within:opacity-20 blur transition-opacity duration-500"></div>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl sm:rounded-2xl opacity-0 group-focus-within:opacity-20 blur transition-opacity duration-500"></div>
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60 group-focus-within:text-[#b87bd1] transition-colors duration-300 z-10" />
               <input
                 placeholder="Search by job title, department, location..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl transition-all text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] hover:bg-white/[0.1] bg-white/5 border border-white/10"
+                className="w-full pl-12 pr-4 py-4 rounded-xl sm:rounded-2xl transition-all text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] hover:bg-white/[0.1] bg-white/5 border border-white/10"
               />
               {searchQuery && (
                 <button
@@ -392,7 +392,7 @@ export default function EmployerJobs() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-6 py-4 rounded-2xl transition-all text-white focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] hover:bg-white/[0.1] cursor-pointer bg-white/5 border border-white/10"
+              className="px-6 py-4 rounded-xl sm:rounded-2xl transition-all text-white focus:outline-none focus:ring-2 focus:ring-[#b87bd1]/50 focus:border-[#b87bd1] hover:bg-white/[0.1] cursor-pointer bg-white/5 border border-white/10"
             >
               <option value="all" className="bg-slate-800">
                 📋 All Status
@@ -408,13 +408,13 @@ export default function EmployerJobs() {
               </option>
             </select>
 
-            <button className="p-4 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:rotate-180">
+            <button className="p-4 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:rotate-180">
               <RefreshCw className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-6 mt-6 pt-6 border-t border-white/10">
+        <div className="flex items-center gap-3 sm:gap-4 md:gap-6 mt-6 pt-6 border-t border-white/10">
           <div className="flex items-center gap-3 text-white/70">
             <BarChart3 className="w-5 h-5 text-[#b87bd1]" />
             <span className="text-sm font-semibold">
@@ -445,7 +445,7 @@ export default function EmployerJobs() {
           return (
             <div
               key={job.id}
-              className="group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
+              className="group relative rounded-xl sm:rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))",
@@ -455,13 +455,13 @@ export default function EmployerJobs() {
               onMouseEnter={() => setHoveredCard(job.id)}
               onMouseLeave={() => setHoveredCard(null)}
             >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-3xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500"></div>
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-xl sm:rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500"></div>
 
               {job.featured && (
                 <div className="absolute top-4 right-4 z-10">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl blur-md opacity-50 animate-pulse"></div>
-                    <div className="relative px-4 py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center gap-2 shadow-lg">
+                    <div className="relative px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center gap-2 shadow-lg">
                       <Star className="w-4 h-4 text-white fill-white" />
                       <span className="text-xs font-bold text-white">
                         FEATURED
@@ -476,9 +476,9 @@ export default function EmployerJobs() {
                   <div className="flex-1">
                     <div className="flex items-start gap-4 mb-4">
                       <div className="relative group/icon">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-2xl blur-md opacity-50 group-hover/icon:opacity-75 transition-opacity duration-300"></div>
+                        <div className="absolute -inset-1 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl sm:rounded-2xl blur-md opacity-50 group-hover/icon:opacity-75 transition-opacity duration-300"></div>
                         <div
-                          className="relative w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-300"
+                          className="relative w-16 h-16 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-300"
                           style={{
                             background:
                               "linear-gradient(135deg,#803791,#b87bd1)",
@@ -490,11 +490,11 @@ export default function EmployerJobs() {
 
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-2xl font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
+                          <h3 className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 group-hover:bg-clip-text transition-all duration-300">
                             {job.title}
                           </h3>
                           <div
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 ${statusConfig.class} group-hover:scale-105 transition-transform duration-300`}
+                            className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-sm font-bold border-2 ${statusConfig.class} group-hover:scale-105 transition-transform duration-300`}
                           >
                             <StatusIcon className="w-4 h-4" />
                             {job.status}
@@ -513,7 +513,7 @@ export default function EmployerJobs() {
                           {job.department}
                         </p>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                           <div className="group/detail flex items-center gap-3 text-white/70 hover:text-white transition-colors duration-300">
                             <div className="p-2.5 rounded-xl bg-white/5 group-hover/detail:bg-white/10 group-hover/detail:scale-110 transition-all duration-300">
                               <MapPin className="w-5 h-5 text-[#b87bd1]" />
@@ -555,7 +555,7 @@ export default function EmployerJobs() {
                         </div>
 
                         <div className="flex items-center gap-4">
-                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
+                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-xl sm:rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
                             <div
                               className="p-3 rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300"
                               style={{
@@ -566,7 +566,7 @@ export default function EmployerJobs() {
                               <Users className="w-6 h-6 text-white" />
                             </div>
                             <div>
-                              <p className="text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
+                              <p className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
                                 {job.applications}
                               </p>
                               <p className="text-xs text-white/60 font-semibold">
@@ -575,7 +575,7 @@ export default function EmployerJobs() {
                             </div>
                           </div>
 
-                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
+                          <div className="group/stat flex items-center gap-4 px-5 py-3 rounded-xl sm:rounded-2xl transition-all duration-300 hover:scale-105 bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-xl flex-1">
                             <div
                               className="p-3 rounded-xl shadow-lg group-hover/stat:scale-110 group-hover/stat:rotate-12 transition-all duration-300"
                               style={{
@@ -586,7 +586,7 @@ export default function EmployerJobs() {
                               <Eye className="w-6 h-6 text-white" />
                             </div>
                             <div>
-                              <p className="text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
+                              <p className="text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl font-black text-white group-hover/stat:text-transparent group-hover/stat:bg-gradient-to-r group-hover/stat:from-white group-hover/stat:to-white/70 group-hover/stat:bg-clip-text transition-all">
                                 {job.views}
                               </p>
                               <p className="text-xs text-white/60 font-semibold">
@@ -623,7 +623,7 @@ export default function EmployerJobs() {
                 </div>
 
                 {job.status === "Expiring Soon" && (
-                  <div className="mt-6 relative overflow-hidden rounded-2xl">
+                  <div className="mt-6 relative overflow-hidden rounded-xl sm:rounded-2xl">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 animate-pulse"></div>
                     <div className="relative flex items-center gap-4 p-5 border-2 border-orange-500/30 bg-orange-500/10 backdrop-blur-sm">
                       <div className="p-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg">
@@ -641,7 +641,7 @@ export default function EmployerJobs() {
                           . Renew now to keep it active and visible.
                         </p>
                       </div>
-                      <button className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 transition-transform duration-300 shadow-lg">
+                      <button className="px-3 py-2 sm:px-4 sm:py-2.5 sm:px-6 sm:py-3 rounded-xl font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 transition-transform duration-300 shadow-lg">
                         Renew Now
                       </button>
                     </div>
@@ -653,7 +653,7 @@ export default function EmployerJobs() {
         })}
 
         {filteredJobs.length === 0 && (
-          <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+          <div className="relative overflow-hidden rounded-xl sm:rounded-2xl sm:rounded-3xl shadow-2xl">
             <div
               className="absolute inset-0"
               style={{
@@ -664,9 +664,9 @@ export default function EmployerJobs() {
 
             <div className="relative p-20 text-center backdrop-blur-xl border border-white/10">
               <div className="relative inline-block mb-8">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-3xl blur-3xl opacity-30 animate-pulse"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-xl sm:rounded-2xl sm:rounded-3xl blur-3xl opacity-30 animate-pulse"></div>
                 <div
-                  className="relative w-32 h-32 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-6 transition-all duration-500"
+                  className="relative w-32 h-32 rounded-xl sm:rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-6 transition-all duration-500"
                   style={{
                     background: "linear-gradient(135deg,#803791,#b87bd1)",
                   }}
@@ -675,7 +675,7 @@ export default function EmployerJobs() {
                 </div>
               </div>
 
-              <h3 className="text-3xl font-extrabold text-white mb-4">
+              <h3 className="text-base sm:text-lg md:text-xl sm:text-lg sm:text-base sm:text-lg md:text-xl md:text-2xl md:text-3xl font-extrabold text-white mb-4">
                 No jobs found
               </h3>
               <p className="text-white/60 text-lg mb-10 max-w-md mx-auto leading-relaxed">

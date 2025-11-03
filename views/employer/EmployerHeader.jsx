@@ -35,7 +35,7 @@ export default function EmployerHeader({ onMenuClick }) {
 
   return (
     <header
-      className="sticky top-0 z-30 h-16 flex items-center justify-between px-6 shadow-lg backdrop-blur-md border-b border-white/6"
+      className="sticky top-0 z-30 h-16 flex items-center justify-between px-4 sm:px-6 shadow-lg backdrop-blur-md border-b border-white/6"
       style={{
         background:
           "linear-gradient(90deg, rgba(128,55,145,0.12), rgba(184,123,209,0.06))",
