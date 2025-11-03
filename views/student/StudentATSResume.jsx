@@ -8,6 +8,7 @@ import {
   Clock, RefreshCw, Lightbulb, FileCheck, Layout, PenTool, Star
 } from "lucide-react";
 import { resumeService } from "@/services/resumeService";
+import ResumeDetailsModal from "./StudentATSResumeModal";
 
 export default function StudentATSResume() {
   const [resumes, setResumes] = useState([]);
@@ -504,176 +505,14 @@ export default function StudentATSResume() {
         </div>
       )}
 
-      {/* Resume Details Modal */}
+      {/* Resume Details Modal - Premium Professional UI */}
       <AnimatePresence>
         {selectedResume && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-            onClick={() => setSelectedResume(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border border-white/20 rounded-2xl shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="sticky top-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] p-6 border-b border-white/10 z-10">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white mb-1">{selectedResume.name}</h2>
-                    <p className="text-white/70 text-sm">
-                      Uploaded {selectedResume.createdAt ? new Date(selectedResume.createdAt).toLocaleDateString() : "recently"}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setSelectedResume(null)}
-                    className="p-2 hover:bg-white/20 rounded-lg transition-all"
-                  >
-                    <span className="text-white text-2xl">&times;</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-6">
-                {/* ATS Score Section */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="md:col-span-1">
-                    <div className="relative rounded-xl p-6 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-                      <div className="text-center">
-                        <div className="relative inline-flex items-center justify-center w-32 h-32 mb-4">
-                          <svg className="w-full h-full transform -rotate-90">
-                            <circle
-                              cx="64"
-                              cy="64"
-                              r="56"
-                              stroke="rgba(255,255,255,0.1)"
-                              strokeWidth="8"
-                              fill="none"
-                            />
-                            <circle
-                              cx="64"
-                              cy="64"
-                              r="56"
-                              stroke="url(#gradient)"
-                              strokeWidth="8"
-                              fill="none"
-                              strokeDasharray={`${(selectedResume.atsScore || 0) * 3.51} 351`}
-                              strokeLinecap="round"
-                            />
-                            <defs>
-                              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="#803791" />
-                                <stop offset="100%" stopColor="#b87bd1" />
-                              </linearGradient>
-                            </defs>
-                          </svg>
-                          <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="text-4xl font-bold text-white">{selectedResume.atsScore || 0}</span>
-                            <span className="text-sm text-white/60">ATS Score</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-center gap-2 text-sm">
-                          <div className={`w-2 h-2 rounded-full ${getScoreColor(selectedResume.atsScore || 0).text.replace('text-', 'bg-')}`}></div>
-                          <span className="text-white/80">
-                            {selectedResume.atsScore >= 80 ? "Excellent" : selectedResume.atsScore >= 60 ? "Good" : "Needs Work"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2 space-y-4">
-                    {/* Keywords */}
-                    <div className="rounded-xl p-5 bg-white/5 border border-white/10">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Target className="w-5 h-5 text-[#b87bd1]" />
-                        <h3 className="font-semibold text-white">Detected Keywords</h3>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedResume.keywords && selectedResume.keywords.length > 0 ? (
-                          selectedResume.keywords.map((keyword, idx) => (
-                            <div key={idx} className="group relative">
-                              <div className="px-3 py-1.5 bg-gradient-to-r from-[#803791]/20 to-[#b87bd1]/20 border border-[#b87bd1]/30 rounded-lg">
-                                <span className="text-sm font-medium text-white">{keyword.word}</span>
-                                <span className="ml-2 text-xs text-white/60">×{keyword.frequency}</span>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-sm text-white/60">No keywords detected</p>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Quick Stats */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-lg p-4 bg-blue-500/10 border border-blue-500/20">
-                        <div className="flex items-center gap-2 mb-1">
-                          <FileText className="w-4 h-4 text-blue-400" />
-                          <span className="text-xs text-white/60">File Size</span>
-                        </div>
-                        <p className="text-lg font-bold text-white">
-                          {selectedResume.fileSize ? `${(selectedResume.fileSize / 1024).toFixed(1)} KB` : "N/A"}
-                        </p>
-                      </div>
-                      <div className="rounded-lg p-4 bg-purple-500/10 border border-purple-500/20">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Star className="w-4 h-4 text-purple-400" />
-                          <span className="text-xs text-white/60">Keywords</span>
-                        </div>
-                        <p className="text-lg font-bold text-white">
-                          {selectedResume.keywords?.length || 0}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Suggestions */}
-                {selectedResume.suggestions && selectedResume.suggestions.length > 0 && (
-                  <div className="rounded-xl p-5 bg-white/5 border border-white/10">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Lightbulb className="w-5 h-5 text-yellow-400" />
-                      <h3 className="font-semibold text-white">Improvement Suggestions</h3>
-                    </div>
-                    <div className="space-y-3">
-                      {selectedResume.suggestions.map((suggestion, idx) => (
-                        <div key={idx} className="flex items-start gap-3 p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#b87bd1]/30 transition-all">
-                          <div className={`mt-1 p-1.5 rounded-lg ${
-                            suggestion.priority === 'high' ? 'bg-red-500/20 border border-red-500/30' :
-                            suggestion.priority === 'medium' ? 'bg-yellow-500/20 border border-yellow-500/30' :
-                            'bg-blue-500/20 border border-blue-500/30'
-                          }`}>
-                            <AlertCircle className={`w-4 h-4 ${
-                              suggestion.priority === 'high' ? 'text-red-400' :
-                              suggestion.priority === 'medium' ? 'text-yellow-400' :
-                              'text-blue-400'
-                            }`} />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-semibold text-white/80 uppercase">{suggestion.category}</span>
-                              {suggestion.impact && (
-                                <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full border border-green-500/30">
-                                  {suggestion.impact}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-sm text-white/80">{suggestion.message}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
+          <ResumeDetailsModal
+            resume={selectedResume}
+            onClose={() => setSelectedResume(null)}
+            getScoreColor={getScoreColor}
+          />
         )}
       </AnimatePresence>
 
