@@ -132,16 +132,16 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-6 flex items-center justify-center">
-        <div className="text-white/80 text-lg">Loading course...</div>
+      <div className="min-h-screen p-4 sm:p-6 flex items-center justify-center">
+        <div className="text-white/80 text-base sm:text-lg">Loading course...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen p-6">
-        <div className="bg-red-500/20 border border-red-500/50 text-white px-4 py-3 rounded-2xl">
+      <div className="min-h-screen p-4 sm:p-6">
+        <div className="bg-red-500/20 border border-red-500/50 text-white px-4 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base">
           {error}
         </div>
       </div>
@@ -151,10 +151,10 @@ export default function CourseDetailPage() {
   if (!course) return null;
 
   return (
-    <div className="min-h-screen p-4 md:p-6 lg:p-8 space-y-6">
+    <div className="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-5 md:space-y-6">
       {/* Premium Course Header */}
       <div
-        className="relative overflow-hidden rounded-3xl p-8 md:p-10 text-white shadow-2xl backdrop-blur-xl border border-white/10 group transition-all duration-500 hover:shadow-purple-500/30"
+        className="relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 lg:p-10 text-white shadow-xl sm:shadow-2xl backdrop-blur-xl border border-white/10 group transition-all duration-500 hover:shadow-purple-500/30"
         style={{
           background:
             "linear-gradient(135deg, rgba(128,55,145,0.18) 0%, rgba(184,123,209,0.12) 50%, rgba(240,194,238,0.08) 100%)",
@@ -163,41 +163,41 @@ export default function CourseDetailPage() {
         }}
       >
         {/* Animated Background Elements */}
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -top-5 -right-5 sm:-top-10 sm:-right-10 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-purple-500/10 rounded-full blur-2xl sm:blur-3xl animate-pulse" />
         <div
-          className="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl animate-pulse"
+          className="absolute -bottom-5 -left-5 sm:-bottom-10 sm:-left-10 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-pink-500/10 rounded-full blur-2xl sm:blur-3xl animate-pulse"
           style={{ animationDelay: "1s" }}
         />
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="flex-1 space-y-4">
-            <div className="flex items-start gap-4">
+        <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-5 md:gap-6">
+          <div className="flex-1 space-y-3 sm:space-y-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               {/* Course Icon */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 backdrop-blur-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                <BookOpen className="w-8 h-8 text-purple-300" />
+              <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 backdrop-blur-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <BookOpen className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-purple-300" />
               </div>
 
               <div className="flex-1">
-                <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-3 leading-tight bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
                   {course.title}
                 </h1>
-                <p className="text-white/90 text-lg leading-relaxed mb-4">
+                <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed mb-3 sm:mb-4">
                   {course.description}
                 </p>
               </div>
             </div>
 
             {/* Enhanced Course Meta */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               {course.category && (
-                <span className="px-4 py-2 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 text-white font-semibold flex items-center gap-2 hover:bg-white/20 transition-colors">
-                  <Target className="w-4 h-4 text-purple-400" />
+                <span className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-white/10 rounded-lg sm:rounded-xl backdrop-blur-sm border border-white/20 text-white font-semibold flex items-center gap-1.5 sm:gap-2 hover:bg-white/20 transition-colors">
+                  <Target className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400" />
                   {course.category}
                 </span>
               )}
               {course.level && (
                 <span
-                  className={`px-4 py-2 rounded-xl backdrop-blur-sm border font-semibold ${
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-lg sm:rounded-xl backdrop-blur-sm border font-semibold ${
                     course.level === "Beginner"
                       ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
                       : course.level === "Intermediate"
@@ -205,31 +205,31 @@ export default function CourseDetailPage() {
                       : "bg-rose-500/15 text-rose-400 border-rose-500/30"
                   }`}
                 >
-                  <Award className="w-4 h-4 inline mr-2" />
+                  <Award className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1.5 sm:mr-2" />
                   {course.level}
                 </span>
               )}
               {course.instructor && (
-                <span className="px-4 py-2 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 text-white font-semibold flex items-center gap-2">
-                  <Users className="w-4 h-4 text-blue-400" />
+                <span className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-white/10 rounded-lg sm:rounded-xl backdrop-blur-sm border border-white/20 text-white font-semibold flex items-center gap-1.5 sm:gap-2">
+                  <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
                   {course.instructor}
                 </span>
               )}
               {isParent && (
                 <span className="px-4 py-2 bg-purple-500/15 rounded-xl backdrop-blur-sm border border-purple-500/30 text-purple-300 font-semibold flex items-center gap-2">
-                  <BookOpen className="w-4 h-4" />
+                  <BookOpen className="w-3 h-3 sm:w-4 sm:h-4" />
                   {course.modules?.length || 0} modules
                 </span>
               )}
               {isModule && (
                 <span className="px-4 py-2 bg-emerald-500/15 rounded-xl backdrop-blur-sm border border-emerald-500/30 text-emerald-300 font-semibold flex items-center gap-2">
-                  <Play className="w-4 h-4" />
+                  <Play className="w-3 h-3 sm:w-4 sm:h-4" />
                   {course.lessons?.length || 0} lessons
                 </span>
               )}
               {course.rating && (
                 <span className="px-4 py-2 bg-yellow-500/15 rounded-xl backdrop-blur-sm border border-yellow-500/30 text-yellow-300 font-semibold flex items-center gap-2">
-                  <Star className="w-4 h-4 fill-yellow-400" />
+                  <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400" />
                   {course.rating}
                 </span>
               )}
@@ -237,7 +237,7 @@ export default function CourseDetailPage() {
 
             {/* Course Progress Bar (for enrolled users) */}
             {hasFullAccess && (
-              <div className="mt-4 p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+              <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-white/80 font-semibold">
                     Your Progress
@@ -264,22 +264,22 @@ export default function CourseDetailPage() {
             )}
           </div>
           {isParent && !hasFullAccess && !isPro && (
-            <div className="flex flex-col items-end gap-2">
-              <div className="text-3xl font-black">
+            <div className="flex flex-col items-end gap-2 sm:gap-3">
+              <div className="text-2xl sm:text-3xl font-black">
                 ₹{course.pricing?.bundlePrice || 0}
               </div>
               <button
                 onClick={() => purchaseFull(course._id)}
                 disabled={purchasing}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black flex items-center gap-2 hover:opacity-95 disabled:opacity-50 shadow-lg"
+                className="px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black flex items-center gap-2 hover:opacity-95 disabled:opacity-50 shadow-lg"
               >
                 <ShoppingCart className="w-5 h-5" /> Buy Complete Bundle
               </button>
             </div>
           )}
           {isPro && (
-            <div className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-xl border border-yellow-500/50">
-              <Crown className="w-6 h-6 text-yellow-400" />
+            <div className="flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-lg sm:rounded-xl border border-yellow-500/50">
+              <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" />
               <div className="text-center">
                 <div className="text-yellow-400 font-bold text-lg">
                   Pro Member
@@ -301,10 +301,10 @@ export default function CourseDetailPage() {
 
       {/* Module Type: Video Player and Lessons */}
       {isModule && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
           {/* Premium Video Player */}
           <div
-            className="lg:col-span-2 relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-xl"
+            className="lg:col-span-2 relative rounded-2xl sm:rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl border border-white/10 backdrop-blur-xl"
             style={{
               background:
                 "linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%)",
@@ -352,15 +352,15 @@ export default function CourseDetailPage() {
                       <div className="relative">
                         <div className="absolute -inset-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-30 animate-pulse" />
                         <div className="relative p-6 rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
-                          <Lock className="w-12 h-12 text-white" />
+                          <Lock className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
                         </div>
                       </div>
 
                       <div className="space-y-3">
-                        <h3 className="text-2xl font-black text-white">
+                        <h3 className="text-xl sm:text-2xl font-black text-white">
                           Premium Content
                         </h3>
-                        <p className="text-white/80 text-lg max-w-md leading-relaxed">
+                        <p className="text-white/80 text-sm sm:text-base md:text-lg max-w-md leading-relaxed">
                           Unlock this lesson and access all premium content with
                           our Pro plan
                         </p>
@@ -369,7 +369,7 @@ export default function CourseDetailPage() {
                       <div className="flex flex-col sm:flex-row gap-4">
                         <button
                           onClick={() => router.push("/student/upgrade")}
-                          className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-3"
+                          className="group px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-3"
                         >
                           <Award className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                           Upgrade to Pro
@@ -379,7 +379,7 @@ export default function CourseDetailPage() {
                           <button
                             onClick={() => purchaseModule(course._id)}
                             disabled={purchasing}
-                            className="px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold border border-white/20 hover:border-white/40 transition-all duration-300 flex items-center gap-3 disabled:opacity-50"
+                            className="px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base rounded-xl sm:rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold border border-white/20 hover:border-white/40 transition-all duration-300 flex items-center gap-3 disabled:opacity-50"
                           >
                             <ShoppingCart className="w-5 h-5" />
                             Buy This Module
@@ -427,13 +427,13 @@ export default function CourseDetailPage() {
               </div>
             )}
             {/* Enhanced Lesson Info Panel */}
-            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-black/40 to-black/60 backdrop-blur-xl">
+            <div className="p-4 sm:p-5 md:p-6 border-t border-white/10 bg-gradient-to-r from-black/40 to-black/60 backdrop-blur-xl">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 space-y-2">
-                  <h2 className="text-white font-black text-xl leading-tight">
+                  <h2 className="text-white font-black text-base sm:text-lg md:text-xl leading-tight">
                     {activeLesson?.title}
                   </h2>
-                  <p className="text-white/80 leading-relaxed">
+                  <p className="text-white/80 text-sm sm:text-base leading-relaxed">
                     {activeLesson?.description}
                   </p>
 
@@ -454,7 +454,7 @@ export default function CourseDetailPage() {
                 </div>
 
                 {/* Lesson Status */}
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex flex-col items-end gap-2 sm:gap-3">
                   {activeLesson?.isFreePreview || hasFullAccess ? (
                     <div className="flex items-center gap-2 px-3 py-2 bg-emerald-500/20 rounded-xl border border-emerald-500/30">
                       <CheckCircle2 className="w-5 h-5 text-emerald-400" />
@@ -477,7 +477,7 @@ export default function CourseDetailPage() {
 
           {/* Premium Lessons List */}
           <div
-            className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-xl max-h-[70vh]"
+            className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl border border-white/10 backdrop-blur-xl max-h-[70vh]"
             style={{
               background:
                 "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
@@ -486,10 +486,10 @@ export default function CourseDetailPage() {
             }}
           >
             {/* Header */}
-            <div className="p-6 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+            <div className="p-4 sm:p-5 md:p-6 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
               <div className="flex items-center justify-between">
-                <h3 className="text-white font-black text-xl flex items-center gap-3">
-                  <BookOpen className="w-6 h-6 text-purple-400" />
+                <h3 className="text-white font-black text-base sm:text-lg md:text-xl flex items-center gap-3">
+                  <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
                   Course Lessons
                 </h3>
                 <div className="px-4 py-2 bg-white/10 rounded-xl border border-white/20">
@@ -515,7 +515,7 @@ export default function CourseDetailPage() {
                     <button
                       key={lesson._id}
                       onClick={() => setActiveLessonId(lesson._id)}
-                      className={`group w-full text-left p-4 rounded-2xl transition-all duration-300 border relative overflow-hidden ${
+                      className={`group w-full text-left p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 border relative overflow-hidden ${
                         isActive
                           ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/40 shadow-lg shadow-purple-500/20"
                           : "hover:bg-white/8 border-white/10 hover:border-white/20 hover:shadow-lg"
@@ -528,7 +528,7 @@ export default function CourseDetailPage() {
                         <div className="flex items-center gap-4">
                           {/* Lesson Number */}
                           <div
-                            className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black transition-all duration-300 ${
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center text-sm font-black transition-all duration-300 ${
                               isActive
                                 ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg"
                                 : "bg-white/10 text-white/70 group-hover:bg-white/20"
@@ -653,8 +653,8 @@ export default function CourseDetailPage() {
       {isParent && (
         <div className="space-y-8">
           <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-black text-white flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30">
+            <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl font-black text-white flex items-center gap-3 sm:gap-4">
+              <div className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30">
                 <BookOpen className="w-8 h-8 text-purple-300" />
               </div>
               Course Modules
@@ -675,7 +675,7 @@ export default function CourseDetailPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {course.modules && course.modules.length > 0 ? (
               course.modules.map((module, index) => {
                 const isFreeModule =
@@ -690,7 +690,7 @@ export default function CourseDetailPage() {
                 return (
                   <div
                     key={module._id}
-                    className="group relative rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-purple-500/30 cursor-pointer"
+                    className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-purple-500/30 cursor-pointer"
                     style={{
                       background:
                         "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)",
@@ -702,7 +702,7 @@ export default function CourseDetailPage() {
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/10 group-hover:to-pink-500/10 transition-all duration-500 rounded-3xl pointer-events-none" />
 
                     {/* Module Image */}
-                    <div className="relative overflow-hidden h-48">
+                    <div className="relative overflow-hidden h-40 sm:h-44 md:h-48">
                       {module.thumbnail ? (
                         <img
                           src={module.thumbnail}
@@ -744,9 +744,9 @@ export default function CourseDetailPage() {
                     </div>
 
                     {/* Module Content */}
-                    <div className="relative p-6 space-y-4">
+                    <div className="relative p-4 sm:p-5 md:p-6 space-y-3 sm:space-y-4">
                       <div>
-                        <h3 className="text-white font-black text-xl leading-tight group-hover:text-purple-200 transition-colors">
+                        <h3 className="text-white font-black text-base sm:text-lg md:text-xl leading-tight group-hover:text-purple-200 transition-colors">
                           {module.title}
                         </h3>
                         <p className="text-white/70 text-sm mt-2 leading-relaxed line-clamp-2">
@@ -787,7 +787,7 @@ export default function CourseDetailPage() {
                       {/* Price and Action */}
                       <div className="flex items-center justify-between pt-4 border-t border-white/10">
                         <div className="text-left">
-                          <span className="text-3xl font-black text-white">
+                          <span className="text-2xl sm:text-3xl font-black text-white">
                             ₹{module.pricing?.individualPrice ?? 0}
                           </span>
                           {isFreeModule && (
@@ -802,7 +802,7 @@ export default function CourseDetailPage() {
                             onClick={() =>
                               router.push(`/student/courses/${module._id}`)
                             }
-                            className="group/btn px-6 py-3 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-3"
+                            className="group/btn px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-3"
                           >
                             <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
                             Start Learning
@@ -817,7 +817,7 @@ export default function CourseDetailPage() {
                             {purchasing ? "Processing..." : "Buy Module"}
                           </button>
                         ) : (
-                          <div className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-xl border border-yellow-500/30">
+                          <div className="flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-lg sm:rounded-xl border border-yellow-500/30">
                             <Crown className="w-5 h-5 text-yellow-400" />
                             <span className="text-yellow-400 font-bold text-sm">
                               Pro Access
