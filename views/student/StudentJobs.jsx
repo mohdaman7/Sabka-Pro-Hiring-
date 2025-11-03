@@ -227,10 +227,10 @@
 //                   background: "linear-gradient(135deg,#803791,#b87bd1)",
 //                 }}
 //               >
-//                 <Sparkles className="w-8 h-8 text-white" strokeWidth={2.5} />
+//                 <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
 //               </div>
 //               <div>
-//                 <h1 className="text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+//                 <h1 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
 //                   Find Your Dream Job
 //                 </h1>
 //                 <p className="text-white/90 text-lg font-medium">
@@ -287,7 +287,7 @@
 //                     <p className="text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">
 //                       {stat.label}
 //                     </p>
-//                     <p className="text-5xl font-black text-white">{stat.value}</p>
+//                     <p className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl font-black text-white">{stat.value}</p>
 //                   </div>
 //                   <div
 //                     className="h-20 w-20 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300"
@@ -303,7 +303,7 @@
 //           })}
 //         </div>
 
-//         <div className="flex gap-8">
+//         <div className="flex gap-4 sm:gap-6 md:gap-8">
 //           {/* Sticky Filters Sidebar */}
 //           <aside
 //             className={`w-80 flex-shrink-0 ${
@@ -482,7 +482,7 @@
 //                       <div className="flex-1 min-w-0">
 //                         <div className="flex items-start justify-between gap-4 mb-3">
 //                           <div className="flex-1 min-w-0">
-//                             <h3 className="text-2xl font-black text-white mb-2 group-hover:text-purple-200 transition-colors">
+//                             <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-2 group-hover:text-purple-200 transition-colors">
 //                               {job.title}
 //                             </h3>
 //                             <p className="text-lg font-bold text-white/80">
@@ -597,7 +597,7 @@
 //                     <Search className="h-12 w-12 text-white" strokeWidth={2.5} />
 //                   </div>
 //                 </div>
-//                 <h3 className="text-3xl font-black text-white mb-4">
+//                 <h3 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-black text-white mb-4">
 //                   No jobs found
 //                 </h3>
 //                 <p className="text-white/70 text-lg font-medium max-w-md mx-auto">

@@ -176,15 +176,15 @@ export default function StudentSettings() {
       {/* Background matching dashboard theme */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl"
           style={{ background: "rgba(128,55,145,0.08)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl"
           style={{ background: "rgba(184,123,209,0.06)" }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
+          className="absolute top-1/3 right-1/4 w-36 h-36 md:w-72 md:h-72 rounded-full blur-xl md:blur-2xl"
           style={{ background: "rgba(240,194,238,0.03)" }}
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
@@ -201,7 +201,7 @@ export default function StudentSettings() {
         >
           <div className="flex items-center gap-3 mb-8">
             <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shadow-lg"
               style={{
                 background: "linear-gradient(135deg,#803791,#b87bd1)",
               }}
@@ -209,7 +209,7 @@ export default function StudentSettings() {
               <SettingsIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">Settings</h1>
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white">Settings</h1>
               <p className="text-white/80">Manage your account preferences</p>
             </div>
           </div>
@@ -281,10 +281,10 @@ export default function StudentSettings() {
         <div className="flex-1 p-8 overflow-auto">
           {/* Profile Section */}
           {activeSection === "profile" && (
-            <div className="max-w-4xl space-y-8">
+            <div className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-3xl font-bold text-white mb-2">
+                  <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                     Profile Settings
                   </h2>
                   <p className="text-white/80">
@@ -294,7 +294,7 @@ export default function StudentSettings() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => handleReset("profile")}
-                    className="px-6 py-3 border border-white/10 text-white/90 rounded-xl font-semibold hover:bg-white/6 transition-all flex items-center gap-2 transform hover:-translate-y-0.5"
+                    className="px-4 py-2 sm:px-6 sm:py-3 border border-white/10 text-white/90 rounded-xl font-semibold hover:bg-white/6 transition-all flex items-center gap-2 transform hover:-translate-y-0.5"
                   >
                     <RotateCcw className="w-4 h-4" />
                     Reset
@@ -302,7 +302,7 @@ export default function StudentSettings() {
                   <button
                     onClick={() => handleSave("profile")}
                     disabled={isLoading}
-                    className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 transform hover:-translate-y-0.5"
+                    className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 transform hover:-translate-y-0.5"
                   >
                     {isLoading ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -314,17 +314,17 @@ export default function StudentSettings() {
                 </div>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-8">
+              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Personal Information */}
                 <div
-                  className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                  className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                       <User className="w-5 h-5 text-white" />
                     </div>
@@ -407,17 +407,17 @@ export default function StudentSettings() {
                 </div>
 
                 {/* Right Column */}
-                <div className="space-y-8">
+                <div className="space-y-4 sm:space-y-6 md:space-y-8">
                   {/* Professional Information */}
                   <div
-                    className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                    className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                     style={{
                       background:
                         "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                       border: "1px solid rgba(255,255,255,0.06)",
                     }}
                   >
-                    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                         <Briefcase className="w-5 h-5 text-white" />
                       </div>
@@ -471,14 +471,14 @@ export default function StudentSettings() {
 
                   {/* Profile Photo */}
                   <div
-                    className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                    className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                     style={{
                       background:
                         "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                       border: "1px solid rgba(255,255,255,0.06)",
                     }}
                   >
-                    <h3 className="text-xl font-bold text-white mb-6">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6">
                       Profile Photo
                     </h3>
                     <div className="flex items-center gap-6">
@@ -519,10 +519,10 @@ export default function StudentSettings() {
 
           {/* Preferences Section */}
           {activeSection === "preferences" && (
-            <div className="max-w-4xl space-y-8">
+            <div className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-3xl font-bold text-white mb-2">
+                  <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                     Preferences
                   </h2>
                   <p className="text-white/80">
@@ -532,7 +532,7 @@ export default function StudentSettings() {
                 <button
                   onClick={() => handleSave("preferences")}
                   disabled={isLoading}
-                  className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 transform hover:-translate-y-0.5"
+                  className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 transform hover:-translate-y-0.5"
                 >
                   {isLoading ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -543,17 +543,17 @@ export default function StudentSettings() {
                 </button>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-8">
+              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Theme Preferences */}
                 <div
-                  className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                  className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                       <Palette className="w-5 h-5 text-white" />
                     </div>
@@ -618,14 +618,14 @@ export default function StudentSettings() {
 
                 {/* Application Preferences */}
                 <div
-                  className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                  className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                       <SettingsIcon className="w-5 h-5 text-white" />
                     </div>
@@ -700,9 +700,9 @@ export default function StudentSettings() {
 
           {/* Security Section */}
           {activeSection === "security" && (
-            <div className="max-w-2xl space-y-8">
+            <div className="max-w-2xl space-y-4 sm:space-y-6 md:space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Security Settings
                 </h2>
                 <p className="text-white/80">
@@ -711,14 +711,14 @@ export default function StudentSettings() {
               </div>
 
               <div
-                className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                     <Key className="w-5 h-5 text-white" />
                   </div>
@@ -823,7 +823,7 @@ export default function StudentSettings() {
               {/* Security Features */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div
-                  className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                  className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
@@ -847,7 +847,7 @@ export default function StudentSettings() {
                   </button>
                 </div>
                 <div
-                  className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                  className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
@@ -871,9 +871,9 @@ export default function StudentSettings() {
 
           {/* Notifications Section */}
           {activeSection === "notifications" && (
-            <div className="max-w-2xl space-y-8">
+            <div className="max-w-2xl space-y-4 sm:space-y-6 md:space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Notification Settings
                 </h2>
                 <p className="text-white/80">
@@ -882,14 +882,14 @@ export default function StudentSettings() {
               </div>
 
               <div
-                className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                     <Bell className="w-5 h-5 text-white" />
                   </div>
@@ -993,9 +993,9 @@ export default function StudentSettings() {
 
           {/* Billing Section */}
           {activeSection === "billing" && (
-            <div className="max-w-4xl space-y-8">
+            <div className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Billing & Subscription
                 </h2>
                 <p className="text-white/80">
@@ -1003,17 +1003,17 @@ export default function StudentSettings() {
                 </p>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-8">
+              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Current Plan */}
                 <div
-                  className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                  className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                       <CreditCard className="w-5 h-5 text-white" />
                     </div>
@@ -1028,7 +1028,7 @@ export default function StudentSettings() {
                   >
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <div className="text-2xl font-bold text-white">
+                        <div className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                           Pro Plan
                         </div>
                         <div className="text-[#b87bd1] font-semibold">
@@ -1061,14 +1061,14 @@ export default function StudentSettings() {
 
                 {/* Payment Method */}
                 <div
-                  className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                  className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
-                  <h3 className="text-xl font-bold text-white mb-6">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6">
                     Payment Method
                   </h3>
                   <div className="space-y-4">
@@ -1104,14 +1104,14 @@ export default function StudentSettings() {
 
               {/* Billing History */}
               <div
-                className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
-                <h3 className="text-xl font-bold text-white mb-6">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6">
                   Billing History
                 </h3>
                 <div className="space-y-3">
@@ -1170,9 +1170,9 @@ export default function StudentSettings() {
 
           {/* Privacy Section */}
           {activeSection === "privacy" && (
-            <div className="max-w-2xl space-y-8">
+            <div className="max-w-2xl space-y-4 sm:space-y-6 md:space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                   Privacy Settings
                 </h2>
                 <p className="text-white/80">
@@ -1181,14 +1181,14 @@ export default function StudentSettings() {
               </div>
 
               <div
-                className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#803791] to-[#b87bd1]">
                     <Lock className="w-5 h-5 text-white" />
                   </div>
@@ -1244,14 +1244,14 @@ export default function StudentSettings() {
 
               {/* Data Management */}
               <div
-                className="rounded-2xl p-6 shadow-xl transition-all hover:shadow-2xl"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl transition-all hover:shadow-2xl"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
-                <h3 className="text-xl font-bold text-white mb-6">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6">
                   Data Management
                 </h3>
                 <div className="space-y-4">

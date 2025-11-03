@@ -140,18 +140,18 @@ export default function UpgradePage() {
   ];
 
   return (
-    <div className="relative p-6 space-y-8 min-h-screen overflow-hidden">
+    <div className="relative p-6 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
           style={{
             background: "rgba(128,55,145,0.15)",
             animation: "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl"
           style={{
             background: "rgba(184,123,209,0.12)",
             animation: "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -288,7 +288,7 @@ export default function UpgradePage() {
 
         <div className="relative">
           <div className="flex items-center gap-4 mb-6 animate-slideInLeft">
-            <div className="px-6 py-3 rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white text-sm font-bold shadow-2xl flex items-center gap-2 animate-pulse">
+            <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white text-sm font-bold shadow-2xl flex items-center gap-2 animate-pulse">
               <Zap className="w-5 h-5 fill-yellow-300 text-yellow-300" />
               <span>LIMITED TIME: 50% OFF</span>
               <Zap className="w-5 h-5 fill-yellow-300 text-yellow-300" />
@@ -298,16 +298,16 @@ export default function UpgradePage() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6 md:gap-8">
             <div className="flex-1">
-              <h1 className="text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+              <h1 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
                 Unlock Your
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 animate-gradient mt-2">
                   Dream Career
                 </span>
               </h1>
 
-              <p className="text-xl leading-relaxed text-white/90 mb-8 max-w-2xl">
+              <p className="text-base sm:text-lg md:text-xl leading-relaxed text-white/90 mb-8 max-w-2xl">
                 Join{" "}
                 <span className="font-bold text-yellow-300">
                   10,000+ students
@@ -324,7 +324,7 @@ export default function UpgradePage() {
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </span>
                 </button>
-                <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white rounded-xl font-semibold text-lg hover:bg-white/20 transition-all duration-300 hover:scale-105">
+                <button className="px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white rounded-xl font-semibold text-lg hover:bg-white/20 transition-all duration-300 hover:scale-105">
                   Watch Demo
                 </button>
               </div>
@@ -335,7 +335,7 @@ export default function UpgradePage() {
                     (color, i) => (
                       <div
                         key={i}
-                        className="w-12 h-12 rounded-full border-4 border-white/20 flex items-center justify-center text-white font-bold shadow-lg"
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-4 border-white/20 flex items-center justify-center text-white font-bold shadow-lg"
                         style={{ background: color }}
                       >
                         {String.fromCharCode(65 + i)}
@@ -370,7 +370,7 @@ export default function UpgradePage() {
                 }}
               >
                 <div className="text-center mb-4">
-                  <div className="text-5xl font-black text-white mb-2">
+                  <div className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2">
                     ₹499
                   </div>
                   <div className="text-white/70 line-through text-lg">
@@ -429,9 +429,9 @@ export default function UpgradePage() {
                 <div
                   className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl mb-5 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 bg-gradient-to-br ${benefit.color}`}
                 >
-                  <Icon className="w-8 h-8 text-white" />
+                  <Icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                 </div>
-                <div className="text-4xl font-black text-white mb-2 group-hover:scale-110 transition-transform duration-300">
+                <div className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2 group-hover:scale-110 transition-transform duration-300">
                   {benefit.stat}
                 </div>
                 <div className="text-lg font-bold text-white mb-2">
@@ -451,7 +451,7 @@ export default function UpgradePage() {
 
       {/* Exclusive Features Showcase */}
       <div
-        className="rounded-3xl p-8 shadow-2xl backdrop-blur-sm border border-white/10 relative overflow-hidden"
+        className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl backdrop-blur-sm border border-white/10 relative overflow-hidden"
         style={{
           background:
             "linear-gradient(135deg, rgba(128,55,145,0.12), rgba(184,123,209,0.08))",
@@ -463,7 +463,7 @@ export default function UpgradePage() {
           <div className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 font-semibold mb-4">
             ✨ Exclusive Pro Features
           </div>
-          <h2 className="text-4xl font-extrabold text-white mb-3">
+          <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3">
             Everything You Need to Succeed
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto">
@@ -497,14 +497,14 @@ export default function UpgradePage() {
         <div className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 font-semibold">
           💎 Simple, Transparent Pricing
         </div>
-        <h2 className="text-5xl font-extrabold text-white">Choose Your Plan</h2>
-        <p className="text-xl text-white/70 max-w-2xl mx-auto">
+        <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl font-extrabold text-white">Choose Your Plan</h2>
+        <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
           Start free, upgrade when you're ready to accelerate your career
         </p>
       </div>
 
       {/* Premium Pricing Cards */}
-      <div className="grid gap-8 lg:grid-cols-2 max-w-6xl mx-auto">
+      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-2 max-w-6xl mx-auto">
         {plans.map((plan, index) => {
           const Icon = plan.icon;
           return (
@@ -561,7 +561,7 @@ export default function UpgradePage() {
                     <Icon className="w-10 h-10 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-3xl font-black text-white mb-2">
+                    <h3 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-black text-white mb-2">
                       {plan.name}
                     </h3>
                     <p className="text-white/70 leading-relaxed">
@@ -573,10 +573,10 @@ export default function UpgradePage() {
                 {/* Price */}
                 <div className="mb-8">
                   <div className="flex items-baseline gap-3 mb-2">
-                    <span className="text-6xl font-black text-white">
+                    <span className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white">
                       {plan.price}
                     </span>
-                    <span className="text-xl text-white/60">{plan.period}</span>
+                    <span className="text-base sm:text-lg md:text-xl text-white/60">{plan.period}</span>
                   </div>
                   {plan.originalPrice && (
                     <div className="flex items-center gap-3">
@@ -647,7 +647,7 @@ export default function UpgradePage() {
           <div className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 font-semibold mb-4">
             💬 Success Stories
           </div>
-          <h2 className="text-4xl font-extrabold text-white mb-3">
+          <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3">
             Loved by Thousands
           </h2>
           <p className="text-white/70 text-lg">
@@ -677,7 +677,7 @@ export default function UpgradePage() {
                 "{testimonial.text}"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
                   {testimonial.image}
                 </div>
                 <div>
@@ -718,7 +718,7 @@ export default function UpgradePage() {
             <Gift className="w-5 h-5" />
           </div>
 
-          <h2 className="text-5xl font-black text-white mb-4">
+          <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">
             Still have questions?
           </h2>
           <p className="text-white/80 mb-8 text-xl max-w-2xl mx-auto leading-relaxed">
@@ -735,14 +735,14 @@ export default function UpgradePage() {
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </span>
             </button>
-            <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white rounded-xl font-bold text-lg hover:bg-white/20 hover:border-white/30 transition-all duration-300 hover:scale-110 flex items-center gap-2">
+            <button className="px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white rounded-xl font-bold text-lg hover:bg-white/20 hover:border-white/30 transition-all duration-300 hover:scale-110 flex items-center gap-2">
               <Phone className="w-5 h-5" />
               Schedule a Call
             </button>
           </div>
 
           {/* Trust badges */}
-          <div className="flex flex-wrap justify-center items-center gap-8 pt-8 border-t border-white/10">
+          <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-8 pt-8 border-t border-white/10">
             <div className="flex items-center gap-2 text-white/70">
               <Shield className="w-5 h-5 text-green-400" />
               <span className="text-sm font-semibold">Secure Payment</span>
@@ -767,7 +767,7 @@ export default function UpgradePage() {
 
       {/* FAQ Section */}
       <div
-        className="rounded-3xl p-8 backdrop-blur-sm border border-white/10"
+        className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 backdrop-blur-sm border border-white/10"
         style={{
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
@@ -777,7 +777,7 @@ export default function UpgradePage() {
           <div className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 font-semibold mb-4">
             ❓ Frequently Asked Questions
           </div>
-          <h2 className="text-4xl font-extrabold text-white">
+          <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-extrabold text-white">
             Everything You Need to Know
           </h2>
         </div>
@@ -814,7 +814,7 @@ export default function UpgradePage() {
               className="group p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105"
             >
               <h3 className="text-white font-bold text-lg mb-3 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                   <Check className="w-5 h-5 text-white" />
                 </div>
                 {faq.q}
@@ -832,7 +832,7 @@ export default function UpgradePage() {
             <div className="text-white font-bold text-lg">₹499/mo</div>
             <div className="text-white/70 text-sm line-through">₹999/mo</div>
           </div>
-          <button className="px-6 py-3 bg-white text-purple-600 rounded-xl font-bold hover:shadow-xl transition-all flex items-center gap-2">
+          <button className="px-4 py-2 sm:px-6 sm:py-3 bg-white text-purple-600 rounded-xl font-bold hover:shadow-xl transition-all flex items-center gap-2">
             Upgrade Now
             <ArrowRight className="w-5 h-5" />
           </button>

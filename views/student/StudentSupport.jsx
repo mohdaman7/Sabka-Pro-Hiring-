@@ -174,25 +174,25 @@ export default function StudentSupport() {
   });
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+    <div className="relative p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
       {/* Enhanced Decorative Background */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
           style={{
             background: "rgba(128,55,145,0.12)",
             animation: "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl"
           style={{
             background: "rgba(184,123,209,0.08)",
             animation: "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
+          className="absolute top-1/3 right-1/4 w-36 h-36 md:w-72 md:h-72 rounded-full blur-xl md:blur-2xl"
           style={{
             background: "rgba(240,194,238,0.05)",
             animation: "pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -296,12 +296,12 @@ export default function StudentSupport() {
                 }}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent" />
-                <Headphones className="w-12 h-12 text-white relative z-10" />
+                <Headphones className="w-10 h-10 sm:w-12 sm:h-12 text-white relative z-10" />
                 <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-400 rounded-full border-4 border-white/20 animate-pulse" />
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-4xl lg:text-5xl font-extrabold text-white">
+                  <h1 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white">
                     Support Center
                   </h1>
                   <span className="px-3 py-1 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold flex items-center gap-1 shadow-lg">
@@ -325,12 +325,12 @@ export default function StudentSupport() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
                       <stat.icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <p className="text-white/70 text-sm">{stat.label}</p>
-                      <p className="text-2xl font-bold text-white">
+                      <p className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                         {stat.value}
                       </p>
                     </div>
@@ -424,9 +424,9 @@ export default function StudentSupport() {
                   <div
                     className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-5 shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 bg-gradient-to-br ${method.color}`}
                   >
-                    <method.icon className="w-8 h-8 text-white" />
+                    <method.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all">
                     {method.title}
                   </h3>
                   <p className="text-lg font-semibold text-white/90 mb-2">
@@ -445,12 +445,12 @@ export default function StudentSupport() {
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {/* Enhanced FAQs Section */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6 md:space-y-8">
               {/* Search and Filter */}
               <div
-                className="rounded-2xl p-6 shadow-xl backdrop-blur-sm border border-white/8 hover:border-white/12 transition-all"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl backdrop-blur-sm border border-white/8 hover:border-white/12 transition-all"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
@@ -509,13 +509,13 @@ export default function StudentSupport() {
 
               {/* Enhanced FAQs List */}
               <div
-                className="rounded-2xl p-6 shadow-xl backdrop-blur-sm border border-white/8"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl backdrop-blur-sm border border-white/8"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
                 }}
               >
-                <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-6 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
                     <HelpCircle className="w-6 h-6 text-white" />
                   </div>
@@ -594,16 +594,16 @@ export default function StudentSupport() {
             </div>
 
             {/* Enhanced Right Column */}
-            <div className="space-y-8">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8">
               {/* Recent Tickets */}
               <div
-                className="rounded-2xl p-6 shadow-xl backdrop-blur-sm border border-white/8 hover:border-white/12 transition-all"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl backdrop-blur-sm border border-white/8 hover:border-white/12 transition-all"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
                 }}
               >
-                <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-3">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-5 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg">
                     <FileText className="w-5 h-5 text-white" />
                   </div>
@@ -661,7 +661,7 @@ export default function StudentSupport() {
                     ))
                   ) : (
                     <div className="text-center py-8">
-                      <FileText className="w-12 h-12 text-white/20 mx-auto mb-2" />
+                      <FileText className="w-10 h-10 sm:w-12 sm:h-12 text-white/20 mx-auto mb-2" />
                       <p className="text-white/60 text-sm">No tickets yet</p>
                     </div>
                   )}
@@ -677,14 +677,14 @@ export default function StudentSupport() {
 
               {/* Help Resources */}
               <div
-                className="rounded-2xl p-6 shadow-xl relative overflow-hidden backdrop-blur-sm border border-white/12"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl relative overflow-hidden backdrop-blur-sm border border-white/12"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(128,55,145,0.18), rgba(184,123,209,0.12))",
                 }}
               >
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.1),_transparent_50%)]" />
-                <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-3 relative">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-5 flex items-center gap-3 relative">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center shadow-lg">
                     <BookOpen className="w-5 h-5 text-white" />
                   </div>
@@ -736,7 +736,7 @@ export default function StudentSupport() {
 
               {/* Premium Tip Card */}
               <div
-                className="rounded-2xl p-6 shadow-xl relative overflow-hidden group hover:scale-105 transition-all duration-500"
+                className="rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl relative overflow-hidden group hover:scale-105 transition-all duration-500"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,165,0,0.1))",
@@ -785,15 +785,15 @@ export default function StudentSupport() {
           }}
         >
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-white flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+            <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
                 <FileText className="w-6 h-6 text-white" />
               </div>
               My Support Tickets
             </h2>
             <button
               onClick={() => setShowTicketForm(!showTicketForm)}
-              className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-xl transition-all flex items-center gap-2 hover:scale-105"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-xl transition-all flex items-center gap-2 hover:scale-105"
             >
               <Send className="w-5 h-5" />
               New Ticket
@@ -802,15 +802,15 @@ export default function StudentSupport() {
 
           {loading ? (
             <div className="text-center py-16">
-              <div className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4" />
               <p className="text-white/70">Loading tickets...</p>
             </div>
           ) : tickets.length === 0 ? (
             <div className="text-center py-16">
               <div className="w-24 h-24 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-12 h-12 text-white/30" />
+                <FileText className="w-10 h-10 sm:w-12 sm:h-12 text-white/30" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2">
                 No tickets yet
               </h3>
               <p className="text-white/70 mb-6">
@@ -818,7 +818,7 @@ export default function StudentSupport() {
               </p>
               <button
                 onClick={() => setShowTicketForm(true)}
-                className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-xl transition-all inline-flex items-center gap-2"
+                className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white rounded-xl font-semibold hover:shadow-xl transition-all inline-flex items-center gap-2"
               >
                 <Send className="w-5 h-5" />
                 Create Ticket
@@ -877,7 +877,7 @@ export default function StudentSupport() {
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all">
                     {ticket.subject}
                   </h3>
 
@@ -971,10 +971,10 @@ export default function StudentSupport() {
               <div
                 className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${resource.color} flex items-center justify-center shadow-xl mb-5 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
               >
-                <resource.icon className="w-8 h-8 text-white" />
+                <resource.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all">
                 {resource.title}
               </h3>
               <p className="text-white/70 mb-4">{resource.desc}</p>
@@ -1020,7 +1020,7 @@ export default function StudentSupport() {
                     <Send className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                       Create Support Ticket
                     </h3>
                     <p className="text-white/80 text-sm">

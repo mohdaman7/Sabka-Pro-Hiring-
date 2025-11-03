@@ -230,11 +230,11 @@ export default function StudentVideoResume() {
   };
 
   return (
-    <div className="relative p-4 md:p-6 lg:p-8 space-y-8 min-h-screen overflow-hidden">
+    <div className="relative p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
           style={{
             background: "rgba(128,55,145,0.12)",
             animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -259,7 +259,7 @@ export default function StudentVideoResume() {
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+          <h1 className="text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white mb-2">
             Video Resume Studio
           </h1>
           <p className="text-white/60 text-sm">
@@ -295,7 +295,7 @@ export default function StudentVideoResume() {
                   onClick={() => videoInputRef.current?.click()}
                 >
                   <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-white/30 rounded-lg cursor-pointer hover:bg-[#b87bd1]/10 transition-colors">
-                    <Upload className="w-8 h-8 text-white/60 mb-2" />
+                    <Upload className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white/60 mb-2" />
                     <p className="text-sm text-center text-white/80">
                       {isDragging
                         ? "Drop your video here"
@@ -336,7 +336,7 @@ export default function StudentVideoResume() {
       {!loading && videoResumes.length === 0 && (
         <div className="mt-10 text-center max-w-2xl mx-auto">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#803791]/20 mb-4">
-            <Video className="w-8 h-8 text-[#b87bd1]" />
+            <Video className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#b87bd1]" />
           </div>
           <h3 className="text-lg font-medium text-white mb-2">
             No Video Resumes Yet
@@ -365,7 +365,7 @@ export default function StudentVideoResume() {
       {loading ? (
         <div className="flex flex-col items-center justify-center h-96 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-sm">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-[#b87bd1]/30 rounded-full"></div>
+            <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 border-4 border-[#b87bd1]/30 rounded-full"></div>
             <div className="absolute top-0 left-0 w-16 h-16 border-4 border-[#b87bd1] border-t-transparent rounded-full animate-spin"></div>
           </div>
           <p className="mt-4 text-white/80 font-medium">
@@ -409,9 +409,9 @@ export default function StudentVideoResume() {
               {/* Video Thumbnail */}
               <div className="relative h-40 bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
-                <Video className="w-16 h-16 text-white/30" />
+                <Video className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white/30" />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center text-[#b87bd1] shadow-lg transform transition-transform group-hover:scale-110">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/80 flex items-center justify-center text-[#b87bd1] shadow-lg transform transition-transform group-hover:scale-110">
                     <Play className="w-5 h-5 ml-1" fill="currentColor" />
                   </div>
                 </div>
@@ -495,7 +495,7 @@ export default function StudentVideoResume() {
 
       {/* Video Templates */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold text-white mb-6">Video Templates</h2>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-6">Video Templates</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {videoTemplates.map((template) => (
             <motion.div
@@ -552,7 +552,7 @@ export default function StudentVideoResume() {
 
       {/* Tips Section */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold text-white mb-6">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-6">
           Tips for Great Video Resumes
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

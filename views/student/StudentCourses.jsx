@@ -112,11 +112,11 @@ export default function StudentCourses() {
 
   return (
     <>
-      <div className="relative p-4 md:p-6 lg:p-8 space-y-8 min-h-screen overflow-hidden">
+      <div className="relative p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
         {/* Enhanced Animated Background */}
         <div className="absolute inset-0 pointer-events-none -z-10">
           <div
-            className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+            className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
             style={{
               background: isPro
                 ? "rgba(245,158,11,0.15)"
@@ -218,13 +218,13 @@ export default function StudentCourses() {
               }}
             >
               {isPro ? (
-                <Crown className="w-12 h-12 text-white" />
+                <Crown className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
               ) : (
-                <GraduationCap className="w-12 h-12 text-white" />
+                <GraduationCap className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
               )}
             </div>
             <div className="flex-1">
-              <h1 className="text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+              <h1 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
                 {isPro ? "Premium Learning Hub" : "My Learning Journey"}
               </h1>
               <p className="text-white/90 text-lg font-medium flex items-center gap-2">
@@ -282,7 +282,7 @@ export default function StudentCourses() {
                     <p className="text-sm font-semibold text-white/70 mb-2 uppercase tracking-wider">
                       {stat.label}
                     </p>
-                    <p className="text-5xl font-black text-white mb-1 group-hover:scale-110 transition-transform duration-300 inline-block">
+                    <p className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl font-black text-white mb-1 group-hover:scale-110 transition-transform duration-300 inline-block">
                       {stat.value}
                       {stat.suffix}
                     </p>

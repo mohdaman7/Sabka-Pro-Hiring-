@@ -132,7 +132,7 @@ export default function InterviewsPage() {
             <Calendar className="w-4 h-4" />
             Interview Scheduler
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+          <h1 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl md:text-5xl font-extrabold text-white mb-4">
             Your Interview Dashboard
           </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
@@ -177,7 +177,7 @@ export default function InterviewsPage() {
                 <p className="text-white/80 text-sm font-medium mb-2">
                   {stat.label}
                 </p>
-                <p className="text-4xl font-bold text-white mb-1">
+                <p className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
                   {stat.value}
                 </p>
                 <p className="text-xs text-white/60 font-medium">
@@ -247,7 +247,7 @@ export default function InterviewsPage() {
                       <img
                         src={interview.logo || "/placeholder.svg"}
                         alt={interview.company}
-                        className="w-12 h-12 object-contain"
+                        className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
                       />
                     </div>
                     {/* Date Badge */}
@@ -268,7 +268,7 @@ export default function InterviewsPage() {
                 <div className="flex-1 space-y-4">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-1 transition-colors duration-300">
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1 transition-colors duration-300">
                         {interview.position}
                       </h3>
                       <p className="text-white/80 font-medium">
@@ -447,7 +447,7 @@ export default function InterviewsPage() {
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-100 to-blue-100 border-2 border-slate-200 flex items-center justify-center mx-auto mb-6">
                 <Calendar className="w-10 h-10 text-purple-600" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 mb-2">
                 No interviews found
               </h3>
               <p className="text-slate-600">

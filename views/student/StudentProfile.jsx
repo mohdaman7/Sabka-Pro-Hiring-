@@ -39,27 +39,27 @@ import { customToast } from "@/components/ui/toast";
 // Enhanced Loading Skeleton Component
 const ProfileSkeleton = () => {
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
-      {/* Enhanced Background Effects */}
+    <div className="relative p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
+      {/* Enhanced Background Effects - Responsive */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
           style={{ background: "rgba(128,55,145,0.12)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl animate-pulse delay-300"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse delay-300"
           style={{ background: "rgba(184,123,209,0.08)" }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl animate-pulse delay-700"
+          className="absolute top-1/3 right-1/4 w-36 h-36 md:w-72 md:h-72 rounded-full blur-xl md:blur-2xl animate-pulse delay-700"
           style={{ background: "rgba(240,194,238,0.05)" }}
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(128,55,145,0.06),transparent_50%)] animate-pulse" />
       </div>
 
-      {/* Header Skeleton */}
+      {/* Header Skeleton - Responsive */}
       <div
-        className="relative overflow-hidden rounded-3xl p-8 text-white shadow-2xl backdrop-blur-xl border border-white/10 animate-pulse"
+        className="relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 text-white shadow-xl sm:shadow-2xl backdrop-blur-xl border border-white/10 animate-pulse"
         style={{
           background:
             "linear-gradient(135deg, rgba(128,55,145,0.18), rgba(184,123,209,0.12))",
@@ -72,9 +72,9 @@ const ProfileSkeleton = () => {
         </div>
       </div>
 
-      {/* Profile Completion Skeleton */}
+      {/* Profile Completion Skeleton - Responsive */}
       <div
-        className="rounded-3xl p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
+        className="rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
         style={{
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
@@ -97,12 +97,12 @@ const ProfileSkeleton = () => {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
         {/* Left Column Skeleton */}
         <div className="space-y-6">
           {/* Profile Picture Skeleton */}
           <div
-            className="rounded-3xl p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
+            className="rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
             style={{
               background:
                 "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
@@ -119,7 +119,7 @@ const ProfileSkeleton = () => {
 
           {/* Plan Selection Skeleton */}
           <div
-            className="rounded-3xl p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
+            className="rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 shadow-xl border border-white/10 backdrop-blur-sm animate-pulse"
             style={{
               background:
                 "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
@@ -180,7 +180,7 @@ const ProfileSkeleton = () => {
             <div className="h-8 bg-white/25 rounded-2xl w-48 mb-6"></div>
 
             {/* Form Sections Skeleton */}
-            <div className="space-y-8">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8">
               {[1, 2, 3, 4, 5].map((section) => (
                 <div key={section} className="space-y-4">
                   <div className="h-6 bg-white/25 rounded-2xl w-40 mb-2"></div>
@@ -818,21 +818,21 @@ export default function StudentProfile() {
   }
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen overflow-hidden">
+    <div className="relative p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-5 md:space-y-6 min-h-screen overflow-hidden">
       {/* Enhanced Background Effects */}
       <FloatingParticles />
 
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse-slow"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse-slow"
           style={{ background: "rgba(128,55,145,0.12)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl animate-pulse-slow delay-1000"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse-slow delay-1000"
           style={{ background: "rgba(184,123,209,0.08)" }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl animate-pulse-slow delay-2000"
+          className="absolute top-1/3 right-1/4 w-36 h-36 md:w-72 md:h-72 rounded-full blur-xl md:blur-2xl animate-pulse-slow delay-2000"
           style={{ background: "rgba(240,194,238,0.05)" }}
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.06),_transparent_50%)]" />
@@ -867,11 +867,11 @@ export default function StudentProfile() {
 
         <div className="relative">
           <div className="flex items-center gap-4 mb-3">
-            <h1 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent drop-shadow-2xl">
               My Profile
             </h1>
             <Sparkles
-              className="w-8 h-8 text-[#b87bd1] animate-pulse"
+              className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#b87bd1] animate-pulse"
               strokeWidth={2.5}
             />
           </div>
@@ -891,7 +891,7 @@ export default function StudentProfile() {
 
       {/* Step Indicator */}
       <div
-        className="rounded-3xl p-6 shadow-2xl backdrop-blur-xl border-2 border-white/10"
+        className="rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 shadow-2xl backdrop-blur-xl border-2 border-white/10"
         style={{
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
@@ -990,24 +990,24 @@ export default function StudentProfile() {
 
       {/* Form Content Card */}
       <div
-        className="rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur-xl border-2 border-white/10"
+        className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 md:p-12 shadow-2xl backdrop-blur-xl border-2 border-white/10"
         style={{
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
         }}
       >
         {/* Step Content */}
-        <div className="space-y-8">
+        <div className="space-y-4 sm:space-y-6 md:space-y-8">
           {/* STEP 1: BASIC INFO */}
           {currentStep === 1 && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn">
               {/* Header */}
               <div className="flex items-center gap-5 mb-8">
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
-                  <User className="w-8 h-8 text-white" strokeWidth={2.5} />
+                  <User className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-4xl font-black text-white mb-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2">
                     Basic Information
                   </h2>
                   <p className="text-white/70 font-semibold text-lg">
@@ -1017,8 +1017,8 @@ export default function StudentProfile() {
               </div>
 
               {/* Profile Picture Upload */}
-              <div className="rounded-3xl p-8 bg-white/5 border-2 border-white/10">
-                <h3 className="text-2xl font-black text-white mb-8 flex items-center gap-4">
+              <div className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 bg-white/5 border-2 border-white/10">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-8 flex items-center gap-4">
                   <div className="p-3 rounded-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1] shadow-2xl">
                     <Camera className="w-6 h-6 text-white" strokeWidth={2.5} />
                   </div>
@@ -1181,13 +1181,13 @@ export default function StudentProfile() {
 
           {/* STEP 2: ADDRESS */}
           {currentStep === 2 && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn">
               <div className="flex items-center gap-5 mb-8">
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
-                  <Home className="w-8 h-8 text-white" strokeWidth={2.5} />
+                  <Home className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-4xl font-black text-white mb-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2">
                     Address Details
                   </h2>
                   <p className="text-white/70 font-semibold text-lg">
@@ -1273,16 +1273,16 @@ export default function StudentProfile() {
 
           {/* STEP 3: EDUCATION */}
           {currentStep === 3 && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn">
               <div className="flex items-center gap-5 mb-8">
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
                   <GraduationCap
-                    className="w-8 h-8 text-white"
+                    className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white"
                     strokeWidth={2.5}
                   />
                 </div>
                 <div>
-                  <h2 className="text-4xl font-black text-white mb-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2">
                     Education
                   </h2>
                   <p className="text-white/70 font-semibold text-lg">
@@ -1405,7 +1405,7 @@ export default function StudentProfile() {
                       <button
                         type="button"
                         onClick={() => removeEducationEntry(index)}
-                        className="px-6 py-3 text-red-400 border-2 border-red-400/30 rounded-2xl hover:bg-red-400 hover:text-white transition-all duration-300 flex items-center gap-2 hover:scale-105 font-semibold"
+                        className="px-4 py-2 sm:px-6 sm:py-3 text-red-400 border-2 border-red-400/30 rounded-2xl hover:bg-red-400 hover:text-white transition-all duration-300 flex items-center gap-2 hover:scale-105 font-semibold"
                       >
                         <Trash2 className="w-5 h-5" />
                         Remove
@@ -1430,13 +1430,13 @@ export default function StudentProfile() {
 
           {/* STEP 4: SKILLS */}
           {currentStep === 4 && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn">
               <div className="flex items-center gap-5 mb-8">
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
-                  <Zap className="w-8 h-8 text-white" strokeWidth={2.5} />
+                  <Zap className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-4xl font-black text-white mb-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2">
                     Skills & Experience
                   </h2>
                   <p className="text-white/70 font-semibold text-lg">
@@ -1485,7 +1485,7 @@ export default function StudentProfile() {
 
                   <div className="flex items-center justify-center">
                     <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-6 text-center">
-                      <div className="text-3xl font-black text-white mb-2">
+                      <div className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-black text-white mb-2">
                         {
                           formData.skills
                             .split(",")
@@ -1504,13 +1504,13 @@ export default function StudentProfile() {
 
           {/* STEP 5: JOB PREFERENCES */}
           {currentStep === 5 && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn">
               <div className="flex items-center gap-5 mb-8">
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
-                  <Target className="w-8 h-8 text-white" strokeWidth={2.5} />
+                  <Target className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-4xl font-black text-white mb-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2">
                     Job Preferences
                   </h2>
                   <p className="text-white/70 font-semibold text-lg">
@@ -1519,7 +1519,7 @@ export default function StudentProfile() {
                 </div>
               </div>
 
-              <div className="space-y-8">
+              <div className="space-y-4 sm:space-y-6 md:space-y-8">
                 {/* Preferred Roles */}
                 <div className="space-y-4">
                   <label className="block text-white font-black text-xl">
@@ -1674,13 +1674,13 @@ export default function StudentProfile() {
 
           {/* STEP 6: PLAN & RESUME */}
           {currentStep === 6 && (
-            <div className="space-y-8 animate-fadeIn">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn">
               <div className="flex items-center gap-5 mb-8">
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-[#803791] to-[#b87bd1] shadow-2xl">
-                  <Crown className="w-8 h-8 text-white" strokeWidth={2.5} />
+                  <Crown className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-4xl font-black text-white mb-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2">
                     Plan & Resume
                   </h2>
                   <p className="text-white/70 font-semibold text-lg">
@@ -1689,10 +1689,10 @@ export default function StudentProfile() {
                 </div>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-8">
+              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Plan Selection */}
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-black text-white mb-4">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-4">
                     Choose Your Plan
                   </h3>
 
@@ -1707,10 +1707,10 @@ export default function StudentProfile() {
                       onClick={() => setSelectedPlan("free")}
                     >
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-xl font-black text-white">
+                        <h4 className="text-base sm:text-lg md:text-xl font-black text-white">
                           Free Plan
                         </h4>
-                        <div className="text-2xl font-black text-white">₹0</div>
+                        <div className="text-lg sm:text-xl md:text-2xl font-black text-white">₹0</div>
                       </div>
                       <ul className="space-y-2 text-white/80">
                         <li className="flex items-center gap-3">
@@ -1738,10 +1738,10 @@ export default function StudentProfile() {
                       onClick={() => setSelectedPlan("pro")}
                     >
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-xl font-black text-white">
+                        <h4 className="text-base sm:text-lg md:text-xl font-black text-white">
                           Pro Plan
                         </h4>
-                        <div className="text-2xl font-black text-white">
+                        <div className="text-lg sm:text-xl md:text-2xl font-black text-white">
                           ₹999<span className="text-sm">/month</span>
                         </div>
                       </div>
@@ -1769,7 +1769,7 @@ export default function StudentProfile() {
 
                 {/* Resume Upload */}
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-black text-white mb-4">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-4">
                     Upload Your Resume
                   </h3>
 
@@ -1843,7 +1843,7 @@ export default function StudentProfile() {
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className="px-8 py-4 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-2xl font-black text-lg border-2 border-white/20 transition-all flex items-center gap-3"
+              className="px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-2xl font-black text-lg border-2 border-white/20 transition-all flex items-center gap-3"
             >
               <ChevronRight className="w-6 h-6 rotate-180" strokeWidth={2.5} />
               Previous
@@ -1856,7 +1856,7 @@ export default function StudentProfile() {
             {currentStep < totalSteps ? (
               <button
                 onClick={nextStep}
-                className="px-8 py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:scale-105 text-white rounded-2xl font-black text-lg shadow-2xl shadow-purple-500/40 transition-all flex items-center gap-3"
+                className="px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:scale-105 text-white rounded-2xl font-black text-lg shadow-2xl shadow-purple-500/40 transition-all flex items-center gap-3"
               >
                 Next
                 <ChevronRight className="w-6 h-6" strokeWidth={2.5} />
@@ -1865,7 +1865,7 @@ export default function StudentProfile() {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="px-8 py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:scale-105 disabled:opacity-50 text-white rounded-2xl font-black text-lg shadow-2xl shadow-green-500/40 transition-all flex items-center gap-3"
+                className="px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:scale-105 disabled:opacity-50 text-white rounded-2xl font-black text-lg shadow-2xl shadow-green-500/40 transition-all flex items-center gap-3"
               >
                 {loading ? "Saving..." : "Save Profile"}
                 <Save className="w-6 h-6" strokeWidth={2.5} />
@@ -1877,7 +1877,7 @@ export default function StudentProfile() {
 
       {/* Enhanced Quick Stats */}
       <div className="bg-gradient-to-br from-blue-600/90 to-cyan-600/90 rounded-3xl p-8 shadow-2xl backdrop-blur-sm text-white transition-all duration-500 hover:shadow-purple-500/40 hover:scale-[1.02] group">
-        <h3 className="text-2xl font-black mb-6 flex items-center gap-4">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-black mb-6 flex items-center gap-4">
           <div className="p-3 rounded-2xl bg-white/25 shadow-2xl">
             <TrendingUp className="w-6 h-6 text-white" strokeWidth={2.5} />
           </div>
@@ -1893,7 +1893,7 @@ export default function StudentProfile() {
                 Applications
               </span>
             </div>
-            <span className="text-2xl font-black text-white drop-shadow-lg">
+            <span className="text-lg sm:text-xl md:text-2xl font-black text-white drop-shadow-lg">
               {activity.totalApplications}
             </span>
           </div>
@@ -1906,7 +1906,7 @@ export default function StudentProfile() {
                 Profile Completion
               </span>
             </div>
-            <span className="text-2xl font-black text-white drop-shadow-lg">
+            <span className="text-lg sm:text-xl md:text-2xl font-black text-white drop-shadow-lg">
               {activity.profileCompletion}%
             </span>
           </div>
@@ -1919,7 +1919,7 @@ export default function StudentProfile() {
                 Resume Uploaded
               </span>
             </div>
-            <span className="text-2xl font-black text-white drop-shadow-lg">
+            <span className="text-lg sm:text-xl md:text-2xl font-black text-white drop-shadow-lg">
               {activity.hasResume ? "Yes" : "No"}
             </span>
           </div>

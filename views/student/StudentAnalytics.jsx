@@ -77,11 +77,11 @@ export default function StudentAnalytics() {
 
   if (!isPro) {
     return (
-      <div className="relative p-4 md:p-6 lg:p-8 space-y-8 min-h-screen overflow-hidden">
+      <div className="relative p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
         {/* Enhanced Animated Background */}
         <div className="absolute inset-0 pointer-events-none -z-10">
           <div
-            className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+            className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
             style={{
               background: "rgba(128,55,145,0.12)",
               animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -105,14 +105,14 @@ export default function StudentAnalytics() {
 
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-12 text-center">
           <div className="w-32 h-32 rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-2xl bg-gradient-to-br from-[#803791] to-[#b87bd1]">
-            <Crown className="w-16 h-16 text-white" />
+            <Crown className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white" />
           </div>
 
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Unlock Advanced Analytics
           </h2>
 
-          <p className="text-xl text-white/80 mb-8 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-white/80 mb-8 leading-relaxed">
             Get detailed insights into your resume performance and profile
             visibility
           </p>
@@ -141,7 +141,7 @@ export default function StudentAnalytics() {
                   key={index}
                   className="p-6 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors duration-300 border border-white/10"
                 >
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-[#b87bd1]/20">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-[#b87bd1]/20">
                     <IconComponent className="w-6 h-6 text-[#b87bd1]" />
                   </div>
                   <h3 className="font-bold text-white mb-2">{feature.title}</h3>
@@ -165,11 +165,11 @@ export default function StudentAnalytics() {
   }
 
   return (
-    <div className="relative p-4 md:p-6 lg:p-8 space-y-8 min-h-screen overflow-hidden">
+    <div className="relative p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
           style={{
             background: "rgba(128,55,145,0.12)",
             animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -194,7 +194,7 @@ export default function StudentAnalytics() {
       {/* Header with Time Range Selector */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+          <h1 className="text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white mb-2">
             Analytics Dashboard
           </h1>
           <p className="text-white/60 text-sm">
@@ -227,7 +227,7 @@ export default function StudentAnalytics() {
 
       {loading ? (
         <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
-          <div className="w-12 h-12 rounded-full border-4 border-[#b87bd1]/30 border-t-[#b87bd1] animate-spin mx-auto mb-4" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-4 border-[#b87bd1]/30 border-t-[#b87bd1] animate-spin mx-auto mb-4" />
           <p className="text-white/60">Loading analytics...</p>
         </div>
       ) : (
@@ -254,7 +254,7 @@ export default function StudentAnalytics() {
                       {stat.change}
                     </span>
                   </div>
-                  <div className="text-3xl font-black text-white mb-1">
+                  <div className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">
                     {stat.value}
                   </div>
                   <div className="text-white/60 text-sm">{stat.label}</div>
@@ -265,13 +265,13 @@ export default function StudentAnalytics() {
 
           {/* Profile Strength */}
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-            <h3 className="text-xl font-bold text-white mb-4">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-4">
               Profile Strength
             </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-white/70">Overall Progress</span>
-                <span className="text-2xl font-black text-[#b87bd1]">
+                <span className="text-lg sm:text-xl md:text-2xl font-black text-[#b87bd1]">
                   {analytics?.overview.profileStrength || 0}%
                 </span>
               </div>
@@ -285,25 +285,25 @@ export default function StudentAnalytics() {
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                 <div className="text-center p-4 bg-white/5 rounded-xl">
-                  <div className="text-2xl font-bold text-white mb-1">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1">
                     {analytics?.resumes?.length || 0}
                   </div>
                   <div className="text-white/60 text-sm">Resumes</div>
                 </div>
                 <div className="text-center p-4 bg-white/5 rounded-xl">
-                  <div className="text-2xl font-bold text-white mb-1">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1">
                     {analytics?.videos?.length || 0}
                   </div>
                   <div className="text-white/60 text-sm">Videos</div>
                 </div>
                 <div className="text-center p-4 bg-white/5 rounded-xl">
-                  <div className="text-2xl font-bold text-white mb-1">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1">
                     {analytics?.overview.avgAtsScore || 0}%
                   </div>
                   <div className="text-white/60 text-sm">ATS Score</div>
                 </div>
                 <div className="text-center p-4 bg-white/5 rounded-xl">
-                  <div className="text-2xl font-bold text-white mb-1">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1">
                     {(analytics?.overview.totalResumeViews || 0) +
                       (analytics?.overview.totalVideoViews || 0)}
                   </div>
@@ -317,7 +317,7 @@ export default function StudentAnalytics() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Resume Performance */}
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 Resume Performance
               </h3>
@@ -355,7 +355,7 @@ export default function StudentAnalytics() {
 
             {/* Video Performance */}
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <Video className="w-5 h-5" />
                 Video Performance
               </h3>
@@ -387,12 +387,12 @@ export default function StudentAnalytics() {
 
           {/* Views Over Time Chart Placeholder */}
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
-            <h3 className="text-xl font-bold text-white mb-6">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-6">
               Views Over Time
             </h3>
             <div className="h-64 flex items-center justify-center text-white/40">
               <div className="text-center">
-                <BarChart3 className="w-16 h-16 mx-auto mb-4" />
+                <BarChart3 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-4" />
                 <p>Chart visualization coming soon</p>
               </div>
             </div>

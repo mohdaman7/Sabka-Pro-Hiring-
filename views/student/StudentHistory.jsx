@@ -196,7 +196,7 @@ export default function StudentHistory() {
               <Clock className="w-10 h-10 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold mb-2 text-white">
+              <h1 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-white">
                 Activity History
               </h1>
               <p className="text-white/80 text-lg">
@@ -205,7 +205,7 @@ export default function StudentHistory() {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-white/90 mb-2">47</div>
+            <div className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-white/90 mb-2">47</div>
             <div className="text-white/70">Total Activities</div>
           </div>
         </div>
@@ -247,7 +247,7 @@ export default function StudentHistory() {
                 {stat.change}
               </div>
             </div>
-            <div className="text-2xl md:text-3xl font-bold text-white mb-1">
+            <div className="text-lg sm:text-xl md:text-2xl md:text-3xl font-bold text-white mb-1">
               {stat.value}
             </div>
             <div className="text-sm text-white/80">{stat.label}</div>
@@ -314,7 +314,7 @@ export default function StudentHistory() {
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-start gap-4">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center"
                     style={{
                       background: "linear-gradient(135deg,#803791,#b87bd1)",
                     }}
@@ -322,7 +322,7 @@ export default function StudentHistory() {
                     <Briefcase className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-1">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
                       {application.jobTitle}
                     </h3>
                     <p className="text-white/80 text-lg mb-2">
@@ -420,7 +420,7 @@ export default function StudentHistory() {
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-start gap-4">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center"
                     style={{
                       background: "linear-gradient(135deg,#803791,#b87bd1)",
                     }}
@@ -428,7 +428,7 @@ export default function StudentHistory() {
                     <GraduationCap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-1">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
                       {course.title}
                     </h3>
                     <p className="text-white/80 mb-2">{course.category}</p>
@@ -490,7 +490,7 @@ export default function StudentHistory() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center"
                     style={{
                       background: "linear-gradient(135deg,#803791,#b87bd1)",
                     }}
@@ -498,7 +498,7 @@ export default function StudentHistory() {
                     <Calendar className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-1">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1">
                       {interview.position}
                     </h3>
                     <p className="text-white/80 text-lg mb-2">

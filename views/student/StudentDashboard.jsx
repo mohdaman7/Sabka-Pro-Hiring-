@@ -170,25 +170,25 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="relative p-6 space-y-8 min-h-screen overflow-hidden">
-      {/* Enhanced Background with Grid */}
+    <div className="relative p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
+      {/* Enhanced Background with Grid - Responsive */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div
-          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl"
           style={{
             background: "rgba(128,55,145,0.12)",
             animation: "pulse 8s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl"
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-64 h-64 md:w-[500px] md:h-[500px] rounded-full blur-2xl md:blur-3xl"
           style={{
             background: "rgba(184,123,209,0.08)",
             animation: "float 15s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full blur-3xl"
+          className="absolute top-1/2 left-1/3 w-40 h-40 md:w-80 md:h-80 rounded-full blur-2xl md:blur-3xl"
           style={{
             background: "rgba(240,194,238,0.05)",
             animation: "float 12s ease-in-out infinite reverse",
@@ -207,9 +207,9 @@ export default function StudentDashboard() {
         />
       </div>
 
-      <div className="relative z-10 space-y-8 max-w-[1600px] mx-auto">
-        {/* Premium Welcome Section */}
-        <div className="relative overflow-hidden rounded-3xl group shadow-2xl">
+      <div className="relative z-10 space-y-4 sm:space-y-6 md:space-y-8 max-w-[1600px] mx-auto">
+        {/* Premium Welcome Section - Responsive */}
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl group shadow-xl sm:shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/90 via-purple-700/90 to-blue-600/90 backdrop-blur-xl" />
           <div className="absolute inset-0 opacity-30">
             <div
@@ -220,42 +220,44 @@ export default function StudentDashboard() {
               }}
             />
           </div>
-          <div className="relative p-10 md:p-12">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-4">
-                  <Sparkles className="w-9 h-9 text-amber-300 animate-pulse drop-shadow-lg" strokeWidth={2.5} />
-                  <span className="px-4 py-2 rounded-full bg-white/25 backdrop-blur-xl text-white text-sm font-bold border border-white/40 shadow-lg">
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                  <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 text-amber-300 animate-pulse drop-shadow-lg" strokeWidth={2.5} />
+                  <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/25 backdrop-blur-xl text-white text-xs sm:text-sm font-bold border border-white/40 shadow-lg">
                     Welcome Back! 👋
                   </span>
                 </div>
-                <h1 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-2xl">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4 tracking-tight drop-shadow-2xl">
                   Hey, Amit!
                 </h1>
-                <p className="text-white/95 text-xl mb-8 flex items-center gap-2 font-medium">
-                  <Target className="w-6 h-6" strokeWidth={2.5} />
-                  You have{" "}
-                  <span className="font-black text-amber-300 text-2xl">
+                <p className="text-white/95 text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 font-medium">
+                  <Target className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" strokeWidth={2.5} />
+                  <span>You have{" "}
+                  <span className="font-black text-amber-300 text-lg sm:text-xl md:text-2xl">
                     2 upcoming interviews
                   </span>{" "}
                   and{" "}
-                  <span className="font-black text-emerald-300 text-2xl">
+                  <span className="font-black text-emerald-300 text-lg sm:text-xl md:text-2xl">
                     5 new job matches
-                  </span>
+                  </span></span>
                 </p>
-                <div className="flex flex-wrap gap-4">
-                  <button className="group/btn relative px-8 py-4 bg-white text-purple-700 rounded-2xl font-black text-base shadow-2xl shadow-white/30 transition-all hover:scale-110 hover:shadow-white/50 flex items-center gap-3 overflow-hidden">
+                <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
+                  <button className="group/btn relative px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white text-purple-700 rounded-xl sm:rounded-2xl font-black text-sm sm:text-base shadow-xl sm:shadow-2xl shadow-white/30 transition-all hover:scale-105 sm:hover:scale-110 hover:shadow-white/50 flex items-center gap-2 sm:gap-3 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-white to-purple-50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                    <Briefcase className="w-6 h-6 relative z-10" strokeWidth={2.5} />
+                    <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 relative z-10" strokeWidth={2.5} />
                     <span className="relative z-10">Browse Jobs</span>
                   </button>
-                  <button className="px-8 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white rounded-2xl font-black text-base border-2 border-white/40 transition-all hover:scale-110 flex items-center gap-3 shadow-xl">
-                    <GraduationCap className="w-6 h-6" strokeWidth={2.5} />
-                    Explore Courses
+                  <button className="px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white rounded-xl sm:rounded-2xl font-black text-sm sm:text-base border-2 border-white/40 transition-all hover:scale-105 sm:hover:scale-110 flex items-center gap-2 sm:gap-3 shadow-xl">
+                    <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" strokeWidth={2.5} />
+                    <span className="hidden sm:inline">Explore Courses</span>
+                    <span className="sm:hidden">Courses</span>
                   </button>
-                  <button className="px-8 py-4 bg-white/10 hover:bg-white/15 backdrop-blur-xl text-white rounded-2xl font-black text-base border-2 border-white/30 transition-all hover:scale-110 flex items-center gap-3 shadow-xl">
-                    <Settings className="w-6 h-6" strokeWidth={2.5} />
-                    Update Profile
+                  <button className="px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white/10 hover:bg-white/15 backdrop-blur-xl text-white rounded-xl sm:rounded-2xl font-black text-sm sm:text-base border-2 border-white/30 transition-all hover:scale-105 sm:hover:scale-110 flex items-center gap-2 sm:gap-3 shadow-xl">
+                    <Settings className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" strokeWidth={2.5} />
+                    <span className="hidden sm:inline">Update Profile</span>
+                    <span className="sm:hidden">Profile</span>
                   </button>
                 </div>
               </div>
@@ -271,8 +273,8 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        {/* Enhanced Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">  
+        {/* Enhanced Stats Grid - Responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">  
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             const TrendIcon = TrendingUp;
@@ -281,7 +283,7 @@ export default function StudentDashboard() {
                 key={index}
                 onMouseEnter={() => setHoveredStat(index)}
                 onMouseLeave={() => setHoveredStat(null)}
-                className="group relative rounded-2xl p-7 transition-all duration-300 cursor-pointer"
+                className="group relative rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-7 transition-all duration-300 cursor-pointer"
                 style={{
                   background:
                     hoveredStat === index
@@ -304,9 +306,9 @@ export default function StudentDashboard() {
                 />
 
                 <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-5">
+                  <div className="flex items-start justify-between mb-3 sm:mb-4 md:mb-5">
                     <div
-                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-2xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6`}
+                      className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-2xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6`}
                       style={{
                         boxShadow:
                           hoveredStat === index
@@ -314,24 +316,24 @@ export default function StudentDashboard() {
                             : "none",
                       }}
                     >
-                      <Icon className="w-8 h-8 text-white" strokeWidth={2.5} />
+                      <Icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" strokeWidth={2.5} />
                     </div>
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/25 backdrop-blur-xl border border-emerald-500/40 shadow-lg">
-                      <TrendIcon className="w-4 h-4 text-emerald-400" strokeWidth={2.5} />
-                      <span className="text-xs font-black text-emerald-300">
+                    <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-emerald-500/25 backdrop-blur-xl border border-emerald-500/40 shadow-lg">
+                      <TrendIcon className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" strokeWidth={2.5} />
+                      <span className="text-xs font-black text-emerald-300 hidden sm:inline">
                         {stat.percentage}
                       </span>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-5xl font-black text-white tracking-tight drop-shadow-lg">
+                    <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight drop-shadow-lg">
                       {stat.value}
                     </div>
-                    <div className="text-base font-bold text-slate-200">
+                    <div className="text-sm sm:text-base font-bold text-slate-200">
                       {stat.label}
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-300 pt-3 border-t border-white/15">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-slate-300 pt-2 sm:pt-3 border-t border-white/15">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-500/50" />
                       {stat.trend}
                     </div>
@@ -344,20 +346,20 @@ export default function StudentDashboard() {
           })}
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Recommended Jobs - Enhanced */}
-          <div className="lg:col-span-2 rounded-3xl p-8 md:p-10 bg-white/8 backdrop-blur-xl border border-white/15 shadow-2xl">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-2xl">
-                  <Star className="w-6 h-6 text-white" strokeWidth={2.5} />
+        {/* Main Content Grid - Responsive */}
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          {/* Recommended Jobs - Enhanced & Responsive */}
+          <div className="lg:col-span-2 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 bg-white/8 backdrop-blur-xl border border-white/15 shadow-2xl">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-2xl">
+                  <Star className="w-5 h-5 sm:w-6 sm:h-6 text-white" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white">
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-black text-white">
                     Recommended Jobs
                   </h2>
-                  <p className="text-sm font-medium text-slate-300">
+                  <p className="text-xs sm:text-sm font-medium text-slate-300">
                     Personalized matches for you
                   </p>
                 </div>
