@@ -262,7 +262,7 @@ export default function JobPostingsManagement() {
         />
       </div>
 
-      <div className="relative z-10 p-6 space-y-6 max-w-[1800px] mx-auto">
+      <div className="relative z-10 space-y-4 md:space-y-6 max-w-[1800px] mx-auto">
         {/* Premium Header Section */}
         <div className="relative overflow-hidden rounded-3xl group">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/90 via-purple-700/90 to-blue-600/90 backdrop-blur-xl" />
@@ -275,13 +275,13 @@ export default function JobPostingsManagement() {
               }}
             />
           </div>
-          <div className="relative p-8 md:p-10">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div className="relative p-4 sm:p-6 md:p-8 lg:p-10">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 md:gap-6">
               <div className="flex-1">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-2 md:mb-3 tracking-tight">
                   Job Postings Management
                 </h1>
-                <p className="text-white/90 text-lg mb-6 flex items-center gap-2">
+                <p className="text-white/90 text-sm sm:text-base md:text-lg mb-4 md:mb-6 flex flex-wrap items-center gap-2">
                   <Target className="w-5 h-5" />
                   Managing{" "}
                   <span className="font-bold text-amber-300">
@@ -297,42 +297,42 @@ export default function JobPostingsManagement() {
                     approved
                   </span>
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <button className="group/btn relative px-6 py-3 bg-white text-purple-700 rounded-xl font-semibold shadow-2xl shadow-white/20 transition-all hover:scale-105 hover:shadow-white/30 flex items-center gap-2 overflow-hidden">
+                <div className="flex flex-wrap gap-2 md:gap-3">
+                  <button className="group/btn relative px-4 py-2 md:px-6 md:py-3 bg-white text-purple-700 rounded-xl font-semibold text-sm md:text-base shadow-2xl shadow-white/20 transition-all hover:scale-105 hover:shadow-white/30 flex items-center gap-2 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-white to-purple-50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                    <Download className="w-5 h-5 relative z-10" />
-                    <span className="relative z-10">Export Data</span>
+                    <Download className="w-4 h-4 md:w-5 md:h-5 relative z-10" />
+                    <span className="relative z-10 hidden sm:inline">Export Data</span>
                   </button>
                   <button
                     onClick={refresh}
                     disabled={loading}
-                    className="px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white rounded-xl font-semibold border border-white/30 transition-all hover:scale-105 flex items-center gap-2 disabled:opacity-50"
+                    className="px-4 py-2 md:px-6 md:py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white rounded-xl font-semibold text-sm md:text-base border border-white/30 transition-all hover:scale-105 flex items-center gap-2 disabled:opacity-50"
                   >
                     <RefreshCw
-                      className={`w-5 h-5 ${loading ? "animate-spin" : ""}`}
+                      className={`w-4 h-4 md:w-5 md:h-5 ${loading ? "animate-spin" : ""}`}
                     />
-                    Refresh
+                    <span className="hidden sm:inline">Refresh</span>
                   </button>
-                  <button className="px-6 py-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl text-white rounded-xl font-semibold border border-white/20 transition-all hover:scale-105 flex items-center gap-2">
-                    <Send className="w-5 h-5" />
-                    Bulk Actions
+                  <button className="px-4 py-2 md:px-6 md:py-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl text-white rounded-xl font-semibold text-sm md:text-base border border-white/20 transition-all hover:scale-105 flex items-center gap-2">
+                    <Send className="w-4 h-4 md:w-5 md:h-5" />
+                    <span className="hidden sm:inline">Bulk Actions</span>
                   </button>
                 </div>
               </div>
 
               {/* Stats Cards */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20">
-                  <div className="text-3xl font-black text-white mb-1">
+              <div className="grid grid-cols-2 gap-3 md:gap-4 w-full lg:w-auto">
+                <div className="p-3 md:p-4 rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20">
+                  <div className="text-2xl md:text-3xl font-black text-white mb-1">
                     {jobs.length}
                   </div>
-                  <div className="text-sm text-white/80">Total Jobs</div>
+                  <div className="text-xs md:text-sm text-white/80">Total Jobs</div>
                 </div>
-                <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20">
-                  <div className="text-3xl font-black text-emerald-300 mb-1">
+                <div className="p-3 md:p-4 rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20">
+                  <div className="text-2xl md:text-3xl font-black text-emerald-300 mb-1">
                     {jobs.filter((j) => j.status === "active").length}
                   </div>
-                  <div className="text-sm text-white/80">Active</div>
+                  <div className="text-xs md:text-sm text-white/80">Active</div>
                 </div>
               </div>
             </div>
@@ -341,14 +341,14 @@ export default function JobPostingsManagement() {
 
         {/* Premium Filter Tabs */}
         <div className="relative">
-          <div className="flex gap-2 pb-2 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`group relative px-6 py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center gap-3 whitespace-nowrap ${
+                  className={`group relative px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl font-semibold transition-all duration-300 flex items-center gap-2 md:gap-3 whitespace-nowrap ${
                     activeTab === tab.id
                       ? "bg-white/10 backdrop-blur-xl border-2 border-purple-500/50 shadow-lg shadow-purple-500/20"
                       : "bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-purple-500/30"
@@ -361,21 +361,21 @@ export default function JobPostingsManagement() {
                   }}
                 >
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                    className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-all ${
                       activeTab === tab.id
                         ? "bg-gradient-to-br from-purple-600 to-purple-800 shadow-lg shadow-purple-500/30"
                         : "bg-white/5 group-hover:bg-white/10"
                     }`}
                   >
                     <Icon
-                      className={`w-5 h-5 ${
+                      className={`w-4 h-4 md:w-5 md:h-5 ${
                         activeTab === tab.id ? "text-white" : "text-slate-400"
                       }`}
                     />
                   </div>
-                  <div className="text-left">
+                  <div className="text-left hidden sm:block">
                     <div
-                      className={`text-sm font-bold ${
+                      className={`text-xs md:text-sm font-bold ${
                         activeTab === tab.id ? "text-white" : "text-slate-300"
                       }`}
                     >

@@ -124,7 +124,7 @@ export default function CourseManagement() {
   };
 
   return (
-    <div className="relative p-6 md:p-8 space-y-8 min-h-screen overflow-hidden">
+    <div className="relative space-y-4 md:space-y-6 lg:space-y-8 min-h-screen overflow-hidden">
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div
@@ -156,7 +156,7 @@ export default function CourseManagement() {
 
       {/* Premium Header */}
       <div
-        className="relative overflow-hidden rounded-[32px] p-10 shadow-[0_20px_80px_-20px_rgba(128,55,145,0.5)] backdrop-blur-xl group transition-all duration-700 hover:shadow-[0_30px_100px_-20px_rgba(128,55,145,0.6)]"
+        className="relative overflow-hidden rounded-2xl md:rounded-[32px] p-4 sm:p-6 md:p-8 lg:p-10 shadow-[0_20px_80px_-20px_rgba(128,55,145,0.5)] backdrop-blur-xl group transition-all duration-700 hover:shadow-[0_30px_100px_-20px_rgba(128,55,145,0.6)]"
         style={{
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
@@ -170,35 +170,35 @@ export default function CourseManagement() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
         </div>
 
-        <div className="relative flex items-start justify-between">
-          <div className="space-y-4 ">
-            <div className="flex items-center gap-4">
+        <div className="relative flex flex-col lg:flex-row items-start justify-between gap-4 md:gap-6">
+          <div className="space-y-3 md:space-y-4 flex-1">
+            <div className="flex items-center gap-3 md:gap-4">
               <div className="relative group/icon">
                 <div className="absolute -inset-2 bg-gradient-to-r from-[#803791] to-[#b87bd1] rounded-[24px] blur-xl opacity-50 group-hover/icon:opacity-75 transition-all duration-500" />
                 <div
-                  className="relative w-20 h-20 rounded-[20px] flex items-center justify-center shadow-2xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-500"
+                  className="relative w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-[16px] md:rounded-[20px] flex items-center justify-center shadow-2xl transform group-hover/icon:scale-110 group-hover/icon:rotate-6 transition-all duration-500"
                   style={{
                     background:
                       "linear-gradient(135deg,#803791 0%,#b87bd1 100%)",
                   }}
                 >
-                  <BookOpen className="w-9 h-9 text-white" strokeWidth={2.5} />
+                  <BookOpen className="w-6 h-6 md:w-8 md:h-8 lg:w-9 lg:h-9 text-white" strokeWidth={2.5} />
                 </div>
               </div>
 
               <div>
-                <h1 className="text-5xl font-black tracking-tight mb-2 ">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-1 md:mb-2">
                   <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
                     Course Management
                   </span>
                 </h1>
-                <p className="text-white/60 text-lg font-medium">
+                <p className="text-white/60 text-sm md:text-base lg:text-lg font-medium">
                   Create, manage, and organize your educational content
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-6 pl-24">
+            <div className="flex items-center gap-4 md:gap-6 pl-0 md:pl-20 lg:pl-24">
               <div className="flex items-center gap-2 text-white/70">
                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                 <span className="text-sm font-semibold">Live System</span>
@@ -211,32 +211,32 @@ export default function CourseManagement() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-row lg:flex-col gap-2 md:gap-3 w-full lg:w-auto">
             <button
               onClick={() => setShowAccessManager(true)}
-              className="group/btn relative px-6 py-3 rounded-2xl font-bold text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30"
+              className="group/btn relative px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold text-sm md:text-base text-white border-2 border-white/15 overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-white/30 flex-1 lg:flex-none"
             >
               <div className="absolute inset-0 bg-white/5 group-hover/btn:bg-white/10 transition-all duration-500" />
-              <span className="relative flex items-center gap-2.5">
+              <span className="relative flex items-center justify-center gap-2">
                 <Users
-                  className="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-500"
+                  className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:scale-110 transition-transform duration-500"
                   strokeWidth={2.5}
                 />
-                Access Control
+                <span className="hidden sm:inline">Access Control</span>
               </span>
             </button>
 
             <button
               onClick={() => setShowCreateParentModal(true)}
-              className="group/btn relative px-6 py-3 rounded-2xl font-bold text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)]"
+              className="group/btn relative px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold text-sm md:text-base text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_-10px_rgba(184,123,209,0.6)] flex-1 lg:flex-none"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] transition-transform group-hover/btn:scale-110 duration-500" />
-              <span className="relative flex items-center gap-2.5">
+              <span className="relative flex items-center justify-center gap-2">
                 <Plus
-                  className="w-5 h-5 group-hover/btn:rotate-90 transition-transform duration-500"
+                  className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:rotate-90 transition-transform duration-500"
                   strokeWidth={2.5}
                 />
-                Create Course
+                <span className="hidden sm:inline">Create Course</span>
               </span>
             </button>
           </div>

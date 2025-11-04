@@ -313,7 +313,7 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-hidden hover:overflow-y-auto px-3 py-3 space-y-1 custom-scrollbar">
+        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1 custom-scrollbar">
           {navigation.map((item) => {
             const hasChildren =
               Array.isArray(item.children) && item.children.length > 0;
