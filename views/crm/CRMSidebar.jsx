@@ -647,37 +647,6 @@ export default function CRMSidebar({ isOpen = true, onClose }) {
           </div>
         )}
 
-        {/* Premium Banner */}
-        {!isCollapsed && (
-          <div className="relative mx-3 mb-3 p-3 rounded-xl overflow-hidden group cursor-pointer border border-orange-500/20 shrink-0">
-            <div
-              className="absolute inset-0 opacity-90"
-              style={{
-                background: "linear-gradient(135deg, #f59e0b, #f97316)",
-              }}
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
-            <div className="absolute top-2 right-2">
-              <Sparkles className="w-4 h-4 text-yellow-200 animate-pulse" />
-            </div>
-
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-1.5">
-                <Crown className="w-4 h-4 text-white" />
-                <span className="text-xs font-bold text-white">
-                  Premium Plan
-                </span>
-              </div>
-              <p className="text-[10px] text-white/90 leading-relaxed mb-2">
-                Unlock advanced analytics
-              </p>
-              <button className="w-full py-1.5 px-3 rounded-lg bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white text-[10px] font-semibold transition-all duration-300">
-                Upgrade Now →
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* User Profile */}
         <div className="relative px-3 pb-3 border-t border-white/8 pt-3 shrink-0">
           {!isCollapsed ? (
