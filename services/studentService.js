@@ -66,6 +66,50 @@ export const studentService = {
     return response.data;
   },
 
+  // Resume Management
+  uploadNewResume: async (file, name) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (name) formData.append("name", name);
+
+    const response = await api.post("/api/resume", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  },
+
+  getMyResumes: async () => {
+    const response = await api.get("/api/resume");
+    return response.data;
+  },
+
+  getResumeById: async (id) => {
+    const response = await api.get(`/api/resume/${id}`);
+    return response.data;
+  },
+
+  updateResume: async (id, data) => {
+    const response = await api.put(`/api/resume/${id}`, data);
+    return response.data;
+  },
+
+  deleteResume: async (id) => {
+    const response = await api.delete(`/api/resume/${id}`);
+    return response.data;
+  },
+
+  setPrimaryResume: async (id) => {
+    const response = await api.post(`/api/resume/${id}/set-primary`);
+    return response.data;
+  },
+
+  duplicateResume: async (id) => {
+    const response = await api.post(`/api/resume/${id}/duplicate`);
+    return response.data;
+  },
+
   // Get support tickets
   getSupportTickets: async (params = {}) => {
     try {
@@ -91,5 +135,11 @@ export const studentService = {
       console.error("Error creating support ticket:", error);
       throw error;
     }
+  },
+
+  // Job Application with resume
+  applyToJob: async (jobId, applicationData) => {
+    const response = await api.post(`/api/jobs/${jobId}/apply`, applicationData);
+    return response.data;
   },
 };
