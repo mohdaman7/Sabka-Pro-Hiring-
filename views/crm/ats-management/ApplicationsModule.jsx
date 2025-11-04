@@ -23,6 +23,7 @@ export default function ApplicationsModule() {
   const [stats, setStats] = useState({ total: 0, applied: 0, reviewed: 0, shortlisted: 0, interview: 0, hired: 0, rejected: 0 });
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchApplications(); }, [filters.page, filters.status]);
 
   const fetchApplications = async () => {
@@ -63,18 +64,27 @@ export default function ApplicationsModule() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-4 md:p-8">
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Premium Animated Background */}
+      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl" style={{ background: "rgba(128,55,145,0.12)", animation: "pulse 8s ease-in-out infinite" }} />
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl" style={{ background: "rgba(184,123,209,0.08)", animation: "float 15s ease-in-out infinite" }} />
+        <div className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full blur-3xl" style={{ background: "rgba(240,194,238,0.05)", animation: "float 12s ease-in-out infinite reverse" }} />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_50%)]" />
+      </div>
+
+      <div className="relative p-4 md:p-8">
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Applications Management</h1>
-            <p className="text-slate-600">Track and manage all job applications from candidates</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Applications Management</h1>
+            <p className="text-white/70">Track and manage all job applications from candidates</p>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-slate-200 text-slate-700 font-semibold hover:border-slate-300 shadow-sm">
+            <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-[#803791]/20 text-white font-semibold hover:bg-white/10 shadow-sm">
               <Filter className="w-4 h-4" /><span className="hidden sm:inline">Filters</span>
             </button>
-            <button onClick={handleExport} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-slate-200 text-slate-700 font-semibold hover:border-slate-300 shadow-sm">
+            <button onClick={handleExport} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-[#803791]/20 text-white font-semibold hover:bg-white/10 shadow-sm">
               <Download className="w-4 h-4" /><span className="hidden sm:inline">Export</span>
             </button>
           </div>
@@ -91,108 +101,108 @@ export default function ApplicationsModule() {
             { key: 'rejected', label: 'Rejected', icon: XCircle, color: 'red' },
           ].map((stat) => (
             <div key={stat.key} onClick={() => stat.key !== 'total' && handleStatusFilter(stat.key)}
-              className={`rounded-2xl bg-white border-2 p-4 cursor-pointer hover:shadow-lg hover:scale-105 transition-all ${filters.status === stat.key ? `border-${stat.color}-500 shadow-lg` : 'border-slate-200'}`}>
+              className={`rounded-2xl bg-white/5 border p-4 cursor-pointer hover:shadow-lg hover:scale-105 transition-all ${filters.status === stat.key ? 'border-purple-500 shadow-lg' : 'border-[#803791]/10'}`}>
               <div className="flex items-center justify-between mb-2">
-                <stat.icon className={`w-5 h-5 text-${stat.color}-600`} />
+                <stat.icon className="w-5 h-5 text-purple-400" />
               </div>
-              <div className={`text-3xl font-bold text-${stat.color}-600 mb-1`}>{stats[stat.key] || 0}</div>
-              <div className="text-xs font-medium text-slate-600">{stat.label}</div>
+              <div className="text-3xl font-bold text-white mb-1">{stats[stat.key] || 0}</div>
+              <div className="text-xs font-medium text-white/60">{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
 
       {showFilters && (
-        <div className="mb-6 p-6 rounded-2xl bg-white border-2 border-slate-200 shadow-sm">
+        <div className="mb-6 p-6 rounded-2xl bg-white/5 border border-[#803791]/20 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-slate-900">Filters</h3>
-            <button onClick={() => setShowFilters(false)} className="p-2 rounded-lg hover:bg-slate-100"><X className="w-5 h-5" /></button>
+            <h3 className="text-lg font-bold text-white">Filters</h3>
+            <button onClick={() => setShowFilters(false)} className="p-2 rounded-lg hover:bg-white/10"><X className="w-5 h-5 text-white" /></button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <input type="date" value={filters.dateFrom || ''} onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
-              className="px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:outline-none" />
+              className="px-4 py-2.5 rounded-xl bg-white/5 border border-[#803791]/20 text-white focus:border-purple-500 focus:outline-none" />
             <input type="date" value={filters.dateTo || ''} onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
-              className="px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:outline-none" />
-            <button onClick={fetchApplications} className="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 shadow-lg">Apply</button>
+              className="px-4 py-2.5 rounded-xl bg-white/5 border border-[#803791]/20 text-white focus:border-purple-500 focus:outline-none" />
+            <button onClick={fetchApplications} className="px-6 py-2.5 rounded-xl bg-purple-600 text-white font-semibold hover:bg-purple-700 shadow-lg">Apply</button>
             <button onClick={() => { setFilters({ search: "", status: "", page: 1, limit: 20 }); fetchApplications(); }}
-              className="px-6 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Clear</button>
+              className="px-6 py-2.5 rounded-xl bg-white/5 border border-[#803791]/20 text-white font-semibold hover:bg-white/10">Clear</button>
           </div>
         </div>
       )}
 
       <div className="mb-6 flex flex-col md:flex-row gap-3">
         <form onSubmit={handleSearch} className="flex-1 relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
           <input type="text" placeholder="Search by name, email, job..." value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-            className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:outline-none" />
+            className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-[#803791]/20 text-white placeholder:text-white/40 focus:border-purple-500 focus:outline-none" />
         </form>
         {selectedApplications.length > 0 && (
-          <div className="flex items-center gap-2 p-2 rounded-xl bg-indigo-50 border-2 border-indigo-200">
-            <span className="px-3 text-sm font-semibold text-indigo-900">{selectedApplications.length} selected</span>
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-purple-500/20 border border-purple-500/30">
+            <span className="px-3 text-sm font-semibold text-white">{selectedApplications.length} selected</span>
             <button onClick={() => handleBulkAction('shortlist')} className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700">Shortlist</button>
             <button onClick={() => handleBulkAction('reject')} className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700">Reject</button>
           </div>
         )}
       </div>
 
-      <div className="rounded-2xl bg-white border-2 border-slate-200 shadow-sm overflow-hidden">
+      <div className="rounded-2xl bg-white/5 border border-[#803791]/10 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-slate-600 font-medium">Loading...</p>
+              <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-white/70 font-medium">Loading...</p>
             </div>
           </div>
         ) : applications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <AlertCircle className="w-16 h-16 text-slate-400 mb-4" />
-            <h3 className="text-xl font-bold text-slate-900 mb-2">No Applications Found</h3>
-            <p className="text-slate-600">Try adjusting your filters</p>
+            <AlertCircle className="w-16 h-16 text-white/40 mb-4" />
+            <h3 className="text-xl font-bold text-white mb-2">No Applications Found</h3>
+            <p className="text-white/60">Try adjusting your filters</p>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-slate-50 border-b-2 border-slate-200">
+                  <tr className="bg-white/5 border-b border-[#803791]/10">
                     <th className="py-4 px-4 text-left">
-                      <input type="checkbox" className="w-5 h-5 rounded border-2 border-slate-300 text-indigo-600 cursor-pointer"
+                      <input type="checkbox" className="w-5 h-5 rounded border-2 border-purple-500/30 bg-white/5 text-purple-600 cursor-pointer"
                         onChange={(e) => e.target.checked ? setSelectedApplications(applications.map(a => a._id)) : setSelectedApplications([])} />
                     </th>
-                    <th className="py-4 px-4 text-left text-sm font-bold text-slate-700 uppercase">Candidate</th>
-                    <th className="py-4 px-4 text-left text-sm font-bold text-slate-700 uppercase">Job Title</th>
-                    <th className="py-4 px-4 text-left text-sm font-bold text-slate-700 uppercase">Company</th>
-                    <th className="py-4 px-4 text-left text-sm font-bold text-slate-700 uppercase">Status</th>
-                    <th className="py-4 px-4 text-left text-sm font-bold text-slate-700 uppercase">Applied Date</th>
+                    <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Candidate</th>
+                    <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Job Title</th>
+                    <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Company</th>
+                    <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Status</th>
+                    <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Applied Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200">
+                <tbody className="divide-y divide-white/5">
                   {applications.map((app) => (
-                    <tr key={app._id} className="hover:bg-slate-50">
+                    <tr key={app._id} className="hover:bg-white/5">
                       <td className="py-4 px-4">
                         <input type="checkbox" checked={selectedApplications.includes(app._id)}
                           onChange={() => setSelectedApplications(prev => prev.includes(app._id) ? prev.filter(id => id !== app._id) : [...prev, app._id])}
-                          className="w-5 h-5 rounded border-2 border-slate-300 text-indigo-600 cursor-pointer" />
+                          className="w-5 h-5 rounded border-2 border-purple-500/30 bg-white/5 text-purple-600 cursor-pointer" />
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-bold">
                             {app.studentId?.firstName?.[0]}{app.studentId?.lastName?.[0]}
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900">{app.studentId?.firstName} {app.studentId?.lastName}</div>
-                            <div className="text-sm text-slate-600">{app.studentId?.email}</div>
+                            <div className="font-semibold text-white">{app.studentId?.firstName} {app.studentId?.lastName}</div>
+                            <div className="text-sm text-white/60">{app.studentId?.email}</div>
                           </div>
                         </div>
                       </td>
                       <td className="py-4 px-4">
-                        <div className="font-semibold text-slate-900">{app.jobId?.title}</div>
-                        <div className="text-sm text-slate-600">{app.jobId?.department}</div>
+                        <div className="font-semibold text-white">{app.jobId?.title}</div>
+                        <div className="text-sm text-white/60">{app.jobId?.department}</div>
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-2">
-                          <Building2 className="w-4 h-4 text-slate-400" />
-                          <span className="font-medium text-slate-700">{app.employerId?.companyName || `${app.employerId?.firstName} ${app.employerId?.lastName}`}</span>
+                          <Building2 className="w-4 h-4 text-white/40" />
+                          <span className="font-medium text-white/80">{app.employerId?.companyName || `${app.employerId?.firstName} ${app.employerId?.lastName}`}</span>
                         </div>
                       </td>
                       <td className="py-4 px-4">
@@ -201,7 +211,7 @@ export default function ApplicationsModule() {
                           {STATUS_CONFIG[app.status]?.label}
                         </span>
                       </td>
-                      <td className="py-4 px-4 text-sm text-slate-600">{new Date(app.createdAt).toLocaleDateString()}</td>
+                      <td className="py-4 px-4 text-sm text-white/70">{new Date(app.createdAt).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -209,18 +219,19 @@ export default function ApplicationsModule() {
             </div>
 
             {pagination.pages > 1 && (
-              <div className="flex items-center justify-between px-4 py-4 border-t-2 border-slate-200">
-                <div className="text-sm text-slate-600">Showing {((pagination.page - 1) * filters.limit) + 1} to {Math.min(pagination.page * filters.limit, pagination.total)} of {pagination.total}</div>
+              <div className="flex items-center justify-between px-4 py-4 border-t border-[#803791]/10">
+                <div className="text-sm text-white/60">Showing {((pagination.page - 1) * filters.limit) + 1} to {Math.min(pagination.page * filters.limit, pagination.total)} of {pagination.total}</div>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })} disabled={pagination.page === 1}
-                    className="p-2 rounded-lg border-2 border-slate-200 hover:bg-slate-50 disabled:opacity-50"><ChevronLeft className="w-5 h-5" /></button>
+                    className="p-2 rounded-lg bg-white/5 border border-[#803791]/20 hover:bg-white/10 disabled:opacity-50 text-white"><ChevronLeft className="w-5 h-5" /></button>
                   <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })} disabled={pagination.page === pagination.pages}
-                    className="p-2 rounded-lg border-2 border-slate-200 hover:bg-slate-50 disabled:opacity-50"><ChevronRight className="w-5 h-5" /></button>
+                    className="p-2 rounded-lg bg-white/5 border border-[#803791]/20 hover:bg-white/10 disabled:opacity-50 text-white"><ChevronRight className="w-5 h-5" /></button>
                 </div>
               </div>
             )}
           </>
         )}
+      </div>
       </div>
     </div>
   );
