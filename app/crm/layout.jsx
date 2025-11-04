@@ -1,10 +1,26 @@
 "use client";
 import CRMSidebar from "@/views/crm/CRMSidebar";
 import CRMHeader from "@/views/crm/CRMHeader";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CRMLayout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      // On desktop, keep sidebar open by default
+      if (!mobile) {
+        setSidebarOpen(true);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   return (
     <div className="min-h-screen flex bg-transparent overflow-hidden">
@@ -28,7 +44,7 @@ export default function CRMLayout({ children }) {
       <div className="flex-1 flex flex-col min-w-0 h-screen">
         <CRMHeader onMenuClick={() => setSidebarOpen(true)} />
         <main className="flex-1 overflow-hidden">
-          <div className="h-full overflow-auto p-6">{children}</div>
+          <div className="h-full overflow-auto p-3 sm:p-4 md:p-6">{children}</div>
         </main>
       </div>
     </div>
