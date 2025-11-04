@@ -18,6 +18,8 @@ import {
 import { studentService } from "@/services/studentService";
 import { customToast } from "@/components/ui/toast";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
 export default function ResumeManager({ onResumeSelect }) {
   const [resumes, setResumes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -236,8 +238,10 @@ export default function ResumeManager({ onResumeSelect }) {
                     <Copy className="w-4 h-4 text-white/70 hover:text-blue-400" />
                   </button>
                   <a
-                    href={resume.fileUrl}
+                    href={`${API_URL}${resume.fileUrl}`}
                     download
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                     title="Download"
                   >

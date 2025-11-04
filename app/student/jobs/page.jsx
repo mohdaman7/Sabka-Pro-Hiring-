@@ -39,7 +39,7 @@ import {
 } from "@/src/store/slices/studentSlice/jobsSlice";
 import { useRouter } from "next/navigation";
 import { customToast } from "@/components/ui/toast";
-import ApplyNowModal from "@/components/ui/ApplyNowModal";
+import ApplyNowModalEnhanced from "@/components/ui/ApplyNowModalEnhanced";
 import JobDetailsModal from "@/components/ui/JobDetailsModal";
 import { createPortal } from "react-dom";
 
@@ -867,7 +867,7 @@ export default function JobListingsPage() {
       </div>
 
       {/* Apply Now Modal */}
-      <ApplyNowModal
+      <ApplyNowModalEnhanced
         job={selectedJob}
         isOpen={showApplyModal}
         onClose={() => {

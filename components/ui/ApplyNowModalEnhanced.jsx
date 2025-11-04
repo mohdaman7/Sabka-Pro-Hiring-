@@ -51,15 +51,22 @@ export default function ApplyNowModalEnhanced({ job, isOpen, onClose, onSubmit }
     try {
       setLoadingResumes(true);
       const response = await studentService.getMyResumes();
+      console.log("📄 Loaded resumes:", response);
       setSavedResumes(response.data || []);
       
       // Auto-select primary resume if available
       const primaryResume = response.data?.find(r => r.isPrimary);
       if (primaryResume) {
         setFormData(prev => ({ ...prev, resumeId: primaryResume._id }));
+        console.log("✅ Auto-selected primary resume:", primaryResume.name);
+      } else if (response.data && response.data.length > 0) {
+        // If no primary, select first resume
+        setFormData(prev => ({ ...prev, resumeId: response.data[0]._id }));
+        console.log("✅ Auto-selected first resume:", response.data[0].name);
       }
     } catch (error) {
-      console.error("Failed to load resumes:", error);
+      console.error("❌ Failed to load resumes:", error);
+      customToast.error("Failed to load saved resumes");
     } finally {
       setLoadingResumes(false);
     }
@@ -132,20 +139,27 @@ export default function ApplyNowModalEnhanced({ job, isOpen, onClose, onSubmit }
       let resumeIdToUse = formData.resumeId;
       
       if (formData.newResume) {
+        console.log("📤 Uploading new resume...");
         const uploadResponse = await studentService.uploadNewResume(
           formData.newResume,
           `Resume for ${job?.title || "Job"}`
         );
         resumeIdToUse = uploadResponse.data._id;
+        console.log("✅ Resume uploaded:", resumeIdToUse);
       }
 
       // Submit application
       const applicationData = {
-        ...formData,
+        coverLetter: formData.coverLetter,
         resumeId: resumeIdToUse,
-        jobId: job._id,
+        email: formData.email,
+        phone: formData.phone,
+        linkedinUrl: formData.linkedinUrl,
+        githubUrl: formData.githubUrl,
+        portfolio: formData.portfolio,
       };
       
+      console.log("📨 Submitting application:", applicationData);
       await onSubmit(applicationData);
       
       setSubmitSuccess(true);
@@ -166,6 +180,7 @@ export default function ApplyNowModalEnhanced({ job, isOpen, onClose, onSubmit }
         });
       }, 2000);
     } catch (error) {
+      console.error("❌ Application submission error:", error);
       customToast.error(error.response?.data?.message || "Failed to submit application");
     } finally {
       setIsSubmitting(false);
