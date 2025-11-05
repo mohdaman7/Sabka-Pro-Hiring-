@@ -62,4 +62,8 @@ export const applicationService = {
     const response = await api.get(`/api/applications/${id}`);
     return response.data;
   },
+  hireCandidate: async (applicationId, hireData) => {
+    const response = await api.post(`/api/applications/${applicationId}/hire`, hireData);
+    return response.data;
+  },
 };

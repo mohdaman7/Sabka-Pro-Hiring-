@@ -43,6 +43,8 @@ import { applicationService } from "@/services/applicationService";
 import ScheduleInterviewDialog from "@/views/employer/ScheduleInterviewDialog";
 import InterviewManagementDialog from "@/views/employer/InterviewManagementDialog";
 import InterviewDashboard from "@/views/employer/InterviewDashboard";
+import HireCandidateModal from "@/views/employer/HireCandidateModal";
+import InterviewManagementModal from "@/views/employer/InterviewManagementModal";
 
 export default function EmployerApplications() {
   const searchParams = useSearchParams();
@@ -66,6 +68,7 @@ export default function EmployerApplications() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [scheduleApp, setScheduleApp] = useState(null);
   const [manageInterviewApp, setManageInterviewApp] = useState(null);
+  const [hireApp, setHireApp] = useState(null);
 
   const computedStats = useMemo(() => {
     const counts = applications.reduce((acc, app) => {
@@ -89,6 +92,25 @@ export default function EmployerApplications() {
     } catch (e) {
       setError(
         e?.response?.data?.message || e?.message || "Failed to update status"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleHireCandidate = async (applicationId, hireData) => {
+    try {
+      setLoading(true);
+      await applicationService.hireCandidate(applicationId, hireData);
+      setApplications(
+        applications.map((app) =>
+          app._id === applicationId ? { ...app, status: "hired", hireData } : app
+        )
+      );
+      setHireApp(null);
+    } catch (e) {
+      setError(
+        e?.response?.data?.message || e?.message || "Failed to hire candidate"
       );
     } finally {
       setLoading(false);
@@ -667,6 +689,22 @@ export default function EmployerApplications() {
                       </button>
                     )}
 
+                    {/* Hire Button - Shows for interview status */}
+                    {app.status === "interview" && (
+                      <button
+                        onClick={() => setHireApp(app)}
+                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-2xl flex-1 sm:flex-initial bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 border-2 border-green-400/50"
+                      >
+                        <span className="relative flex items-center gap-2 justify-center">
+                          <Award
+                            className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300"
+                            strokeWidth={2.5}
+                          />
+                          Hire Candidate
+                        </span>
+                      </button>
+                    )}
+
                     {/* Resume Button */}
                     {app.resumeUrl && (
                       <a
@@ -1106,6 +1144,40 @@ export default function EmployerApplications() {
           setManageInterviewApp(null);
         }}
       />
+
+      {/* Hire Candidate Modal */}
+      {hireApp && (
+        <HireCandidateModal
+          application={hireApp}
+          onClose={() => setHireApp(null)}
+          onConfirm={handleHireCandidate}
+        />
+      )}
+
+      {/* Interview Management Modal */}
+      {manageInterviewApp && manageInterviewApp.interviewData && (
+        <InterviewManagementModal
+          interview={manageInterviewApp.interviewData}
+          application={manageInterviewApp}
+          onClose={() => setManageInterviewApp(null)}
+          onUpdate={async (id, data) => {
+            // Update interview
+            console.log("Update interview:", id, data);
+          }}
+          onReschedule={(interview) => {
+            setManageInterviewApp(null);
+            setScheduleApp(manageInterviewApp);
+          }}
+          onCancel={async (id) => {
+            // Cancel interview
+            console.log("Cancel interview:", id);
+          }}
+          onComplete={async (id) => {
+            // Complete interview
+            console.log("Complete interview:", id);
+          }}
+        />
+      )}
     </div>
   );
 }
