@@ -41,8 +41,10 @@ import {
 import { applicationService } from "@/services/applicationService";
 import ScheduleInterviewDialog from "@/views/employer/ScheduleInterviewDialog";
 import InterviewManagementDialog from "@/views/employer/InterviewManagementDialog";
+import InterviewDashboard from "@/views/employer/InterviewDashboard";
 
 export default function EmployerApplications() {
+  const [activeView, setActiveView] = useState("applications"); // applications or interviews
   const [search, setSearch] = useState("");
   const [stage, setStage] = useState("all");
   const [expandedId, setExpandedId] = useState(null);
@@ -252,10 +254,44 @@ export default function EmployerApplications() {
         />
       </div>
 
-      {/* Modern Clean Header */}
-      <div
-        className="relative overflow-hidden rounded-xl sm:rounded-2xl shadow-xl group transition-all duration-300 bg-gradient-to-br from-[#803791] to-[#6a2a6f] border border-[#b87bd1]/20"
-      >
+      {/* View Toggle Tabs */}
+      <div className="flex gap-3 mb-6">
+        <button
+          onClick={() => setActiveView("applications")}
+          className={`flex-1 px-6 py-4 rounded-xl font-semibold transition-all ${
+            activeView === "applications"
+              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
+              : "bg-white/5 text-white/60 hover:bg-white/10 border border-white/10"
+          }`}
+        >
+          <Users className="w-5 h-5 inline-block mr-2" />
+          Applications
+        </button>
+        <button
+          onClick={() => setActiveView("interviews")}
+          className={`flex-1 px-6 py-4 rounded-xl font-semibold transition-all ${
+            activeView === "interviews"
+              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
+              : "bg-white/5 text-white/60 hover:bg-white/10 border border-white/10"
+          }`}
+        >
+          <Calendar className="w-5 h-5 inline-block mr-2" />
+          Interview Dashboard
+        </button>
+      </div>
+
+      {/* Render based on active view */}
+      {activeView === "interviews" ? (
+        <InterviewDashboard
+          onManageInterview={(app) => setManageInterviewApp(app)}
+          onScheduleInterview={(app) => setScheduleApp(app)}
+        />
+      ) : (
+        <>
+          {/* Modern Clean Header */}
+          <div
+            className="relative overflow-hidden rounded-xl sm:rounded-2xl shadow-xl group transition-all duration-300 bg-gradient-to-br from-[#803791] to-[#6a2a6f] border border-[#b87bd1]/20"
+          >
         {/* Subtle overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/5 to-transparent opacity-50" />
 
@@ -1074,7 +1110,10 @@ export default function EmployerApplications() {
           animation: orbit-2 6s linear infinite;
         }
       `}</style>
+        </>
+      )}
 
+      {/* Dialogs - Always available */}
       <ScheduleInterviewDialog
         app={scheduleApp}
         onClose={() => setScheduleApp(null)}
