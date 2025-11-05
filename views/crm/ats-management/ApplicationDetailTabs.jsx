@@ -66,13 +66,25 @@ export function OverviewTab({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InfoCard icon={Mail} label="Email" value={application.email || "N/A"} />
-            <InfoCard icon={Phone} label="Phone" value={application.phone || "N/A"} />
-            <InfoCard icon={MapPin} label="Location" value={application.location || "N/A"} />
+            <InfoCard 
+              icon={Mail} 
+              label="Email" 
+              value={application.studentId?.email || application.email || "N/A"} 
+            />
+            <InfoCard 
+              icon={Phone} 
+              label="Phone" 
+              value={application.studentId?.phone || application.phone || "N/A"} 
+            />
+            <InfoCard 
+              icon={MapPin} 
+              label="Location" 
+              value={application.studentId?.location || application.location || "N/A"} 
+            />
             <InfoCard
               icon={Calendar}
               label="Applied On"
-              value={new Date(application.appliedAt || application.createdAt).toLocaleDateString()}
+              value={application.createdAt ? new Date(application.createdAt).toLocaleDateString() : "N/A"}
             />
           </div>
 
@@ -102,11 +114,29 @@ export function OverviewTab({
             <Briefcase className="w-6 h-6 text-purple-400" />
             Job Information
           </h2>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <p className="text-white/60 text-sm mb-1">Job Title</p>
-            <p className="text-white font-bold text-lg">
-              {application.jobTitle || application.jobId?.title || "N/A"}
-            </p>
+          <div className="space-y-4">
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <p className="text-white/60 text-sm mb-1">Job Title</p>
+              <p className="text-white font-bold text-lg">
+                {application.jobId?.title || application.jobTitle || "N/A"}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                <p className="text-white/60 text-sm mb-1">Company</p>
+                <p className="text-white font-medium flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-purple-400" />
+                  {application.employerId?.companyName || 
+                   (application.employerId?.firstName && application.employerId?.lastName 
+                     ? `${application.employerId.firstName} ${application.employerId.lastName}`
+                     : "N/A")}
+                </p>
+              </div>
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                <p className="text-white/60 text-sm mb-1">Department</p>
+                <p className="text-white font-medium">{application.jobId?.department || "N/A"}</p>
+              </div>
+            </div>
           </div>
         </div>
 

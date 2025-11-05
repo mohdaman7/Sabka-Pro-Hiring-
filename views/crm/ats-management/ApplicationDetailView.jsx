@@ -95,7 +95,10 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
   const loadApplicationDetails = async (silent = false) => {
     try {
       if (!silent) setLoading(true);
-      const data = await atsManagementService.getApplicationById(applicationId);
+      const response = await atsManagementService.getApplicationById(applicationId);
+      // Handle both direct data and nested response
+      const data = response.data || response;
+      console.log('Application data:', data); // Debug log
       setApplication(data);
       setNotes(data.notes || "");
     } catch (error) {
@@ -227,7 +230,38 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
   );
 
   return (
-    <div ref={detailViewRef} className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div ref={detailViewRef} className="min-h-screen bg-[#0a0118] relative overflow-hidden">
+      {/* Animated Background - Matching other components */}
+      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div
+          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-[120px] animate-pulse-slow opacity-20"
+          style={{
+            background: "radial-gradient(circle, #803791 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full blur-[140px] animate-pulse-slower opacity-15"
+          style={{
+            background: "radial-gradient(circle, #b87bd1 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[100px] animate-float opacity-10"
+          style={{
+            background: "radial-gradient(circle, #f0c2ee 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: "50px 50px",
+          }}
+        />
+      </div>
       {/* Header */}
       <div className="sticky top-0 z-50 bg-gradient-to-r from-slate-900 to-slate-800 border-b-2 border-indigo-500/30 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -243,7 +277,9 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-3">
                   <User className="w-7 h-7 text-indigo-400" />
-                  {application.candidateName}
+                  {application.studentId?.firstName && application.studentId?.lastName
+                    ? `${application.studentId.firstName} ${application.studentId.lastName}`
+                    : application.candidateName || "Candidate"}
                 </h1>
                 <p className="text-white/60 text-sm mt-1">
                   Application ID: #{application._id?.slice(-8).toUpperCase()}
