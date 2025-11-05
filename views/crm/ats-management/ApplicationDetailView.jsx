@@ -83,7 +83,7 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
   useEffect(() => {
     if (applicationId) {
       loadApplicationDetails();
-      
+
       const interval = setInterval(() => {
         loadApplicationDetails(true); // Silent refresh
       }, 30000); // 30 seconds
@@ -95,10 +95,16 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
   const loadApplicationDetails = async (silent = false) => {
     try {
       if (!silent) setLoading(true);
-      const response = await atsManagementService.getApplicationById(applicationId);
+      const response = await atsManagementService.getApplicationById(
+        applicationId
+      );
       // Handle nested response structure
-      const data = response.application || response.data?.application || response.data || response;
-      console.log('Application data:', data); // Debug log
+      const data =
+        response.application ||
+        response.data?.application ||
+        response.data ||
+        response;
+      console.log("Application data:", data); // Debug log
       setApplication(data);
       setNotes(data.notes || "");
     } catch (error) {
@@ -125,23 +131,23 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
       if (!element) return;
 
       // Dynamic imports to avoid SSR issues
-      const { jsPDF } = await import('jspdf');
-      const html2canvas = (await import('html2canvas')).default;
+      const { jsPDF } = await import("jspdf");
+      const html2canvas = (await import("html2canvas")).default;
 
       // Create canvas from element
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#0f172a'
+        backgroundColor: "#0f172a",
       });
 
       // Create PDF
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
       });
 
       const imgWidth = 210; // A4 width in mm
@@ -150,28 +156,35 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
       let position = 0;
 
       // Add image to PDF (handle multiple pages if needed)
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= 297; // A4 height in mm
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= 297;
       }
 
       // Save PDF
-      const filename = `application-${application.candidateName || application._id}.pdf`;
+      const filename = `application-${
+        application.candidateName || application._id
+      }.pdf`;
       pdf.save(filename);
     } catch (error) {
       console.error("Error exporting to PDF:", error);
-      alert("Failed to export PDF. Please ensure jspdf and html2canvas are installed.");
+      alert(
+        "Failed to export PDF. Please ensure jspdf and html2canvas are installed."
+      );
     }
   };
 
   const handleStatusUpdate = async (newStatus) => {
     try {
-      await atsManagementService.updateApplicationStatus(applicationId, newStatus);
+      await atsManagementService.updateApplicationStatus(
+        applicationId,
+        newStatus
+      );
       loadApplicationDetails();
     } catch (error) {
       console.error("Error updating status:", error);
@@ -205,10 +218,12 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#0a0118]">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70 text-lg">Loading application details...</p>
+          <p className="text-white/70 text-lg">
+            Loading application details...
+          </p>
         </div>
       </div>
     );
@@ -216,54 +231,48 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
 
   if (!application) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#0a0118]">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <p className="text-white text-xl">Application not found</p>
         </div>
       </div>
     );
-  };
+  }
 
   const currentStageIndex = STATUS_STAGES.findIndex(
     (s) => s.value === application.status
   );
 
   return (
-    <div ref={detailViewRef} className="min-h-screen bg-[#0a0118] relative overflow-hidden">
-      {/* Animated Background - Matching other components */}
+    <div ref={detailViewRef} className="relative min-h-screen overflow-hidden">
+      {/* Premium Animated Background - Matching ApplicationsModule */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div
-          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-[120px] animate-pulse-slow opacity-20"
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
           style={{
-            background: "radial-gradient(circle, #803791 0%, transparent 70%)",
+            background: "rgba(128,55,145,0.12)",
+            animation: "pulse 8s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full blur-[140px] animate-pulse-slower opacity-15"
+          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl"
           style={{
-            background: "radial-gradient(circle, #b87bd1 0%, transparent 70%)",
+            background: "rgba(184,123,209,0.08)",
+            animation: "float 15s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[100px] animate-float opacity-10"
+          className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full blur-3xl"
           style={{
-            background: "radial-gradient(circle, #f0c2ee 0%, transparent 70%)",
+            background: "rgba(240,194,238,0.05)",
+            animation: "float 12s ease-in-out infinite reverse",
           }}
         />
-        <div
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: "50px 50px",
-          }}
-        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_50%)]" />
       </div>
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-[#0a0118]/80 backdrop-blur-xl border-b border-purple-500/20 shadow-2xl">
+      <div className="sticky top-0 z-50 bg-gradient-to-r from-[#2a0a42]/90 via-[#3b0f63]/90 to-[#2a0a42]/90 backdrop-blur-xl border-b border-purple-500/30 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
@@ -277,7 +286,8 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-3">
                   <User className="w-7 h-7 text-indigo-400" />
-                  {application.studentId?.firstName && application.studentId?.lastName
+                  {application.studentId?.firstName &&
+                  application.studentId?.lastName
                     ? `${application.studentId.firstName} ${application.studentId.lastName}`
                     : application.candidateName || "Candidate"}
                 </h1>
@@ -295,9 +305,13 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
                 className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-green-500/50 transition-all duration-300 hover:scale-110 disabled:opacity-50"
                 title="Refresh Data"
               >
-                <RefreshCw className={`w-5 h-5 text-white ${isRefreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw
+                  className={`w-5 h-5 text-white ${
+                    isRefreshing ? "animate-spin" : ""
+                  }`}
+                />
               </button>
-              
+
               <button
                 onClick={() => setShowMessageModal(true)}
                 className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-blue-500/50 transition-all duration-300 hover:scale-110"
@@ -353,7 +367,11 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
               { id: "overview", label: "Overview", icon: Eye },
               { id: "timeline", label: "Timeline", icon: Clock },
               { id: "documents", label: "Documents", icon: FileText },
-              { id: "communication", label: "Communication", icon: MessageSquare },
+              {
+                id: "communication",
+                label: "Communication",
+                icon: MessageSquare,
+              },
               { id: "assignment", label: "Assignment", icon: Users },
             ].map((tab) => {
               const Icon = tab.icon;
@@ -399,9 +417,13 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
 
         {activeTab === "timeline" && <TimelineTab application={application} />}
 
-        {activeTab === "documents" && <DocumentsTab application={application} />}
+        {activeTab === "documents" && (
+          <DocumentsTab application={application} />
+        )}
 
-        {activeTab === "communication" && <CommunicationTab application={application} />}
+        {activeTab === "communication" && (
+          <CommunicationTab application={application} />
+        )}
 
         {activeTab === "assignment" && (
           <AssignmentTab
