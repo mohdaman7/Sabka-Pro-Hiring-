@@ -252,7 +252,6 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
               </button>
 
               {/* Status Badge */}
-              <div className="flex items-center gap-3">
               {STATUS_STAGES.map((stage) => {
                 if (stage.value === application.status) {
                   const Icon = stage.icon;
