@@ -11,6 +11,9 @@ import {
   scheduleInterview,
   getInterviewByApplicationId,
   rescheduleInterview,
+  updateInterviewStatus,
+  completeInterviewWithEvaluation,
+  scheduleNextRound,
   cancelInterview,
   completeInterview,
 } from "../controllers/applicationController.js";
@@ -94,10 +97,10 @@ router.patch(
 );
 
 router.patch(
-  "/:id/interview/cancel",
+  "/:id/interview/status",
   authenticate,
   authorize(["employer", "admin"]),
-  cancelInterview
+  updateInterviewStatus
 );
 
 router.patch(
@@ -105,6 +108,27 @@ router.patch(
   authenticate,
   authorize(["employer", "admin"]),
   completeInterview
+);
+
+router.post(
+  "/:id/interview/complete-evaluation",
+  authenticate,
+  authorize(["employer", "admin"]),
+  completeInterviewWithEvaluation
+);
+
+router.post(
+  "/:id/interview/next-round",
+  authenticate,
+  authorize(["employer", "admin"]),
+  scheduleNextRound
+);
+
+router.patch(
+  "/:id/interview/cancel",
+  authenticate,
+  authorize(["employer", "admin"]),
+  cancelInterview
 );
 
 export default router;

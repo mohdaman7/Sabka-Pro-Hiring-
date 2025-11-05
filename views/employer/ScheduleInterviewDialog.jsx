@@ -18,6 +18,7 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
+  Target,
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
 
@@ -29,6 +30,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   const [time, setTime] = useState("10:00");
   const [duration, setDuration] = useState(60);
   const [type, setType] = useState("video");
+  const [stage, setStage] = useState("screening");
   const [meetingLink, setMeetingLink] = useState("");
   const [location, setLocation] = useState("");
   const [timezone, setTimezone] = useState(
@@ -75,6 +77,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
         setTime(`${hh}:${mm}`);
         setDuration(interview.durationMinutes || 60);
         setType(interview.type || "video");
+        setStage(interview.stage || "screening");
         setMeetingLink(interview.meetingLink || "");
         setLocation(interview.location?.address || interview.location || "");
         setTimezone(interview.timezone || timezone);
@@ -106,6 +109,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
     setTime("10:00");
     setDuration(60);
     setType("video");
+    setStage("screening");
     setMeetingLink("");
     setLocation("");
     setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
@@ -156,6 +160,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
         timezone,
         durationMinutes: Number(duration),
         type,
+        stage,
         meetingLink: type === "video" ? meetingLink : undefined,
         location: type === "onsite" ? location : undefined,
         panel: panel.filter((p) => p.name && p.email),
@@ -225,6 +230,14 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
       setLoading(false);
     }
   };
+
+  const interviewStages = [
+    { value: "screening", label: "Screening", icon: Users, gradient: "from-blue-500 to-cyan-500" },
+    { value: "technical", label: "Technical", icon: FileText, gradient: "from-purple-500 to-pink-500" },
+    { value: "hr", label: "HR Round", icon: CheckCircle, gradient: "from-indigo-500 to-purple-500" },
+    { value: "final", label: "Final", icon: Sparkles, gradient: "from-amber-500 to-orange-500" },
+    { value: "cultural", label: "Cultural Fit", icon: Users, gradient: "from-emerald-500 to-teal-500" },
+  ];
 
   const interviewTypes = [
     {
@@ -424,7 +437,59 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
             </div>
           </div>
 
-          {/* Rest of your existing form sections remain the same */}
+          {/* Interview Stage Section */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-sm font-semibold text-white/90">
+              <Target className="w-4 h-4 text-[#b87bd1]" />
+              <span>Interview Stage</span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {interviewStages.map((stageOption) => {
+                const Icon = stageOption.icon;
+                return (
+                  <button
+                    key={stageOption.value}
+                    onClick={() => setStage(stageOption.value)}
+                    className={`group relative p-4 rounded-xl transition-all duration-300 overflow-hidden ${
+                      stage === stageOption.value
+                        ? "scale-105 shadow-lg"
+                        : "hover:scale-105"
+                    }`}
+                    style={{
+                      background:
+                        stage === stageOption.value
+                          ? "linear-gradient(135deg, rgba(128,55,145,0.2), rgba(184,123,209,0.2))"
+                          : "rgba(255,255,255,0.05)",
+                      border: `2px solid ${
+                        stage === stageOption.value
+                          ? "rgba(184,123,209,0.5)"
+                          : "rgba(255,255,255,0.1)"
+                      }`,
+                    }}
+                  >
+                    <Icon
+                      className={`w-6 h-6 mx-auto mb-2 ${
+                        stage === stageOption.value
+                          ? "text-[#b87bd1]"
+                          : "text-white/60"
+                      }`}
+                    />
+                    <div
+                      className={`text-xs font-semibold ${
+                        stage === stageOption.value
+                          ? "text-white"
+                          : "text-white/70"
+                      }`}
+                    >
+                      {stageOption.label}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Interview Type Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-white/90">

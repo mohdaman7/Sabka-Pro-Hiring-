@@ -38,6 +38,18 @@ export const applicationService = {
     const response = await api.patch(`/api/applications/${applicationId}/interview/reschedule`, payload);
     return response.data;
   },
+  updateInterviewStatus: async (applicationId, payload) => {
+    const response = await api.patch(`/api/applications/${applicationId}/interview/status`, payload);
+    return response.data;
+  },
+  completeInterviewWithEvaluation: async (applicationId, payload) => {
+    const response = await api.post(`/api/applications/${applicationId}/interview/complete-evaluation`, payload);
+    return response.data;
+  },
+  scheduleNextRound: async (applicationId, payload) => {
+    const response = await api.post(`/api/applications/${applicationId}/interview/next-round`, payload);
+    return response.data;
+  },
   cancelInterview: async (applicationId, reason) => {
     const response = await api.patch(`/api/applications/${applicationId}/interview/cancel`, { reason });
     return response.data;

@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
 import ScheduleInterviewDialog from "@/views/employer/ScheduleInterviewDialog";
+import InterviewManagementDialog from "@/views/employer/InterviewManagementDialog";
 
 export default function EmployerApplications() {
   const [search, setSearch] = useState("");
@@ -52,6 +53,7 @@ export default function EmployerApplications() {
   const [error, setError] = useState("");
   const [hoveredCard, setHoveredCard] = useState(null);
   const [scheduleApp, setScheduleApp] = useState(null);
+  const [manageInterviewApp, setManageInterviewApp] = useState(null);
 
   const computedStats = useMemo(() => {
     const counts = applications.reduce((acc, app) => {
@@ -631,6 +633,28 @@ export default function EmployerApplications() {
                       </button>
                     )}
 
+                    {/* Manage Interview Button - Shows when interview exists */}
+                    {app.hasInterview && app.interviewData && (
+                      <button
+                        onClick={() => setManageInterviewApp(app)}
+                        className="group/btn relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(128,55,145,0.2), rgba(184,123,209,0.2))",
+                          border: "2px solid rgba(184,123,209,0.5)",
+                        }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
+                        <span className="relative flex items-center gap-2 justify-center">
+                          <Sparkles
+                            className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-500"
+                            strokeWidth={2.5}
+                          />
+                          Manage Interview
+                        </span>
+                      </button>
+                    )}
+
                     {/* Resume Button */}
                     {app.resumeUrl && (
                       <a
@@ -1059,6 +1083,18 @@ export default function EmployerApplications() {
             prev.map((a) => (a._id === scheduleApp._id ? { ...a, hasInterview: true, interviewData: updated.interview || updated } : a))
           );
           setScheduleApp(null);
+        }}
+      />
+
+      <InterviewManagementDialog
+        interview={manageInterviewApp?.interviewData}
+        app={manageInterviewApp}
+        onClose={() => setManageInterviewApp(null)}
+        onUpdated={(updated) => {
+          setApplications((prev) =>
+            prev.map((a) => (a._id === manageInterviewApp._id ? { ...a, interviewData: updated } : a))
+          );
+          setManageInterviewApp(null);
         }}
       />
     </div>
