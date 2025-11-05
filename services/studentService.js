@@ -142,4 +142,15 @@ export const studentService = {
     const response = await api.post(`/api/jobs/${jobId}/apply`, applicationData);
     return response.data;
   },
+
+  // Get my interviews
+  getMyInterviews: async () => {
+    try {
+      const response = await api.get("/api/student/interviews");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching interviews:", error);
+      throw error;
+    }
+  },
 };

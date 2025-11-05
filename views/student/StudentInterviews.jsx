@@ -31,6 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { applicationService } from "@/services/applicationService";
+import { studentService } from "@/services/studentService";
 
 export default function InterviewsPage() {
   const [filter, setFilter] = useState("all");
@@ -47,11 +48,19 @@ export default function InterviewsPage() {
       try {
         setLoading(true);
         setError("");
-        const res = await applicationService.studentMyApplications({ status: "interview", limit: 100 });
+        const res = await studentService.getMyInterviews();
         if (!mounted) return;
-        const apps = res?.data || [];
-        setApplications(apps);
-        setStats(res?.stats || {});
+        const interviews = res?.data || [];
+        setApplications(interviews);
+        
+        // Calculate stats from interviews
+        const stats = {
+          total: interviews.length,
+          upcoming: interviews.filter(i => i.status === 'scheduled' && new Date(i.scheduledAt) > new Date()).length,
+          completed: interviews.filter(i => i.status === 'completed').length,
+          cancelled: interviews.filter(i => i.status === 'cancelled').length,
+        };
+        setStats(stats);
       } catch (e) {
         setError(e?.response?.data?.message || e?.message || "Failed to load interviews");
       } finally {
@@ -92,45 +101,44 @@ export default function InterviewsPage() {
 
   const interviews = useMemo(() => {
     return (applications || [])
-      .filter((a) => a.interview)
-      .map((a) => {
-        const when = a.interview?.scheduledAt ? new Date(a.interview.scheduledAt) : null;
-        const company = a.jobId?.employerId?.employerProfile?.company?.name || a.jobId?.employerId?.company?.name || a.jobId?.company?.name || "Company";
-        const position = a.jobId?.title || "Position";
-        const type = a.interview?.type || "video";
-        const isExpired = when && isInterviewExpired(a.interview.scheduledAt);
+      .map((interview) => {
+        const when = interview?.scheduledAt ? new Date(interview.scheduledAt) : null;
+        const company = interview.employerId?.companyName || `${interview.employerId?.firstName} ${interview.employerId?.lastName}` || "Company";
+        const position = interview.jobId?.title || "Position";
+        const type = interview?.type || "video";
+        const isExpired = when && isInterviewExpired(interview.scheduledAt);
         
         // Determine status with expired check
         let status = "upcoming";
-        if (a.interview?.status === "completed") {
+        if (interview?.status === "completed") {
           status = "completed";
-        } else if (a.interview?.status === "cancelled") {
+        } else if (interview?.status === "cancelled") {
           status = "cancelled";
         } else if (isExpired) {
           status = "expired";
         }
         
         return {
-          id: a._id,
+          id: interview._id,
           company,
           position,
           type,
           date: when ? when.toDateString() : "",
-          time: when ? when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + (a.interview?.durationMinutes ? ` (${a.interview.durationMinutes} min)` : "") : "",
-          scheduledAt: a.interview?.scheduledAt,
+          time: when ? when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + (interview?.durationMinutes ? ` (${interview.durationMinutes} min)` : "") : "",
+          scheduledAt: interview?.scheduledAt,
           status,
-          interviewer: a.interview?.panel?.[0]?.name || "Interviewer",
-          panel: a.interview?.panel || [],
-          round: a.interview?.round || "Interview",
+          interviewer: interview?.interviewers?.[0]?.name || "Interviewer",
+          panel: interview?.interviewers || [],
+          round: interview?.round || interview?.stage || "Interview",
           logo: "/placeholder.svg",
-          meetingLink: a.interview?.meetingLink,
-          notes: a.interview?.notes,
-          location: a.interview?.location,
-          timezone: a.interview?.timezone,
-          durationMinutes: a.interview?.durationMinutes,
-          result: a.interview?.status === "completed" ? a.interview?.feedback ? "Completed" : "Completed" : undefined,
-          feedback: a.interview?.feedback,
-          timeUntil: when ? getTimeUntilInterview(a.interview.scheduledAt) : null,
+          meetingLink: interview?.meetingLink,
+          notes: interview?.notes,
+          location: interview?.location?.address || interview?.location,
+          timezone: interview?.timezone,
+          durationMinutes: interview?.durationMinutes,
+          result: interview?.status === "completed" ? interview?.evaluation?.feedback ? "Completed" : "Completed" : undefined,
+          feedback: interview?.evaluation?.feedback,
+          timeUntil: when ? getTimeUntilInterview(interview.scheduledAt) : null,
           isExpired,
         };
       })
