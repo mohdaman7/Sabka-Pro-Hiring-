@@ -13,6 +13,7 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Plus,
   Sparkles,
   Building,
@@ -22,6 +23,7 @@ import {
   LogOut,
   Crown,
   Star,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -68,6 +70,19 @@ const navigation = [
     icon: FileText,
     badge: "23",
     gradient: "from-rose-500 to-pink-500",
+    hasDropdown: true,
+    subItems: [
+      {
+        name: "All Applications",
+        href: "/employer/applications",
+        icon: FileText,
+      },
+      {
+        name: "Interview Dashboard",
+        href: "/employer/applications?view=interviews",
+        icon: Calendar,
+      },
+    ],
   },
   {
     name: "Analytics",
@@ -105,6 +120,7 @@ export default function EmployerSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   return (
     <>
@@ -245,9 +261,164 @@ export default function EmployerSidebar({ isOpen, onClose }) {
         <nav className="flex-1 flex flex-col p-2.5 sm:p-3 overflow-hidden">
           <div className="space-y-2 h-full overflow-hidden hover:overflow-y-auto custom-scrollbar">
             {navigation.map((item, index) => {
-              const isActive = pathname === item.href;
+              const isActive = pathname === item.href || (item.subItems && item.subItems.some(sub => pathname === sub.href));
               const Icon = item.icon;
               const isHovered = hoveredItem === item.href;
+              const isDropdownOpen = openDropdown === item.name;
+
+              if (item.hasDropdown && !isCollapsed) {
+                return (
+                  <div key={item.name}>
+                    <button
+                      onClick={() => setOpenDropdown(isDropdownOpen ? null : item.name)}
+                      onMouseEnter={() => setHoveredItem(item.href)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className={cn(
+                        "group relative flex items-center rounded-xl px-5 py-5 transition-all duration-300 overflow-hidden w-full",
+                        "gap-3",
+                        isActive
+                          ? "shadow-md scale-[1.02]"
+                          : "hover:scale-[1.02] hover:shadow-md"
+                      )}
+                      style={{
+                        background: isActive
+                          ? "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))"
+                          : "rgba(255,255,255,0.02)",
+                        border: isActive
+                          ? "1px solid rgba(255,255,255,0.12)"
+                          : "1px solid rgba(255,255,255,0.04)",
+                        animationDelay: `${index * 50}ms`,
+                      }}
+                    >
+                  {/* Hover gradient overlay - reduced size */}
+                  <div
+                    className={`absolute inset-1 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-lg`}
+                  ></div>
+
+                  {/* Active indicator */}
+                  {isActive && (
+                    <div
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-gradient-to-b"
+                      style={{
+                        background: `linear-gradient(to bottom, ${
+                          item.gradient.split(" ")[1]
+                        }, ${item.gradient.split(" ")[3]})`,
+                      }}
+                    ></div>
+                  )}
+
+                  {/* Icon with animation */}
+                  <div
+                    className={cn(
+                      "relative flex items-center justify-center transition-all duration-300",
+                      isActive
+                        ? "scale-105 rotate-3"
+                        : "group-hover:scale-105 group-hover:rotate-3"
+                    )}
+                  >
+                    <div
+                      className={`absolute inset-0 blur-md opacity-0 transition-opacity duration-300 ${
+                        isActive || isHovered ? "opacity-40" : ""
+                      }`}
+                      style={{
+                        background: `linear-gradient(135deg, ${
+                          item.gradient.split(" ")[1]
+                        }, ${item.gradient.split(" ")[3]})`,
+                      }}
+                    ></div>
+                    <Icon
+                      className={cn(
+                        "h-5 w-5 flex-shrink-0 relative z-10 transition-colors duration-300",
+                        isActive
+                          ? "text-white"
+                          : "text-white/70 group-hover:text-white"
+                      )}
+                    />
+                  </div>
+
+                  {!isCollapsed && (
+                    <>
+                      <span
+                        className={cn(
+                          "text-xs sm:text-sm font-medium truncate transition-all duration-300 relative z-10",
+                          isActive
+                            ? "text-white"
+                            : "text-white/70 group-hover:text-white"
+                        )}
+                      >
+                        {item.name}
+                      </span>
+
+                      {/* Badge */}
+                      {item.badge && (
+                        <div className="ml-auto relative">
+                          <div
+                            className={`absolute inset-0 blur-sm opacity-40 rounded-full bg-gradient-to-r ${item.gradient}`}
+                          ></div>
+                          <div
+                            className={`relative px-2 py-1 rounded-full text-xs font-semibold text-white shadow-md bg-gradient-to-r ${item.gradient}`}
+                          >
+                            {item.badge}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                      {/* Indicator dot for collapsed state */}
+                      {isCollapsed && item.badge && (
+                        <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 border border-gray-900 animate-pulse"></div>
+                      )}
+
+                      {/* Dropdown chevron */}
+                      {item.hasDropdown && !isCollapsed && (
+                        <ChevronDown className={cn(
+                          "ml-auto h-4 w-4 text-white/70 transition-transform duration-300",
+                          isDropdownOpen && "rotate-180"
+                        )} />
+                      )}
+                    </button>
+
+                    {/* Dropdown Sub-items */}
+                    {isDropdownOpen && item.subItems && (
+                      <div className="ml-4 mt-2 space-y-1 border-l-2 border-white/10 pl-4">
+                        {item.subItems.map((subItem) => {
+                          const SubIcon = subItem.icon;
+                          const isSubActive = pathname === subItem.href;
+                          return (
+                            <Link
+                              key={subItem.name}
+                              href={subItem.href}
+                              onClick={() => {
+                                if (window.innerWidth < 768) {
+                                  onClose();
+                                }
+                              }}
+                              className={cn(
+                                "group relative flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-300",
+                                isSubActive
+                                  ? "bg-white/10 shadow-sm"
+                                  : "hover:bg-white/5"
+                              )}
+                            >
+                              <SubIcon className={cn(
+                                "h-4 w-4 transition-colors duration-300",
+                                isSubActive ? "text-white" : "text-white/60 group-hover:text-white"
+                              )} />
+                              <span className={cn(
+                                "text-xs font-medium transition-colors duration-300",
+                                isSubActive ? "text-white" : "text-white/70 group-hover:text-white"
+                              )}>
+                                {subItem.name}
+                              </span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
 
               return (
                 <Link

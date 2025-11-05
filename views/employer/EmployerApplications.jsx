@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Search,
   Download,
@@ -44,8 +45,17 @@ import InterviewManagementDialog from "@/views/employer/InterviewManagementDialo
 import InterviewDashboard from "@/views/employer/InterviewDashboard";
 
 export default function EmployerApplications() {
+  const searchParams = useSearchParams();
   const [activeView, setActiveView] = useState("applications"); // applications or interviews
   const [search, setSearch] = useState("");
+
+  // Handle URL query parameter for view switching
+  useEffect(() => {
+    const view = searchParams.get("view");
+    if (view === "interviews") {
+      setActiveView("interviews");
+    }
+  }, [searchParams]);
   const [stage, setStage] = useState("all");
   const [expandedId, setExpandedId] = useState(null);
   const [sortBy, setSortBy] = useState("newest");

@@ -308,40 +308,49 @@ export default function InterviewDashboard({ onManageInterview, onScheduleInterv
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50"
+          className="px-4 py-3 rounded-xl bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border-2 border-white/20 text-white focus:outline-none focus:border-purple-500 shadow-lg hover:border-purple-500/50 transition-all cursor-pointer"
+          style={{
+            backgroundImage: "linear-gradient(135deg, rgba(128,55,145,0.1), rgba(184,123,209,0.05))"
+          }}
         >
-          <option value="all">All Status</option>
-          <option value="scheduled">Scheduled</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-          <option value="no-show">No Show</option>
+          <option value="all" className="bg-[#1a1a2e] text-white">All Status</option>
+          <option value="scheduled" className="bg-[#1a1a2e] text-white">Scheduled</option>
+          <option value="completed" className="bg-[#1a1a2e] text-white">Completed</option>
+          <option value="cancelled" className="bg-[#1a1a2e] text-white">Cancelled</option>
+          <option value="no-show" className="bg-[#1a1a2e] text-white">No Show</option>
         </select>
 
         {/* Stage Filter */}
         <select
           value={stageFilter}
           onChange={(e) => setStageFilter(e.target.value)}
-          className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50"
+          className="px-4 py-3 rounded-xl bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border-2 border-white/20 text-white focus:outline-none focus:border-purple-500 shadow-lg hover:border-purple-500/50 transition-all cursor-pointer"
+          style={{
+            backgroundImage: "linear-gradient(135deg, rgba(128,55,145,0.1), rgba(184,123,209,0.05))"
+          }}
         >
-          <option value="all">All Stages</option>
-          <option value="screening">Screening</option>
-          <option value="technical">Technical</option>
-          <option value="hr">HR Round</option>
-          <option value="final">Final</option>
-          <option value="cultural">Cultural Fit</option>
+          <option value="all" className="bg-[#1a1a2e] text-white">All Stages</option>
+          <option value="screening" className="bg-[#1a1a2e] text-white">Screening</option>
+          <option value="technical" className="bg-[#1a1a2e] text-white">Technical</option>
+          <option value="hr" className="bg-[#1a1a2e] text-white">HR Round</option>
+          <option value="final" className="bg-[#1a1a2e] text-white">Final</option>
+          <option value="cultural" className="bg-[#1a1a2e] text-white">Cultural Fit</option>
         </select>
 
         {/* Sort */}
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500/50"
+          className="px-4 py-3 rounded-xl bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border-2 border-white/20 text-white focus:outline-none focus:border-purple-500 shadow-lg hover:border-purple-500/50 transition-all cursor-pointer"
+          style={{
+            backgroundImage: "linear-gradient(135deg, rgba(128,55,145,0.1), rgba(184,123,209,0.05))"
+          }}
         >
-          <option value="date-asc">Date: Earliest First</option>
-          <option value="date-desc">Date: Latest First</option>
-          <option value="round-asc">Round: Low to High</option>
-          <option value="round-desc">Round: High to Low</option>
-          <option value="candidate">Candidate: A-Z</option>
+          <option value="date-asc" className="bg-[#1a1a2e] text-white">Date: Earliest First</option>
+          <option value="date-desc" className="bg-[#1a1a2e] text-white">Date: Latest First</option>
+          <option value="round-asc" className="bg-[#1a1a2e] text-white">Round: Low to High</option>
+          <option value="round-desc" className="bg-[#1a1a2e] text-white">Round: High to Low</option>
+          <option value="candidate" className="bg-[#1a1a2e] text-white">Candidate: A-Z</option>
         </select>
       </div>
 
