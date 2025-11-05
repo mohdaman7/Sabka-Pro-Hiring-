@@ -88,6 +88,22 @@ export const atsManagementService = {
     }
   },
 
+  // Send message (Email/SMS/WhatsApp)
+  sendMessage: async (id, messageData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${BASE_URL}/applications/${id}/send-message`,
+        messageData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error sending message:', error);
+      throw error.response?.data || error;
+    }
+  },
+
   // Update application status
   updateApplicationStatus: async (id, data) => {
     try {

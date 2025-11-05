@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Search, Filter, Download, Users, CheckCircle, XCircle, Clock, Eye, Calendar, Star, FileText, ChevronLeft, ChevronRight, X, AlertCircle, Building2 } from "lucide-react";
+import { Search, Filter, Download, Users, CheckCircle, XCircle, Clock, Eye, Calendar, Star, FileText, ChevronLeft, ChevronRight, X, AlertCircle, Building2, ArrowRight, Sparkles } from "lucide-react";
 import { atsManagementService } from "@/services/atsManagementService";
 import { customToast } from "@/components/ui/toast";
+import ApplicationDetailView from "./ApplicationDetailView";
 
 const STATUS_CONFIG = {
   applied: { label: "Applied", color: "bg-blue-500", textColor: "text-blue-600", bgLight: "bg-blue-50" },
@@ -22,6 +23,7 @@ export default function ApplicationsModule() {
   const [filters, setFilters] = useState({ search: "", status: "", page: 1, limit: 20 });
   const [stats, setStats] = useState({ total: 0, applied: 0, reviewed: 0, shortlisted: 0, interview: 0, hired: 0, rejected: 0 });
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
+  const [selectedAppId, setSelectedAppId] = useState(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchApplications(); }, [filters.page, filters.status]);
@@ -62,6 +64,20 @@ export default function ApplicationsModule() {
     try { await atsManagementService.exportApplications(filters, 'csv'); customToast.success("Exported successfully"); }
     catch (error) { customToast.error("Export failed"); }
   };
+
+  const handleViewDetails = (appId) => {
+    setSelectedAppId(appId);
+  };
+
+  // If detail view is open, show it
+  if (selectedAppId) {
+    return (
+      <ApplicationDetailView
+        applicationId={selectedAppId}
+        onClose={() => setSelectedAppId(null)}
+      />
+    );
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -174,6 +190,7 @@ export default function ApplicationsModule() {
                     <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Company</th>
                     <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Status</th>
                     <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Applied Date</th>
+                    <th className="py-4 px-4 text-left text-sm font-bold text-white/70 uppercase">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -212,6 +229,16 @@ export default function ApplicationsModule() {
                         </span>
                       </td>
                       <td className="py-4 px-4 text-sm text-white/70">{new Date(app.createdAt).toLocaleDateString()}</td>
+                      <td className="py-4 px-4">
+                        <button
+                          onClick={() => handleViewDetails(app._id)}
+                          className="group relative px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2"
+                        >
+                          <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                          <span>View Details</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

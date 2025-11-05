@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ArrowLeft,
   User,
@@ -28,6 +28,9 @@ import {
   Building2,
   Users,
   Video,
+  Printer,
+  RefreshCw,
+  Maximize2,
 } from "lucide-react";
 import { atsManagementService } from "@/services/atsManagementService";
 import {
@@ -37,6 +40,8 @@ import {
   CommunicationTab,
   AssignmentTab,
 } from "./ApplicationDetailTabs";
+import PDFViewerModal from "./PDFViewerModal";
+import SendMessageModal from "./SendMessageModal";
 
 const STATUS_STAGES = [
   { value: "applied", label: "Applied", color: "blue", icon: FileText },
@@ -56,23 +61,81 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
   const [notes, setNotes] = useState("");
   const [newComment, setNewComment] = useState("");
   const [rating, setRating] = useState(0);
+  const [showPDFViewer, setShowPDFViewer] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState("");
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const detailViewRef = useRef(null);
 
+  // Keyboard shortcuts (ESC to close)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  // Real-time updates (refresh every 30 seconds)
   useEffect(() => {
     if (applicationId) {
       loadApplicationDetails();
+      
+      const interval = setInterval(() => {
+        loadApplicationDetails(true); // Silent refresh
+      }, 30000); // 30 seconds
+
+      return () => clearInterval(interval);
     }
   }, [applicationId]);
 
-  const loadApplicationDetails = async () => {
+  const loadApplicationDetails = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const data = await atsManagementService.getApplicationById(applicationId);
       setApplication(data);
       setNotes(data.notes || "");
     } catch (error) {
       console.error("Error loading application:", error);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await loadApplicationDetails();
+    setIsRefreshing(false);
+  };
+
+  const handleViewPDF = (url) => {
+    setPdfUrl(url);
+    setShowPDFViewer(true);
+  };
+
+  const handleExportToPDF = async () => {
+    try {
+      const element = detailViewRef.current;
+      if (!element) return;
+
+      // Using html2pdf library (you'll need to install it)
+      const opt = {
+        margin: 10,
+        filename: `application-${application.candidateName || application._id}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      // Dynamic import to avoid SSR issues
+      const html2pdf = (await import('html2pdf.js')).default;
+      html2pdf().set(opt).from(element).save();
+    } catch (error) {
+      console.error("Error exporting to PDF:", error);
+      alert("Failed to export PDF. Please try again.");
     }
   };
 
@@ -137,15 +200,16 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Header - See next file for full implementation */}
+    <div ref={detailViewRef} className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Header */}
       <div className="sticky top-0 z-50 bg-gradient-to-r from-slate-900 to-slate-800 border-b-2 border-indigo-500/30 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <button
                 onClick={onClose}
                 className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
+                title="Close (ESC)"
               >
                 <ArrowLeft className="w-5 h-5 text-white" />
               </button>
@@ -160,8 +224,35 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
               </div>
             </div>
 
-            {/* Status Badge */}
-            <div className="flex items-center gap-3">
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-green-500/50 transition-all duration-300 hover:scale-110 disabled:opacity-50"
+                title="Refresh Data"
+              >
+                <RefreshCw className={`w-5 h-5 text-white ${isRefreshing ? 'animate-spin' : ''}`} />
+              </button>
+              
+              <button
+                onClick={() => setShowMessageModal(true)}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-blue-500/50 transition-all duration-300 hover:scale-110"
+                title="Send Message"
+              >
+                <Send className="w-5 h-5 text-white" />
+              </button>
+
+              <button
+                onClick={handleExportToPDF}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-purple-500/50 transition-all duration-300 hover:scale-110"
+                title="Export to PDF"
+              >
+                <Printer className="w-5 h-5 text-white" />
+              </button>
+
+              {/* Status Badge */}
+              <div className="flex items-center gap-3">
               {STATUS_STAGES.map((stage) => {
                 if (stage.value === application.status) {
                   const Icon = stage.icon;
@@ -240,6 +331,7 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
             handleAddComment={handleAddComment}
             handleStatusUpdate={handleStatusUpdate}
             currentStageIndex={currentStageIndex}
+            handleViewPDF={handleViewPDF}
           />
         )}
 
@@ -257,6 +349,26 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
           />
         )}
       </div>
+
+      {/* PDF Viewer Modal */}
+      {showPDFViewer && (
+        <PDFViewerModal
+          pdfUrl={pdfUrl}
+          onClose={() => setShowPDFViewer(false)}
+        />
+      )}
+
+      {/* Send Message Modal */}
+      {showMessageModal && (
+        <SendMessageModal
+          application={application}
+          onClose={() => setShowMessageModal(false)}
+          onSent={() => {
+            setShowMessageModal(false);
+            loadApplicationDetails();
+          }}
+        />
+      )}
     </div>
   );
 }
