@@ -121,21 +121,48 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
       const element = detailViewRef.current;
       if (!element) return;
 
-      // Using html2pdf library (you'll need to install it)
-      const opt = {
-        margin: 10,
-        filename: `application-${application.candidateName || application._id}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+      // Dynamic imports to avoid SSR issues
+      const { jsPDF } = await import('jspdf');
+      const html2canvas = (await import('html2canvas')).default;
 
-      // Dynamic import to avoid SSR issues
-      const html2pdf = (await import('html2pdf.js')).default;
-      html2pdf().set(opt).from(element).save();
+      // Create canvas from element
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#0f172a'
+      });
+
+      // Create PDF
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add image to PDF (handle multiple pages if needed)
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= 297; // A4 height in mm
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= 297;
+      }
+
+      // Save PDF
+      const filename = `application-${application.candidateName || application._id}.pdf`;
+      pdf.save(filename);
     } catch (error) {
       console.error("Error exporting to PDF:", error);
-      alert("Failed to export PDF. Please try again.");
+      alert("Failed to export PDF. Please ensure jspdf and html2canvas are installed.");
     }
   };
 
