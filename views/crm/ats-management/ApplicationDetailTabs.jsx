@@ -57,7 +57,7 @@ export function OverviewTab({
       {/* Left Column */}
       <div className="lg:col-span-2 space-y-6">
         {/* Candidate Info Card */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-indigo-500/30 shadow-2xl p-6">
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-purple-500/20 shadow-2xl p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <User className="w-6 h-6 text-indigo-400" />
@@ -109,7 +109,7 @@ export function OverviewTab({
         </div>
 
         {/* Job Info */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-purple-500/30 shadow-2xl p-6">
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-purple-500/30 shadow-2xl p-6">
           <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
             <Briefcase className="w-6 h-6 text-purple-400" />
             Job Information
@@ -142,7 +142,7 @@ export function OverviewTab({
 
         {/* Documents */}
         {application.resumeUrl && (
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-emerald-500/30 shadow-2xl p-6">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-emerald-500/30 shadow-2xl p-6">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
               <FileText className="w-6 h-6 text-emerald-400" />
               Documents
@@ -205,7 +205,7 @@ export function OverviewTab({
 
 export function TimelineTab({ application }) {
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-indigo-500/30 shadow-2xl p-8">
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-indigo-500/30 shadow-2xl p-8">
       <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
         <Clock className="w-7 h-7 text-indigo-400" />
         Application Timeline
@@ -242,7 +242,7 @@ export function TimelineTab({ application }) {
 
 export function DocumentsTab({ application }) {
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-emerald-500/30 shadow-2xl p-8">
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-emerald-500/30 shadow-2xl p-8">
       <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
         <FileText className="w-7 h-7 text-emerald-400" />
         Documents
@@ -265,7 +265,7 @@ export function DocumentsTab({ application }) {
 
 export function CommunicationTab({ application }) {
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-green-500/30 shadow-2xl p-8">
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-green-500/30 shadow-2xl p-8">
       <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
         <MessageSquare className="w-7 h-7 text-green-400" />
         Communication Logs
@@ -287,7 +287,7 @@ export function AssignmentTab({ application, applicationId, onUpdate }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-blue-500/30 shadow-2xl p-8">
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-blue-500/30 shadow-2xl p-8">
       <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
         <Users className="w-7 h-7 text-blue-400" />
         HR Assignment
@@ -329,7 +329,7 @@ function InfoCard({ icon: Icon, label, value }) {
 
 function StatusUpdateCard({ application, handleStatusUpdate, currentStageIndex }) {
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-amber-500/30 shadow-2xl p-6">
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-amber-500/30 shadow-2xl p-6">
       <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
         <TrendingUp className="w-6 h-6 text-amber-400" />
         Update Status
@@ -369,7 +369,7 @@ function NotesCard({
   application,
 }) {
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-indigo-500/30 shadow-2xl p-6">
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-indigo-500/30 shadow-2xl p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <MessageSquare className="w-6 h-6 text-indigo-400" />
@@ -424,7 +424,7 @@ function RatingCard({
   application,
 }) {
   return (
-    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border-2 border-yellow-500/30 shadow-2xl p-6">
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-yellow-500/30 shadow-2xl p-6">
       <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
         <Star className="w-6 h-6 text-yellow-400" />
         Rating

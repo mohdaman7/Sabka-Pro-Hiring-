@@ -205,9 +205,9 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="flex items-center justify-center min-h-screen bg-[#0a0118]">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-white/70 text-lg">Loading application details...</p>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
 
   if (!application) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="flex items-center justify-center min-h-screen bg-[#0a0118]">
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <p className="text-white text-xl">Application not found</p>
@@ -263,7 +263,7 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
         />
       </div>
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-slate-900 to-slate-800 border-b-2 border-indigo-500/30 shadow-2xl">
+      <div className="sticky top-0 z-50 bg-[#0a0118]/80 backdrop-blur-xl border-b border-purple-500/20 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
