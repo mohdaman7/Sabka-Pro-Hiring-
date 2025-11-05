@@ -89,7 +89,27 @@ export default function EmployerApplications() {
         setError("");
         const res = await applicationService.employerMyApplications();
         if (!mounted) return;
-        setApplications(res?.data || []);
+        
+        const apps = res?.data || [];
+        
+        // Fetch interview status for each application
+        const appsWithInterviews = await Promise.all(
+          apps.map(async (app) => {
+            try {
+              const interviewRes = await applicationService.getInterviewByApplicationId(app._id);
+              return {
+                ...app,
+                hasInterview: !!interviewRes?.data,
+                interviewData: interviewRes?.data || null
+              };
+            } catch (error) {
+              return { ...app, hasInterview: false, interviewData: null };
+            }
+          })
+        );
+        
+        if (!mounted) return;
+        setApplications(appsWithInterviews);
         setStats(res?.stats || {});
       } catch (e) {
         setError(
@@ -606,7 +626,7 @@ export default function EmployerApplications() {
                             className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-500"
                             strokeWidth={2.5}
                           />
-                          {app.interview?.status ? "Update" : "Schedule"}
+                          {app.hasInterview ? "Update Interview" : "Schedule Interview"}
                         </span>
                       </button>
                     )}
@@ -1036,7 +1056,7 @@ export default function EmployerApplications() {
         onClose={() => setScheduleApp(null)}
         onScheduled={(updated) => {
           setApplications((prev) =>
-            prev.map((a) => (a._id === updated._id ? updated : a))
+            prev.map((a) => (a._id === scheduleApp._id ? { ...a, hasInterview: true, interviewData: updated.interview || updated } : a))
           );
           setScheduleApp(null);
         }}

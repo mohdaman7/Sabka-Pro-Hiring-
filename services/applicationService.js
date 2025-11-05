@@ -26,6 +26,10 @@ export const applicationService = {
     return response.data;
   },
   // Interview scheduling
+  getInterviewByApplicationId: async (applicationId) => {
+    const response = await api.get(`/api/applications/${applicationId}/interview`);
+    return response.data;
+  },
   scheduleInterview: async (applicationId, payload) => {
     const response = await api.post(`/api/applications/${applicationId}/interview/schedule`, payload);
     return response.data;

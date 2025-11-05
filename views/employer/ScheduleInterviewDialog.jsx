@@ -23,6 +23,8 @@ import { applicationService } from "@/services/applicationService";
 
 export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   const [open, setOpen] = useState(false);
+  const [existingInterview, setExistingInterview] = useState(null);
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [date, setDate] = useState(null);
   const [time, setTime] = useState("10:00");
   const [duration, setDuration] = useState(60);
@@ -36,46 +38,81 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   const [notes, setNotes] = useState("");
   const [completionFeedback, setCompletionFeedback] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetchingInterview, setFetchingInterview] = useState(false);
   const [error, setError] = useState("");
 
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
+  // Fetch existing interview when dialog opens
   useEffect(() => {
     const shouldOpen = !!app;
     setOpen(shouldOpen);
     setError("");
-    if (app?.interview?.scheduledAt) {
-      const d = new Date(app.interview.scheduledAt);
-      setDate(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
-      const hh = String(d.getHours()).padStart(2, "0");
-      const mm = String(d.getMinutes()).padStart(2, "0");
-      setTime(`${hh}:${mm}`);
-      setDuration(app.interview.durationMinutes || 60);
-      setType(app.interview.type || "video");
-      setMeetingLink(app.interview.meetingLink || "");
-      setLocation(app.interview.location || "");
-      setTimezone(app.interview.timezone || timezone);
-      setPanel(
-        app.interview.panel?.length
-          ? app.interview.panel
-          : [{ name: "", email: "", role: "" }]
-      );
-      setNotes(app.interview.notes || "");
-      setCompletionFeedback(app.interview.feedback || "");
+    
+    if (app?._id) {
+      fetchExistingInterview();
     } else {
-      setDate(null);
-      setTime("10:00");
-      setDuration(60);
-      setType("video");
-      setMeetingLink("");
-      setLocation("");
-      setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
-      setPanel([{ name: "", email: "", role: "" }]);
-      setNotes("");
-      setCompletionFeedback("");
+      resetForm();
     }
   }, [app]);
+
+  const fetchExistingInterview = async () => {
+    try {
+      setFetchingInterview(true);
+      const response = await applicationService.getInterviewByApplicationId(app._id);
+      
+      if (response.success && response.data) {
+        const interview = response.data;
+        setExistingInterview(interview);
+        setIsUpdateMode(true);
+        
+        // Populate form with existing interview data
+        const d = new Date(interview.scheduledAt);
+        setDate(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
+        const hh = String(d.getHours()).padStart(2, "0");
+        const mm = String(d.getMinutes()).padStart(2, "0");
+        setTime(`${hh}:${mm}`);
+        setDuration(interview.durationMinutes || 60);
+        setType(interview.type || "video");
+        setMeetingLink(interview.meetingLink || "");
+        setLocation(interview.location?.address || interview.location || "");
+        setTimezone(interview.timezone || timezone);
+        setPanel(
+          interview.interviewers?.length
+            ? interview.interviewers.map(i => ({ name: i.name, email: i.email, role: i.role || "" }))
+            : [{ name: "", email: "", role: "" }]
+        );
+        setNotes(interview.notes || "");
+        setCompletionFeedback(interview.evaluation?.feedback || "");
+      } else {
+        // No existing interview
+        setExistingInterview(null);
+        setIsUpdateMode(false);
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Error fetching interview:", error);
+      setExistingInterview(null);
+      setIsUpdateMode(false);
+      resetForm();
+    } finally {
+      setFetchingInterview(false);
+    }
+  };
+
+  const resetForm = () => {
+    setDate(null);
+    setTime("10:00");
+    setDuration(60);
+    setType("video");
+    setMeetingLink("");
+    setLocation("");
+    setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
+    setPanel([{ name: "", email: "", role: "" }]);
+    setNotes("");
+    setCompletionFeedback("");
+  };
 
   const closeAll = () => {
     setOpen(false);
@@ -125,13 +162,13 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
         notes: notes || undefined,
       };
 
-      const fn = app?.interview?.status
+      const fn = isUpdateMode
         ? applicationService.rescheduleInterview
         : applicationService.scheduleInterview;
 
       const res = await fn(app._id, payload);
       if (!res?.success)
-        throw new Error(res?.message || "Failed to schedule interview");
+        throw new Error(res?.message || `Failed to ${isUpdateMode ? 'update' : 'schedule'} interview`);
 
       onScheduled?.(res.data);
       closeAll();
@@ -273,7 +310,7 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               </div>
               <div className="flex-1">
                 <h2 className="text-2xl lg:text-3xl font-bold bg-linear-to-r from-white to-white/70 bg-clip-text text-transparent">
-                  {app?.interview?.status
+                  {fetchingInterview ? "Loading..." : isUpdateMode
                     ? "Update Interview Schedule"
                     : "Schedule New Interview"}
                 </h2>
@@ -642,8 +679,8 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
               ) : (
                 <>
                   <Calendar className="w-5 h-5" />
-                  {app?.interview?.status
-                    ? "Update Schedule"
+                  {isUpdateMode
+                    ? "Update Interview"
                     : "Schedule Interview"}
                 </>
               )}

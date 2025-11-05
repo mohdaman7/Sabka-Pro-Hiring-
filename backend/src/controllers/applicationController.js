@@ -418,6 +418,38 @@ export const scheduleInterview = async (req, res, next) => {
   }
 };
 
+// Get interview by application ID (employer)
+export const getInterviewByApplicationId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { InterviewModel } = await import('../models/Interview.js');
+    
+    // Find interview by application ID
+    const interview = await InterviewModel.findOne({
+      applicationId: id,
+      employerId: req.user.id,
+    })
+      .populate("candidateId", "firstName lastName email")
+      .populate("jobId", "title")
+      .sort({ createdAt: -1 }); // Get the latest interview
+
+    if (!interview) {
+      return res.json({
+        success: true,
+        data: null,
+        message: "No interview found for this application"
+      });
+    }
+
+    res.json({
+      success: true,
+      data: interview
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Reschedule interview (employer)
 export const rescheduleInterview = async (req, res, next) => {
   try {

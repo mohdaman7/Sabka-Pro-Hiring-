@@ -9,6 +9,7 @@ import {
   withdrawApplication,
   getApplicationStats,
   scheduleInterview,
+  getInterviewByApplicationId,
   rescheduleInterview,
   cancelInterview,
   completeInterview,
@@ -71,6 +72,13 @@ router.patch(
 );
 
 // Interview routes (employer)
+router.get(
+  "/:id/interview",
+  authenticate,
+  authorize(["employer", "admin"]),
+  getInterviewByApplicationId
+);
+
 router.post(
   "/:id/interview/schedule",
   authenticate,
