@@ -219,8 +219,8 @@ export default function EmployerApplications() {
   }, [applications, search, stage, sortBy]);
 
   return (
-    <div className="relative p-4 sm:p-6 md:p-8 space-y-6 min-h-screen" style={{ background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)" }}>
-      {/* Premium Solid Background Pattern */}
+    <div className="relative p-4 sm:p-6 md:p-8 space-y-6 min-h-screen bg-[#0a0118]">
+      {/* Subtle Background Pattern */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute inset-0 opacity-5" style={{
           backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px)`
