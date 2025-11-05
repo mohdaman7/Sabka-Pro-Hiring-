@@ -247,6 +247,52 @@ export const atsManagementService = {
     }
   },
 
+  // Get interview by ID
+  getInterviewById: async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/interviews/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching interview:', error);
+      throw error.response?.data || error;
+    }
+  },
+
+  // Update interview
+  updateInterview: async (id, data) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        `${BASE_URL}/interviews/${id}`,
+        data,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error updating interview:', error);
+      throw error.response?.data || error;
+    }
+  },
+
+  // Mark as no-show
+  markNoShow: async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        `${BASE_URL}/interviews/${id}/no-show`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error marking as no-show:', error);
+      throw error.response?.data || error;
+    }
+  },
+
   // ==================== REPORTS API ====================
 
   // Get ATS dashboard stats
