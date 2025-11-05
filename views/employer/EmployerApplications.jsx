@@ -219,12 +219,49 @@ export default function EmployerApplications() {
   }, [applications, search, stage, sortBy]);
 
   return (
-    <div className="relative p-4 sm:p-6 md:p-8 space-y-6 min-h-screen bg-[#0a0118]">
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px)`
-        }} />
+    <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8 min-h-screen overflow-hidden">
+      {/* Sophisticated Animated Background */}
+      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+        {/* Primary gradient orbs */}
+        <div
+          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-[120px] animate-pulse-slow opacity-20"
+          style={{
+            background: "radial-gradient(circle, #803791 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full blur-[140px] animate-pulse-slower opacity-15"
+          style={{
+            background: "radial-gradient(circle, #b87bd1 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[100px] animate-float opacity-10"
+          style={{
+            background: "radial-gradient(circle, #f0c2ee 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Grid overlay for depth */}
+        <div
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: "50px 50px",
+          }}
+        />
+
+        {/* Radial spotlight effect */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.1) 100%)",
+          }}
+        />
       </div>
 
       {/* View Toggle Tabs - Premium Design */}
