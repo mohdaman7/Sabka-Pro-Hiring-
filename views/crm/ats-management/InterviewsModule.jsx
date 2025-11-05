@@ -76,7 +76,37 @@ export default function InterviewsModuleNew() {
       setLoading(true);
       const response = await atsManagementService.getAllInterviews(filters);
       if (response.success) {
-        setInterviews(response.data.interviews || []);
+        // Transform API data to match component expectations
+        const transformedInterviews = (response.data.interviews || []).map(interview => ({
+          ...interview,
+          // Map scheduledAt to scheduledDate
+          scheduledDate: interview.scheduledAt || interview.scheduledDate,
+          // Extract candidate info from nested object
+          candidateName: interview.candidateId ? `${interview.candidateId.firstName} ${interview.candidateId.lastName}` : interview.candidateName || "N/A",
+          candidateEmail: interview.candidateId?.email || interview.candidateEmail || "N/A",
+          candidatePhone: interview.candidateId?.phone || interview.candidatePhone || "N/A",
+          // Extract job info
+          jobTitle: interview.jobId?.title || interview.jobTitle || "N/A",
+          jobDepartment: interview.jobId?.department || interview.jobDepartment,
+          jobLocation: interview.jobId?.location || interview.jobLocation,
+          // Extract employer info
+          employerName: interview.employerId ? `${interview.employerId.firstName} ${interview.employerId.lastName}` : interview.employerName || "N/A",
+          // Map interviewer
+          interviewer: interview.interviewers?.length > 0 
+            ? interview.interviewers.map(i => i.name).join(", ") 
+            : interview.interviewer || "N/A",
+          // Map duration
+          duration: interview.durationMinutes || interview.duration || 60,
+          // Map location for onsite
+          location: interview.location?.address || interview.location || "",
+          // Ensure meetingLink exists
+          meetingLink: interview.meetingLink || "",
+          // Map resume URL
+          resumeUrl: interview.applicationId?.resumeUrl || interview.resumeUrl,
+        }));
+        
+        console.log("✅ Transformed Interviews:", transformedInterviews);
+        setInterviews(transformedInterviews);
         setPagination(response.data.pagination || { total: 0, page: 1, pages: 1 });
         
         // Calculate stats
@@ -84,12 +114,12 @@ export default function InterviewsModuleNew() {
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         
-        const todayInterviews = (response.data.interviews || []).filter((int) => {
+        const todayInterviews = transformedInterviews.filter((int) => {
           const intDate = new Date(int.scheduledDate);
           return intDate >= today && intDate < new Date(today.getTime() + 24 * 60 * 60 * 1000);
         });
 
-        const upcomingInterviews = (response.data.interviews || []).filter((int) => {
+        const upcomingInterviews = transformedInterviews.filter((int) => {
           return new Date(int.scheduledDate) > now && int.status === "scheduled";
         });
 
