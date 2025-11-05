@@ -35,6 +35,59 @@ export const atsManagementService = {
     }
   },
 
+  // Alias for getApplicationDetails
+  getApplicationById: async (id) => {
+    return atsManagementService.getApplicationDetails(id);
+  },
+
+  // Add note to application
+  addNote: async (id, notes) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        `${BASE_URL}/applications/${id}/notes`,
+        { notes },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error adding note:', error);
+      throw error.response?.data || error;
+    }
+  },
+
+  // Add comment with rating
+  addComment: async (id, commentData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${BASE_URL}/applications/${id}/comments`,
+        commentData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      throw error.response?.data || error;
+    }
+  },
+
+  // Assign HR to application
+  assignHR: async (id, hrUserId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        `${BASE_URL}/applications/${id}/assign`,
+        { assignedTo: hrUserId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error assigning HR:', error);
+      throw error.response?.data || error;
+    }
+  },
+
   // Update application status
   updateApplicationStatus: async (id, data) => {
     try {
