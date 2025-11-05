@@ -219,59 +219,22 @@ export default function EmployerApplications() {
   }, [applications, search, stage, sortBy]);
 
   return (
-    <div className="relative p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8 min-h-screen overflow-hidden">
-      {/* Sophisticated Animated Background */}
-      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
-        {/* Primary gradient orbs */}
-        <div
-          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-[120px] animate-pulse-slow opacity-20"
-          style={{
-            background: "radial-gradient(circle, #803791 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full blur-[140px] animate-pulse-slower opacity-15"
-          style={{
-            background: "radial-gradient(circle, #b87bd1 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[100px] animate-float opacity-10"
-          style={{
-            background: "radial-gradient(circle, #f0c2ee 0%, transparent 70%)",
-          }}
-        />
-
-        {/* Grid overlay for depth */}
-        <div
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: "50px 50px",
-          }}
-        />
-
-        {/* Radial spotlight effect */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.1) 100%)",
-          }}
-        />
+    <div className="relative p-4 sm:p-6 md:p-8 space-y-6 min-h-screen" style={{ background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)" }}>
+      {/* Premium Solid Background Pattern */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px)`
+        }} />
       </div>
 
-      {/* View Toggle Tabs */}
-      <div className="flex gap-3 mb-6">
+      {/* View Toggle Tabs - Premium Design */}
+      <div className="flex gap-4">
         <button
           onClick={() => setActiveView("applications")}
-          className={`flex-1 px-6 py-4 rounded-xl font-semibold transition-all ${
+          className={`flex-1 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 ${
             activeView === "applications"
-              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
-              : "bg-white/5 text-white/60 hover:bg-white/10 border border-white/10"
+              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl shadow-purple-500/50 scale-105"
+              : "bg-[#1a1a2e] text-white/70 hover:text-white border-2 border-white/10 hover:border-purple-500/50 hover:scale-105"
           }`}
         >
           <Users className="w-5 h-5 inline-block mr-2" />
@@ -279,10 +242,10 @@ export default function EmployerApplications() {
         </button>
         <button
           onClick={() => setActiveView("interviews")}
-          className={`flex-1 px-6 py-4 rounded-xl font-semibold transition-all ${
+          className={`flex-1 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 ${
             activeView === "interviews"
-              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-lg scale-105"
-              : "bg-white/5 text-white/60 hover:bg-white/10 border border-white/10"
+              ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl shadow-purple-500/50 scale-105"
+              : "bg-[#1a1a2e] text-white/70 hover:text-white border-2 border-white/10 hover:border-purple-500/50 hover:scale-105"
           }`}
         >
           <Calendar className="w-5 h-5 inline-block mr-2" />
@@ -298,12 +261,10 @@ export default function EmployerApplications() {
         />
       ) : (
         <>
-          {/* Modern Clean Header */}
-          <div
-            className="relative overflow-hidden rounded-xl sm:rounded-2xl shadow-xl group transition-all duration-300 bg-gradient-to-br from-[#803791] to-[#6a2a6f] border border-[#b87bd1]/20"
-          >
-        {/* Subtle overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#b87bd1]/5 to-transparent opacity-50" />
+          {/* Premium Solid Header */}
+          <div className="relative overflow-hidden rounded-2xl shadow-2xl border-2 border-purple-500/30" style={{
+            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)"
+          }}>
 
         <div className="relative p-4 sm:p-5 md:p-6 lg:p-8">
           <div className="flex flex-col lg:flex-row items-start justify-between gap-4 sm:gap-6">
@@ -374,21 +335,13 @@ export default function EmployerApplications() {
           return (
             <div
               key={stat.value}
-              className={`group relative rounded-xl p-4 sm:p-5 md:p-6 shadow-lg transition-all cursor-pointer hover:shadow-xl ${
-                isActive
-                  ? "bg-gradient-to-br from-[#803791] to-[#6a2a6f] border-2 border-[#b87bd1] scale-105"
-                  : "bg-white/5 border border-white/10 hover:bg-white/8"
-              }`}
               onClick={() => setStage(stat.value)}
+              className={`group relative rounded-2xl p-5 md:p-6 shadow-2xl transition-all duration-300 cursor-pointer border-2 ${
+                isActive
+                  ? "bg-gradient-to-br from-[#803791] to-[#b87bd1] border-purple-400 scale-105 shadow-purple-500/50"
+                  : "bg-[#1a1a2e] border-white/10 hover:border-purple-500/50 hover:scale-105"
+              }`}
             >
-              {/* Glow effect */}
-              <div
-                className={`absolute -inset-1 bg-gradient-to-r ${
-                  stat.gradient
-                } rounded-[24px] opacity-0 ${
-                  isActive ? "opacity-30" : "group-hover:opacity-20"
-                } blur-xl transition-opacity duration-700`}
-              />
 
               <div className="relative space-y-5">
                 <div className="flex items-center justify-between">
@@ -441,11 +394,9 @@ export default function EmployerApplications() {
 
       {/* Premium Search and Filters */}
       <div
-        className="rounded-[28px] p-8 shadow-2xl backdrop-blur-xl border"
+        className="rounded-2xl p-6 md:p-8 shadow-2xl border-2 border-purple-500/30"
         style={{
-          background:
-            "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05))",
-          borderColor: "rgba(255,255,255,0.12)",
+          background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
         }}
       >
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4 md:gap-6">
@@ -547,28 +498,18 @@ export default function EmployerApplications() {
           return (
             <div
               key={app._id}
-              className="group relative rounded-xl overflow-hidden transition-all hover:shadow-xl cursor-pointer bg-white/5 border border-white/10 hover:border-white/20"
-              style={{
-                boxShadow:
-                  isHovered
-                    ? "0 30px 80px -20px rgba(128,55,145,0.4)"
-                    : "0 10px 40px -10px rgba(0,0,0,0.3)",
-                animationDelay: `${index * 60}ms`,
-              }}
               onMouseEnter={() => setHoveredCard(app._id)}
               onMouseLeave={() => setHoveredCard(null)}
+              className={`group relative rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer border-2 shadow-2xl ${
+                isHovered
+                  ? "border-purple-500 shadow-purple-500/50 scale-[1.02]"
+                  : "border-white/10 hover:border-purple-500/50"
+              }`}
+              style={{
+                background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                animationDelay: `${index * 60}ms`,
+              }}
             >
-              {/* Premium gradient border effect */}
-              <div
-                className={`absolute -inset-[1px] bg-gradient-to-r from-[#803791] via-[#b87bd1] to-[#803791] rounded-[28px] opacity-0 ${
-                  isHovered ? "opacity-30" : "group-hover:opacity-20"
-                } blur-sm transition-opacity duration-700`}
-              />
-
-              {/* Shimmer animation on hover */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
-              </div>
 
               <div className="relative p-4 sm:p-5 md:p-6">
                 {/* Header Section */}
@@ -661,17 +602,11 @@ export default function EmployerApplications() {
                       app.status === "interview") && (
                       <button
                         onClick={() => setScheduleApp(app)}
-                        className="group/btn relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
-                          border: "2px solid rgba(255,255,255,0.15)",
-                        }}
+                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-2xl flex-1 sm:flex-initial bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 border-2 border-blue-400/50"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
                         <span className="relative flex items-center gap-2 justify-center">
                           <Calendar
-                            className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-500"
+                            className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300"
                             strokeWidth={2.5}
                           />
                           {app.hasInterview ? "Update Interview" : "Schedule Interview"}
@@ -683,17 +618,11 @@ export default function EmployerApplications() {
                     {app.hasInterview && app.interviewData && (
                       <button
                         onClick={() => setManageInterviewApp(app)}
-                        className="group/btn relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, rgba(128,55,145,0.2), rgba(184,123,209,0.2))",
-                          border: "2px solid rgba(184,123,209,0.5)",
-                        }}
+                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-2xl flex-1 sm:flex-initial bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#9147a1] hover:to-[#c88be1] border-2 border-purple-400/50"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
                         <span className="relative flex items-center gap-2 justify-center">
                           <Sparkles
-                            className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-500"
+                            className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-300"
                             strokeWidth={2.5}
                           />
                           Manage Interview
@@ -707,14 +636,8 @@ export default function EmployerApplications() {
                         href={app.resumeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/btn relative px-6 py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl flex-1 sm:flex-initial text-center"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))",
-                          border: "2px solid rgba(255,255,255,0.15)",
-                        }}
+                        className="group/btn relative px-6 py-3.5 rounded-2xl font-bold text-sm text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-2xl flex-1 sm:flex-initial text-center bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 border-2 border-emerald-400/50"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#803791] to-[#b87bd1] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
                         <span className="relative flex items-center gap-2 justify-center">
                           <FileText
                             className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-500"
