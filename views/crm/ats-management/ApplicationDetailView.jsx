@@ -96,8 +96,8 @@ export default function ApplicationDetailView({ applicationId, onClose }) {
     try {
       if (!silent) setLoading(true);
       const response = await atsManagementService.getApplicationById(applicationId);
-      // Handle both direct data and nested response
-      const data = response.data || response;
+      // Handle nested response structure
+      const data = response.application || response.data?.application || response.data || response;
       console.log('Application data:', data); // Debug log
       setApplication(data);
       setNotes(data.notes || "");
