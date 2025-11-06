@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Search,
@@ -330,7 +331,10 @@ export default function JobListingsPage() {
       </div>
 
       {/* Premium Header Section */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative overflow-visible rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 lg:p-12 text-white shadow-xl sm:shadow-2xl backdrop-blur-xl border border-white/15 mb-6 sm:mb-8 md:mb-10 group transition-all duration-500 hover:shadow-purple-500/30"
         style={{
           background:
@@ -340,42 +344,90 @@ export default function JobListingsPage() {
         }}
       >
         {/* Animated accent line */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+        <motion.div 
+          className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 3, repeat: Infinity }}
+        />
 
-        {/* Floating orbs */}
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
+        {/* Floating orbs with enhanced animation */}
+        <motion.div 
+          className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
+          transition={{ duration: 4, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl"
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.15, 0.1, 0.15] }}
+          transition={{ duration: 5, repeat: Infinity }}
         />
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 sm:mb-8 md:mb-10 gap-4 sm:gap-6">
-          <div className="flex-1">
+          <motion.div 
+            className="flex-1"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <div className="flex items-center gap-3 sm:gap-4 md:gap-5 mb-3 sm:mb-4">
-              <div className="relative">
-                <div className="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30 animate-pulse" />
-                <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/50 group-hover:scale-110 transition-all duration-500">
+              <motion.div 
+                className="relative"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <motion.div 
+                  className="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30"
+                  animate={{ opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                <motion.div 
+                  className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/50 group-hover:scale-110 transition-all duration-500"
+                  whileHover={{ rotate: 12, scale: 1.15 }}
+                >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-3xl" />
-                  <Zap className="relative w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white animate-pulse" strokeWidth={3} />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-2 sm:mb-3 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent drop-shadow-2xl">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Zap className="relative w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" strokeWidth={3} />
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <motion.h1 
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-2 sm:mb-3 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent drop-shadow-2xl"
+                  animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
                   Discover Your Future
-                </h1>
-                <p className="text-purple-100 text-sm sm:text-base md:text-lg lg:text-xl font-bold">
+                </motion.h1>
+                <motion.p 
+                  className="text-purple-100 text-sm sm:text-base md:text-lg lg:text-xl font-bold"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
                   Find opportunities that match your ambitions
-                </p>
-              </div>
+                </motion.p>
+              </motion.div>
             </div>
-          </div>
-          <button
+          </motion.div>
+          <motion.button
             className="md:hidden px-6 py-3 sm:px-8 sm:py-4 bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white rounded-xl sm:rounded-2xl transition-all duration-300 font-black text-sm sm:text-base border-2 border-white/30 flex items-center gap-2 sm:gap-3 shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95"
             onClick={() => setShowFilters(!showFilters)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
             <Filter className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
             Filters
-          </button>
+          </motion.button>
         </div>
 
         {/* Premium Search Bar with Suggestions */}
@@ -436,21 +488,25 @@ export default function JobListingsPage() {
               )}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Premium Stats Cards - Responsive */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8 md:mb-10">
         {stats.map((stat, index) => {
           const Icon = statIcons[index % statIcons.length];
           return (
-            <div
+            <motion.div
               key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group relative rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl transition-all duration-500 hover:-translate-y-2 sm:hover:-translate-y-3 hover:shadow-purple-500/30 cursor-pointer overflow-hidden"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))",
                 border: "1.5px solid rgba(255,255,255,0.12)",
               }}
+              whileHover={{ scale: 1.05 }}
             >
               {/* Hover gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/10 group-hover:to-pink-500/10 transition-all duration-500 rounded-2xl" />
@@ -497,7 +553,7 @@ export default function JobListingsPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
