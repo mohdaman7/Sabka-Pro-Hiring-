@@ -1,6 +1,7 @@
 import { Toaster } from "sonner";
 import "./globals.css";
 import ReduxProvider from "./providers/ReduxProvider";
+import ConfettiProvider from "@/components/providers/ConfettiProvider";
 
 export const metadata = {
   title: "Sabka Pro HIRIN - Job Consultancy & Training Platform",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="font-sans overflow-x-hidden">
+        <ConfettiProvider />
         <ReduxProvider>{children}</ReduxProvider>
         <Toaster
           position="top-right"

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { studentService } from "@/services/studentService";
 import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function ApplyNowModalEnhanced({ job, isOpen, onClose, onSubmit }) {
   const [formData, setFormData] = useState({
@@ -161,6 +162,9 @@ export default function ApplyNowModalEnhanced({ job, isOpen, onClose, onSubmit }
       
       console.log("📨 Submitting application:", applicationData);
       await onSubmit(applicationData);
+      
+      // Trigger success animation
+      triggerSuccessAnimation({ type: "success" });
       
       setSubmitSuccess(true);
       customToast.success("Application submitted successfully!");

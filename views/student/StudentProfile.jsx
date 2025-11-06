@@ -35,6 +35,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 // Enhanced Loading Skeleton Component
 const ProfileSkeleton = () => {
@@ -759,6 +760,9 @@ export default function StudentProfile() {
           console.log("Student profile reloaded after save:", transformedData);
         }
       }
+
+      // Trigger success animation
+      triggerSuccessAnimation({ type: "achievement" });
 
       customToast.success("Success", "Profile updated successfully");
     } catch (error) {

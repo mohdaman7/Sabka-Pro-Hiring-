@@ -30,6 +30,7 @@ import courseService from "@/services/courseService";
 import purchaseService from "@/services/purchaseService";
 import { studentService } from "@/services/studentService";
 import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function StudentCourses() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -86,6 +87,24 @@ export default function StudentCourses() {
     return (
       isPro || myAccess.some((access) => access.courseId?._id === courseId)
     );
+  };
+
+  const handleEnrollFree = async (course) => {
+    try {
+      // Trigger success animation
+      triggerSuccessAnimation({ type: "achievement" });
+      
+      customToast.success("Enrolled successfully!", {
+        description: `Welcome to ${course.title}!`,
+      });
+      
+      // Reload data to show updated enrollment status
+      setTimeout(() => loadData(), 1000);
+    } catch (error) {
+      customToast.error("Enrollment failed", {
+        description: error.message || "Please try again",
+      });
+    }
   };
 
   const filteredCourses =
