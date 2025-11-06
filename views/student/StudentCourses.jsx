@@ -29,6 +29,7 @@ import {
 import courseService from "@/services/courseService";
 import purchaseService from "@/services/purchaseService";
 import { studentService } from "@/services/studentService";
+import { customToast } from "@/components/ui/toast";
 
 export default function StudentCourses() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -53,6 +54,7 @@ export default function StudentCourses() {
 
   const loadData = async () => {
     setLoading(true);
+    setError("");
     try {
       const [coursesData, accessData, profileRes] = await Promise.all([
         courseService.listPublic(),
@@ -72,7 +74,9 @@ export default function StudentCourses() {
       ).toLowerCase();
       setIsPro(plan === "pro");
     } catch (e) {
-      setError(e?.response?.data?.message || e.message);
+      const errorMsg = e?.response?.data?.message || e.message || "Failed to load courses";
+      setError(errorMsg);
+      customToast.error("Loading Failed", errorMsg);
     } finally {
       setLoading(false);
     }

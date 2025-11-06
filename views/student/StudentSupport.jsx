@@ -29,6 +29,7 @@ import {
   ChevronDown,
   X,
 } from "lucide-react";
+import { customToast } from "@/components/ui/toast";
 
 export default function StudentSupport() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -1043,6 +1044,7 @@ export default function StudentSupport() {
                 e.preventDefault();
                 try {
                   setLoading(true);
+                  setError("");
                   const { supportService } = await import(
                     "@/services/supportService"
                   );
@@ -1056,12 +1058,13 @@ export default function StudentSupport() {
                   await loadTickets();
                   setShowTicketForm(false);
                   setActiveTab("tickets");
+                  customToast.success("Ticket Created", "Your support ticket has been submitted successfully. We'll respond within 24 hours.");
                 } catch (e) {
-                  setError(
-                    e?.response?.data?.message ||
+                  const errorMsg = e?.response?.data?.message ||
                       e?.message ||
-                      "Failed to create ticket"
-                  );
+                      "Failed to create ticket";
+                  setError(errorMsg);
+                  customToast.error("Submission Failed", errorMsg);
                 } finally {
                   setLoading(false);
                 }

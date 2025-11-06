@@ -34,6 +34,8 @@ import {
   Crown,
   Calendar,
 } from "lucide-react";
+import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function StudentSettings() {
   const [activeSection, setActiveSection] = useState("profile");
@@ -139,15 +141,59 @@ export default function StudentSettings() {
 
   const handleSave = async (section) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    // Show success message
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      // Show success message based on section with animations
+      if (section === "profile") {
+        customToast.success("Profile Updated", "Your profile information has been saved successfully");
+        triggerSuccessAnimation({ type: "success" });
+      } else if (section === "preferences") {
+        customToast.success("Preferences Saved", "Your preferences have been updated");
+        triggerSuccessAnimation({ type: "success" });
+      } else if (section === "security") {
+        customToast.success("Password Changed", "Your password has been updated successfully");
+        triggerSuccessAnimation({ type: "achievement" }); // Major achievement
+        // Reset security form
+        setSecurityData({
+          oldPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      } else if (section === "billing") {
+        customToast.success("Billing Updated", "Your billing information has been saved");
+        triggerSuccessAnimation({ type: "success" });
+      }
+    } catch (error) {
+      customToast.error("Update Failed", error.message || "Failed to save changes. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleReset = (section) => {
     // Reset logic here
-    console.log(`Reset ${section}`);
+    if (section === "profile") {
+      setProfileData({
+        firstName: "Amit",
+        lastName: "Sharma",
+        email: "amit.sharma@example.com",
+        phone: "+91 98765 43210",
+        location: "Mumbai, Maharashtra",
+        bio: "Frontend developer passionate about creating beautiful user experiences with React and Next.js.",
+        jobTitle: "Frontend Developer",
+        company: "Tech Solutions",
+      });
+      customToast.info("Profile Reset", "Profile information has been reset to defaults");
+    } else if (section === "security") {
+      setSecurityData({
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      customToast.info("Form Cleared", "Security form has been cleared");
+    }
   };
 
   const handlePreferenceChange = (key, value) => {

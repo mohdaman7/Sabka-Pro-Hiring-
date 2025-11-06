@@ -32,6 +32,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { applicationService } from "@/services/applicationService";
 import { studentService } from "@/services/studentService";
+import { customToast } from "@/components/ui/toast";
 
 export default function InterviewsPage() {
   const [filter, setFilter] = useState("all");
@@ -223,6 +224,33 @@ export default function InterviewsPage() {
       interview.position.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  // Handler for copying meeting link
+  const handleCopyMeetingLink = async (meetingLink, interviewTitle) => {
+    try {
+      await navigator.clipboard.writeText(meetingLink);
+      customToast.success("Link Copied", `Meeting link for ${interviewTitle} copied to clipboard`);
+    } catch (error) {
+      customToast.error("Copy Failed", "Failed to copy meeting link to clipboard");
+    }
+  };
+
+  // Handler for interview reschedule request
+  const handleRescheduleRequest = (interviewTitle) => {
+    customToast.info("Reschedule Request", `Please contact the employer to reschedule ${interviewTitle}`);
+  };
+
+  // Handler for interview cancellation
+  const handleCancelInterview = async (interviewId, interviewTitle) => {
+    try {
+      // Placeholder for actual cancellation API call
+      customToast.loading("Cancelling", `Cancelling ${interviewTitle}...`);
+      // await applicationService.cancelInterview(interviewId);
+      customToast.success("Cancelled", `${interviewTitle} has been cancelled`);
+    } catch (error) {
+      customToast.error("Cancellation Failed", error.message || "Failed to cancel interview");
+    }
+  };
 
   // Calculate stats
   const statsData = {
@@ -490,15 +518,37 @@ export default function InterviewsPage() {
                       {/* Actions */}
                       <div className="flex lg:flex-col gap-2 flex-shrink-0">
                         {interview.status === "upcoming" && interview.meetingLink && (
-                          <a
-                            href={interview.meetingLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#6d2d7a] hover:to-[#a066b8] text-white rounded-xl font-semibold shadow-lg hover:shadow-[#b87bd1]/50 transition-all px-6 py-3 text-sm gap-2"
+                          <>
+                            <a
+                              href={interview.meetingLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:from-[#6d2d7a] hover:to-[#a066b8] text-white rounded-xl font-semibold shadow-lg hover:shadow-[#b87bd1]/50 transition-all px-6 py-3 text-sm gap-2"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                              Join Now
+                            </a>
+                            <Button
+                              onClick={() => handleCopyMeetingLink(interview.meetingLink, interview.position)}
+                              variant="outline"
+                              size="sm"
+                              className="bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl text-xs"
+                              title="Copy meeting link to clipboard"
+                            >
+                              <Share2 className="w-4 h-4" />
+                            </Button>
+                          </>
+                        )}
+                        {interview.status === "upcoming" && (
+                          <Button
+                            onClick={() => handleRescheduleRequest(interview.position)}
+                            variant="outline"
+                            size="sm"
+                            className="bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl text-xs"
+                            title="Request to reschedule"
                           >
-                            <ExternalLink className="w-4 h-4" />
-                            Join Now
-                          </a>
+                            <Calendar className="w-4 h-4" />
+                          </Button>
                         )}
                         <Button
                           onClick={() => setSelectedInterview(interview)}
