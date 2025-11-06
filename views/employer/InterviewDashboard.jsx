@@ -247,21 +247,44 @@ export default function InterviewDashboard({ onManageInterview, onScheduleInterv
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Interview Dashboard</h1>
-          <p className="text-white/60">Track and manage all your interviews in one place</p>
-        </div>
-        <button
-          onClick={() => onScheduleInterview?.()}
-          className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-semibold hover:shadow-lg transition-all"
-        >
-          <Calendar className="w-5 h-5 inline-block mr-2" />
-          Schedule Interview
-        </button>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0a0118 0%, #1a0a2e 50%, #0a0118 100%)" }}>
+      {/* Animated Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
       </div>
+
+      <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-10 space-y-6">
+        {/* Header with View Toggle */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-black text-white mb-2 flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-lg">
+                <Calendar className="w-8 h-8 text-white" />
+              </div>
+              Interview Dashboard
+            </h1>
+            <p className="text-white/60 text-sm md:text-base">Track and manage all your interviews in one place</p>
+          </div>
+          
+          {/* View Toggle */}
+          <div className="flex gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10">
+            <button
+              onClick={() => window.location.href = '/employer/applications'}
+              className="px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 text-white/60 hover:text-white hover:bg-white/5"
+            >
+              <Users className="w-5 h-5" />
+              <span className="hidden sm:inline">Applications</span>
+            </button>
+            <button
+              className="px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
+            >
+              <Calendar className="w-5 h-5" />
+              <span className="hidden sm:inline">Interviews</span>
+            </button>
+          </div>
+        </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -471,6 +494,7 @@ export default function InterviewDashboard({ onManageInterview, onScheduleInterv
           onConfirm={handleHireCandidate}
         />
       )}
+      </div>
     </div>
   );
 }
