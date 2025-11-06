@@ -30,6 +30,7 @@ import { applicationService } from "@/services/applicationService";
 import ScheduleInterviewDialog from "@/views/employer/ScheduleInterviewDialog";
 import InterviewManagementModal from "@/views/employer/InterviewManagementModal";
 import HireCandidateModal from "@/views/employer/HireCandidateModal";
+import { customToast } from "@/components/ui/toast";
 
 const STAGE_CONFIG = {
   screening: { label: "Screening", color: "blue", icon: Users },

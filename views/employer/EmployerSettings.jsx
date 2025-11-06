@@ -16,6 +16,7 @@ import {
   Eye,
   EyeOff,
   CheckCircle,
+  Briefcase,
 } from "lucide-react";
 
 export default function EmployerSettings() {
@@ -67,8 +68,12 @@ export default function EmployerSettings() {
     { id: "privacy", label: "Privacy", icon: Shield },
   ];
 
-  const handleSave = () => {
+  const handleSave = (section = "Settings") => {
     setSaved(true);
+    customToast.success(
+      `${section} Saved! ✅`,
+      "Your changes have been saved successfully"
+    );
     setTimeout(() => setSaved(false), 3000);
   };
 

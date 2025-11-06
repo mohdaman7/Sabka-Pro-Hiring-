@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Plus, Mail, Trash2, Shield, CheckCircle, Clock } from "lucide-react";
+import { customToast } from "@/components/ui/toast";
 
 const roleOptions = [
   { value: "admin", label: "Admin" },
@@ -44,27 +45,45 @@ export default function EmployerTeam() {
       await collabService.inviteMember(inviteEmail, inviteRole);
       setInviteEmail("");
       setInviteRole("recruiter");
+      customToast.success(
+        "Invitation Sent! 📧",
+        `Invitation sent to ${inviteEmail} as ${inviteRole}`
+      );
       await load();
     } catch (e) {
-      setError(e?.response?.data?.message || e.message || "Failed to invite");
+      const errorMsg = e?.response?.data?.message || e.message || "Failed to invite";
+      setError(errorMsg);
+      customToast.error("Invitation Failed", errorMsg);
     }
   };
 
   const updateRole = async (invitedEmail, role) => {
     try {
       await collabService.updateMember(invitedEmail, { role });
+      customToast.success(
+        "Role Updated! 🔄",
+        `${invitedEmail}'s role changed to ${role}`
+      );
       await load();
     } catch (e) {
-      setError(e?.response?.data?.message || e.message || "Failed to update role");
+      const errorMsg = e?.response?.data?.message || e.message || "Failed to update role";
+      setError(errorMsg);
+      customToast.error("Update Failed", errorMsg);
     }
   };
 
   const remove = async (invitedEmail) => {
     try {
       await collabService.removeMember(invitedEmail);
+      customToast.success(
+        "Member Removed",
+        `${invitedEmail} has been removed from the team`
+      );
       await load();
     } catch (e) {
-      setError(e?.response?.data?.message || e.message || "Failed to remove member");
+      const errorMsg = e?.response?.data?.message || e.message || "Failed to remove member";
+      setError(errorMsg);
+      customToast.error("Removal Failed", errorMsg);
     }
   };
 
