@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { X, CheckCircle, Calendar, DollarSign, FileText, Briefcase, User, Mail, Phone, Award, Sparkles } from "lucide-react";
+import { customToast } from "@/components/ui/toast";
 
 export default function HireCandidateModal({ application, onClose, onConfirm }) {
   const [formData, setFormData] = useState({
@@ -21,9 +22,17 @@ export default function HireCandidateModal({ application, onClose, onConfirm }) 
         salary: Number(formData.salary),
       };
       await onConfirm(application._id, payload);
+      customToast.success(
+        "Candidate Hired Successfully! 🎉",
+        `${candidate.firstName} ${candidate.lastName} has been hired for ${formData.position}`
+      );
       onClose();
     } catch (error) {
       console.error("Error hiring candidate:", error);
+      customToast.error(
+        "Failed to Hire Candidate",
+        error?.response?.data?.message || error?.message || "An error occurred while hiring the candidate"
+      );
     } finally {
       setLoading(false);
     }

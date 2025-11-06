@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
 import ScheduleInterviewDialog from "@/views/employer/ScheduleInterviewDialog";
+import { customToast } from "@/components/ui/toast";
 import InterviewManagementModal from "@/views/employer/InterviewManagementModal";
 import HireCandidateModal from "@/views/employer/HireCandidateModal";
 import InterviewDashboard from "@/views/employer/InterviewDashboard";
@@ -174,8 +175,16 @@ export default function ApplicationManagementNew() {
         )
       );
       setOpenMenuId(null);
+      customToast.success(
+        "Status Updated",
+        `Application status changed to ${newStatus}`
+      );
     } catch (error) {
       console.error("Error updating status:", error);
+      customToast.error(
+        "Update Failed",
+        error?.response?.data?.message || "Failed to update application status"
+      );
     }
   };
 
@@ -190,8 +199,16 @@ export default function ApplicationManagementNew() {
         )
       );
       setHireApp(null);
+      customToast.success(
+        "Candidate Hired! 🎉",
+        `Successfully hired for ${hireData.position}`
+      );
     } catch (error) {
       console.error("Error hiring candidate:", error);
+      customToast.error(
+        "Hiring Failed",
+        error?.response?.data?.message || "Failed to hire candidate"
+      );
     }
   };
 

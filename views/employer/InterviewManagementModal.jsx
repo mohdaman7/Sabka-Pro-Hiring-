@@ -23,6 +23,7 @@ import {
   ThumbsUp,
   ThumbsDown,
 } from "lucide-react";
+import { customToast } from "@/components/ui/toast";
 
 const STATUS_BADGES = {
   scheduled: { label: "Scheduled", color: "bg-blue-500", icon: Clock },
@@ -53,8 +54,16 @@ export default function InterviewManagementModal({ interview, application, onClo
   const handleSaveEvaluation = async () => {
     try {
       await onUpdate(interview._id, { evaluation, result: evaluation.recommendation });
+      customToast.success(
+        "Evaluation Saved! ⭐",
+        "Interview evaluation has been saved successfully"
+      );
     } catch (error) {
       console.error("Error saving evaluation:", error);
+      customToast.error(
+        "Save Failed",
+        error?.response?.data?.message || "Failed to save evaluation"
+      );
     }
   };
 

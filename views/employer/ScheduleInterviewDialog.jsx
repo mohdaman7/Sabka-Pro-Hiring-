@@ -21,6 +21,7 @@ import {
   Target,
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
+import { customToast } from "@/components/ui/toast";
 
 export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   const [open, setOpen] = useState(false);
@@ -175,13 +176,18 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
       if (!res?.success)
         throw new Error(res?.message || `Failed to ${isUpdateMode ? 'update' : 'schedule'} interview`);
 
+      customToast.success(
+        isUpdateMode ? "Interview Updated! ✨" : "Interview Scheduled! 📅",
+        `${stage.charAt(0).toUpperCase() + stage.slice(1)} interview ${isUpdateMode ? 'updated' : 'scheduled'} for ${scheduledAt.toLocaleDateString()}`
+      );
       onScheduled?.(res.data);
       closeAll();
     } catch (e) {
-      setError(
-        e?.response?.data?.message ||
-          e.message ||
-          "Failed to schedule interview"
+      const errorMsg = e?.response?.data?.message || e.message || "Failed to schedule interview";
+      setError(errorMsg);
+      customToast.error(
+        isUpdateMode ? "Update Failed" : "Schedule Failed",
+        errorMsg
       );
     } finally {
       setLoading(false);
@@ -197,6 +203,10 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
         "Employer cancelled"
       );
       if (!res?.success) throw new Error(res?.message || "Failed to cancel");
+      customToast.success(
+        "Interview Cancelled",
+        "The interview has been cancelled successfully"
+      );
       onScheduled?.(res.data);
       closeAll();
     } catch (e) {
