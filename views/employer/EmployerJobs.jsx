@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Plus,
   Search,
@@ -29,12 +29,17 @@ import {
   Award,
   CheckCircle2,
 } from "lucide-react";
+import PremiumPagination from "@/components/ui/PremiumPagination";
 
 export default function EmployerJobs() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [hoveredCard, setHoveredCard] = useState(null);
   const [hoveredStat, setHoveredStat] = useState(null);
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const jobs = [
     {
@@ -157,16 +162,24 @@ export default function EmployerJobs() {
     },
   ];
 
-  const filteredJobs = jobs.filter((job) => {
-    const q = searchQuery.toLowerCase();
-    const matchesSearch =
-      job.title.toLowerCase().includes(q) ||
-      job.department.toLowerCase().includes(q);
-    const matchesFilter =
-      filterStatus === "all" ||
-      job.status.toLowerCase() === filterStatus.toLowerCase();
-    return matchesSearch && matchesFilter;
-  });
+  const filteredJobs = useMemo(() => {
+    return jobs.filter((job) => {
+      const matchesSearch =
+        job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        job.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        job.location.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus =
+        filterStatus === "all" || job.status === filterStatus;
+      return matchesSearch && matchesStatus;
+    });
+  }, [jobs, searchQuery, filterStatus]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
+  const paginatedJobs = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredJobs.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredJobs, currentPage, itemsPerPage]);
 
   const statusBadgeConfig = (status) => {
     switch (status) {
@@ -439,7 +452,7 @@ export default function EmployerJobs() {
 
       {/* Jobs List */}
       <div className="space-y-3 sm:space-y-4 md:space-y-5">
-        {filteredJobs.map((job, index) => {
+        {paginatedJobs.map((job, index) => {
           const statusConfig = statusBadgeConfig(job.status);
           const StatusIcon = statusConfig.icon;
 
@@ -732,6 +745,19 @@ export default function EmployerJobs() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Pagination */}
+        {filteredJobs.length > 0 && (
+          <PremiumPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredJobs.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            itemsPerPageOptions={[5, 10, 20, 50]}
+          />
         )}
       </div>
 

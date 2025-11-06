@@ -31,6 +31,7 @@ import { customToast } from "@/components/ui/toast";
 import InterviewManagementModal from "@/views/employer/InterviewManagementModal";
 import HireCandidateModal from "@/views/employer/HireCandidateModal";
 import InterviewDashboard from "@/views/employer/InterviewDashboard";
+import PremiumPagination from "@/components/ui/PremiumPagination";
 
 const STATUS_CONFIG = {
   applied: {
@@ -74,6 +75,10 @@ export default function ApplicationManagementNew() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [openMenuId, setOpenMenuId] = useState(null);
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Modals
   const [scheduleApp, setScheduleApp] = useState(null);
@@ -165,6 +170,18 @@ export default function ApplicationManagementNew() {
 
     return result;
   }, [applications, statusFilter, search, sortBy]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filtered.slice(startIndex, startIndex + itemsPerPage);
+  }, [filtered, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, search, sortBy]);
 
   const handleStatusUpdate = async (applicationId, newStatus) => {
     try {
@@ -429,8 +446,9 @@ export default function ApplicationManagementNew() {
             </p>
           </div>
         ) : (
+          <>
           <div className="grid grid-cols-1 gap-4">
-            {filtered.map((app) => (
+            {paginatedData.map((app) => (
               <ApplicationCard
                 key={app._id}
                 application={app}
@@ -443,6 +461,18 @@ export default function ApplicationManagementNew() {
               />
             ))}
           </div>
+
+          {/* Pagination */}
+          <PremiumPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filtered.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            itemsPerPageOptions={[5, 10, 20, 50]}
+          />
+          </>
         )}
       </div>
 
