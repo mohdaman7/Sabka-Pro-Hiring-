@@ -3,6 +3,12 @@ import { ApplicationModel } from "../models/Application.js";
 import { ActivityModel } from "../models/Activity.js";
 import { JobModel } from "../models/Job.js";
 import mongoose from "mongoose";
+import {
+  sendApplicationReceivedEmail,
+  sendApplicationStatusEmail,
+  sendInterviewScheduledEmail,
+  sendCandidateHiredEmail,
+} from "../utils/mailer.js";
 
 // Validation schemas
 export const applySchema = z.object({
@@ -126,6 +132,20 @@ export const applyForJob = async (req, res, next) => {
       data: application,
       message: "Application submitted successfully",
     });
+
+    // Send application received email
+    try {
+      const companyName = application.jobId?.employerId?.employerProfile?.company?.name || "the company";
+      await sendApplicationReceivedEmail({
+        candidateEmail: req.user.email,
+        candidateName: `${req.user.firstName} ${req.user.lastName}`,
+        jobTitle: application.jobId.title,
+        companyName: companyName,
+        location: application.jobId.location || "Remote"
+      });
+    } catch (emailError) {
+      console.error("Failed to send application received email:", emailError);
+    }
   } catch (err) {
     next(err);
   }
@@ -344,6 +364,20 @@ export const updateApplicationStatus = async (req, res, next) => {
       data: application,
       message: `Application status updated to ${parsed.status}`,
     });
+
+    // Send status change email
+    try {
+      await sendApplicationStatusEmail({
+        candidateEmail: application.studentId.email,
+        candidateName: `${application.studentId.firstName} ${application.studentId.lastName}`,
+        jobTitle: application.jobId.title,
+        companyName: application.jobId.company || "Our Company",
+        newStatus: parsed.status,
+        message: parsed.feedback
+      });
+    } catch (emailError) {
+      console.error("Failed to send status change email:", emailError);
+    }
   } catch (err) {
     next(err);
   }
@@ -422,6 +456,33 @@ export const scheduleInterview = async (req, res, next) => {
         meta: { scheduledAt: parsed.scheduledAt, type: parsed.type },
       });
     } catch {}
+
+    // Send interview scheduled email
+    try {
+      await sendInterviewScheduledEmail({
+        candidateEmail: application.studentId.email,
+        candidateName: `${application.studentId.firstName} ${application.studentId.lastName}`,
+        jobTitle: application.jobId.title,
+        companyName: application.jobId.company || "Our Company",
+        dateTime: new Date(parsed.scheduledAt).toLocaleString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        duration: parsed.durationMinutes,
+        type: parsed.type,
+        stage: parsed.stage || "Interview",
+        meetingLink: parsed.meetingLink,
+        location: parsed.location,
+        interviewers: parsed.panel || [],
+        notes: parsed.notes
+      });
+    } catch (emailError) {
+      console.error("Failed to send interview email:", emailError);
+    }
   } catch (err) {
     next(err);
   }
@@ -1027,6 +1088,21 @@ export const hireCandidate = async (req, res, next) => {
       message: "Candidate hired successfully",
       data: application,
     });
+
+    // Send candidate hired email
+    try {
+      await sendCandidateHiredEmail({
+        candidateEmail: application.studentId.email,
+        candidateName: `${application.studentId.firstName} ${application.studentId.lastName}`,
+        position: parsed.position,
+        companyName: application.jobId.company || "Our Company",
+        salary: parsed.salary,
+        joiningDate: parsed.joiningDate,
+        notes: parsed.notes
+      });
+    } catch (emailError) {
+      console.error("Failed to send hired email:", emailError);
+    }
   } catch (err) {
     next(err);
   }
