@@ -96,7 +96,25 @@ export default function ApplicationManagementNew() {
       setLoading(true);
       const res = await applicationService.employerMyApplications();
       const apps = res?.data || [];
-      setApplications(apps);
+
+      const appsWithInterviews = await Promise.all(
+        apps.map(async (app) => {
+          try {
+            const interviewRes = await applicationService.getInterviewByApplicationId(app._id);
+            const interviewData = interviewRes?.data || null;
+            return {
+              ...app,
+              hasInterview: Boolean(interviewData),
+              interviewData,
+            };
+          } catch (error) {
+            console.error("Error fetching interview for application", app._id, error);
+            return { ...app, hasInterview: false, interviewData: null };
+          }
+        })
+      );
+
+      setApplications(appsWithInterviews);
     } catch (error) {
       console.error("Error fetching applications:", error);
     } finally {
