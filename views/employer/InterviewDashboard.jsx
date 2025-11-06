@@ -27,6 +27,9 @@ import {
   MoreVertical,
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
+import ScheduleInterviewDialog from "@/views/employer/ScheduleInterviewDialog";
+import InterviewManagementModal from "@/views/employer/InterviewManagementModal";
+import HireCandidateModal from "@/views/employer/HireCandidateModal";
 
 const STAGE_CONFIG = {
   screening: { label: "Screening", color: "blue", icon: Users },
@@ -61,6 +64,11 @@ export default function InterviewDashboard({ onManageInterview, onScheduleInterv
   const [sortBy, setSortBy] = useState("date-asc");
   const [expandedId, setExpandedId] = useState(null);
   const [viewMode, setViewMode] = useState("upcoming"); // upcoming, all, pending
+  
+  // Modals
+  const [scheduleApp, setScheduleApp] = useState(null);
+  const [manageInterviewApp, setManageInterviewApp] = useState(null);
+  const [hireApp, setHireApp] = useState(null);
 
   useEffect(() => {
     fetchInterviews();
@@ -98,9 +106,20 @@ export default function InterviewDashboard({ onManageInterview, onScheduleInterv
       
       setInterviews(validInterviews);
     } catch (e) {
-      setError(e?.response?.data?.message || e?.message || "Failed to load interviews");
+      console.error("Error fetching interviews:", e);
+      setError("Failed to load interviews");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleHireCandidate = async (applicationId, hireData) => {
+    try {
+      await applicationService.hireCandidate(applicationId, hireData);
+      fetchInterviews();
+      setHireApp(null);
+    } catch (error) {
+      console.error("Error hiring candidate:", error);
     }
   };
 
@@ -399,13 +418,58 @@ export default function InterviewDashboard({ onManageInterview, onScheduleInterv
               interview={interview}
               expanded={expandedId === interview._id}
               onToggle={() => setExpandedId(expandedId === interview._id ? null : interview._id)}
-              onManage={() => onManageInterview?.(interview.application)}
-              onSchedule={() => onScheduleInterview?.(interview.application)}
+              onManage={() => setManageInterviewApp(interview)}
+              onSchedule={() => setScheduleApp(interview.application)}
+              onHire={() => setHireApp(interview.application)}
               getTimeUntil={getTimeUntil}
               formatDate={formatDate}
             />
           ))}
         </div>
+      )}
+
+      {/* Modals */}
+      {scheduleApp && (
+        <ScheduleInterviewDialog
+          app={scheduleApp}
+          onClose={() => setScheduleApp(null)}
+          onScheduled={() => {
+            fetchInterviews();
+            setScheduleApp(null);
+          }}
+        />
+      )}
+
+      {manageInterviewApp && (
+        <InterviewManagementModal
+          interview={manageInterviewApp}
+          application={manageInterviewApp.application}
+          onClose={() => setManageInterviewApp(null)}
+          onUpdate={async (id, data) => {
+            console.log("Update interview:", id, data);
+            fetchInterviews();
+          }}
+          onReschedule={(interview) => {
+            setManageInterviewApp(null);
+            setScheduleApp(interview.application);
+          }}
+          onCancel={async (id) => {
+            console.log("Cancel interview:", id);
+            fetchInterviews();
+          }}
+          onComplete={async (id) => {
+            console.log("Complete interview:", id);
+            fetchInterviews();
+          }}
+        />
+      )}
+
+      {hireApp && (
+        <HireCandidateModal
+          application={hireApp}
+          onClose={() => setHireApp(null)}
+          onConfirm={handleHireCandidate}
+        />
       )}
     </div>
   );
@@ -444,7 +508,7 @@ function StatCard({ label, value, icon: Icon, color, onClick, active }) {
   );
 }
 
-function InterviewCard({ interview, expanded, onToggle, onManage, onSchedule, getTimeUntil, formatDate }) {
+function InterviewCard({ interview, expanded, onToggle, onManage, onSchedule, onHire, getTimeUntil, formatDate }) {
   const stageConfig = STAGE_CONFIG[interview.stage] || {};
   const statusConfig = STATUS_CONFIG[interview.status] || {};
   const typeConfig = TYPE_CONFIG[interview.type] || {};
@@ -534,6 +598,15 @@ function InterviewCard({ interview, expanded, onToggle, onManage, onSchedule, ge
               >
                 Manage
               </button>
+              {interview.status === 'scheduled' && interview.application?.status === 'interview' && (
+                <button
+                  onClick={onHire}
+                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold hover:shadow-lg transition-all flex items-center gap-2"
+                >
+                  <Award className="w-4 h-4" />
+                  Hire
+                </button>
+              )}
             </div>
           </div>
         </div>

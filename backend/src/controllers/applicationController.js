@@ -47,6 +47,14 @@ const interviewFeedbackSchema = z.object({
   feedback: z.string().min(1).max(2000),
 });
 
+const hireCandidateSchema = z.object({
+  position: z.string().min(1).max(200),
+  joiningDate: z.coerce.date(),
+  salary: z.number().positive(),
+  offerLetter: z.string().url().optional(),
+  notes: z.string().max(1000).optional(),
+});
+
 // Apply for a job
 export const applyForJob = async (req, res, next) => {
   try {
@@ -950,6 +958,69 @@ export const getApplicationStats = async (req, res, next) => {
         stats: statusStats,
         recentActivity: recentApplications,
       },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Hire candidate (employer)
+export const hireCandidate = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const parsed = hireCandidateSchema.parse(req.body);
+
+    const application = await ApplicationModel.findById(id)
+      .populate("jobId", "title")
+      .populate("studentId", "firstName lastName email");
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    // Verify employer owns this application
+    if (application.employerId.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized to hire for this application",
+      });
+    }
+
+    // Update application status to hired
+    application.status = "hired";
+    application.hireData = {
+      position: parsed.position,
+      joiningDate: parsed.joiningDate,
+      salary: parsed.salary,
+      offerLetter: parsed.offerLetter,
+      notes: parsed.notes,
+      hiredAt: new Date(),
+      hiredBy: req.user.id,
+    };
+
+    await application.save();
+
+    // Log activity
+    await ActivityModel.create({
+      userId: req.user.id,
+      type: "application_hired",
+      description: `Hired ${application.studentId.firstName} ${application.studentId.lastName} for ${application.jobId.title}`,
+      metadata: {
+        applicationId: application._id,
+        jobId: application.jobId._id,
+        studentId: application.studentId._id,
+        position: parsed.position,
+        salary: parsed.salary,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Candidate hired successfully",
+      data: application,
     });
   } catch (err) {
     next(err);
