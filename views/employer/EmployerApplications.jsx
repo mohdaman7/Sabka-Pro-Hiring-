@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Search,
@@ -505,6 +505,38 @@ function ApplicationCard({
     STATUS_CONFIG[application.status] || STATUS_CONFIG.applied;
   const StatusIcon = statusConfig.icon;
   const isMenuOpen = openMenuId === application._id;
+  const triggerRef = useRef(null);
+  const menuRef = useRef(null);
+  const [menuPosition, setMenuPosition] = useState("bottom");
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const updatePosition = () => {
+      const triggerEl = triggerRef.current;
+      if (!triggerEl) return;
+
+      const rect = triggerEl.getBoundingClientRect();
+      const menuHeight = menuRef.current?.offsetHeight || 240;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      if (spaceBelow < menuHeight + 16 && spaceAbove > spaceBelow) {
+        setMenuPosition("top");
+      } else {
+        setMenuPosition("bottom");
+      }
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [isMenuOpen]);
 
   return (
     <div
@@ -566,6 +598,7 @@ function ApplicationCard({
         {/* Right: Actions Menu */}
         <div className="relative flex-shrink-0">
           <button
+            ref={triggerRef}
             onClick={() => setOpenMenuId(isMenuOpen ? null : application._id)}
             className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500 transition-all"
           >
@@ -579,7 +612,14 @@ function ApplicationCard({
                 className="fixed inset-0 z-40"
                 onClick={() => setOpenMenuId(null)}
               />
-              <div className="absolute right-0 top-12 z-50 w-56 bg-slate-900/95 backdrop-blur-xl border border-purple-500/30 rounded-xl shadow-2xl overflow-hidden">
+              <div
+                ref={menuRef}
+                className={`absolute right-0 z-50 w-56 bg-slate-900/95 backdrop-blur-xl border border-purple-500/30 rounded-xl shadow-2xl overflow-hidden transition-transform duration-150 ${
+                  menuPosition === "top"
+                    ? "bottom-12 origin-bottom animate-dropdown-up"
+                    : "top-12 origin-top animate-dropdown-down"
+                }`}
+              >
                 {/* View Resume */}
                 {application.resumeUrl && (
                   <a
