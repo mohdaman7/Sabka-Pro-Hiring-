@@ -472,7 +472,7 @@ function ApplicationCard({
   const isMenuOpen = openMenuId === application._id;
 
   return (
-    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:shadow-2xl hover:scale-[1.01]">
+    <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:shadow-2xl hover:scale-[1.01] overflow-visible">
       <div className="flex items-start justify-between gap-4">
         {/* Left: Candidate Info */}
         <div className="flex items-start gap-4 flex-1 min-w-0">
@@ -540,7 +540,7 @@ function ApplicationCard({
                 className="fixed inset-0 z-40"
                 onClick={() => setOpenMenuId(null)}
               />
-              <div className="absolute right-0 top-12 z-50 w-56 bg-slate-900 border border-white/20 rounded-xl shadow-2xl overflow-hidden">
+              <div className="absolute right-0 top-12 z-50 w-56 bg-slate-900/95 backdrop-blur-xl border border-purple-500/30 rounded-xl shadow-2xl overflow-hidden">
                 {/* View Resume */}
                 {application.resumeUrl && (
                   <a
