@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { X, CheckCircle, Calendar, DollarSign, FileText, Briefcase, User, Mail, Phone, Award, Sparkles } from "lucide-react";
 import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function HireCandidateModal({ application, onClose, onConfirm }) {
   const [formData, setFormData] = useState({
@@ -22,6 +23,10 @@ export default function HireCandidateModal({ application, onClose, onConfirm }) 
         salary: Number(formData.salary),
       };
       await onConfirm(application._id, payload);
+      
+      // Trigger milestone animation for hiring
+      triggerSuccessAnimation({ type: "milestone" });
+      
       customToast.success(
         "Candidate Hired Successfully! 🎉",
         `${candidate.firstName} ${candidate.lastName} has been hired for ${formData.position}`

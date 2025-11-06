@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { jobService } from "@/services/jobService";
 import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function PostNewJob() {
   const router = useRouter();
@@ -149,6 +150,9 @@ export default function PostNewJob() {
       const result = await jobService.createJob(jobData);
 
       if (result.success) {
+        // Trigger success animation
+        triggerSuccessAnimation({ type: "achievement" });
+        
         customToast.success("Success!", result.message);
 
         if (action === "publish") {

@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { applicationService } from "@/services/applicationService";
 import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
   const [open, setOpen] = useState(false);
@@ -175,6 +176,9 @@ export default function ScheduleInterviewDialog({ app, onClose, onScheduled }) {
       const res = await fn(app._id, payload);
       if (!res?.success)
         throw new Error(res?.message || `Failed to ${isUpdateMode ? 'update' : 'schedule'} interview`);
+
+      // Trigger success animation
+      triggerSuccessAnimation({ type: "achievement" });
 
       customToast.success(
         isUpdateMode ? "Interview Updated! ✨" : "Interview Scheduled! 📅",

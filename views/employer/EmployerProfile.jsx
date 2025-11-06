@@ -39,11 +39,8 @@ import {
   ShieldCheck,
   Image as ImageIcon,
 } from "lucide-react";
-
-const customToast = {
-  success: (title, message) => console.log("Success:", title, message),
-  error: (title, message) => console.error("Error:", title, message),
-};
+import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 // Enhanced Loading Skeleton Component
 const CompanyProfileSkeleton = () => {
@@ -361,6 +358,10 @@ export default function CompanyProfile() {
       };
 
       await employerService.updateProfile(payload);
+      
+      // Trigger success animation
+      triggerSuccessAnimation({ type: "achievement" });
+      
       customToast.success("Success", "Company profile updated successfully");
     } catch (error) {
       console.error("Failed to update company profile:", error);
