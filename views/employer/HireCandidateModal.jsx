@@ -16,7 +16,11 @@ export default function HireCandidateModal({ application, onClose, onConfirm }) 
     e.preventDefault();
     setLoading(true);
     try {
-      await onConfirm(application._id, formData);
+      const payload = {
+        ...formData,
+        salary: Number(formData.salary),
+      };
+      await onConfirm(application._id, payload);
       onClose();
     } catch (error) {
       console.error("Error hiring candidate:", error);
