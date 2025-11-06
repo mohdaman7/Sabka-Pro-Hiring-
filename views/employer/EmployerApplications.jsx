@@ -472,7 +472,11 @@ function ApplicationCard({
   const isMenuOpen = openMenuId === application._id;
 
   return (
-    <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:shadow-2xl hover:scale-[1.01] overflow-visible">
+    <div
+      className={`relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-all hover:shadow-2xl hover:scale-[1.01] overflow-visible ${
+        isMenuOpen ? "z-50 ring-2 ring-purple-400/40 shadow-3xl" : "z-10"
+      }`}
+    >
       <div className="flex items-start justify-between gap-4">
         {/* Left: Candidate Info */}
         <div className="flex items-start gap-4 flex-1 min-w-0">
