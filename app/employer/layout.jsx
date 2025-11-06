@@ -8,12 +8,22 @@ export default function EmployerLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex overflow-hidden" style={{ background: "linear-gradient(135deg, #0a0118 0%, #1a0a2e 50%, #0a0118 100%)" }}>
-      {/* Dark gradient background matching Interview Dashboard */}
-      <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+    <div className="min-h-screen flex bg-transparent overflow-hidden">
+      {/* Shared employer background (matching student theme) */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <div
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(128,55,145,0.08)" }}
+        />
+        <div
+          className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-48 h-48 md:w-96 md:h-96 rounded-full blur-3xl"
+          style={{ background: "rgba(184,123,209,0.06)" }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-2xl"
+          style={{ background: "rgba(240,194,238,0.03)" }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.03),_transparent_30%)]" />
       </div>
 
       {/* Sidebar - Hidden on mobile, overlay when open */}

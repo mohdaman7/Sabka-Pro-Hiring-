@@ -145,15 +145,8 @@ export default function ApplicationManagementNew() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0a0118 0%, #1a0a2e 50%, #0a0118 100%)" }}>
-      {/* Animated Background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
-      </div>
-
-      <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-10">
+    <>
+      <div className="relative p-4 sm:p-6 md:p-8 lg:p-10">
         {/* Header */}
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
@@ -342,7 +335,7 @@ export default function ApplicationManagementNew() {
           onConfirm={handleHireCandidate}
         />
       )}
-    </div>
+    </>
   );
 }
 
