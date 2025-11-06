@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import PaginationControls from "@/components/ui/PaginationControls";
 import {
   Calendar,
   Clock,
@@ -42,6 +43,8 @@ export default function InterviewsPage() {
   const [applications, setApplications] = useState([]);
   const [stats, setStats] = useState({});
   const [selectedInterview, setSelectedInterview] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   useEffect(() => {
     let mounted = true;
@@ -225,6 +228,22 @@ export default function InterviewsPage() {
     return matchesFilter && matchesSearch;
   });
 
+  // Pagination logic
+  const totalPages = Math.max(1, Math.ceil(filteredInterviews.length / itemsPerPage));
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(1);
+  }, [filteredInterviews.length, totalPages, currentPage]);
+
+  const paginatedInterviews = filteredInterviews.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset to first page when filter or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, searchQuery]);
+
   // Handler for copying meeting link
   const handleCopyMeetingLink = async (meetingLink, interviewTitle) => {
     try {
@@ -354,7 +373,7 @@ export default function InterviewsPage() {
         {/* Interviews List */}
         <div className="space-y-4">
           <AnimatePresence mode="popLayout">
-            {filteredInterviews.map((interview, index) => {
+            {paginatedInterviews.map((interview, index) => {
               const statusConfig = getStatusConfig(interview.status);
               const StatusIcon = statusConfig.icon;
               
@@ -567,6 +586,22 @@ export default function InterviewsPage() {
             })}
           </AnimatePresence>
         </div>
+
+        {/* Pagination Controls */}
+        {filteredInterviews.length > itemsPerPage && (
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            options={{
+              itemsPerPage,
+              totalItems: filteredInterviews.length,
+              showPageNumbers: true,
+              maxVisiblePages: 5,
+              variant: "default",
+            }}
+          />
+        )}
 
         {/* Empty State */}
         {filteredInterviews.length === 0 && !loading && (

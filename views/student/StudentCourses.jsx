@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import PaginationControls from "@/components/ui/PaginationControls";
 import {
   Play,
   Lock,
@@ -40,6 +41,8 @@ export default function StudentCourses() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isPro, setIsPro] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const categories = [
     { id: "all", name: "All Courses", icon: BookOpen },
@@ -111,6 +114,22 @@ export default function StudentCourses() {
     selectedCategory === "all"
       ? courses
       : courses.filter((course) => course.category === selectedCategory);
+
+  // Pagination logic
+  const totalPages = Math.max(1, Math.ceil(filteredCourses.length / itemsPerPage));
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(1);
+  }, [filteredCourses.length, totalPages, currentPage]);
+
+  const paginatedCourses = filteredCourses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset to first page when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
 
   const enrolledCourses = courses.filter((c) => hasAccess(c._id));
   const avgProgress =
@@ -362,8 +381,8 @@ export default function StudentCourses() {
             <div className="col-span-3 text-center py-12 text-white/80">
               Loading courses...
             </div>
-          ) : filteredCourses.length > 0 ? (
-            filteredCourses.map((course, index) => {
+          ) : paginatedCourses.length > 0 ? (
+            paginatedCourses.map((course, index) => {
               const enrolled = hasAccess(course._id);
               return (
                 <Link
@@ -530,6 +549,22 @@ export default function StudentCourses() {
             </div>
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {filteredCourses.length > itemsPerPage && (
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            options={{
+              itemsPerPage,
+              totalItems: filteredCourses.length,
+              showPageNumbers: true,
+              maxVisiblePages: 5,
+              variant: "default",
+            }}
+          />
+        )}
       </div>
 
       <style jsx>{`

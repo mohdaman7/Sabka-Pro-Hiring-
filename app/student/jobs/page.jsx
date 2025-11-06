@@ -42,6 +42,7 @@ import { useRouter } from "next/navigation";
 import { customToast } from "@/components/ui/toast";
 import ApplyNowModalEnhanced from "@/components/ui/ApplyNowModalEnhanced";
 import JobDetailsModal from "@/components/ui/JobDetailsModal";
+import PaginationControls from "@/components/ui/PaginationControls";
 import { createPortal } from "react-dom";
 
 export default function JobListingsPage() {
@@ -888,6 +889,22 @@ export default function JobListingsPage() {
                 </div>
               ))}
             </div>
+          )}
+
+          {/* Pagination Controls */}
+          {!loading && jobs.length > pageSize && (
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+              options={{
+                itemsPerPage: pageSize,
+                totalItems: jobs.length,
+                showPageNumbers: true,
+                maxVisiblePages: 5,
+                variant: "default",
+              }}
+            />
           )}
 
           {!loading && jobs.length === 0 && (
