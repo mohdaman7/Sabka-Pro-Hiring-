@@ -1005,15 +1005,20 @@ export const hireCandidate = async (req, res, next) => {
 
     // Log activity
     await ActivityModel.create({
-      userId: req.user.id,
-      type: "application_hired",
-      description: `Hired ${application.studentId.firstName} ${application.studentId.lastName} for ${application.jobId.title}`,
-      metadata: {
-        applicationId: application._id,
-        jobId: application.jobId._id,
-        studentId: application.studentId._id,
+      employerId: application.employerId,
+      actorId: req.user.id,
+      type: "application_status_changed",
+      target: {
+        kind: "application",
+        id: application._id,
+        label: `${application.studentId.firstName} ${application.studentId.lastName} - ${application.jobId.title}`,
+      },
+      meta: {
+        previousStatus: application.status,
+        newStatus: "hired",
         position: parsed.position,
         salary: parsed.salary,
+        hiredBy: req.user.id,
       },
     });
 
