@@ -1,6 +1,6 @@
 import { CourseEnrollment } from "../models/CourseEnrollment.js";
 import { CourseModel } from "../models/Course.js";
-import { Student } from "../models/Student.js";
+import { StudentModel as Student } from "../models/Student.js";
 import mongoose from "mongoose";
 
 // ==================== STUDENT ENROLLMENT ====================
