@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Briefcase, FileText, Users, TrendingUp, List, BarChart3 } from "lucide-react";
-import { getEmployerEngagement, formatPercentage, formatNumber } from "@/services/analyticsService";
+import { Briefcase, FileText, Users, TrendingUp, List, BarChart3, Building2, Award } from "lucide-react";
+import { getEmployerEngagement, getTopEmployersByJobPosts, getTopEmployersByApplications, formatPercentage, formatNumber } from "@/services/analyticsService";
 import AllEmployersListing from "./AllEmployersListing";
 
 export default function EmployerEngagement({ filters, isRefreshing }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [viewMode, setViewMode] = useState("summary"); // "summary" or "all"
+  const [topEmployersByJobs, setTopEmployersByJobs] = useState([]);
+  const [topEmployersByApps, setTopEmployersByApps] = useState([]);
+  const [loadingExtra, setLoadingExtra] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -20,10 +23,31 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
       setLoading(true);
       const response = await getEmployerEngagement(filters);
       setData(response.data);
+      
+      // Fetch top employers data
+      setLoadingExtra(true);
+      const params = {};
+      if (filters?.startDate) params.startDate = filters.startDate;
+      if (filters?.endDate) params.endDate = filters.endDate;
+      params.limit = 5;
+      
+      const [jobsRes, appsRes] = await Promise.all([
+        getTopEmployersByJobPosts(params),
+        getTopEmployersByApplications(params),
+      ]);
+      
+      if (jobsRes.success && jobsRes.data.topEmployers) {
+        setTopEmployersByJobs(jobsRes.data.topEmployers);
+      }
+      
+      if (appsRes.success && appsRes.data.topEmployers) {
+        setTopEmployersByApps(appsRes.data.topEmployers);
+      }
     } catch (error) {
       console.error("Error:", error);
     } finally {
       setLoading(false);
+      setLoadingExtra(false);
     }
   };
 
@@ -146,6 +170,99 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
           </div>
         )}
       </motion.div>
+
+      {/* Top Employers by Job Posts */}
+      {!loadingExtra && topEmployersByJobs.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-blue-400" />
+            Top Employers by Job Posts
+          </h3>
+          <div className="space-y-3">
+            {topEmployersByJobs.map((employer, index) => {
+              const isTop3 = index < 3;
+              const rankColors = [
+                "from-yellow-400 to-yellow-600",
+                "from-gray-300 to-gray-500",
+                "from-orange-400 to-orange-600"
+              ];
+              return (
+                <motion.div key={employer._id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="group relative">
+                  <div className="flex items-center gap-4 p-5 bg-white/6 border border-white/12 rounded-xl hover:bg-white/10 hover:border-white/25 transition-all duration-300">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
+                      isTop3 ? `bg-gradient-to-br ${rankColors[index]}` : 'bg-gradient-to-br from-blue-500 to-cyan-500'
+                    }`}>
+                      #{index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-white text-lg truncate">{employer.name}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm text-white/70">{formatNumber(employer.activeJobs)} active</span>
+                        {isTop3 && (
+                          <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-semibold border border-yellow-500/30 ml-auto">
+                            Top {index + 1}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="px-4 py-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30">
+                        <p className="text-2xl font-bold text-blue-300">{formatNumber(employer.jobPosts)}</p>
+                        <p className="text-xs text-white/60">posts</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Top Employers by Applications */}
+      {!loadingExtra && topEmployersByApps.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+            <Award className="w-5 h-5 text-purple-400" />
+            Top Employers by Applications
+          </h3>
+          <div className="space-y-3">
+            {topEmployersByApps.map((employer, index) => {
+              const isTop3 = index < 3;
+              const rankColors = [
+                "from-yellow-400 to-yellow-600",
+                "from-gray-300 to-gray-500",
+                "from-orange-400 to-orange-600"
+              ];
+              return (
+                <motion.div key={employer._id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="group relative">
+                  <div className="flex items-center gap-4 p-5 bg-white/6 border border-white/12 rounded-xl hover:bg-white/10 hover:border-white/25 transition-all duration-300">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
+                      isTop3 ? `bg-gradient-to-br ${rankColors[index]}` : 'bg-gradient-to-br from-purple-500 to-pink-500'
+                    }`}>
+                      #{index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-white text-lg truncate">{employer.name}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm text-white/70">{formatNumber(employer.hired)} hired</span>
+                        <span className="text-sm text-white/70">•</span>
+                        <span className="text-sm text-white/70">{formatPercentage(employer.hireRate)}% hire rate</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="px-4 py-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                        <p className="text-2xl font-bold text-purple-300">{formatNumber(employer.totalApplications)}</p>
+                        <p className="text-xs text-white/60">applications</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
 
       {/* Job Stats */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
