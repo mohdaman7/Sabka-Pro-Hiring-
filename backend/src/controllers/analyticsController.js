@@ -394,7 +394,7 @@ export const getPlacementAnalytics = async (req, res) => {
       { $match: { ...dateFilter, status: "hired" } },
       {
         $lookup: {
-          from: "employers",
+          from: "users",
           localField: "employerId",
           foreignField: "_id",
           as: "employer",
@@ -404,7 +404,8 @@ export const getPlacementAnalytics = async (req, res) => {
       {
         $group: {
           _id: "$employer._id",
-          name: { $first: "$employer.companyName" },
+          name: { $first: { $concat: ["$employer.firstName", " ", "$employer.lastName"] } },
+          email: { $first: "$employer.email" },
           placements: { $sum: 1 },
         },
       },
@@ -534,7 +535,7 @@ export const getEmployerEngagement = async (req, res) => {
       { $match: dateFilter },
       {
         $lookup: {
-          from: "employers",
+          from: "users",
           localField: "employerId",
           foreignField: "_id",
           as: "employer",
@@ -544,7 +545,8 @@ export const getEmployerEngagement = async (req, res) => {
       {
         $group: {
           _id: "$employer._id",
-          name: { $first: "$employer.companyName" },
+          name: { $first: { $concat: ["$employer.firstName", " ", "$employer.lastName"] } },
+          email: { $first: "$employer.email" },
           jobPosts: { $sum: 1 },
           activeJobs: {
             $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] },
@@ -560,7 +562,7 @@ export const getEmployerEngagement = async (req, res) => {
       { $match: dateFilter },
       {
         $lookup: {
-          from: "employers",
+          from: "users",
           localField: "employerId",
           foreignField: "_id",
           as: "employer",
@@ -570,7 +572,8 @@ export const getEmployerEngagement = async (req, res) => {
       {
         $group: {
           _id: "$employer._id",
-          name: { $first: "$employer.companyName" },
+          name: { $first: { $concat: ["$employer.firstName", " ", "$employer.lastName"] } },
+          email: { $first: "$employer.email" },
           applications: { $sum: 1 },
           hired: {
             $sum: { $cond: [{ $eq: ["$status", "hired"] }, 1, 0] },
@@ -969,7 +972,7 @@ export const getTopEmployersByJobPosts = async (req, res) => {
       { $match: dateFilter },
       {
         $lookup: {
-          from: "employers",
+          from: "users",
           localField: "employerId",
           foreignField: "_id",
           as: "employer",
@@ -979,8 +982,8 @@ export const getTopEmployersByJobPosts = async (req, res) => {
       {
         $group: {
           _id: "$employer._id",
-          name: { $first: "$employer.companyName" },
-          industry: { $first: "$employer.industry" },
+          name: { $first: { $concat: ["$employer.firstName", " ", "$employer.lastName"] } },
+          email: { $first: "$employer.email" },
           jobPosts: { $sum: 1 },
           activeJobs: {
             $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] },
@@ -1026,7 +1029,7 @@ export const getTopEmployersByApplications = async (req, res) => {
       { $match: dateFilter },
       {
         $lookup: {
-          from: "employers",
+          from: "users",
           localField: "employerId",
           foreignField: "_id",
           as: "employer",
@@ -1036,8 +1039,8 @@ export const getTopEmployersByApplications = async (req, res) => {
       {
         $group: {
           _id: "$employer._id",
-          name: { $first: "$employer.companyName" },
-          industry: { $first: "$employer.industry" },
+          name: { $first: { $concat: ["$employer.firstName", " ", "$employer.lastName"] } },
+          email: { $first: "$employer.email" },
           totalApplications: { $sum: 1 },
           hired: {
             $sum: { $cond: [{ $eq: ["$status", "hired"] }, 1, 0] },
