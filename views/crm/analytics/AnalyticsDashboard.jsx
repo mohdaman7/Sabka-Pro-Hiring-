@@ -142,7 +142,7 @@ export default function AnalyticsDashboard() {
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-slate-950 p-4 sm:p-6 md:p-8 lg:p-10">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#472162_0%,_#1b0f2e_45%,_#0f0a1f_100%)] text-white p-4 sm:p-6 md:p-8 lg:p-10">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -152,7 +152,7 @@ export default function AnalyticsDashboard() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex items-center gap-3">
             <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-xl border border-indigo-400/40"
+              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-2xl border border-white/15"
               style={{
                 background: `linear-gradient(135deg, ${activeTabData.color.split(" ")[1]}, ${activeTabData.color.split(" ")[3]})`,
               }}
@@ -160,13 +160,13 @@ export default function AnalyticsDashboard() {
               <activeTabData.icon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-widest text-indigo-300/70">
+              <p className="text-xs uppercase tracking-[0.4rem] text-white/60">
                 CRM Intelligence Suite
               </p>
-              <h1 className="text-3xl sm:text-4xl font-bold text-indigo-100">
+              <h1 className="text-3xl sm:text-4xl font-bold text-white">
                 Analytics Dashboard
               </h1>
-              <p className="text-sm text-indigo-300/70 mt-1">
+              <p className="text-sm text-white/65 mt-1">
                 {activeTabData.description}
               </p>
             </div>
@@ -176,17 +176,17 @@ export default function AnalyticsDashboard() {
             <button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-indigo-500/40 bg-indigo-500/20 text-indigo-100 hover:bg-indigo-500/30 hover:border-indigo-400 transition disabled:opacity-60 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/15 hover:border-white/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
               {isRefreshing ? "Refreshing..." : "Refresh"}
             </button>
             <button
               onClick={() => setShowFilters((prev) => !prev)}
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 transition-all duration-300 ${
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border transition-all duration-300 ${
                 showFilters
-                  ? "border-indigo-400 bg-indigo-500/40 text-indigo-100"
-                  : "border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/20"
+                  ? "border-white/35 bg-white/20 text-white"
+                  : "border-white/15 bg-white/10 text-white/80 hover:border-white/25 hover:bg-white/15"
               }`}
             >
               <Filter className="w-4 h-4" />
@@ -194,7 +194,7 @@ export default function AnalyticsDashboard() {
             </button>
             <button
               onClick={() => setActiveTab("reports")}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/20 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white/80 hover:border-white/25 hover:bg-white/15 transition"
             >
               <Download className="w-4 h-4" />
               Export Center
@@ -210,39 +210,39 @@ export default function AnalyticsDashboard() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="mb-6 p-6 rounded-2xl border-2 border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm shadow-xl"
+            className="mb-6 p-6 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md shadow-2xl"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div>
-                <label className="block text-sm font-semibold text-indigo-200 mb-2">
+                <label className="block text-sm font-semibold text-white/80 mb-2">
                   Start Date
                 </label>
                 <input
                   type="date"
                   value={filters.startDate || ""}
                   onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-100 placeholder-indigo-300/40 focus:outline-none focus:border-indigo-300"
+                  className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-indigo-200 mb-2">
+                <label className="block text-sm font-semibold text-white/80 mb-2">
                   End Date
                 </label>
                 <input
                   type="date"
                   value={filters.endDate || ""}
                   onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-100 placeholder-indigo-300/40 focus:outline-none focus:border-indigo-300"
+                  className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-indigo-200 mb-2">
+                <label className="block text-sm font-semibold text-white/80 mb-2">
                   Staff Member
                 </label>
                 <select
                   value={filters.staffId || ""}
                   onChange={(e) => setFilters({ ...filters, staffId: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-100 focus:outline-none focus:border-indigo-300"
+                  className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white focus:outline-none focus:border-white/40"
                 >
                   <option value="" className="text-gray-900">All Staff</option>
                   {/* TODO: Populate with staff list */}
@@ -250,19 +250,19 @@ export default function AnalyticsDashboard() {
               </div>
             </div>
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-              <p className="text-indigo-300/70">
+              <p className="text-white/60">
                 Tip: Combine filters with tab selection to generate precise exports.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/20 transition"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/15 bg-white/10 text-white/80 hover:border-white/25 hover:bg-white/15 transition"
                 >
                   Clear Filters
                 </button>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-indigo-400 bg-indigo-500/40 text-indigo-100 hover:bg-indigo-500/50 transition"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/25 bg-white/20 text-white hover:bg-white/30 transition"
                 >
                   Apply & Hide
                 </button>
@@ -288,8 +288,8 @@ export default function AnalyticsDashboard() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative px-4 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 min-w-fit ${
                   isActive
-                    ? "bg-indigo-600/40 border-2 border-indigo-500/50 shadow-lg scale-105 text-indigo-100"
-                    : "bg-indigo-500/10 border-2 border-indigo-500/20 hover:border-indigo-500/40 text-indigo-200"
+                    ? "bg-white/12 border border-white/35 shadow-lg scale-105 text-white"
+                    : "bg-white/6 border border-white/15 hover:border-white/25 text-white/70"
                 }`}
               >
                 {isActive && (
@@ -310,12 +310,12 @@ export default function AnalyticsDashboard() {
                   style={{
                     background: isActive
                       ? `linear-gradient(135deg, ${tab.color.split(" ")[1]}, ${tab.color.split(" ")[3]})`
-                      : "rgba(99, 102, 241, 0.1)",
+                      : "rgba(255,255,255,0.08)",
                   }}
                 >
                   <Icon
                     className={`w-4 h-4 ${
-                      isActive ? "text-white" : "text-indigo-300"
+                      isActive ? "text-white" : "text-white/70"
                     }`}
                   />
                 </div>
@@ -323,12 +323,12 @@ export default function AnalyticsDashboard() {
                 <div className="text-left">
                   <div
                     className={`text-sm ${
-                      isActive ? "text-indigo-100" : "text-indigo-200"
+                      isActive ? "text-white" : "text-white/70"
                     }`}
                   >
                     {tab.name}
                   </div>
-                  <div className="text-xs text-indigo-300/60 hidden lg:block">
+                  <div className="text-xs text-white/50 hidden lg:block">
                     {tab.description}
                   </div>
                 </div>
