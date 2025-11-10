@@ -58,43 +58,57 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
       {/* Top Employers by Jobs */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
         <h3 className="text-lg font-bold text-white mb-4">Top Employers by Job Posts</h3>
-        <div className="space-y-3">
-          {data.topEmployersByJobs.map((employer, index) => (
-            <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
-                style={{ background: "linear-gradient(135deg, rgba(244,114,182,0.85), rgba(236,72,153,0.7))" }}
-              >
-                #{index + 1}
+        {data.topEmployersByJobs && data.topEmployersByJobs.length > 0 ? (
+          <div className="space-y-3">
+            {data.topEmployersByJobs.map((employer, index) => (
+              <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
+                  style={{ background: "linear-gradient(135deg, rgba(244,114,182,0.85), rgba(236,72,153,0.7))" }}
+                >
+                  #{index + 1}
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-white">{employer.name}</p>
+                  <p className="text-sm text-white/70">{formatNumber(employer.jobPosts)} job posts</p>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-white">{employer.name}</p>
-                <p className="text-sm text-white/70">{formatNumber(employer.jobPosts)} job posts</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-white/50 text-sm">No job posts data available</p>
+            <p className="text-white/30 text-xs mt-1">Add jobs to see employer rankings</p>
+          </div>
+        )}
       </motion.div>
 
       {/* Top Employers by Applications */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
         <h3 className="text-lg font-bold text-white mb-4">Top Employers by Applications</h3>
-        <div className="space-y-3">
-          {data.topEmployersByApplications.map((employer, index) => (
-            <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
-                style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.85), rgba(168,85,247,0.65))" }}
-              >
-                #{index + 1}
+        {data.topEmployersByApplications && data.topEmployersByApplications.length > 0 ? (
+          <div className="space-y-3">
+            {data.topEmployersByApplications.map((employer, index) => (
+              <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
+                  style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.85), rgba(168,85,247,0.65))" }}
+                >
+                  #{index + 1}
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-white">{employer.name}</p>
+                  <p className="text-sm text-white/70">{formatNumber(employer.applications)} applications • {formatNumber(employer.hired)} hired</p>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-white">{employer.name}</p>
-                <p className="text-sm text-white/70">{formatNumber(employer.applications)} applications • {formatNumber(employer.hired)} hired</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-white/50 text-sm">No applications data available</p>
+            <p className="text-white/30 text-xs mt-1">Applications will appear here once students apply</p>
+          </div>
+        )}
       </motion.div>
 
       {/* Job Stats */}
