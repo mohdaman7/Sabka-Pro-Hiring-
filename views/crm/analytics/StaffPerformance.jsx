@@ -134,48 +134,48 @@ export default function StaffPerformance({ filters, isRefreshing }) {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b-2 border-gray-200">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Rank</th>
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Staff ID</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">Leads</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">Converted</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">Lost</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">In Progress</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">Conv. Rate</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">Revenue</th>
+              <tr className="border-b-2 border-white/20">
+                <th className="text-left py-3 px-4 text-sm font-semibold text-white/80">Rank</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-white/80">Staff ID</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-white/80">Leads</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-white/80">Converted</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-white/80">Lost</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-white/80">In Progress</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-white/80">Conv. Rate</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-white/80">Revenue</th>
               </tr>
             </thead>
             <tbody>
               {data.staffPerformance.map((staff, index) => (
-                <tr key={staff.staffId} className="border-b border-gray-100 hover:bg-purple-50 transition-colors">
+                <tr key={staff.staffId} className="border-b border-white/10 hover:bg-white/8 transition-colors">
                   <td className="py-3 px-4">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-600 font-bold text-sm">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-purple-500/40 to-pink-500/40 text-white font-bold text-sm border border-purple-500/30">
                       {index + 1}
                     </span>
                   </td>
-                  <td className="py-3 px-4 font-medium text-gray-900">Staff {staff.staffId?.toString().slice(-4) || 'N/A'}</td>
-                  <td className="py-3 px-4 text-right font-semibold text-gray-900">{formatNumber(staff.totalLeads)}</td>
+                  <td className="py-3 px-4 font-medium text-white">Staff {staff.staffId?.toString().slice(-4) || 'N/A'}</td>
+                  <td className="py-3 px-4 text-right font-semibold text-white">{formatNumber(staff.totalLeads)}</td>
                   <td className="py-3 px-4 text-right">
-                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-green-50 text-green-600 font-semibold text-sm">
+                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-semibold text-sm border border-emerald-500/30">
                       {formatNumber(staff.converted)}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-red-50 text-red-600 font-semibold text-sm">
+                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-red-500/20 text-red-300 font-semibold text-sm border border-red-500/30">
                       {formatNumber(staff.lost)}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-blue-50 text-blue-600 font-semibold text-sm">
+                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-blue-500/20 text-blue-300 font-semibold text-sm border border-blue-500/30">
                       {formatNumber(staff.inProgress)}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-purple-50 text-purple-600 font-bold text-sm">
+                    <span className="inline-flex items-center px-2 py-1 rounded-lg bg-purple-500/20 text-purple-300 font-bold text-sm border border-purple-500/30">
                       {formatPercentage(staff.conversionRate)}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-right font-bold text-emerald-600">{formatCurrency(staff.revenue)}</td>
+                  <td className="py-3 px-4 text-right font-bold text-emerald-300">{formatCurrency(staff.revenue)}</td>
                 </tr>
               ))}
             </tbody>

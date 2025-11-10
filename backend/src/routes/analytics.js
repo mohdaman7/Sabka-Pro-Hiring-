@@ -7,6 +7,9 @@ import {
   getEmployerEngagement,
   getCourseAnalytics,
   getStaffPerformance,
+  getTopEmployersByJobPosts,
+  getTopEmployersByApplications,
+  getTopCoursesByPerformance,
   exportReport,
 } from "../controllers/analyticsController.js";
 
@@ -27,8 +30,17 @@ router.get("/placements", getPlacementAnalytics);
 // Employer Engagement Analytics
 router.get("/employers/engagement", getEmployerEngagement);
 
+// Top Employers by Job Posts
+router.get("/employers/top-by-jobs", getTopEmployersByJobPosts);
+
+// Top Employers by Applications
+router.get("/employers/top-by-applications", getTopEmployersByApplications);
+
 // Training/Course Analytics
 router.get("/courses", getCourseAnalytics);
+
+// Top Courses by Performance
+router.get("/courses/top-performance", getTopCoursesByPerformance);
 
 // Staff Performance
 router.get("/staff/performance", getStaffPerformance);

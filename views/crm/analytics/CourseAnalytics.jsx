@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign } from "lucide-react";
+import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap } from "lucide-react";
 import { getCourseAnalytics, formatPercentage, formatNumber, formatCurrency } from "@/services/analyticsService";
 
 export default function CourseAnalytics({ filters, isRefreshing }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
+  const [topCoursesByPerformance, setTopCoursesByPerformance] = useState([]);
+  const [loadingExtra, setLoadingExtra] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -18,10 +20,16 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
       setLoading(true);
       const response = await getCourseAnalytics(filters);
       setData(response.data);
+      
+      // Fetch top courses by performance
+      setLoadingExtra(true);
+      const perfRes = await fetch(`/api/analytics/courses/top-performance?limit=5${filters?.startDate ? `&startDate=${filters.startDate}` : ''}${filters?.endDate ? `&endDate=${filters.endDate}` : ''}`).then(r => r.json());
+      if (perfRes.success) setTopCoursesByPerformance(perfRes.data.topCourses);
     } catch (error) {
       console.error("Error:", error);
     } finally {
       setLoading(false);
+      setLoadingExtra(false);
     }
   };
 
@@ -135,16 +143,69 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
 
       {/* Completion Trend */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-        <h3 className="text-lg font-bold text-white mb-4">Completion Trend</h3>
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-purple-400" />
+          Completion Trend
+        </h3>
         <div className="space-y-3">
           {data.completionTrend.map((item) => (
-            <div key={item._id} className="flex items-center justify-between p-4 bg-white/6 border border-white/12 rounded-xl">
+            <div key={item._id} className="flex items-center justify-between p-4 bg-white/6 border border-white/12 rounded-xl hover:bg-white/10 transition-all duration-300">
               <p className="font-semibold text-white">{item._id}</p>
               <p className="text-xl font-bold text-purple-300">{formatNumber(item.count)} completions</p>
             </div>
           ))}
         </div>
       </motion.div>
+
+      {/* Top Courses by Performance */}
+      {!loadingExtra && topCoursesByPerformance.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-yellow-400" />
+            Top Courses by Performance
+          </h3>
+          <div className="space-y-3">
+            {topCoursesByPerformance.map((course, index) => {
+              const isTop3 = index < 3;
+              const rankColors = [
+                "from-yellow-400 to-yellow-600",
+                "from-gray-300 to-gray-500",
+                "from-orange-400 to-orange-600"
+              ];
+              return (
+                <motion.div key={course._id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="group relative">
+                  <div className="flex items-center gap-4 p-5 bg-white/6 border border-white/12 rounded-xl hover:bg-white/10 hover:border-white/25 transition-all duration-300">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
+                      isTop3 ? `bg-gradient-to-br ${rankColors[index]}` : 'bg-gradient-to-br from-yellow-500 to-orange-500'
+                    }`}>
+                      #{index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-white text-lg truncate">{course.name}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm text-white/70">{formatNumber(course.totalEnrolled)} enrolled</span>
+                        <span className="text-sm text-white/70">•</span>
+                        <span className="text-sm text-white/70">{formatNumber(course.completed)} completed</span>
+                        {isTop3 && (
+                          <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-semibold border border-yellow-500/30 ml-auto">
+                            Top {index + 1}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="px-4 py-2 rounded-lg bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30">
+                        <p className="text-2xl font-bold text-yellow-300">{formatPercentage(course.completionRate)}</p>
+                        <p className="text-xs text-white/60">completion</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

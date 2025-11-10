@@ -953,6 +953,215 @@ const getStaffData = async (startDate, endDate) => {
   return {};
 };
 
+// ==================== TOP EMPLOYERS ANALYTICS ====================
+export const getTopEmployersByJobPosts = async (req, res) => {
+  try {
+    const { startDate, endDate, limit = 10 } = req.query;
+
+    const dateFilter = {};
+    if (startDate || endDate) {
+      dateFilter.createdAt = {};
+      if (startDate) dateFilter.createdAt.$gte = new Date(startDate);
+      if (endDate) dateFilter.createdAt.$lte = new Date(endDate);
+    }
+
+    const topEmployers = await Job.aggregate([
+      { $match: dateFilter },
+      {
+        $lookup: {
+          from: "employers",
+          localField: "employerId",
+          foreignField: "_id",
+          as: "employer",
+        },
+      },
+      { $unwind: "$employer" },
+      {
+        $group: {
+          _id: "$employer._id",
+          name: { $first: "$employer.companyName" },
+          industry: { $first: "$employer.industry" },
+          jobPosts: { $sum: 1 },
+          activeJobs: {
+            $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] },
+          },
+          closedJobs: {
+            $sum: { $cond: [{ $eq: ["$status", "closed"] }, 1, 0] },
+          },
+        },
+      },
+      { $sort: { jobPosts: -1 } },
+      { $limit: parseInt(limit) },
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        topEmployers,
+        count: topEmployers.length,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching top employers by job posts:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch top employers by job posts",
+      error: error.message,
+    });
+  }
+};
+
+export const getTopEmployersByApplications = async (req, res) => {
+  try {
+    const { startDate, endDate, limit = 10 } = req.query;
+
+    const dateFilter = {};
+    if (startDate || endDate) {
+      dateFilter.createdAt = {};
+      if (startDate) dateFilter.createdAt.$gte = new Date(startDate);
+      if (endDate) dateFilter.createdAt.$lte = new Date(endDate);
+    }
+
+    const topEmployers = await Application.aggregate([
+      { $match: dateFilter },
+      {
+        $lookup: {
+          from: "employers",
+          localField: "employerId",
+          foreignField: "_id",
+          as: "employer",
+        },
+      },
+      { $unwind: "$employer" },
+      {
+        $group: {
+          _id: "$employer._id",
+          name: { $first: "$employer.companyName" },
+          industry: { $first: "$employer.industry" },
+          totalApplications: { $sum: 1 },
+          hired: {
+            $sum: { $cond: [{ $eq: ["$status", "hired"] }, 1, 0] },
+          },
+          rejected: {
+            $sum: { $cond: [{ $eq: ["$status", "rejected"] }, 1, 0] },
+          },
+          interviewed: {
+            $sum: { $cond: [{ $eq: ["$status", "interview"] }, 1, 0] },
+          },
+        },
+      },
+      {
+        $addFields: {
+          hireRate: {
+            $cond: [
+              { $gt: ["$totalApplications", 0] },
+              {
+                $multiply: [
+                  { $divide: ["$hired", "$totalApplications"] },
+                  100,
+                ],
+              },
+              0,
+            ],
+          },
+        },
+      },
+      { $sort: { totalApplications: -1 } },
+      { $limit: parseInt(limit) },
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        topEmployers,
+        count: topEmployers.length,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching top employers by applications:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch top employers by applications",
+      error: error.message,
+    });
+  }
+};
+
+// ==================== TOP COURSES ANALYTICS ====================
+export const getTopCoursesByPerformance = async (req, res) => {
+  try {
+    const { startDate, endDate, limit = 10 } = req.query;
+
+    const dateFilter = {};
+    if (startDate || endDate) {
+      dateFilter.createdAt = {};
+      if (startDate) dateFilter.createdAt.$gte = new Date(startDate);
+      if (endDate) dateFilter.createdAt.$lte = new Date(endDate);
+    }
+
+    const topCourses = await CourseProgress.aggregate([
+      { $match: dateFilter },
+      {
+        $lookup: {
+          from: "courses",
+          localField: "courseId",
+          foreignField: "_id",
+          as: "course",
+        },
+      },
+      { $unwind: "$course" },
+      {
+        $group: {
+          _id: "$course._id",
+          name: { $first: "$course.title" },
+          category: { $first: "$course.category" },
+          totalEnrolled: { $sum: 1 },
+          completed: {
+            $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] },
+          },
+          inProgress: {
+            $sum: { $cond: [{ $eq: ["$status", "in_progress"] }, 1, 0] },
+          },
+          avgProgress: { $avg: "$progress" },
+        },
+      },
+      {
+        $addFields: {
+          completionRate: {
+            $cond: [
+              { $gt: ["$totalEnrolled", 0] },
+              {
+                $multiply: [
+                  { $divide: ["$completed", "$totalEnrolled"] },
+                  100,
+                ],
+              },
+              0,
+            ],
+          },
+        },
+      },
+      { $sort: { completionRate: -1, totalEnrolled: -1 } },
+      { $limit: parseInt(limit) },
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        topCourses,
+        count: topCourses.length,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching top courses by performance:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch top courses by performance",
+      error: error.message,
+    });
+  }
+};
+
 const convertToCSV = (data) => {
   // Simple CSV conversion
   if (!data || typeof data !== "object") return "";
