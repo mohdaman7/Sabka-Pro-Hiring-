@@ -86,24 +86,50 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
 
       {/* Top Courses */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-        <h3 className="text-lg font-bold text-white mb-4">Top Performing Courses</h3>
+        <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+          <GraduationCap className="w-5 h-5 text-cyan-400" />
+          Top Performing Courses
+        </h3>
         <div className="space-y-3">
-          {data.topCourses.map((course, index) => (
-            <div key={course._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
-                style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.85), rgba(59,130,246,0.7))" }}
-              >
-                #{index + 1}
+          {data.topCourses.map((course, index) => {
+            const isTop3 = index < 3;
+            const rankColors = [
+              "from-yellow-400 to-yellow-600",
+              "from-gray-300 to-gray-500",
+              "from-orange-400 to-orange-600"
+            ];
+            return (
+              <div key={course._id} className="group relative">
+                <div className="flex items-center gap-4 p-5 bg-white/6 border border-white/12 rounded-xl hover:bg-white/10 hover:border-white/25 transition-all duration-300">
+                  {/* Rank Badge */}
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
+                    isTop3 ? `bg-gradient-to-br ${rankColors[index]}` : 'bg-gradient-to-br from-cyan-500 to-blue-500'
+                  }`}>
+                    #{index + 1}
+                  </div>
+                  {/* Course Info */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-white text-lg truncate">{course.title}</p>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-sm text-white/70">{formatNumber(course.enrollments)} enrollments</span>
+                      {isTop3 && (
+                        <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-semibold border border-yellow-500/30">
+                          Top {index + 1}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {/* Completion Rate Badge */}
+                  <div className="text-right">
+                    <div className="px-4 py-2 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
+                      <p className="text-2xl font-bold text-cyan-300">{formatPercentage(course.completionRate)}</p>
+                      <p className="text-xs text-white/60">completion</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-white">{course.title}</p>
-                <p className="text-sm text-white/70">{formatNumber(course.enrollments)} enrollments</p>
-              </div>
-              <p className="text-lg font-bold text-cyan-300">{formatPercentage(course.completionRate)}</p>
-              <p className="text-xs text-white/60">completion rate</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
 

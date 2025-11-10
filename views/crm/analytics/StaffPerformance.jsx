@@ -63,65 +63,72 @@ export default function StaffPerformance({ filters, isRefreshing }) {
       </div>
 
       {/* Top Performers */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-        <h3 className="text-lg font-bold text-indigo-100 mb-4 flex items-center gap-2">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
           <Award className="w-5 h-5 text-purple-400" />
           Top Performers
         </h3>
         <div className="space-y-3">
-          {data.staffPerformance.slice(0, 5).map((staff, index) => (
-            <div key={staff.staffId} className="relative group">
-              <div className="flex items-center gap-4 p-5 bg-indigo-500/10 border-2 border-indigo-500/20 rounded-xl hover:border-indigo-500/50 transition-all duration-300">
-                {/* Rank Badge */}
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
-                  index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
-                  index === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-500' :
-                  index === 2 ? 'bg-gradient-to-r from-orange-400 to-orange-600' :
-                  'bg-gradient-to-r from-indigo-500 to-purple-500'
-                }`}>
-                  #{index + 1}
-                </div>
+          {data.staffPerformance.slice(0, 5).map((staff, index) => {
+            const isTop3 = index < 3;
+            const rankColors = [
+              "from-yellow-400 to-yellow-600",
+              "from-gray-300 to-gray-500",
+              "from-orange-400 to-orange-600"
+            ];
+            return (
+              <div key={staff.staffId} className="relative group">
+                <div className="flex items-center gap-4 p-5 bg-white/6 border border-white/12 rounded-xl hover:bg-white/10 hover:border-white/25 transition-all duration-300">
+                  {/* Rank Badge */}
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
+                    isTop3 ? `bg-gradient-to-br ${rankColors[index]}` : 'bg-gradient-to-br from-purple-500 to-pink-500'
+                  }`}>
+                    #{index + 1}
+                  </div>
 
-                {/* Staff Info */}
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div>
-                    <p className="text-xs text-indigo-300/60 mb-1">Staff ID</p>
-                    <p className="font-bold text-indigo-100">Staff {staff.staffId?.toString().slice(-4) || 'N/A'}</p>
+                  {/* Staff Info */}
+                  <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                      <p className="text-xs text-white/60 mb-1">Staff ID</p>
+                      <p className="font-bold text-white">Staff {staff.staffId?.toString().slice(-4) || 'N/A'}</p>
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-white text-lg">{staff.name}</p>
+                      <p className="text-sm text-white/70">{formatNumber(staff.totalLeads)} leads</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 inline-block">
+                        <p className="text-lg font-bold text-purple-300">{formatPercentage(staff.conversionRate)}</p>
+                        <p className="text-xs text-white/60">{formatNumber(staff.converted)} converted</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 inline-block">
+                        <p className="text-xs text-white/60 mb-1">Revenue</p>
+                        <p className="font-bold text-emerald-300">{formatCurrency(staff.revenue)}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-indigo-100">{staff.name}</p>
-                    <p className="text-sm text-indigo-300/70">{formatNumber(staff.totalLeads)} leads</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-bold text-purple-400">{formatPercentage(staff.conversionRate)}</p>
-                    <p className="text-xs text-indigo-300/60">{formatNumber(staff.converted)} converted</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-indigo-300/60 mb-1">Revenue Generated</p>
-                    <p className="font-bold text-emerald-400">{formatCurrency(staff.revenue)}</p>
-                  </div>
-                </div>
 
-                {/* Trophy for top 3 */}
-                {index < 3 && (
-                  <div className="absolute -top-2 -right-2">
-                    <Award className={`w-6 h-6 ${
-                      index === 0 ? 'text-yellow-500' :
-                      index === 1 ? 'text-gray-400' :
-                      'text-orange-500'
-                    }`} />
-                  </div>
-                )}
+                  {/* Trophy for top 3 */}
+                  {isTop3 && (
+                    <div className="absolute -top-2 -right-2">
+                      <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-semibold border border-yellow-500/30">
+                        Top {index + 1}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
 
       {/* All Staff Performance */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Users className="w-5 h-5 text-indigo-600" />
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <Users className="w-5 h-5 text-purple-300" />
           All Staff Performance
         </h3>
         <div className="overflow-x-auto">

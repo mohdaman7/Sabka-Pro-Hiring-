@@ -285,37 +285,94 @@ export default function OverviewDashboard({ filters, isRefreshing }) {
         </motion.div>
       </div>
 
-      {/* Quick Stats */}
+      {/* Quick Stats with Progress */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md"
       >
-        <h3 className="text-lg font-bold text-white mb-4">Quick Stats</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-4 rounded-xl border border-white/15 bg-white/8">
-            <p className="text-2xl font-bold text-white">
-              {formatNumber(data.kpis.totalStudents)}
-            </p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Total Students</p>
+        <h3 className="text-lg font-bold text-white mb-6">Performance Overview</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Total Students */}
+          <div className="p-5 rounded-xl border border-white/15 bg-white/6">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-medium text-white/70">Total Students</p>
+              <p className="text-2xl font-bold text-white">
+                {formatNumber(data.kpis.totalStudents)}
+              </p>
+            </div>
+            <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div
+                className="h-2.5 rounded-full transition-all duration-1000"
+                style={{
+                  width: "100%",
+                  background: "linear-gradient(90deg, rgba(59,130,246,0.8), rgba(147,51,234,0.8))"
+                }}
+              />
+            </div>
+            <p className="text-xs text-white/60 mt-2">Total enrolled students</p>
           </div>
-          <div className="text-center p-4 rounded-xl border border-white/15 bg-white/8">
-            <p className="text-2xl font-bold text-white">
-              {formatNumber(data.kpis.placedStudents)}
+
+          {/* Placed Students */}
+          <div className="p-5 rounded-xl border border-white/15 bg-white/6">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-medium text-white/70">Placed Students</p>
+              <p className="text-2xl font-bold text-emerald-300">
+                {formatNumber(data.kpis.placedStudents)}
+              </p>
+            </div>
+            <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div
+                className="h-2.5 rounded-full transition-all duration-1000"
+                style={{
+                  width: `${Math.min(100, (data.kpis.placedStudents / data.kpis.totalStudents) * 100)}%`,
+                  background: "linear-gradient(90deg, rgba(16,185,129,0.8), rgba(6,182,212,0.8))"
+                }}
+              />
+            </div>
+            <p className="text-xs text-white/60 mt-2">
+              {formatPercentage((data.kpis.placedStudents / data.kpis.totalStudents) * 100)} of total
             </p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Placed Students</p>
           </div>
-          <div className="text-center p-4 rounded-xl border border-white/15 bg-white/8">
-            <p className="text-2xl font-bold text-white">
-              {formatPercentage(data.kpis.placementRate)}
-            </p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Placement Rate</p>
+
+          {/* Placement Rate */}
+          <div className="p-5 rounded-xl border border-white/15 bg-white/6">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-medium text-white/70">Placement Rate</p>
+              <p className="text-2xl font-bold text-purple-300">
+                {formatPercentage(data.kpis.placementRate)}
+              </p>
+            </div>
+            <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div
+                className="h-2.5 rounded-full transition-all duration-1000"
+                style={{
+                  width: `${data.kpis.placementRate}%`,
+                  background: "linear-gradient(90deg, rgba(168,85,247,0.8), rgba(236,72,153,0.8))"
+                }}
+              />
+            </div>
+            <p className="text-xs text-white/60 mt-2">Success rate target: 80%</p>
           </div>
-          <div className="text-center p-4 rounded-xl border border-white/15 bg-white/8">
-            <p className="text-2xl font-bold text-white">
-              {formatNumber(data.kpis.activeJobs)}
-            </p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Active Jobs</p>
+
+          {/* Active Jobs */}
+          <div className="p-5 rounded-xl border border-white/15 bg-white/6">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-medium text-white/70">Active Jobs</p>
+              <p className="text-2xl font-bold text-cyan-300">
+                {formatNumber(data.kpis.activeJobs)}
+              </p>
+            </div>
+            <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div
+                className="h-2.5 rounded-full transition-all duration-1000"
+                style={{
+                  width: `${Math.min(100, (data.kpis.activeJobs / 50) * 100)}%`,
+                  background: "linear-gradient(90deg, rgba(6,182,212,0.8), rgba(59,130,246,0.8))"
+                }}
+              />
+            </div>
+            <p className="text-xs text-white/60 mt-2">Available opportunities</p>
           </div>
         </div>
       </motion.div>

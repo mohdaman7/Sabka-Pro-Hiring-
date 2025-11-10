@@ -142,7 +142,7 @@ export default function AnalyticsDashboard() {
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#472162_0%,_#1b0f2e_45%,_#0f0a1f_100%)] text-white p-4 sm:p-6 md:p-8 lg:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900 text-white p-4 sm:p-6 md:p-8 lg:p-10">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

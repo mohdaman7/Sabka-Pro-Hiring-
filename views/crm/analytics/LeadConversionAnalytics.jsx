@@ -55,24 +55,27 @@ export default function LeadConversionAnalytics({ filters, isRefreshing }) {
       {/* Funnel Chart */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
         <h3 className="text-lg font-bold text-white mb-4">Conversion Funnel</h3>
-        <div className="space-y-3">
-          {data.funnelData.map((stage, index) => (
-            <div key={stage._id} className="relative">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-white/70 capitalize">{stage._id}</span>
-                <span className="text-sm font-bold text-white">{formatNumber(stage.count)}</span>
+        <div className="space-y-4">
+          {data.funnelData.map((stage) => {
+            const percentage = Math.min(100, Math.max(0, (stage.count / (data.funnelData[0]?.count || 1)) * 100));
+            return (
+              <div key={stage._id} className="relative">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-white/70 capitalize">{stage._id}</span>
+                  <span className="text-sm font-bold text-white">{formatNumber(stage.count)}</span>
+                </div>
+                <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                  <div
+                    className="h-3 rounded-full transition-all duration-500"
+                    style={{
+                      width: `${percentage}%`,
+                      background: "linear-gradient(135deg, rgba(128,55,145,0.85), rgba(236,72,153,0.7))",
+                    }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-3">
-                <div
-                  className="h-3 rounded-full transition-all duration-500"
-                  style={{
-                    width: `${(stage.count / data.funnelData[0]?.count) * 100}%`,
-                    background: "linear-gradient(135deg, rgba(128,55,145,0.85), rgba(236,72,153,0.7))",
-                  }}
-                />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
 

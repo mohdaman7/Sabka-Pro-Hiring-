@@ -72,6 +72,11 @@ export const getOverviewStats = async (req, res) => {
     const monthlyLeads = await Lead.aggregate([
       { $match: { createdAt: { $gte: sixMonthsAgo }, ...staffFilter } },
       {
+        $match: {
+          createdAt: { $exists: true, $ne: null, $type: "date" }
+        }
+      },
+      {
         $group: {
           _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
           count: { $sum: 1 },
@@ -82,6 +87,11 @@ export const getOverviewStats = async (req, res) => {
 
     const monthlyRevenue = await Purchase.aggregate([
       { $match: { createdAt: { $gte: sixMonthsAgo }, status: "completed" } },
+      {
+        $match: {
+          createdAt: { $exists: true, $ne: null, $type: "date" }
+        }
+      },
       {
         $group: {
           _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
@@ -286,6 +296,11 @@ export const getRevenueReports = async (req, res) => {
     const revenueTrend = await Purchase.aggregate([
       { $match: { ...dateFilter, status: "completed" } },
       {
+        $match: {
+          createdAt: { $exists: true, $ne: null, $type: "date" }
+        }
+      },
+      {
         $group: {
           _id: { $dateToString: { format, date: "$createdAt" } },
           revenue: { $sum: "$amount" },
@@ -450,6 +465,11 @@ export const getPlacementAnalytics = async (req, res) => {
     const placementTrend = await Application.aggregate([
       { $match: { ...dateFilter, status: "hired" } },
       {
+        $match: {
+          updatedAt: { $exists: true, $ne: null, $type: "date" }
+        }
+      },
+      {
         $group: {
           _id: { $dateToString: { format: "%Y-%m", date: "$updatedAt" } },
           count: { $sum: 1 },
@@ -565,6 +585,11 @@ export const getEmployerEngagement = async (req, res) => {
     const activityTrend = await Job.aggregate([
       { $match: dateFilter },
       {
+        $match: {
+          createdAt: { $exists: true, $ne: null, $type: "date" }
+        }
+      },
+      {
         $group: {
           _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
           jobPosts: { $sum: 1 },
@@ -672,6 +697,11 @@ export const getCourseAnalytics = async (req, res) => {
     // Course completion trend
     const completionTrend = await CourseProgress.aggregate([
       { $match: { ...dateFilter, status: "completed" } },
+      {
+        $match: {
+          updatedAt: { $exists: true, $ne: null, $type: "date" }
+        }
+      },
       {
         $group: {
           _id: { $dateToString: { format: "%Y-%m", date: "$updatedAt" } },
