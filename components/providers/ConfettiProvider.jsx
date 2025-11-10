@@ -9,12 +9,15 @@ import { useEffect } from "react";
 export default function ConfettiProvider() {
   useEffect(() => {
     // Dynamically import canvas-confetti
-    import("canvas-confetti").then((confetti) => {
-      // Make it available globally
-      window.confetti = confetti.default;
-    }).catch((error) => {
-      console.warn("Failed to load canvas-confetti:", error);
-    });
+    import("canvas-confetti")
+      .then((confetti) => {
+        // Make it available globally
+
+        window.confetti = confetti.default;
+      })
+      .catch((error) => {
+        console.warn("Failed to load canvas-confetti:", error);
+      });
   }, []);
 
   return null; // This provider doesn't render anything

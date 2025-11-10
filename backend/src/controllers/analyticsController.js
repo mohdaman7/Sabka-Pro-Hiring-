@@ -1,12 +1,12 @@
-import Lead from "../models/Lead.js";
-import Application from "../models/Application.js";
-import Student from "../models/Student.js";
-import Employer from "../models/Employer.js";
-import Job from "../models/Job.js";
-import Course from "../models/Course.js";
-import CourseProgress from "../models/CourseProgress.js";
-import Purchase from "../models/Purchase.js";
-import Interview from "../models/Interview.js";
+import { LeadModel as Lead } from "../models/Lead.js";
+import { ApplicationModel as Application } from "../models/Application.js";
+import { StudentModel as Student } from "../models/Student.js";
+import { EmployerModel as Employer } from "../models/Employer.js";
+import { JobModel as Job } from "../models/Job.js";
+import { CourseModel as Course } from "../models/Course.js";
+import { CourseProgressModel as CourseProgress } from "../models/CourseProgress.js";
+import { PurchaseModel as Purchase } from "../models/Purchase.js";
+import { InterviewModel as Interview } from "../models/Interview.js";
 
 // ==================== OVERVIEW DASHBOARD ====================
 export const getOverviewStats = async (req, res) => {
