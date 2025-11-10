@@ -304,9 +304,9 @@ export default function AnalyticsDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Tabs Navigation */}
-      <div className="mb-6 overflow-x-auto pb-2 scrollbar-hide">
-        <div className="flex gap-2 min-w-max">
+      {/* Tabs Navigation - Premium UI */}
+      <div className="mb-8 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-3 min-w-max p-2 bg-gradient-to-r from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-sm">
           {tabs.map((tab, index) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -318,52 +318,70 @@ export default function AnalyticsDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative px-4 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 min-w-fit ${
+                className={`relative group px-5 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center gap-3 min-w-fit ${
                   isActive
-                    ? "bg-white/12 border border-white/35 shadow-lg scale-105 text-white"
-                    : "bg-white/6 border border-white/15 hover:border-white/25 text-white/70"
+                    ? "bg-gradient-to-br from-white/20 to-white/10 border-2 border-white/40 shadow-2xl scale-105 text-white"
+                    : "bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 text-white/70 hover:text-white hover:scale-102"
                 }`}
               >
+                {/* Active indicator glow */}
                 {isActive && (
                   <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 rounded-xl border-2"
+                    layoutId="activeTabGlow"
+                    className="absolute inset-0 rounded-xl opacity-50 blur-xl"
                     style={{
-                      borderImage: `linear-gradient(135deg, ${tab.color.split(" ")[1]}, ${tab.color.split(" ")[3]}) 1`,
+                      background: `linear-gradient(135deg, ${tab.color.split(" ")[1]}, ${tab.color.split(" ")[3]})`,
                     }}
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
 
+                {/* Icon container */}
                 <div
-                  className={`relative w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                    isActive ? "scale-110" : ""
+                  className={`relative z-10 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                    isActive ? "scale-110 shadow-lg" : "group-hover:scale-105"
                   }`}
                   style={{
                     background: isActive
                       ? `linear-gradient(135deg, ${tab.color.split(" ")[1]}, ${tab.color.split(" ")[3]})`
-                      : "rgba(255,255,255,0.08)",
+                      : "rgba(255,255,255,0.1)",
+                    boxShadow: isActive ? `0 8px 20px ${tab.color.split(" ")[1]}40` : "none",
                   }}
                 >
                   <Icon
-                    className={`w-4 h-4 ${
-                      isActive ? "text-white" : "text-white/70"
+                    className={`w-5 h-5 transition-all ${
+                      isActive ? "text-white" : "text-white/70 group-hover:text-white"
                     }`}
                   />
                 </div>
 
-                <div className="text-left">
+                {/* Text content */}
+                <div className="text-left relative z-10">
                   <div
-                    className={`text-sm ${
-                      isActive ? "text-white" : "text-white/70"
+                    className={`text-sm font-bold transition-all ${
+                      isActive ? "text-white" : "text-white/70 group-hover:text-white"
                     }`}
                   >
                     {tab.name}
                   </div>
-                  <div className="text-xs text-white/50 hidden lg:block">
+                  <div className={`text-xs transition-all hidden lg:block ${
+                    isActive ? "text-white/80" : "text-white/50 group-hover:text-white/70"
+                  }`}>
                     {tab.description}
                   </div>
                 </div>
+
+                {/* Active indicator line */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTabLine"
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1 rounded-full"
+                    style={{
+                      background: `linear-gradient(90deg, ${tab.color.split(" ")[1]}, ${tab.color.split(" ")[3]})`,
+                    }}
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
               </motion.button>
             );
           })}
