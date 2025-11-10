@@ -28,10 +28,20 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
       if (filters?.endDate) params.endDate = filters.endDate;
       params.limit = 5;
       
+      console.log("📚 Fetching top courses with params:", params);
+      
       const perfRes = await getTopCoursesByPerformance(params);
-      if (perfRes.success) setTopCoursesByPerformance(perfRes.data.topCourses);
+      
+      console.log("✅ Top Courses Response:", perfRes);
+      
+      if (perfRes.success && perfRes.data.topCourses) {
+        console.log("📈 Setting top courses:", perfRes.data.topCourses.length);
+        setTopCoursesByPerformance(perfRes.data.topCourses);
+      } else {
+        console.warn("⚠️ No top courses data");
+      }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("❌ Error fetching course analytics:", error);
     } finally {
       setLoading(false);
       setLoadingExtra(false);
