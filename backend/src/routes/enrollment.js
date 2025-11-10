@@ -10,7 +10,7 @@ import {
   getCourseEnrollmentStats,
   getTopEnrolledCourses,
 } from "../controllers/enrollmentController.js";
-import { authenticateToken } from "../middleware/auth.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -18,32 +18,36 @@ const router = express.Router();
 // All student routes require authentication
 
 // Enroll in a course
-router.post("/enroll", authenticateToken, enrollInCourse);
+router.post("/enroll", authenticate, enrollInCourse);
 
 // Get my enrollments
-router.get("/my-enrollments", authenticateToken, getMyEnrollments);
+router.get("/my-enrollments", authenticate, getMyEnrollments);
 
 // Check enrollment status for a course
-router.get("/check/:courseId", authenticateToken, checkEnrollmentStatus);
+router.get("/check/:courseId", authenticate, checkEnrollmentStatus);
 
 // Get enrollment details
-router.get("/:enrollmentId", authenticateToken, getEnrollmentDetails);
+router.get("/:enrollmentId", authenticate, getEnrollmentDetails);
 
 // Update enrollment progress
-router.patch("/:enrollmentId/progress", authenticateToken, updateEnrollmentProgress);
+router.patch("/:enrollmentId/progress", authenticate, updateEnrollmentProgress);
 
 // Drop/Unenroll from course
-router.delete("/:enrollmentId", authenticateToken, dropCourse);
+router.delete("/:enrollmentId", authenticate, dropCourse);
 
 // ==================== CRM/ADMIN ROUTES ====================
 
 // Get all enrollments (CRM)
-router.get("/admin/all", authenticateToken, getAllEnrollments);
+router.get("/admin/all", authenticate, getAllEnrollments);
 
 // Get enrollment stats for a course (CRM)
-router.get("/admin/course/:courseId/stats", authenticateToken, getCourseEnrollmentStats);
+router.get(
+  "/admin/course/:courseId/stats",
+  authenticate,
+  getCourseEnrollmentStats
+);
 
 // Get top enrolled courses (CRM)
-router.get("/admin/top-courses", authenticateToken, getTopEnrolledCourses);
+router.get("/admin/top-courses", authenticate, getTopEnrolledCourses);
 
 export default router;
