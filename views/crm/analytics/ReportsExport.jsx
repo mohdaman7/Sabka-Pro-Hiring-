@@ -44,24 +44,27 @@ export default function ReportsExport({ filters }) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-white">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl border-2 border-indigo-500/30">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-8 border border-white/15 shadow-xl backdrop-blur-md">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <div
+            className="w-16 h-16 rounded-xl flex items-center justify-center border border-white/20 shadow-inner"
+            style={{ background: "linear-gradient(135deg, rgba(128,55,145,0.85), rgba(184,123,209,0.65))" }}
+          >
             <Download className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold">Export Reports</h2>
-            <p className="text-indigo-100 mt-1">Download your analytics data in your preferred format</p>
+            <h2 className="text-3xl font-bold text-white">Export Reports</h2>
+            <p className="text-white/70 mt-1">Download your analytics data in your preferred format</p>
           </div>
         </div>
       </motion.div>
 
       {/* Report Selection */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-        <h3 className="text-lg font-bold text-indigo-100 mb-4 flex items-center gap-2">
-          <FileText className="w-5 h-5 text-purple-400" />
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <FileText className="w-5 h-5 text-purple-300" />
           Select Report Type
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -72,26 +75,26 @@ export default function ReportsExport({ filters }) {
               <button
                 key={report.id}
                 onClick={() => setSelectedReport(report.id)}
-                className={`relative p-4 rounded-xl border-2 transition-all duration-300 text-left ${
+                className={`relative p-4 rounded-xl border transition-all duration-300 text-left ${
                   isSelected
-                    ? `border-${report.color}-500 bg-${report.color}-50`
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    ? "border-white/40 bg-white/15"
+                    : "border-white/12 bg-white/6 hover:border-white/25"
                 }`}
               >
                 {isSelected && (
                   <div className="absolute -top-2 -right-2">
-                    <CheckCircle className={`w-6 h-6 text-${report.color}-600 bg-white rounded-full`} />
+                    <CheckCircle className="w-6 h-6 text-purple-300 bg-white/20 rounded-full" />
                   </div>
                 )}
                 <div className="flex items-start gap-3">
-                  <div className={`w-10 h-10 rounded-lg bg-${report.color}-100 flex items-center justify-center shrink-0`}>
-                    <Icon className={`w-5 h-5 text-${report.color}-600`} />
+                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0 border border-white/15">
+                    <Icon className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-semibold ${isSelected ? `text-${report.color}-900` : "text-gray-900"}`}>
+                    <p className="font-semibold text-white">
                       {report.name}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">{report.description}</p>
+                    <p className="text-xs text-white/60 mt-1">{report.description}</p>
                   </div>
                 </div>
               </button>
@@ -101,9 +104,9 @@ export default function ReportsExport({ filters }) {
       </motion.div>
 
       {/* Format Selection */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-        <h3 className="text-lg font-bold text-indigo-100 mb-4 flex items-center gap-2">
-          <FileSpreadsheet className="w-5 h-5 text-purple-400" />
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <FileSpreadsheet className="w-5 h-5 text-purple-300" />
           Select Format
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -114,26 +117,26 @@ export default function ReportsExport({ filters }) {
               <button
                 key={format.id}
                 onClick={() => setSelectedFormat(format.id)}
-                className={`relative p-5 rounded-xl border-2 transition-all duration-300 text-left ${
+                className={`relative p-5 rounded-xl border transition-all duration-300 text-left ${
                   isSelected
-                    ? "border-purple-500 bg-purple-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    ? "border-white/40 bg-white/15"
+                    : "border-white/12 bg-white/6 hover:border-white/25"
                 }`}
               >
                 {isSelected && (
                   <div className="absolute -top-2 -right-2">
-                    <CheckCircle className="w-6 h-6 text-purple-600 bg-white rounded-full" />
+                    <CheckCircle className="w-6 h-6 text-purple-300 bg-white/20 rounded-full" />
                   </div>
                 )}
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-lg ${isSelected ? "bg-purple-100" : "bg-gray-100"} flex items-center justify-center`}>
-                    <Icon className={`w-6 h-6 ${isSelected ? "text-purple-600" : "text-gray-600"}`} />
+                  <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center border border-white/15">
+                    <Icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className={`font-bold text-lg ${isSelected ? "text-purple-900" : "text-gray-900"}`}>
+                    <p className="font-bold text-lg text-white">
                       {format.name}
                     </p>
-                    <p className="text-sm text-gray-500">{format.description}</p>
+                    <p className="text-sm text-white/60">{format.description}</p>
                   </div>
                 </div>
               </button>
@@ -143,28 +146,28 @@ export default function ReportsExport({ filters }) {
       </motion.div>
 
       {/* Date Range */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-purple-600" />
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <Calendar className="w-5 h-5 text-purple-300" />
           Date Range (Optional)
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+            <label className="block text-sm font-medium text-white/80 mb-2">Start Date</label>
             <input
               type="date"
               value={dateRange.startDate}
               onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-xl border border-white/15 bg-white/10 text-white focus:border-white/40 focus:outline-none transition-colors placeholder-white/40"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+            <label className="block text-sm font-medium text-white/80 mb-2">End Date</label>
             <input
               type="date"
               value={dateRange.endDate}
               onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-xl border border-white/15 bg-white/10 text-white focus:border-white/40 focus:outline-none transition-colors placeholder-white/40"
             />
           </div>
         </div>
@@ -192,14 +195,17 @@ export default function ReportsExport({ filters }) {
       </motion.div>
 
       {/* Info Box */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border-2 border-blue-200">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
-            <FileText className="w-5 h-5 text-blue-600" />
+          <div
+            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border border-white/20"
+            style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.8), rgba(99,102,241,0.6))" }}
+          >
+            <FileText className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h4 className="font-bold text-gray-900 mb-2">Export Information</h4>
-            <ul className="space-y-1 text-sm text-gray-600">
+            <h4 className="font-bold text-white mb-2">Export Information</h4>
+            <ul className="space-y-1 text-sm text-white/70">
               <li>• JSON format is ideal for API integration and data processing</li>
               <li>• CSV format can be opened in Excel, Google Sheets, or any spreadsheet software</li>
               <li>• Date range is optional - leave blank to export all available data</li>

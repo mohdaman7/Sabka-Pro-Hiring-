@@ -26,7 +26,7 @@ export default function StaffPerformance({ filters, isRefreshing }) {
   };
 
   if (loading) return <div className="flex items-center justify-center h-96"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>;
-  if (!data || !data.staffPerformance.length) return <div className="text-center py-12"><p className="text-gray-500">No staff performance data available</p></div>;
+  if (!data || !data.staffPerformance || !data.staffPerformance.length) return <div className="text-center py-12"><p className="text-white/70">No staff performance data available</p></div>;
 
   // Calculate totals
   const totals = data.staffPerformance.reduce((acc, staff) => ({
@@ -36,29 +36,29 @@ export default function StaffPerformance({ filters, isRefreshing }) {
   }), { totalLeads: 0, converted: 0, revenue: 0 });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-white">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
           <div className="w-12 h-12 rounded-xl bg-indigo-500/30 flex items-center justify-center mb-4 border-2 border-indigo-500/40">
             <Users className="w-6 h-6 text-indigo-300" />
           </div>
-          <p className="text-sm text-indigo-300/80">Total Staff</p>
-          <p className="text-3xl font-bold text-indigo-100">{formatNumber(data.summary.totalStaff)}</p>
+          <p className="text-sm text-white/70">Total Staff</p>
+          <p className="text-3xl font-bold text-white">{formatNumber(data?.summary?.totalStaff || 0)}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
           <div className="w-12 h-12 rounded-xl bg-emerald-500/30 flex items-center justify-center mb-4 border-2 border-emerald-500/40">
             <TrendingUp className="w-6 h-6 text-emerald-300" />
           </div>
-          <p className="text-sm text-indigo-300/80">Avg Conversion Rate</p>
-          <p className="text-3xl font-bold text-indigo-100">{formatPercentage(data.summary.avgConversionRate)}</p>
+          <p className="text-sm text-white/70">Avg Conversion Rate</p>
+          <p className="text-3xl font-bold text-white">{formatPercentage(data?.summary?.avgConversionRate || 0)}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
           <div className="w-12 h-12 rounded-xl bg-purple-500/30 flex items-center justify-center mb-4 border-2 border-purple-500/40">
             <DollarSign className="w-6 h-6 text-purple-300" />
           </div>
-          <p className="text-sm text-indigo-300/80">Total Revenue</p>
-          <p className="text-3xl font-bold text-indigo-100">{formatCurrency(data.summary.totalRevenue)}</p>
+          <p className="text-sm text-white/70">Total Revenue</p>
+          <p className="text-3xl font-bold text-white">{formatCurrency(data?.summary?.totalRevenue || 0)}</p>
         </motion.div>
       </div>
 
