@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Download, FileText, FileSpreadsheet, Calendar, Filter, CheckCircle } from "lucide-react";
 import { exportReport } from "@/services/analyticsService";
-import customToast from "@/components/ui/CustomToast";
+import { customToast } from "@/components/ui/toast";
 
 export default function ReportsExport({ filters }) {
   const [loading, setLoading] = useState(false);
