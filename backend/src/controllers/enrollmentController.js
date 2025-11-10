@@ -9,7 +9,7 @@ import mongoose from "mongoose";
 export const enrollInCourse = async (req, res) => {
   try {
     const { courseId } = req.body;
-    const studentId = req.user.id;
+    const studentId = req.user?.id || req.user?._id;
 
     const course = await CourseModel.findById(courseId);
     if (!course) {
@@ -72,7 +72,7 @@ export const enrollInCourse = async (req, res) => {
 // Get student's enrollments
 export const getMyEnrollments = async (req, res) => {
   try {
-    const studentId = req.user.id;
+    const studentId = req.user?.id || req.user?._id;
     const { status, page = 1, limit = 10 } = req.query;
 
     const filter = { studentId };
@@ -116,7 +116,7 @@ export const getMyEnrollments = async (req, res) => {
 export const getEnrollmentDetails = async (req, res) => {
   try {
     const { enrollmentId } = req.params;
-    const studentId = req.user.id;
+    const studentId = req.user?.id || req.user?._id;
 
     const enrollment = await CourseEnrollment.findOne({
       _id: enrollmentId,
@@ -151,7 +151,7 @@ export const updateEnrollmentProgress = async (req, res) => {
   try {
     const { enrollmentId } = req.params;
     const { lessonId, progress } = req.body;
-    const studentId = req.user.id;
+    const studentId = req.user?.id || req.user?._id;
 
     const enrollment = await CourseEnrollment.findOne({
       _id: enrollmentId,
@@ -215,7 +215,7 @@ export const updateEnrollmentProgress = async (req, res) => {
 export const dropCourse = async (req, res) => {
   try {
     const { enrollmentId } = req.params;
-    const studentId = req.user.id;
+    const studentId = req.user?.id || req.user?._id;
 
     const enrollment = await CourseEnrollment.findOne({
       _id: enrollmentId,
@@ -254,7 +254,7 @@ export const dropCourse = async (req, res) => {
 export const checkEnrollmentStatus = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const studentId = req.user.id;
+    const studentId = req.user?.id || req.user?._id;
 
     const enrollment = await CourseEnrollment.findOne({
       studentId,
