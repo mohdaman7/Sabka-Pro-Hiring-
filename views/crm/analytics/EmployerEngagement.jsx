@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Briefcase, FileText, Users, TrendingUp, List, BarChart3, Building2, Award } from "lucide-react";
+import { Briefcase, FileText, Users, TrendingUp, List, BarChart3, Building2, Award, CheckCircle, Send, ExternalLink } from "lucide-react";
 import { getEmployerEngagement, getTopEmployersByJobPosts, getTopEmployersByApplications, formatPercentage, formatNumber } from "@/services/analyticsService";
 import AllEmployersListing from "./AllEmployersListing";
 
@@ -65,29 +65,26 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
       {/* View Toggle */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-white">Employer Engagement</h2>
-        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => setViewMode("summary")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
               viewMode === "summary"
-                ? "bg-purple-600 text-white shadow-lg"
-                : "text-white/60 hover:text-white hover:bg-white/10"
+                ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/50"
+                : "text-white/60 hover:text-white bg-white/5 border border-white/10 hover:border-white/20"
             }`}
           >
             <BarChart3 className="w-4 h-4" />
             Summary
           </button>
-          <button
-            onClick={() => setViewMode("all")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-              viewMode === "all"
-                ? "bg-purple-600 text-white shadow-lg"
-                : "text-white/60 hover:text-white hover:bg-white/10"
-            }`}
+          <a
+            href="/crm/employers"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-white/60 hover:text-white bg-white/5 border border-white/10 hover:border-white/20 transition-all hover:bg-white/10"
+            title="Go to Employers page"
           >
-            <List className="w-4 h-4" />
-            All Employers
-          </button>
+            <ExternalLink className="w-4 h-4" />
+            View All
+          </a>
         </div>
       </div>
 
@@ -114,62 +111,6 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
           );
         })}
       </div>
-
-      {/* Top Employers by Jobs */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-        <h3 className="text-lg font-bold text-white mb-4">Top Employers by Job Posts</h3>
-        {data.topEmployersByJobs && data.topEmployersByJobs.length > 0 ? (
-          <div className="space-y-3">
-            {data.topEmployersByJobs.map((employer, index) => (
-              <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
-                  style={{ background: "linear-gradient(135deg, rgba(244,114,182,0.85), rgba(236,72,153,0.7))" }}
-                >
-                  #{index + 1}
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-white">{employer.name}</p>
-                  <p className="text-sm text-white/70">{formatNumber(employer.jobPosts)} job posts</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8">
-            <p className="text-white/50 text-sm">No job posts data available</p>
-            <p className="text-white/30 text-xs mt-1">Add jobs to see employer rankings</p>
-          </div>
-        )}
-      </motion.div>
-
-      {/* Top Employers by Applications */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-        <h3 className="text-lg font-bold text-white mb-4">Top Employers by Applications</h3>
-        {data.topEmployersByApplications && data.topEmployersByApplications.length > 0 ? (
-          <div className="space-y-3">
-            {data.topEmployersByApplications.map((employer, index) => (
-              <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
-                  style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.85), rgba(168,85,247,0.65))" }}
-                >
-                  #{index + 1}
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-white">{employer.name}</p>
-                  <p className="text-sm text-white/70">{formatNumber(employer.applications)} applications • {formatNumber(employer.hired)} hired</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8">
-            <p className="text-white/50 text-sm">No applications data available</p>
-            <p className="text-white/30 text-xs mt-1">Applications will appear here once students apply</p>
-          </div>
-        )}
-      </motion.div>
 
       {/* Top Employers by Job Posts */}
       {!loadingExtra && topEmployersByJobs.length > 0 && (
@@ -265,25 +206,63 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
       )}
 
       {/* Job Stats */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-        <h3 className="text-lg font-bold text-white mb-4">Job Statistics</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
-            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.totalJobs)}</p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Total Jobs</p>
-          </div>
-          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
-            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.activeJobs)}</p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Active Jobs</p>
-          </div>
-          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
-            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.totalApplications)}</p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Applications</p>
-          </div>
-          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
-            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.totalHired)}</p>
-            <p className="text-sm text-white/70 mt-1 font-medium">Hired</p>
-          </div>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-8 border border-white/20 shadow-2xl backdrop-blur-md">
+        <div className="flex items-center justify-between mb-8">
+          <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30">
+              <Briefcase className="w-6 h-6 text-blue-400" />
+            </div>
+            Job Statistics
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Total Jobs */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
+            <div className="flex items-start justify-between mb-4">
+              <div className="p-3 rounded-lg bg-blue-500/20 border border-blue-500/30">
+                <Briefcase className="w-5 h-5 text-blue-400" />
+              </div>
+              <span className="text-xs font-bold text-blue-300 bg-blue-500/20 px-2 py-1 rounded-full">Total</span>
+            </div>
+            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.totalJobs)}</p>
+            <p className="text-sm text-white/70 font-medium">Total Jobs</p>
+          </motion.div>
+
+          {/* Active Jobs */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
+            <div className="flex items-start justify-between mb-4">
+              <div className="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
+              </div>
+              <span className="text-xs font-bold text-emerald-300 bg-emerald-500/20 px-2 py-1 rounded-full">Active</span>
+            </div>
+            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.activeJobs)}</p>
+            <p className="text-sm text-white/70 font-medium">Active Jobs</p>
+          </motion.div>
+
+          {/* Applications */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
+            <div className="flex items-start justify-between mb-4">
+              <div className="p-3 rounded-lg bg-purple-500/20 border border-purple-500/30">
+                <Send className="w-5 h-5 text-purple-400" />
+              </div>
+              <span className="text-xs font-bold text-purple-300 bg-purple-500/20 px-2 py-1 rounded-full">Received</span>
+            </div>
+            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.totalApplications)}</p>
+            <p className="text-sm text-white/70 font-medium">Applications</p>
+          </motion.div>
+
+          {/* Hired */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-rose-500/20 to-rose-600/10 border border-rose-500/30 hover:border-rose-500/50 hover:shadow-lg hover:shadow-rose-500/20 transition-all duration-300">
+            <div className="flex items-start justify-between mb-4">
+              <div className="p-3 rounded-lg bg-rose-500/20 border border-rose-500/30">
+                <Users className="w-5 h-5 text-rose-400" />
+              </div>
+              <span className="text-xs font-bold text-rose-300 bg-rose-500/20 px-2 py-1 rounded-full">Success</span>
+            </div>
+            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.totalHired)}</p>
+            <p className="text-sm text-white/70 font-medium">Hired</p>
+          </motion.div>
         </div>
       </motion.div>
         </>

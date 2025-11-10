@@ -637,9 +637,9 @@ export const getCourseAnalytics = async (req, res) => {
       if (endDate) dateFilter.createdAt.$lte = new Date(endDate);
     }
 
-    // Course statistics
-    const totalCourses = await Course.countDocuments(dateFilter);
-    const activeCourses = await Course.countDocuments({ ...dateFilter, status: "active" });
+    // Course statistics - count from courses collection
+    const totalCourses = await Course.countDocuments();
+    const activeCourses = await Course.countDocuments({ status: "active" });
 
     // Enrollment statistics
     const enrollmentStats = await CourseProgress.aggregate([

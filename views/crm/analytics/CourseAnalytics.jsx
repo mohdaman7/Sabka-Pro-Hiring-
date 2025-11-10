@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap, List, BarChart3 } from "lucide-react";
+import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap, List, BarChart3, ExternalLink } from "lucide-react";
 import { getCourseAnalytics, getTopCoursesByPerformance, formatPercentage, formatNumber, formatCurrency } from "@/services/analyticsService";
 import AllCoursesListing from "./AllCoursesListing";
 
@@ -58,29 +58,26 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
       {/* View Toggle */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-white">Course Analytics</h2>
-        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => setViewMode("summary")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
               viewMode === "summary"
-                ? "bg-purple-600 text-white shadow-lg"
-                : "text-white/60 hover:text-white hover:bg-white/10"
+                ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/50"
+                : "text-white/60 hover:text-white bg-white/5 border border-white/10 hover:border-white/20"
             }`}
           >
             <BarChart3 className="w-4 h-4" />
             Summary
           </button>
-          <button
-            onClick={() => setViewMode("all")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-              viewMode === "all"
-                ? "bg-purple-600 text-white shadow-lg"
-                : "text-white/60 hover:text-white hover:bg-white/10"
-            }`}
+          <a
+            href="/crm/training-courses"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-white/60 hover:text-white bg-white/5 border border-white/10 hover:border-white/20 transition-all hover:bg-white/10"
+            title="Go to Training Courses page"
           >
-            <List className="w-4 h-4" />
-            All Courses
-          </button>
+            <ExternalLink className="w-4 h-4" />
+            View All
+          </a>
         </div>
       </div>
 
