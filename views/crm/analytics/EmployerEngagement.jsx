@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Briefcase, FileText, Users, TrendingUp } from "lucide-react";
+import { Briefcase, FileText, Users, TrendingUp, List, BarChart3 } from "lucide-react";
 import { getEmployerEngagement, formatPercentage, formatNumber } from "@/services/analyticsService";
+import AllEmployersListing from "./AllEmployersListing";
 
 export default function EmployerEngagement({ filters, isRefreshing }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
+  const [viewMode, setViewMode] = useState("summary"); // "summary" or "all"
 
   useEffect(() => {
     fetchData();
@@ -36,7 +38,41 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
 
   return (
     <div className="space-y-6 text-white">
-      {/* Stats Cards */}
+      {/* View Toggle */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-white">Employer Engagement</h2>
+        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+          <button
+            onClick={() => setViewMode("summary")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              viewMode === "summary"
+                ? "bg-purple-600 text-white shadow-lg"
+                : "text-white/60 hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            Summary
+          </button>
+          <button
+            onClick={() => setViewMode("all")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              viewMode === "all"
+                ? "bg-purple-600 text-white shadow-lg"
+                : "text-white/60 hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <List className="w-4 h-4" />
+            All Employers
+          </button>
+        </div>
+      </div>
+
+      {/* Conditional Rendering */}
+      {viewMode === "all" ? (
+        <AllEmployersListing />
+      ) : (
+        <>
+          {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
@@ -133,6 +169,8 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
           </div>
         </div>
       </motion.div>
+        </>
+      )}
     </div>
   );
 }

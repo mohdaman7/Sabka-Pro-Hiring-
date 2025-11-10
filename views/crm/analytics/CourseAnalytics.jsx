@@ -2,14 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap } from "lucide-react";
+import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap, List, BarChart3 } from "lucide-react";
 import { getCourseAnalytics, getTopCoursesByPerformance, formatPercentage, formatNumber, formatCurrency } from "@/services/analyticsService";
+import AllCoursesListing from "./AllCoursesListing";
 
 export default function CourseAnalytics({ filters, isRefreshing }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [topCoursesByPerformance, setTopCoursesByPerformance] = useState([]);
   const [loadingExtra, setLoadingExtra] = useState(false);
+  const [viewMode, setViewMode] = useState("summary"); // "summary" or "all"
 
   useEffect(() => {
     fetchData();
@@ -53,7 +55,41 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
 
   return (
     <div className="space-y-6 text-white">
-      {/* Summary Cards */}
+      {/* View Toggle */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-white">Course Analytics</h2>
+        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+          <button
+            onClick={() => setViewMode("summary")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              viewMode === "summary"
+                ? "bg-purple-600 text-white shadow-lg"
+                : "text-white/60 hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            Summary
+          </button>
+          <button
+            onClick={() => setViewMode("all")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              viewMode === "all"
+                ? "bg-purple-600 text-white shadow-lg"
+                : "text-white/60 hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <List className="w-4 h-4" />
+            All Courses
+          </button>
+        </div>
+      </div>
+
+      {/* Conditional Rendering */}
+      {viewMode === "all" ? (
+        <AllCoursesListing />
+      ) : (
+        <>
+          {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
           <div
@@ -220,6 +256,8 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
             })}
           </div>
         </motion.div>
+      )}
+        </>
       )}
     </div>
   );

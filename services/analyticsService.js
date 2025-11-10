@@ -134,6 +134,40 @@ export const getTopCoursesByPerformance = async (params = {}) => {
   }
 };
 
+// ==================== GET ALL COURSES (USING EXISTING ENDPOINT) ====================
+export const getAllCourses = async (params = {}) => {
+  try {
+    // Use existing courses endpoint with pagination
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+    const response = await fetch(`${API_URL}/api/courses?${new URLSearchParams(params)}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching all courses:", error);
+    throw error;
+  }
+};
+
+// ==================== GET ALL EMPLOYERS (USING EXISTING ENDPOINT) ====================
+export const getAllEmployers = async (params = {}) => {
+  try {
+    // Use existing employer endpoint
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+    const response = await fetch(`${API_URL}/api/employer/public?${new URLSearchParams(params)}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching all employers:", error);
+    throw error;
+  }
+};
+
 // ==================== EXPORT REPORTS ====================
 export const exportReport = async (reportType, format = "json", params = {}) => {
   try {
@@ -284,6 +318,8 @@ export default {
   getTopEmployersByJobPosts,
   getTopEmployersByApplications,
   getTopCoursesByPerformance,
+  getAllCourses,
+  getAllEmployers,
   exportReport,
   formatCurrency,
   formatPercentage,
