@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Users, Award, Briefcase, Clock, TrendingUp, Building2 } from "lucide-react";
-import { getPlacementAnalytics, formatPercentage, formatNumber } from "@/services/analyticsService";
+import { getPlacementAnalytics, getTopEmployersByJobPosts, getTopEmployersByApplications, formatPercentage, formatNumber } from "@/services/analyticsService";
 
 export default function PlacementAnalytics({ filters, isRefreshing }) {
   const [loading, setLoading] = useState(true);
@@ -24,9 +24,14 @@ export default function PlacementAnalytics({ filters, isRefreshing }) {
       
       // Fetch additional data
       setLoadingExtra(true);
+      const params = {};
+      if (filters?.startDate) params.startDate = filters.startDate;
+      if (filters?.endDate) params.endDate = filters.endDate;
+      params.limit = 5;
+      
       const [jobsRes, appsRes] = await Promise.all([
-        fetch(`/api/analytics/employers/top-by-jobs?limit=5${filters?.startDate ? `&startDate=${filters.startDate}` : ''}${filters?.endDate ? `&endDate=${filters.endDate}` : ''}`).then(r => r.json()),
-        fetch(`/api/analytics/employers/top-by-applications?limit=5${filters?.startDate ? `&startDate=${filters.startDate}` : ''}${filters?.endDate ? `&endDate=${filters.endDate}` : ''}`).then(r => r.json()),
+        getTopEmployersByJobPosts(params),
+        getTopEmployersByApplications(params),
       ]);
       
       if (jobsRes.success) setTopEmployersByJobs(jobsRes.data.topEmployers);

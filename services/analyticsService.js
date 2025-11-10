@@ -101,6 +101,39 @@ export const getStaffPerformance = async (params = {}) => {
   }
 };
 
+// ==================== TOP EMPLOYERS BY JOB POSTS ====================
+export const getTopEmployersByJobPosts = async (params = {}) => {
+  try {
+    const response = await analyticsAPI.get("/employers/top-by-jobs", { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top employers by job posts:", error);
+    throw error;
+  }
+};
+
+// ==================== TOP EMPLOYERS BY APPLICATIONS ====================
+export const getTopEmployersByApplications = async (params = {}) => {
+  try {
+    const response = await analyticsAPI.get("/employers/top-by-applications", { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top employers by applications:", error);
+    throw error;
+  }
+};
+
+// ==================== TOP COURSES BY PERFORMANCE ====================
+export const getTopCoursesByPerformance = async (params = {}) => {
+  try {
+    const response = await analyticsAPI.get("/courses/top-performance", { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching top courses by performance:", error);
+    throw error;
+  }
+};
+
 // ==================== EXPORT REPORTS ====================
 export const exportReport = async (reportType, format = "json", params = {}) => {
   try {
@@ -248,6 +281,9 @@ export default {
   getEmployerEngagement,
   getCourseAnalytics,
   getStaffPerformance,
+  getTopEmployersByJobPosts,
+  getTopEmployersByApplications,
+  getTopCoursesByPerformance,
   exportReport,
   formatCurrency,
   formatPercentage,

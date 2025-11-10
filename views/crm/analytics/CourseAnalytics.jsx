@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap } from "lucide-react";
-import { getCourseAnalytics, formatPercentage, formatNumber, formatCurrency } from "@/services/analyticsService";
+import { getCourseAnalytics, getTopCoursesByPerformance, formatPercentage, formatNumber, formatCurrency } from "@/services/analyticsService";
 
 export default function CourseAnalytics({ filters, isRefreshing }) {
   const [loading, setLoading] = useState(true);
@@ -23,7 +23,12 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
       
       // Fetch top courses by performance
       setLoadingExtra(true);
-      const perfRes = await fetch(`/api/analytics/courses/top-performance?limit=5${filters?.startDate ? `&startDate=${filters.startDate}` : ''}${filters?.endDate ? `&endDate=${filters.endDate}` : ''}`).then(r => r.json());
+      const params = {};
+      if (filters?.startDate) params.startDate = filters.startDate;
+      if (filters?.endDate) params.endDate = filters.endDate;
+      params.limit = 5;
+      
+      const perfRes = await getTopCoursesByPerformance(params);
       if (perfRes.success) setTopCoursesByPerformance(perfRes.data.topCourses);
     } catch (error) {
       console.error("Error:", error);
