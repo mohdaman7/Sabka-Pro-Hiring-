@@ -35,33 +35,41 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-white">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <motion.div key={stat.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-              <div className="w-12 h-12 rounded-xl bg-indigo-500/30 flex items-center justify-center mb-4 border-2 border-indigo-500/40">
-                <Icon className="w-6 h-6 text-indigo-300" />
+            <motion.div key={stat.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-white/20 shadow-inner"
+                style={{ background: "linear-gradient(135deg, rgba(128,55,145,0.85), rgba(184,123,209,0.65))" }}
+              >
+                <Icon className="w-6 h-6 text-white" />
               </div>
-              <p className="text-sm text-indigo-300/80 mb-2">{stat.title}</p>
-              <p className="text-3xl font-bold text-indigo-100">{stat.value}</p>
+              <p className="text-sm text-white/70 mb-2">{stat.title}</p>
+              <p className="text-3xl font-bold text-white">{stat.value}</p>
             </motion.div>
           );
         })}
       </div>
 
       {/* Top Employers by Jobs */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-        <h3 className="text-lg font-bold text-indigo-100 mb-4">Top Employers by Job Posts</h3>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-4">Top Employers by Job Posts</h3>
         <div className="space-y-3">
           {data.topEmployersByJobs.map((employer, index) => (
-            <div key={employer._id} className="flex items-center gap-4 p-4 bg-indigo-500/10 border-2 border-indigo-500/20 rounded-xl">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 flex items-center justify-center text-white font-bold shadow-lg">#{index + 1}</div>
+            <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
+                style={{ background: "linear-gradient(135deg, rgba(244,114,182,0.85), rgba(236,72,153,0.7))" }}
+              >
+                #{index + 1}
+              </div>
               <div className="flex-1">
-                <p className="font-semibold text-indigo-100">{employer.name}</p>
-                <p className="text-sm text-indigo-300/70">{formatNumber(employer.jobPosts)} job posts</p>
+                <p className="font-semibold text-white">{employer.name}</p>
+                <p className="text-sm text-white/70">{formatNumber(employer.jobPosts)} job posts</p>
               </div>
             </div>
           ))}
@@ -69,15 +77,20 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
       </motion.div>
 
       {/* Top Employers by Applications */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-        <h3 className="text-lg font-bold text-indigo-100 mb-4">Top Employers by Applications</h3>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-4">Top Employers by Applications</h3>
         <div className="space-y-3">
           {data.topEmployersByApplications.map((employer, index) => (
-            <div key={employer._id} className="flex items-center gap-4 p-4 bg-indigo-500/10 border-2 border-indigo-500/20 rounded-xl">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-lg">#{index + 1}</div>
+            <div key={employer._id} className="flex items-center gap-4 p-4 bg-white/6 border border-white/12 rounded-xl">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
+                style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.85), rgba(168,85,247,0.65))" }}
+              >
+                #{index + 1}
+              </div>
               <div className="flex-1">
-                <p className="font-semibold text-indigo-100">{employer.name}</p>
-                <p className="text-sm text-indigo-300/70">{formatNumber(employer.applications)} applications • {formatNumber(employer.hired)} hired</p>
+                <p className="font-semibold text-white">{employer.name}</p>
+                <p className="text-sm text-white/70">{formatNumber(employer.applications)} applications • {formatNumber(employer.hired)} hired</p>
               </div>
             </div>
           ))}
@@ -85,24 +98,24 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
       </motion.div>
 
       {/* Job Stats */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-        <h3 className="text-lg font-bold text-indigo-100 mb-4">Job Statistics</h3>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
+        <h3 className="text-lg font-bold text-white mb-4">Job Statistics</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-blue-500/20 border-2 border-blue-500/30 rounded-xl">
-            <p className="text-2xl font-bold text-blue-300">{formatNumber(data.jobStats.totalJobs)}</p>
-            <p className="text-sm text-blue-300/70 mt-1 font-medium">Total Jobs</p>
+          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
+            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.totalJobs)}</p>
+            <p className="text-sm text-white/70 mt-1 font-medium">Total Jobs</p>
           </div>
-          <div className="text-center p-4 bg-emerald-500/20 border-2 border-emerald-500/30 rounded-xl">
-            <p className="text-2xl font-bold text-emerald-300">{formatNumber(data.jobStats.activeJobs)}</p>
-            <p className="text-sm text-emerald-300/70 mt-1 font-medium">Active Jobs</p>
+          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
+            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.activeJobs)}</p>
+            <p className="text-sm text-white/70 mt-1 font-medium">Active Jobs</p>
           </div>
-          <div className="text-center p-4 bg-purple-500/20 border-2 border-purple-500/30 rounded-xl">
-            <p className="text-2xl font-bold text-purple-300">{formatNumber(data.jobStats.totalApplications)}</p>
-            <p className="text-sm text-purple-300/70 mt-1 font-medium">Applications</p>
+          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
+            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.totalApplications)}</p>
+            <p className="text-sm text-white/70 mt-1 font-medium">Applications</p>
           </div>
-          <div className="text-center p-4 bg-orange-500/20 border-2 border-orange-500/30 rounded-xl">
-            <p className="text-2xl font-bold text-orange-300">{formatNumber(data.jobStats.totalHired)}</p>
-            <p className="text-sm text-orange-300/70 mt-1 font-medium">Hired</p>
+          <div className="text-center p-4 rounded-xl border border-white/12 bg-white/6">
+            <p className="text-2xl font-bold text-white">{formatNumber(data.jobStats.totalHired)}</p>
+            <p className="text-sm text-white/70 mt-1 font-medium">Hired</p>
           </div>
         </div>
       </motion.div>
