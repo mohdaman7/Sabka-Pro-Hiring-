@@ -142,37 +142,69 @@ export default function AnalyticsDashboard() {
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900 text-white p-4 sm:p-6 md:p-8 lg:p-10">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-6"
-      >
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-2xl border border-white/15"
-              style={{
-                background: `linear-gradient(135deg, ${activeTabData.color.split(" ")[1]}, ${activeTabData.color.split(" ")[3]})`,
-              }}
-            >
-              <activeTabData.icon className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.4rem] text-white/60">
-                CRM Intelligence Suite
-              </p>
-              <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                Analytics Dashboard
-              </h1>
-              <p className="text-sm text-white/65 mt-1">
-                {activeTabData.description}
-              </p>
-            </div>
-          </div>
+    <div className="relative min-h-screen overflow-hidden text-white">
+      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div
+          className="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl"
+          style={{
+            background: "rgba(128,55,145,0.12)",
+            animation: "pulse 8s ease-in-out infinite",
+          }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl"
+          style={{
+            background: "rgba(184,123,209,0.08)",
+            animation: "float 15s ease-in-out infinite",
+          }}
+        />
+        <div
+          className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full blur-3xl"
+          style={{
+            background: "rgba(240,194,238,0.05)",
+            animation: "float 12s ease-in-out infinite reverse",
+          }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.05),_transparent_55%)]" />
+        <div
+          className="absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(184,123,209,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(184,123,209,0.5) 1px, transparent 1px)`,
+          }}
+        />
+      </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-sm">
+      <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-2xl border border-white/15"
+                style={{
+                  background: `linear-gradient(135deg, ${activeTabData.color.split(" ")[1]}, ${activeTabData.color.split(" ")[3]})`,
+                }}
+              >
+                <activeTabData.icon className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.4rem] text-white/60">
+                  CRM Intelligence Suite
+                </p>
+                <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                  Analytics Dashboard
+                </h1>
+                <p className="text-sm text-white/65 mt-1">
+                  {activeTabData.description}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 text-sm">
             <button
               onClick={handleRefresh}
               disabled={isRefreshing}
@@ -351,7 +383,7 @@ export default function AnalyticsDashboard() {
         </motion.div>
       </AnimatePresence>
 
-      <style jsx>{`
+        <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
@@ -359,7 +391,8 @@ export default function AnalyticsDashboard() {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
-      `}</style>
+        `}</style>
+      </div>
     </div>
   );
 }
