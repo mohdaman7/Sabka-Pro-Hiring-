@@ -1,7 +1,7 @@
 "use client"
 
-import StudentCourses from "@/views/student/StudentCourses"
+import StudentCoursesEnhanced from "@/views/student/StudentCoursesEnhanced"
 
 export default function StudentCoursesPage() {
-  return <StudentCourses />
+  return <StudentCoursesEnhanced />
 }

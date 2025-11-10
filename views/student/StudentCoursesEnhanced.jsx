@@ -19,9 +19,11 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { enrollInCourse, getMyEnrollments, checkEnrollmentStatus } from "@/services/enrollmentService";
+import courseService from "@/services/courseService";
 import customToast from "@/utils/customToast";
 
-export default function StudentCoursesEnhanced({ courses = [] }) {
+export default function StudentCoursesEnhanced() {
+  const [courses, setCourses] = useState([]);
   const [viewMode, setViewMode] = useState("all"); // "all" or "enrolled"
   const [layoutMode, setLayoutMode] = useState("grid"); // "grid" or "list"
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,6 +32,11 @@ export default function StudentCoursesEnhanced({ courses = [] }) {
   const [enrollmentStatus, setEnrollmentStatus] = useState({});
   const [loading, setLoading] = useState(false);
   const [enrollingCourseId, setEnrollingCourseId] = useState(null);
+
+  // Fetch courses on mount
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
   // Fetch enrollments
   useEffect(() => {
@@ -40,8 +47,23 @@ export default function StudentCoursesEnhanced({ courses = [] }) {
 
   // Check enrollment status for all courses
   useEffect(() => {
-    checkAllEnrollmentStatus();
+    if (courses.length > 0) {
+      checkAllEnrollmentStatus();
+    }
   }, [courses]);
+
+  const fetchCourses = async () => {
+    try {
+      setLoading(true);
+      const data = await courseService.publicList();
+      setCourses(data);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      customToast.error("Failed to load courses");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchEnrollments = async () => {
     try {

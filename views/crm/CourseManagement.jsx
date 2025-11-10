@@ -12,12 +12,16 @@ import {
   Users,
   TrendingUp,
   Star,
+  BarChart3,
+  Trophy,
 } from "lucide-react";
 import courseService from "@/services/courseService";
 import CreateParentCourseModal from "@/components/ui/CreateParentCourseModal";
 import CreateModuleModal from "@/components/ui/CreateModuleModal";
 import CourseDetailView from "@/components/ui/CourseDetailView";
 import CourseAccessManager from "@/components/ui/CourseAccessManager";
+import CourseEnrollmentStats from "@/views/crm/training/CourseEnrollmentStats";
+import TopEnrolledCourses from "@/views/crm/training/TopEnrolledCourses";
 
 export default function CourseManagement() {
   const [activeTab, setActiveTab] = useState("courses");
@@ -29,6 +33,8 @@ export default function CourseManagement() {
   const [showDetailView, setShowDetailView] = useState(false);
   const [showAccessManager, setShowAccessManager] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [showEnrollmentStats, setShowEnrollmentStats] = useState(false);
+  const [showTopEnrolled, setShowTopEnrolled] = useState(false);
   const [adminCourses, setAdminCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -307,34 +313,47 @@ export default function CourseManagement() {
       </div>
 
       {/* Premium Tabs */}
-      <div className="flex gap-3">
-        {[
-          { id: "courses", label: "Courses", icon: BookOpen },
-          { id: "modules", label: "Modules", icon: Video },
-        ].map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`group relative px-8 py-4 rounded-2xl font-bold whitespace-nowrap transition-all duration-300 flex items-center gap-3 overflow-hidden ${
-                isActive
-                  ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl shadow-purple-500/40 scale-105"
-                  : "bg-white/6 text-white/80 hover:bg-white/12 hover:text-white shadow-lg hover:shadow-xl hover:scale-105 border border-white/10"
-              }`}
-            >
-              <div
-                className={`p-2 rounded-xl ${
-                  isActive ? "bg-white/20" : "bg-white/10"
-                } transition-all duration-300 group-hover:scale-110 group-hover:rotate-12`}
+      <div className="flex flex-wrap gap-3 items-center justify-between">
+        <div className="flex gap-3">
+          {[
+            { id: "courses", label: "Courses", icon: BookOpen },
+            { id: "modules", label: "Modules", icon: Video },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`group relative px-8 py-4 rounded-2xl font-bold whitespace-nowrap transition-all duration-300 flex items-center gap-3 overflow-hidden ${
+                  isActive
+                    ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl shadow-purple-500/40 scale-105"
+                    : "bg-white/6 text-white/80 hover:bg-white/12 hover:text-white shadow-lg hover:shadow-xl hover:scale-105 border border-white/10"
+                }`}
               >
-                <Icon className="w-5 h-5" strokeWidth={2.5} />
-              </div>
-              <span className="relative">{tab.label}</span>
-            </button>
-          );
-        })}
+                <div
+                  className={`p-2 rounded-xl ${
+                    isActive ? "bg-white/20" : "bg-white/10"
+                  } transition-all duration-300 group-hover:scale-110 group-hover:rotate-12`}
+                >
+                  <Icon className="w-5 h-5" strokeWidth={2.5} />
+                </div>
+                <span className="relative">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+        
+        {/* Enrollment Analytics Button */}
+        <button
+          onClick={() => setShowTopEnrolled(true)}
+          className="group relative px-6 py-4 rounded-2xl font-bold whitespace-nowrap transition-all duration-300 flex items-center gap-3 overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-2xl shadow-emerald-500/40 hover:scale-105"
+        >
+          <div className="p-2 rounded-xl bg-white/20 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+            <Trophy className="w-5 h-5" strokeWidth={2.5} />
+          </div>
+          <span className="relative">Top Enrolled Courses</span>
+        </button>
       </div>
 
       {/* Search and Filters */}
@@ -491,15 +510,29 @@ export default function CourseManagement() {
                   )}
                 </div>
 
-                {course.enrolledCount > 0 && (
+                {/* Enrollment Stats */}
+                <div className="flex items-center justify-between">
                   <div className="text-sm text-white/70 font-semibold flex items-center gap-2">
                     <Users
                       className="w-4 h-4 text-purple-400"
                       strokeWidth={2.5}
                     />
-                    {course.enrolledCount} students
+                    {course.enrolledCount || 0} students enrolled
                   </div>
-                )}
+                  {course.enrolledCount > 0 && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedCourse(course);
+                        setShowEnrollmentStats(true);
+                      }}
+                      className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-lg text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1.5"
+                    >
+                      <BarChart3 className="w-3.5 h-3.5" strokeWidth={2.5} />
+                      View Stats
+                    </button>
+                  )}
+                </div>
 
                 {/* Action Buttons */}
                 <div className="flex gap-2 pt-2">
@@ -824,6 +857,29 @@ export default function CourseManagement() {
       )}
       {showAccessManager && (
         <CourseAccessManager onClose={() => setShowAccessManager(false)} />
+      )}
+      {showEnrollmentStats && selectedCourse && (
+        <CourseEnrollmentStats
+          courseId={selectedCourse._id}
+          courseName={selectedCourse.title}
+          onClose={() => {
+            setShowEnrollmentStats(false);
+            setSelectedCourse(null);
+          }}
+        />
+      )}
+      {showTopEnrolled && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="max-w-7xl w-full my-8">
+            <TopEnrolledCourses limit={10} />
+            <button
+              onClick={() => setShowTopEnrolled(false)}
+              className="mt-4 mx-auto block px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold transition-all"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
