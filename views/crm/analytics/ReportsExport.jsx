@@ -46,22 +46,22 @@ export default function ReportsExport({ filters }) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-xl">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl border-2 border-indigo-500/30">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <Download className="w-8 h-8" />
+            <Download className="w-8 h-8 text-white" />
           </div>
           <div>
             <h2 className="text-3xl font-bold">Export Reports</h2>
-            <p className="text-purple-100 mt-1">Download analytics data in your preferred format</p>
+            <p className="text-indigo-100 mt-1">Download your analytics data in your preferred format</p>
           </div>
         </div>
       </motion.div>
 
       {/* Report Selection */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <FileText className="w-5 h-5 text-purple-600" />
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+        <h3 className="text-lg font-bold text-indigo-100 mb-4 flex items-center gap-2">
+          <FileText className="w-5 h-5 text-purple-400" />
           Select Report Type
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -101,9 +101,9 @@ export default function ReportsExport({ filters }) {
       </motion.div>
 
       {/* Format Selection */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <FileSpreadsheet className="w-5 h-5 text-purple-600" />
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+        <h3 className="text-lg font-bold text-indigo-100 mb-4 flex items-center gap-2">
+          <FileSpreadsheet className="w-5 h-5 text-purple-400" />
           Select Format
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

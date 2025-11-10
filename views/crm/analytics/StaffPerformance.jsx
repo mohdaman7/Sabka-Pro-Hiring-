@@ -37,41 +37,41 @@ export default function StaffPerformance({ filters, isRefreshing }) {
 
   return (
     <div className="space-y-6">
-      {/* Summary Cards */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-          <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
-            <Target className="w-6 h-6 text-indigo-600" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+          <div className="w-12 h-12 rounded-xl bg-indigo-500/30 flex items-center justify-center mb-4 border-2 border-indigo-500/40">
+            <Users className="w-6 h-6 text-indigo-300" />
           </div>
-          <p className="text-sm text-gray-600">Total Leads Handled</p>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(totals.totalLeads)}</p>
+          <p className="text-sm text-indigo-300/80">Total Staff</p>
+          <p className="text-3xl font-bold text-indigo-100">{formatNumber(data.summary.totalStaff)}</p>
         </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-          <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mb-4">
-            <TrendingUp className="w-6 h-6 text-green-600" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/30 flex items-center justify-center mb-4 border-2 border-emerald-500/40">
+            <TrendingUp className="w-6 h-6 text-emerald-300" />
           </div>
-          <p className="text-sm text-gray-600">Total Conversions</p>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(totals.converted)}</p>
+          <p className="text-sm text-indigo-300/80">Avg Conversion Rate</p>
+          <p className="text-3xl font-bold text-indigo-100">{formatPercentage(data.summary.avgConversionRate)}</p>
         </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
-            <DollarSign className="w-6 h-6 text-emerald-600" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+          <div className="w-12 h-12 rounded-xl bg-purple-500/30 flex items-center justify-center mb-4 border-2 border-purple-500/40">
+            <DollarSign className="w-6 h-6 text-purple-300" />
           </div>
-          <p className="text-sm text-gray-600">Total Revenue</p>
-          <p className="text-3xl font-bold text-gray-900">{formatCurrency(totals.revenue)}</p>
+          <p className="text-sm text-indigo-300/80">Total Revenue</p>
+          <p className="text-3xl font-bold text-indigo-100">{formatCurrency(data.summary.totalRevenue)}</p>
         </motion.div>
       </div>
 
       {/* Top Performers */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Award className="w-5 h-5 text-purple-600" />
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+        <h3 className="text-lg font-bold text-indigo-100 mb-4 flex items-center gap-2">
+          <Award className="w-5 h-5 text-purple-400" />
           Top Performers
         </h3>
         <div className="space-y-3">
           {data.staffPerformance.slice(0, 5).map((staff, index) => (
             <div key={staff.staffId} className="relative group">
-              <div className="flex items-center gap-4 p-5 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-xl border-2 border-transparent hover:border-purple-200 transition-all duration-300">
+              <div className="flex items-center gap-4 p-5 bg-indigo-500/10 border-2 border-indigo-500/20 rounded-xl hover:border-indigo-500/50 transition-all duration-300">
                 {/* Rank Badge */}
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
                   index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
@@ -85,20 +85,20 @@ export default function StaffPerformance({ filters, isRefreshing }) {
                 {/* Staff Info */}
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Staff ID</p>
-                    <p className="font-bold text-gray-900">Staff {staff.staffId?.toString().slice(-4) || 'N/A'}</p>
+                    <p className="text-xs text-indigo-300/60 mb-1">Staff ID</p>
+                    <p className="font-bold text-indigo-100">Staff {staff.staffId?.toString().slice(-4) || 'N/A'}</p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-indigo-100">{staff.name}</p>
+                    <p className="text-sm text-indigo-300/70">{formatNumber(staff.totalLeads)} leads</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-purple-400">{formatPercentage(staff.conversionRate)}</p>
+                    <p className="text-xs text-indigo-300/60">{formatNumber(staff.converted)} converted</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Leads Handled</p>
-                    <p className="font-bold text-gray-900">{formatNumber(staff.totalLeads)}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Conversion Rate</p>
-                    <p className="font-bold text-purple-600">{formatPercentage(staff.conversionRate)}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Revenue Generated</p>
-                    <p className="font-bold text-emerald-600">{formatCurrency(staff.revenue)}</p>
+                    <p className="text-xs text-indigo-300/60 mb-1">Revenue Generated</p>
+                    <p className="font-bold text-emerald-400">{formatCurrency(staff.revenue)}</p>
                   </div>
                 </div>
 

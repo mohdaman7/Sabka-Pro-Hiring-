@@ -212,8 +212,8 @@ export default function OverviewDashboard({ filters, isRefreshing }) {
 
   return (
     <div className="space-y-6">
-      {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 bg-slate-900/30 p-6 rounded-xl border-2 border-indigo-500/20">
         {kpiCards.map((card, index) => {
           const Icon = card.icon;
           return (
@@ -224,57 +224,42 @@ export default function OverviewDashboard({ filters, isRefreshing }) {
               transition={{ delay: index * 0.05 }}
               className="relative group"
             >
-              <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl"
-                style={{
-                  background: `linear-gradient(135deg, ${card.color.split(" ")[1]}, ${card.color.split(" ")[3]})`,
-                }}
-              />
-              <div className="relative bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100 hover:border-gray-200 transition-all duration-300">
-                <div className="flex items-start justify-between mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center ${card.bgColor}`}
-                  >
-                    <Icon className="w-6 h-6"
-                      style={{
-                        color: card.color.split(" ")[1].replace("from-", "").replace("-500", ""),
-                      }}
-                    />
-                  </div>
-                  <div
-                    className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold ${
-                      card.trend === "up"
-                        ? "bg-green-50 text-green-600"
-                        : "bg-red-50 text-red-600"
-                    }`}
-                  >
-                    {card.trend === "up" ? (
-                      <TrendingUp className="w-3 h-3" />
-                    ) : (
-                      <TrendingDown className="w-3 h-3" />
-                    )}
-                    {card.change}
-                  </div>
+              <div className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 hover:border-indigo-500/50 hover:shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm">
+                <div className="w-12 h-12 rounded-xl bg-indigo-500/30 flex items-center justify-center mb-4 border-2 border-indigo-500/40">
+                  <Icon className="w-6 h-6 text-indigo-300" />
                 </div>
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
+                <div
+                  className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold mb-2 w-fit ${
+                    card.trend === "up"
+                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                      : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
+                  }`}
+                >
+                  {card.trend === "up" ? (
+                    <TrendingUp className="w-3 h-3" />
+                  ) : (
+                    <TrendingDown className="w-3 h-3" />
+                  )}
+                  {card.change}
+                </div>
+                <h3 className="text-sm font-medium text-indigo-300/80 mb-1">
                   {card.title}
                 </h3>
-                <p className="text-3xl font-bold text-gray-900">{card.value}</p>
+                <p className="text-3xl font-bold text-indigo-100">{card.value}</p>
               </div>
             </motion.div>
           );
         })}
       </div>
 
-      {/* Charts Row */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Leads Trend */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100"
+          className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm"
         >
-          <h3 className="text-lg font-bold text-gray-900 mb-4">
+          <h3 className="text-lg font-bold text-indigo-100 mb-4">
             Leads Trend (Last 6 Months)
           </h3>
           <div className="h-64">
@@ -286,10 +271,9 @@ export default function OverviewDashboard({ filters, isRefreshing }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100"
+          className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm"
         >
-          <h3 className="text-lg font-bold text-gray-900 mb-4">
+          <h3 className="text-lg font-bold text-indigo-100 mb-4">
             Revenue Trend (Last 6 Months)
           </h3>
           <div className="h-64">
@@ -302,34 +286,33 @@ export default function OverviewDashboard({ filters, isRefreshing }) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100"
+        className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm"
       >
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Stats</h3>
+        <h3 className="text-lg font-bold text-indigo-100 mb-4">Quick Stats</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-blue-50 rounded-xl">
-            <p className="text-2xl font-bold text-blue-600">
+          <div className="text-center p-4 bg-blue-500/20 border-2 border-blue-500/30 rounded-xl">
+            <p className="text-2xl font-bold text-blue-300">
               {formatNumber(data.kpis.totalStudents)}
             </p>
-            <p className="text-sm text-gray-600 mt-1">Total Students</p>
+            <p className="text-sm text-blue-300/70 mt-1 font-medium">Total Students</p>
           </div>
-          <div className="text-center p-4 bg-green-50 rounded-xl">
-            <p className="text-2xl font-bold text-green-600">
+          <div className="text-center p-4 bg-emerald-500/20 border-2 border-emerald-500/30 rounded-xl">
+            <p className="text-2xl font-bold text-emerald-300">
               {formatNumber(data.kpis.placedStudents)}
             </p>
-            <p className="text-sm text-gray-600 mt-1">Placed Students</p>
+            <p className="text-sm text-emerald-300/70 mt-1 font-medium">Placed Students</p>
           </div>
-          <div className="text-center p-4 bg-purple-50 rounded-xl">
-            <p className="text-2xl font-bold text-purple-600">
-              {formatNumber(data.kpis.totalApplications)}
+          <div className="text-center p-4 bg-purple-500/20 border-2 border-purple-500/30 rounded-xl">
+            <p className="text-2xl font-bold text-purple-300">
+              {formatPercentage(data.kpis.placementRate)}
             </p>
-            <p className="text-sm text-gray-600 mt-1">Applications</p>
+            <p className="text-sm text-purple-300/70 mt-1 font-medium">Placement Rate</p>
           </div>
-          <div className="text-center p-4 bg-orange-50 rounded-xl">
-            <p className="text-2xl font-bold text-orange-600">
-              {formatNumber(data.kpis.completedInterviews)}
+          <div className="text-center p-4 bg-orange-500/20 border-2 border-orange-500/30 rounded-xl">
+            <p className="text-2xl font-bold text-orange-300">
+              {formatNumber(data.kpis.activeJobs)}
             </p>
-            <p className="text-sm text-gray-600 mt-1">Completed Interviews</p>
+            <p className="text-sm text-orange-300/70 mt-1 font-medium">Active Jobs</p>
           </div>
         </div>
       </motion.div>

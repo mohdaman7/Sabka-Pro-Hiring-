@@ -62,49 +62,49 @@ export default function RevenueReports({ filters, isRefreshing }) {
       </div>
 
       {/* Revenue Trend */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Revenue Trend</h3>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+        <h3 className="text-lg font-bold text-indigo-100 mb-4">Revenue by Status</h3>
         <div className="space-y-4">
-          {data.revenueTrend.map((item) => (
-            <div key={item._id} className="flex items-center justify-between p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl">
+          {data.revenueByStatus.map((item) => (
+            <div key={item._id} className="flex items-center justify-between p-4 bg-indigo-500/10 border-2 border-indigo-500/20 rounded-xl">
               <div>
-                <p className="font-semibold text-gray-900">{item._id}</p>
-                <p className="text-sm text-gray-600">{formatNumber(item.transactions)} transactions</p>
+                <p className="font-semibold text-indigo-100">{item._id}</p>
+                <p className="text-sm text-indigo-300/70">{formatNumber(item.transactions)} transactions</p>
               </div>
-              <p className="text-xl font-bold text-emerald-600">{formatCurrency(item.revenue)}</p>
+              <p className="text-xl font-bold text-emerald-400">{formatCurrency(item.revenue)}</p>
             </div>
           ))}
         </div>
       </motion.div>
 
       {/* Revenue by Type */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Revenue by Type</h3>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+        <h3 className="text-lg font-bold text-indigo-100 mb-4">Revenue by Type</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {data.revenueByType.map((type) => (
-            <div key={type._id} className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-600 capitalize">{type._id || "Other"}</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(type.total)}</p>
-              <p className="text-xs text-gray-500 mt-1">{formatNumber(type.count)} transactions</p>
+            <div key={type._id} className="p-4 bg-indigo-500/10 border-2 border-indigo-500/20 rounded-xl">
+              <p className="text-sm text-indigo-300/70 capitalize">{type._id || "Other"}</p>
+              <p className="text-2xl font-bold text-indigo-100 mt-1">{formatCurrency(type.total)}</p>
+              <p className="text-xs text-indigo-300/60 mt-1">{formatNumber(type.count)} transactions</p>
             </div>
           ))}
         </div>
       </motion.div>
 
       {/* Top Sources */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Top Revenue Sources</h3>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
+        <h3 className="text-lg font-bold text-indigo-100 mb-4">Top Revenue Sources</h3>
         <div className="space-y-3">
           {data.topSources.map((source, index) => (
-            <div key={source._id} className="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+            <div key={source._id} className="flex items-center gap-4 p-4 bg-indigo-500/10 border-2 border-indigo-500/20 rounded-xl">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center text-white font-bold shadow-lg">
                 #{index + 1}
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-gray-900 capitalize">{source._id || "Direct"}</p>
-                <p className="text-sm text-gray-600">{formatNumber(source.count)} transactions</p>
+                <p className="font-semibold text-indigo-100">{source._id}</p>
+                <p className="text-sm text-indigo-300/70">{formatNumber(source.count)} transactions</p>
               </div>
-              <p className="text-lg font-bold text-purple-600">{formatCurrency(source.revenue)}</p>
+              <p className="text-lg font-bold text-emerald-400">{formatCurrency(source.total)}</p>
             </div>
           ))}
         </div>

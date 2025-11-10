@@ -106,6 +106,14 @@ export default function AnalyticsDashboard() {
     setTimeout(() => setIsRefreshing(false), 1000);
   };
 
+  const resetFilters = () => {
+    setFilters({
+      startDate: null,
+      endDate: null,
+      staffId: null,
+    });
+  };
+
   const renderActiveModule = () => {
     const commonProps = { filters, isRefreshing };
 
@@ -134,119 +142,135 @@ export default function AnalyticsDashboard() {
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50/30 p-4 sm:p-6 md:p-8 lg:p-10">
+    <div className="min-h-screen bg-slate-950 p-4 sm:p-6 md:p-8 lg:p-10">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-6"
       >
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
-                style={{
-                  background: `linear-gradient(135deg, ${activeTabData.color.split(" ")[1]}, ${activeTabData.color.split(" ")[3]})`,
-                }}
-              >
-                <activeTabData.icon className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-                  Analytics Dashboard
-                </h1>
-                <p className="text-sm text-gray-500 mt-1">
-                  {activeTabData.description}
-                </p>
-              </div>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-xl border border-indigo-400/40"
+              style={{
+                background: `linear-gradient(135deg, ${activeTabData.color.split(" ")[1]}, ${activeTabData.color.split(" ")[3]})`,
+              }}
+            >
+              <activeTabData.icon className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-widest text-indigo-300/70">
+                CRM Intelligence Suite
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-bold text-indigo-100">
+                Analytics Dashboard
+              </h1>
+              <p className="text-sm text-indigo-300/70 mt-1">
+                {activeTabData.description}
+              </p>
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="px-4 py-2 rounded-xl bg-white border-2 border-gray-200 hover:border-purple-300 text-gray-700 font-medium transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md"
-            >
-              <Filter className="w-4 h-4" />
-              <span className="hidden sm:inline">Filters</span>
-            </button>
-
+          <div className="flex flex-wrap items-center gap-3 text-sm">
             <button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              className="px-4 py-2 rounded-xl bg-white border-2 border-gray-200 hover:border-purple-300 text-gray-700 font-medium transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-indigo-500/40 bg-indigo-500/20 text-indigo-100 hover:bg-indigo-500/30 hover:border-indigo-400 transition disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <RefreshCw
-                className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
-              />
-              <span className="hidden sm:inline">Refresh</span>
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
+              {isRefreshing ? "Refreshing..." : "Refresh"}
             </button>
-
-            <button className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
+            <button
+              onClick={() => setShowFilters((prev) => !prev)}
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 transition-all duration-300 ${
+                showFilters
+                  ? "border-indigo-400 bg-indigo-500/40 text-indigo-100"
+                  : "border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/20"
+              }`}
+            >
+              <Filter className="w-4 h-4" />
+              {showFilters ? "Hide Filters" : "Show Filters"}
+            </button>
+            <button
+              onClick={() => setActiveTab("reports")}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/20 transition"
+            >
               <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Export</span>
+              Export Center
             </button>
           </div>
         </div>
-
-        {/* Filters Panel */}
-        <AnimatePresence>
-          {showFilters && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-4 p-4 bg-white rounded-xl border-2 border-gray-200 shadow-sm"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    value={filters.startDate || ""}
-                    onChange={(e) =>
-                      setFilters({ ...filters, startDate: e.target.value })
-                    }
-                    className="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    value={filters.endDate || ""}
-                    onChange={(e) =>
-                      setFilters({ ...filters, endDate: e.target.value })
-                    }
-                    className="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Staff Member
-                  </label>
-                  <select
-                    value={filters.staffId || ""}
-                    onChange={(e) =>
-                      setFilters({ ...filters, staffId: e.target.value })
-                    }
-                    className="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
-                  >
-                    <option value="">All Staff</option>
-                    {/* Add staff options dynamically */}
-                  </select>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.div>
+
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="mb-6 p-6 rounded-2xl border-2 border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm shadow-xl"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div>
+                <label className="block text-sm font-semibold text-indigo-200 mb-2">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  value={filters.startDate || ""}
+                  onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-100 placeholder-indigo-300/40 focus:outline-none focus:border-indigo-300"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-indigo-200 mb-2">
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  value={filters.endDate || ""}
+                  onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-100 placeholder-indigo-300/40 focus:outline-none focus:border-indigo-300"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-indigo-200 mb-2">
+                  Staff Member
+                </label>
+                <select
+                  value={filters.staffId || ""}
+                  onChange={(e) => setFilters({ ...filters, staffId: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-100 focus:outline-none focus:border-indigo-300"
+                >
+                  <option value="" className="text-gray-900">All Staff</option>
+                  {/* TODO: Populate with staff list */}
+                </select>
+              </div>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+              <p className="text-indigo-300/70">
+                Tip: Combine filters with tab selection to generate precise exports.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:border-indigo-400 hover:bg-indigo-500/20 transition"
+                >
+                  Clear Filters
+                </button>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-indigo-400 bg-indigo-500/40 text-indigo-100 hover:bg-indigo-500/50 transition"
+                >
+                  Apply & Hide
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Tabs Navigation */}
       <div className="mb-6 overflow-x-auto pb-2 scrollbar-hide">
@@ -264,8 +288,8 @@ export default function AnalyticsDashboard() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative px-4 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 min-w-fit ${
                   isActive
-                    ? "bg-white shadow-lg scale-105"
-                    : "bg-white/50 hover:bg-white hover:shadow-md"
+                    ? "bg-indigo-600/40 border-2 border-indigo-500/50 shadow-lg scale-105 text-indigo-100"
+                    : "bg-indigo-500/10 border-2 border-indigo-500/20 hover:border-indigo-500/40 text-indigo-200"
                 }`}
               >
                 {isActive && (
@@ -286,12 +310,12 @@ export default function AnalyticsDashboard() {
                   style={{
                     background: isActive
                       ? `linear-gradient(135deg, ${tab.color.split(" ")[1]}, ${tab.color.split(" ")[3]})`
-                      : "rgba(156, 163, 175, 0.1)",
+                      : "rgba(99, 102, 241, 0.1)",
                   }}
                 >
                   <Icon
                     className={`w-4 h-4 ${
-                      isActive ? "text-white" : "text-gray-500"
+                      isActive ? "text-white" : "text-indigo-300"
                     }`}
                   />
                 </div>
@@ -299,12 +323,12 @@ export default function AnalyticsDashboard() {
                 <div className="text-left">
                   <div
                     className={`text-sm ${
-                      isActive ? "text-gray-900" : "text-gray-600"
+                      isActive ? "text-indigo-100" : "text-indigo-200"
                     }`}
                   >
                     {tab.name}
                   </div>
-                  <div className="text-xs text-gray-400 hidden lg:block">
+                  <div className="text-xs text-indigo-300/60 hidden lg:block">
                     {tab.description}
                   </div>
                 </div>
