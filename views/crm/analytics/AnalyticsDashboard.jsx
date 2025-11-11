@@ -16,6 +16,8 @@ import {
   Filter,
   RefreshCw,
   ChevronDown,
+  XCircle,
+  CheckCircle,
 } from "lucide-react";
 
 // Import all analytics modules
@@ -192,55 +194,54 @@ export default function AnalyticsDashboard() {
           className="mb-6"
         >
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-2xl border border-white/15"
+            <div className="flex items-center gap-4">
+              <motion.div
+                whileHover={{ scale: 1.05, rotate: 5 }}
+                className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl border-2 border-white/20"
                 style={{
                   background: `linear-gradient(135deg, ${activeTabData.color.split(" ")[1]}, ${activeTabData.color.split(" ")[3]})`,
                 }}
               >
-                <activeTabData.icon className="w-6 h-6 text-white" />
-              </div>
+                <activeTabData.icon className="w-7 h-7 text-white" />
+              </motion.div>
               <div>
-                <p className="text-xs uppercase tracking-[0.4rem] text-white/60">
+                <p className="text-xs uppercase tracking-[0.3rem] text-white/50 font-semibold mb-1">
                   CRM Intelligence Suite
                 </p>
-                <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                  Analytics Dashboard
+                <h1 className="text-3xl sm:text-4xl font-bold text-white bg-gradient-to-r from-white to-white/80 bg-clip-text">
+                  {activeTabData.name}
                 </h1>
-                <p className="text-sm text-white/65 mt-1">
+                <p className="text-sm text-white/60 mt-1 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   {activeTabData.description}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 text-sm">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleRefresh}
               disabled={isRefreshing}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/15 hover:border-white/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-white/20 bg-gradient-to-br from-white/10 to-white/5 text-white hover:from-white/15 hover:to-white/10 hover:border-white/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
-              {isRefreshing ? "Refreshing..." : "Refresh"}
-            </button>
-            <button
+              <span className="font-semibold">{isRefreshing ? "Refreshing..." : "Refresh"}</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setShowFilters((prev) => !prev)}
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border transition-all duration-300 ${
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
                 showFilters
-                  ? "border-white/35 bg-white/20 text-white"
-                  : "border-white/15 bg-white/10 text-white/80 hover:border-white/25 hover:bg-white/15"
+                  ? "border-purple-400/50 bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-white"
+                  : "border-white/20 bg-gradient-to-br from-white/10 to-white/5 text-white/80 hover:from-white/15 hover:to-white/10 hover:border-white/30"
               }`}
             >
               <Filter className="w-4 h-4" />
-              {showFilters ? "Hide Filters" : "Show Filters"}
-            </button>
-            <button
-              onClick={() => setActiveTab("reports")}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white/80 hover:border-white/25 hover:bg-white/15 transition"
-            >
-              <Download className="w-4 h-4" />
-              Export Center
-            </button>
+              <span className="font-semibold">{showFilters ? "Hide Filters" : "Show Filters"}</span>
+            </motion.button>
           </div>
         </div>
       </motion.div>
@@ -251,63 +252,89 @@ export default function AnalyticsDashboard() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="mb-6 p-6 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md shadow-2xl"
+            transition={{ duration: 0.3 }}
+            className="mb-6 p-6 md:p-8 rounded-2xl border-2 border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl shadow-2xl"
           >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                <Filter className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Advanced Filters</h3>
+                <p className="text-xs text-white/60">Refine your analytics data</p>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div>
-                <label className="block text-sm font-semibold text-white/80 mb-2">
+                <label className="flex items-center gap-2 text-sm font-bold text-white/90 mb-2">
+                  <Calendar className="w-4 h-4 text-purple-400" />
                   Start Date
                 </label>
                 <input
                   type="date"
                   value={filters.startDate || ""}
                   onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-purple-400/50 focus:bg-white/15 transition-all duration-300 font-medium"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-white/80 mb-2">
+                <label className="flex items-center gap-2 text-sm font-bold text-white/90 mb-2">
+                  <Calendar className="w-4 h-4 text-pink-400" />
                   End Date
                 </label>
                 <input
                   type="date"
                   value={filters.endDate || ""}
                   onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-pink-400/50 focus:bg-white/15 transition-all duration-300 font-medium"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-white/80 mb-2">
+                <label className="flex items-center gap-2 text-sm font-bold text-white/90 mb-2">
+                  <Users className="w-4 h-4 text-cyan-400" />
                   Staff Member
                 </label>
                 <select
                   value={filters.staffId || ""}
                   onChange={(e) => setFilters({ ...filters, staffId: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl border border-white/15 bg-white/10 text-white focus:outline-none focus:border-white/40"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white focus:outline-none focus:border-cyan-400/50 focus:bg-white/15 transition-all duration-300 font-medium appearance-none cursor-pointer"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 0.75rem center',
+                    backgroundSize: '1.25rem',
+                  }}
                 >
-                  <option value="" className="text-gray-900">All Staff</option>
+                  <option value="" className="bg-slate-900 text-white">All Staff Members</option>
                   {/* TODO: Populate with staff list */}
                 </select>
               </div>
             </div>
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-              <p className="text-white/60">
-                Tip: Combine filters with tab selection to generate precise exports.
-              </p>
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-sm text-white/70 bg-white/5 px-4 py-2 rounded-lg border border-white/10">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span className="font-medium">Tip: Combine filters for precise data analysis</span>
+              </div>
               <div className="flex gap-3">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/15 bg-white/10 text-white/80 hover:border-white/25 hover:bg-white/15 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-white/20 bg-white/10 text-white/90 hover:border-white/30 hover:bg-white/15 transition-all duration-300 font-semibold shadow-lg"
                 >
-                  Clear Filters
-                </button>
-                <button
+                  <XCircle className="w-4 h-4" />
+                  Clear All
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowFilters(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/25 bg-white/20 text-white hover:bg-white/30 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-purple-400/50 bg-gradient-to-r from-purple-500/30 to-pink-500/30 text-white hover:from-purple-500/40 hover:to-pink-500/40 transition-all duration-300 font-semibold shadow-lg"
                 >
-                  Apply & Hide
-                </button>
+                  <CheckCircle className="w-4 h-4" />
+                  Apply Filters
+                </motion.button>
               </div>
             </div>
           </motion.div>
