@@ -28,7 +28,16 @@ import {
   PlusCircle,
   FileCheck,
   Scissors,
+  Award,
+  Clock,
+  Lightbulb,
+  ArrowRight,
+  Flame,
 } from "lucide-react";
+import ResumeCard from "./ResumeCard";
+import VideoCard from "./VideoCard";
+import TemplateCard from "./TemplateCard";
+import UploadModal from "./UploadModal";
 
 export default function ResumeManagement({ isPro = false }) {
   const [activeTab, setActiveTab] = useState("ats");
@@ -37,19 +46,58 @@ export default function ResumeManagement({ isPro = false }) {
       id: 1,
       name: "Software Engineer Resume",
       type: "ats",
-      score: 87,
+      atsScore: 87,
       views: 124,
       downloads: 23,
       isPrimary: true,
       createdAt: "2024-10-15",
+      keywords: [
+        { word: "React" },
+        { word: "TypeScript" },
+        { word: "Node.js" },
+        { word: "AWS" },
+      ],
     },
   ]);
-  const [videoResumes, setVideoResumes] = useState([]);
+  const [videoResumes, setVideoResumes] = useState([
+    {
+      id: 1,
+      name: "Introduction Video",
+      duration: "1:30",
+      views: 45,
+      createdAt: "2024-10-14",
+      isPrimary: true,
+      status: "processed",
+      atsScore: 88,
+    },
+  ]);
   const [uploading, setUploading] = useState(false);
+  const [showResumeUpload, setShowResumeUpload] = useState(false);
+  const [showVideoUpload, setShowVideoUpload] = useState(false);
   const [showBuilder, setShowBuilder] = useState(false);
   const [showVideoEditor, setShowVideoEditor] = useState(false);
   const fileInputRef = useRef(null);
   const videoInputRef = useRef(null);
+
+  const getScoreColor = (score) => {
+    if (score >= 80)
+      return {
+        bg: "from-green-500/20 to-green-600/20",
+        border: "border-green-500/30",
+        text: "text-green-400",
+      };
+    if (score >= 60)
+      return {
+        bg: "from-yellow-500/20 to-yellow-600/20",
+        border: "border-yellow-500/30",
+        text: "text-yellow-400",
+      };
+    return {
+      bg: "from-red-500/20 to-red-600/20",
+      border: "border-red-500/30",
+      text: "text-red-400",
+    };
+  };
 
   const tabs = [
     { id: "ats", label: "ATS Resume", icon: FileText },
@@ -65,7 +113,13 @@ export default function ResumeManagement({ isPro = false }) {
       score: 95,
       free: true,
     },
-    { id: 2, name: "Modern", preview: "/templates/modern.jpg", score: 92, free: true },
+    {
+      id: 2,
+      name: "Modern",
+      preview: "/templates/modern.jpg",
+      score: 92,
+      free: true,
+    },
     {
       id: 3,
       name: "Creative",
@@ -73,7 +127,13 @@ export default function ResumeManagement({ isPro = false }) {
       score: 89,
       free: false,
     },
-    { id: 4, name: "Executive", preview: "/templates/executive.jpg", score: 97, free: false },
+    {
+      id: 4,
+      name: "Executive",
+      preview: "/templates/executive.jpg",
+      score: 97,
+      free: false,
+    },
   ];
 
   const videoTemplates = [
@@ -83,8 +143,7 @@ export default function ResumeManagement({ isPro = false }) {
     { id: 4, name: "Full Profile", duration: "120s", free: false },
   ];
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
+  const handleFileUpload = async (file) => {
     if (!file) return;
 
     setUploading(true);
@@ -94,19 +153,24 @@ export default function ResumeManagement({ isPro = false }) {
         id: Date.now(),
         name: file.name,
         type: "ats",
-        score: Math.floor(Math.random() * 30) + 70,
+        atsScore: Math.floor(Math.random() * 30) + 70,
         views: 0,
         downloads: 0,
         isPrimary: resumes.length === 0,
         createdAt: new Date().toISOString().split("T")[0],
+        keywords: [
+          { word: "Leadership" },
+          { word: "Communication" },
+          { word: "Project Management" },
+        ],
       };
       setResumes([...resumes, newResume]);
       setUploading(false);
+      setShowResumeUpload(false);
     }, 2000);
   };
 
-  const handleVideoUpload = async (e) => {
-    const file = e.target.files?.[0];
+  const handleVideoUpload = async (file) => {
     if (!file) return;
 
     setUploading(true);
@@ -120,16 +184,19 @@ export default function ResumeManagement({ isPro = false }) {
         isPrimary: videoResumes.length === 0,
         createdAt: new Date().toISOString().split("T")[0],
         privacy: "public",
+        status: "processed",
+        atsScore: Math.floor(Math.random() * 30) + 75,
       };
       setVideoResumes([...videoResumes, newVideo]);
       setUploading(false);
+      setShowVideoUpload(false);
     }, 3000);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-full overflow-hidden space-y-6">
       {/* Header with Pro Badge */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-black text-white mb-2">Resume Center</h2>
           <p className="text-white/60">
@@ -137,7 +204,7 @@ export default function ResumeManagement({ isPro = false }) {
           </p>
         </div>
         {!isPro && (
-          <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-amber-500/30 transition-all hover:scale-105">
+          <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-amber-500/30 transition-all hover:scale-105 whitespace-nowrap">
             <Crown className="w-5 h-5" />
             Upgrade to Pro
           </button>
@@ -145,7 +212,7 @@ export default function ResumeManagement({ isPro = false }) {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-2 flex gap-2">
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-2 flex gap-2 overflow-x-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -180,13 +247,13 @@ export default function ResumeManagement({ isPro = false }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-6"
+            className="space-y-6 w-full"
           >
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="group p-6 bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/10 border-2 border-[#b87bd1]/30 rounded-2xl hover:border-[#b87bd1] transition-all hover:scale-105"
+                className="group p-6 bg-gradient-to-br from-[#803791]/20 to-[#b87bd1]/10 border-2 border-[#b87bd1]/30 rounded-2xl hover:border-[#b87bd1] transition-all hover:scale-105 w-full"
               >
                 <input
                   ref={fileInputRef}
@@ -196,27 +263,37 @@ export default function ResumeManagement({ isPro = false }) {
                   onChange={handleFileUpload}
                 />
                 <Upload className="w-10 h-10 text-[#b87bd1] mb-3 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold text-white mb-1">Upload Resume</h3>
-                <p className="text-white/60 text-sm">PDF, DOC, DOCX (Max 5MB)</p>
+                <h3 className="text-lg font-bold text-white mb-1">
+                  Upload Resume
+                </h3>
+                <p className="text-white/60 text-sm">
+                  PDF, DOC, DOCX (Max 5MB)
+                </p>
               </button>
 
               <button
                 onClick={() => setShowBuilder(true)}
-                className="group p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl hover:border-blue-500 transition-all hover:scale-105"
+                className="group p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl hover:border-blue-500 transition-all hover:scale-105 w-full"
               >
                 <Edit3 className="w-10 h-10 text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold text-white mb-1">Build Resume</h3>
-                <p className="text-white/60 text-sm">Use professional templates</p>
+                <h3 className="text-lg font-bold text-white mb-1">
+                  Build Resume
+                </h3>
+                <p className="text-white/60 text-sm">
+                  Use professional templates
+                </p>
               </button>
 
               <button
-                className={`group p-6 bg-gradient-to-br from-amber-500/20 to-orange-500/10 border-2 border-amber-500/30 rounded-2xl hover:border-amber-500 transition-all hover:scale-105 relative ${
+                className={`group p-6 bg-gradient-to-br from-amber-500/20 to-orange-500/10 border-2 border-amber-500/30 rounded-2xl hover:border-amber-500 transition-all hover:scale-105 relative w-full ${
                   !isPro && "opacity-60"
                 }`}
                 disabled={!isPro}
               >
                 <Target className="w-10 h-10 text-amber-400 mb-3 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold text-white mb-1">ATS Optimizer</h3>
+                <h3 className="text-lg font-bold text-white mb-1">
+                  ATS Optimizer
+                </h3>
                 <p className="text-white/60 text-sm">Boost your score</p>
                 {!isPro && (
                   <div className="absolute top-2 right-2">
@@ -247,26 +324,26 @@ export default function ResumeManagement({ isPro = false }) {
                   </button>
                 </div>
               ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-4 w-full overflow-hidden">
                   {resumes.map((resume) => (
                     <motion.div
                       key={resume.id}
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="group bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-[#b87bd1]/50 transition-all"
+                      className="group bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-[#b87bd1]/50 transition-all overflow-hidden"
                     >
-                      <div className="flex items-start gap-4">
+                      <div className="flex flex-col sm:flex-row items-start gap-4 w-full">
                         <div className="w-14 h-14 bg-gradient-to-br from-[#803791] to-[#b87bd1] rounded-xl flex items-center justify-center shrink-0">
                           <FileText className="w-7 h-7 text-white" />
                         </div>
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-4 mb-3">
-                            <div>
-                              <h4 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
-                                {resume.name}
+                        <div className="flex-1 min-w-0 w-full">
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 mb-3">
+                            <div className="min-w-0">
+                              <h4 className="text-lg font-bold text-white mb-1 flex items-center gap-2 flex-wrap break-words">
+                                <span className="truncate">{resume.name}</span>
                                 {resume.isPrimary && (
-                                  <span className="px-2 py-0.5 bg-[#b87bd1]/20 border border-[#b87bd1]/30 rounded-full text-xs text-[#b87bd1]">
+                                  <span className="px-2 py-0.5 bg-[#b87bd1]/20 border border-[#b87bd1]/30 rounded-full text-xs text-[#b87bd1] whitespace-nowrap">
                                     Primary
                                   </span>
                                 )}
@@ -277,51 +354,55 @@ export default function ResumeManagement({ isPro = false }) {
                             </div>
 
                             {/* ATS Score */}
-                            <div className="text-right">
+                            <div className="text-right shrink-0">
                               <div
                                 className={`text-2xl font-black ${
-                                  resume.score >= 80
+                                  resume.atsScore >= 80
                                     ? "text-green-400"
-                                    : resume.score >= 60
+                                    : resume.atsScore >= 60
                                     ? "text-yellow-400"
                                     : "text-red-400"
                                 }`}
                               >
-                                {resume.score}%
+                                {resume.atsScore || 75}%
                               </div>
-                              <div className="text-white/60 text-xs">ATS Score</div>
+                              <div className="text-white/60 text-xs">
+                                ATS Score
+                              </div>
                             </div>
                           </div>
 
                           {/* Stats */}
-                          <div className="flex items-center gap-6 mb-4">
+                          <div className="flex flex-wrap items-center gap-3 sm:gap-6 mb-4">
                             <div className="flex items-center gap-2 text-white/60 text-sm">
-                              <Eye className="w-4 h-4" />
-                              {resume.views} views
+                              <Eye className="w-4 h-4 shrink-0" />
+                              <span>{resume.views} views</span>
                             </div>
                             <div className="flex items-center gap-2 text-white/60 text-sm">
-                              <Download className="w-4 h-4" />
-                              {resume.downloads} downloads
+                              <Download className="w-4 h-4 shrink-0" />
+                              <span>{resume.downloads} downloads</span>
                             </div>
                           </div>
 
                           {/* Actions */}
-                          <div className="flex items-center gap-2">
-                            <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                              <Eye className="w-4 h-4" />
-                              View
+                          <div className="flex flex-wrap gap-2 w-full">
+                            <button className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap">
+                              <Eye className="w-4 h-4 shrink-0" />
+                              <span className="hidden sm:inline">View</span>
                             </button>
-                            <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                              <Download className="w-4 h-4" />
-                              Download
+                            <button className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap">
+                              <Download className="w-4 h-4 shrink-0" />
+                              <span className="hidden sm:inline">Download</span>
                             </button>
-                            <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                              <Copy className="w-4 h-4" />
-                              Duplicate
+                            <button className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap">
+                              <Copy className="w-4 h-4 shrink-0" />
+                              <span className="hidden sm:inline">
+                                Duplicate
+                              </span>
                             </button>
-                            <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                              <Trash2 className="w-4 h-4" />
-                              Delete
+                            <button className="px-3 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap">
+                              <Trash2 className="w-4 h-4 shrink-0" />
+                              <span className="hidden sm:inline">Delete</span>
                             </button>
                           </div>
                         </div>
@@ -333,9 +414,11 @@ export default function ResumeManagement({ isPro = false }) {
             </div>
 
             {/* ATS Templates */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-white">ATS-Optimized Templates</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="space-y-4 w-full">
+              <h3 className="text-xl font-bold text-white">
+                ATS-Optimized Templates
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
                 {atsTemplates.map((template) => (
                   <div
                     key={template.id}
@@ -344,16 +427,22 @@ export default function ResumeManagement({ isPro = false }) {
                     {!template.free && (
                       <div className="absolute top-3 right-3 z-10 px-2 py-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg flex items-center gap-1">
                         <Crown className="w-3 h-3 text-white" />
-                        <span className="text-xs font-bold text-white">PRO</span>
+                        <span className="text-xs font-bold text-white">
+                          PRO
+                        </span>
                       </div>
                     )}
                     <div className="aspect-[3/4] bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
                       <FileCheck className="w-16 h-16 text-white/40" />
                     </div>
                     <div className="p-4">
-                      <h4 className="font-bold text-white mb-1">{template.name}</h4>
+                      <h4 className="font-bold text-white mb-1">
+                        {template.name}
+                      </h4>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-white/60">Score: {template.score}%</span>
+                        <span className="text-xs text-white/60">
+                          Score: {template.score}%
+                        </span>
                         <button className="text-xs text-[#b87bd1] font-semibold hover:underline">
                           Use Template
                         </button>
@@ -373,13 +462,13 @@ export default function ResumeManagement({ isPro = false }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-6"
+            className="space-y-6 w-full"
           >
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               <button
                 onClick={() => videoInputRef.current?.click()}
-                className="group p-6 bg-gradient-to-br from-purple-500/20 to-pink-500/10 border-2 border-purple-500/30 rounded-2xl hover:border-purple-500 transition-all hover:scale-105"
+                className="group p-6 bg-gradient-to-br from-purple-500/20 to-pink-500/10 border-2 border-purple-500/30 rounded-2xl hover:border-purple-500 transition-all hover:scale-105 w-full"
               >
                 <input
                   ref={videoInputRef}
@@ -389,19 +478,23 @@ export default function ResumeManagement({ isPro = false }) {
                   onChange={handleVideoUpload}
                 />
                 <Video className="w-10 h-10 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold text-white mb-1">Upload Video</h3>
+                <h3 className="text-lg font-bold text-white mb-1">
+                  Upload Video
+                </h3>
                 <p className="text-white/60 text-sm">MP4, MOV (Max 100MB)</p>
               </button>
 
               <button
-                className={`group p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl hover:border-blue-500 transition-all hover:scale-105 relative ${
+                className={`group p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl hover:border-blue-500 transition-all hover:scale-105 relative w-full ${
                   !isPro && "opacity-60"
                 }`}
                 onClick={() => isPro && setShowVideoEditor(true)}
                 disabled={!isPro}
               >
                 <Scissors className="w-10 h-10 text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold text-white mb-1">Video Editor</h3>
+                <h3 className="text-lg font-bold text-white mb-1">
+                  Video Editor
+                </h3>
                 <p className="text-white/60 text-sm">Trim & merge clips</p>
                 {!isPro && (
                   <div className="absolute top-2 right-2">
@@ -411,13 +504,15 @@ export default function ResumeManagement({ isPro = false }) {
               </button>
 
               <button
-                className={`group p-6 bg-gradient-to-br from-green-500/20 to-emerald-500/10 border-2 border-green-500/30 rounded-2xl hover:border-green-500 transition-all hover:scale-105 relative ${
+                className={`group p-6 bg-gradient-to-br from-green-500/20 to-emerald-500/10 border-2 border-green-500/30 rounded-2xl hover:border-green-500 transition-all hover:scale-105 relative w-full ${
                   !isPro && "opacity-60"
                 }`}
                 disabled={!isPro}
               >
                 <Shield className="w-10 h-10 text-green-400 mb-3 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold text-white mb-1">DRM Protection</h3>
+                <h3 className="text-lg font-bold text-white mb-1">
+                  DRM Protection
+                </h3>
                 <p className="text-white/60 text-sm">Secure your video</p>
                 {!isPro && (
                   <div className="absolute top-2 right-2">
@@ -430,7 +525,9 @@ export default function ResumeManagement({ isPro = false }) {
             {/* Video List */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-white">My Video Resumes</h3>
+                <h3 className="text-xl font-bold text-white">
+                  My Video Resumes
+                </h3>
                 <span className="text-white/60 text-sm">
                   {videoResumes.length} / {isPro ? "∞" : "2"} videos
                 </span>
@@ -448,16 +545,16 @@ export default function ResumeManagement({ isPro = false }) {
                   </button>
                 </div>
               ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-4 w-full overflow-hidden">
                   {videoResumes.map((video) => (
                     <motion.div
                       key={video.id}
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="group bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 transition-all"
+                      className="group bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 transition-all overflow-hidden"
                     >
-                      <div className="flex items-start gap-4">
-                        <div className="relative w-32 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl overflow-hidden shrink-0">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
+                        <div className="relative w-full sm:w-32 sm:h-20 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl overflow-hidden shrink-0">
                           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                             <Play className="w-8 h-8 text-white" />
                           </div>
@@ -466,11 +563,11 @@ export default function ResumeManagement({ isPro = false }) {
                           </span>
                         </div>
 
-                        <div className="flex-1">
-                          <h4 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
-                            {video.name}
+                        <div className="flex-1 min-w-0 w-full">
+                          <h4 className="text-lg font-bold text-white mb-1 flex items-center gap-2 flex-wrap break-words">
+                            <span className="truncate">{video.name}</span>
                             {video.isPrimary && (
-                              <span className="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-400">
+                              <span className="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-400 whitespace-nowrap">
                                 Primary
                               </span>
                             )}
@@ -478,18 +575,18 @@ export default function ResumeManagement({ isPro = false }) {
                           <p className="text-white/60 text-sm mb-3">
                             Uploaded {video.createdAt} · {video.privacy}
                           </p>
-                          <div className="flex items-center gap-2">
-                            <button className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                              <Play className="w-4 h-4" />
-                              Play
+                          <div className="flex flex-wrap gap-2 w-full">
+                            <button className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap">
+                              <Play className="w-4 h-4 shrink-0" />
+                              <span className="hidden sm:inline">Play</span>
                             </button>
-                            <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                              <Settings className="w-4 h-4" />
-                              Settings
+                            <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap">
+                              <Settings className="w-4 h-4 shrink-0" />
+                              <span className="hidden sm:inline">Settings</span>
                             </button>
-                            <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
-                              <Trash2 className="w-4 h-4" />
-                              Delete
+                            <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap">
+                              <Trash2 className="w-4 h-4 shrink-0" />
+                              <span className="hidden sm:inline">Delete</span>
                             </button>
                           </div>
                         </div>
@@ -501,9 +598,9 @@ export default function ResumeManagement({ isPro = false }) {
             </div>
 
             {/* Video Templates */}
-            <div className="space-y-4">
+            <div className="space-y-4 w-full">
               <h3 className="text-xl font-bold text-white">Video Templates</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
                 {videoTemplates.map((template) => (
                   <div
                     key={template.id}
@@ -512,16 +609,22 @@ export default function ResumeManagement({ isPro = false }) {
                     {!template.free && (
                       <div className="absolute top-3 right-3 z-10 px-2 py-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg flex items-center gap-1">
                         <Crown className="w-3 h-3 text-white" />
-                        <span className="text-xs font-bold text-white">PRO</span>
+                        <span className="text-xs font-bold text-white">
+                          PRO
+                        </span>
                       </div>
                     )}
                     <div className="aspect-video bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
                       <Video className="w-12 h-12 text-white/40" />
                     </div>
                     <div className="p-4">
-                      <h4 className="font-bold text-white mb-1">{template.name}</h4>
+                      <h4 className="font-bold text-white mb-1">
+                        {template.name}
+                      </h4>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-white/60">{template.duration}</span>
+                        <span className="text-xs text-white/60">
+                          {template.duration}
+                        </span>
                         <button className="text-xs text-purple-400 font-semibold hover:underline">
                           Use Template
                         </button>
@@ -541,15 +644,35 @@ export default function ResumeManagement({ isPro = false }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-6"
+            className="space-y-6 w-full"
           >
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
               {[
-                { label: "Total Views", value: "1,247", icon: Eye, color: "blue" },
-                { label: "Downloads", value: "342", icon: Download, color: "green" },
-                { label: "Avg. ATS Score", value: "87%", icon: Target, color: "purple" },
-                { label: "Profile Strength", value: "94%", icon: TrendingUp, color: "amber" },
+                {
+                  label: "Total Views",
+                  value: "1,247",
+                  icon: Eye,
+                  color: "blue",
+                },
+                {
+                  label: "Downloads",
+                  value: "342",
+                  icon: Download,
+                  color: "green",
+                },
+                {
+                  label: "Avg. ATS Score",
+                  value: "87%",
+                  icon: Target,
+                  color: "purple",
+                },
+                {
+                  label: "Profile Strength",
+                  value: "94%",
+                  icon: TrendingUp,
+                  color: "amber",
+                },
               ].map((stat, index) => {
                 const Icon = stat.icon;
                 return (
@@ -563,7 +686,9 @@ export default function ResumeManagement({ isPro = false }) {
                       >
                         <Icon className={`w-5 h-5 text-${stat.color}-400`} />
                       </div>
-                      <div className="text-2xl font-black text-white">{stat.value}</div>
+                      <div className="text-2xl font-black text-white">
+                        {stat.value}
+                      </div>
                     </div>
                     <div className="text-white/60 text-sm">{stat.label}</div>
                   </div>
@@ -573,7 +698,9 @@ export default function ResumeManagement({ isPro = false }) {
 
             {/* Charts Placeholder */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-              <h3 className="text-xl font-bold text-white mb-4">Views Over Time</h3>
+              <h3 className="text-xl font-bold text-white mb-4">
+                Views Over Time
+              </h3>
               <div className="h-64 flex items-center justify-center text-white/40">
                 <BarChart3 className="w-16 h-16" />
               </div>
@@ -595,7 +722,9 @@ export default function ResumeManagement({ isPro = false }) {
               <div className="w-12 h-12 rounded-full border-4 border-[#b87bd1]/30 border-t-[#b87bd1] animate-spin" />
               <div>
                 <h4 className="font-bold text-white">
-                  {activeTab === "ats" ? "Analyzing Resume..." : "Processing Video..."}
+                  {activeTab === "ats"
+                    ? "Analyzing Resume..."
+                    : "Processing Video..."}
                 </h4>
                 <p className="text-white/60 text-sm">This may take a moment</p>
               </div>

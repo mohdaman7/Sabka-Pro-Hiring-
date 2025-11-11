@@ -28,15 +28,12 @@ export default function StudentLayout({ children }) {
 
       {/* Sidebar - Hidden on mobile, visible on desktop */}
       <div className="hidden lg:block flex-shrink-0 h-screen">
-        <StudentSidebar
-          isOpen={true}
-          onClose={() => {}}
-        />
+        <StudentSidebar isOpen={true} onClose={() => {}} />
       </div>
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
@@ -51,10 +48,10 @@ export default function StudentLayout({ children }) {
       </div>
 
       {/* Main content - Responsive padding */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         <StudentHeader onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 overflow-hidden">
-          <div className="h-full overflow-auto p-3 sm:p-4 md:p-6">{children}</div>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="min-h-full p-3 sm:p-4 md:p-6 pb-8">{children}</div>
         </main>
       </div>
     </div>
