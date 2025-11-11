@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap, List, BarChart3, ExternalLink } from "lucide-react";
+import { GraduationCap, Users, CheckCircle, TrendingUp, DollarSign, Zap, List, BarChart3, ExternalLink, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { getCourseAnalytics, getTopCoursesByPerformance, formatPercentage, formatNumber, formatCurrency } from "@/services/analyticsService";
 import AllCoursesListing from "./AllCoursesListing";
 
@@ -50,7 +50,25 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-96"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-t-purple-500 animate-spin"></div>
+            <GraduationCap className="absolute inset-0 m-auto w-8 h-8 text-purple-400" />
+          </div>
+          <p className="text-white/70 font-semibold text-lg">Loading Course Analytics...</p>
+          <p className="text-white/50 text-sm mt-2">Fetching training data</p>
+        </motion.div>
+      </div>
+    );
+  }
   if (!data) return <div className="text-center py-12"><p className="text-gray-500">No data available</p></div>;
 
   return (
@@ -87,57 +105,99 @@ export default function CourseAnalytics({ filters, isRefreshing }) {
       ) : (
         <>
           {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-white/20 shadow-inner"
-            style={{ background: "linear-gradient(135deg, rgba(34,197,94,0.85), rgba(6,182,212,0.65))" }}
-          >
-            <GraduationCap className="w-6 h-6 text-white" />
-          </div>
-          <p className="text-sm text-white/70">Total Courses</p>
-          <p className="text-3xl font-bold text-white">{formatNumber(data?.summary?.totalCourses || 0)}</p>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-white/20 shadow-inner"
-            style={{ background: "linear-gradient(135deg, rgba(16,185,129,0.85), rgba(59,130,246,0.55))" }}
-          >
-            <CheckCircle className="w-6 h-6 text-white" />
-          </div>
-          <p className="text-sm text-white/70">Active Courses</p>
-          <p className="text-3xl font-bold text-white">{formatNumber(data?.summary?.activeCourses || 0)}</p>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-white/20 shadow-inner"
-            style={{ background: "linear-gradient(135deg, rgba(192,132,252,0.85), rgba(168,85,247,0.65))" }}
-          >
-            <TrendingUp className="w-6 h-6 text-white" />
-          </div>
-          <p className="text-sm text-white/70">Completion Rate</p>
-          <p className="text-3xl font-bold text-white">{formatPercentage(data?.summary?.completionRate || 0)}</p>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-white/20 shadow-inner"
-            style={{ background: "linear-gradient(135deg, rgba(251,146,60,0.85), rgba(244,114,182,0.55))" }}
-          >
-            <TrendingUp className="w-6 h-6 text-white" />
-          </div>
-          <p className="text-sm text-white/70">Avg Progress</p>
-          <p className="text-3xl font-bold text-white">{formatPercentage(data?.summary?.avgProgress || 0)}</p>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-white/20 shadow-inner"
-            style={{ background: "linear-gradient(135deg, rgba(34,197,94,0.85), rgba(59,130,246,0.55))" }}
-          >
-            <DollarSign className="w-6 h-6 text-white" />
-          </div>
-          <p className="text-sm text-white/70">Revenue</p>
-          <p className="text-3xl font-bold text-white">{formatCurrency(data?.summary?.revenue || 0)}</p>
-        </motion.div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5">
+        {[
+          {
+            label: "Total Courses",
+            value: formatNumber(data?.summary?.totalCourses || 0),
+            icon: GraduationCap,
+            color: "from-cyan-500 to-blue-500",
+            bgColor: "bg-cyan-500/10",
+            iconColor: "text-cyan-400",
+            trend: { value: "10.5", isPositive: true },
+          },
+          {
+            label: "Active Courses",
+            value: formatNumber(data?.summary?.activeCourses || 0),
+            icon: CheckCircle,
+            color: "from-emerald-500 to-green-500",
+            bgColor: "bg-emerald-500/10",
+            iconColor: "text-emerald-400",
+            trend: { value: "8.2", isPositive: true },
+          },
+          {
+            label: "Completion Rate",
+            value: formatPercentage(data?.summary?.completionRate || 0),
+            icon: TrendingUp,
+            color: "from-purple-500 to-pink-500",
+            bgColor: "bg-purple-500/10",
+            iconColor: "text-purple-400",
+            trend: { value: "12.3", isPositive: true },
+          },
+          {
+            label: "Avg Progress",
+            value: formatPercentage(data?.summary?.avgProgress || 0),
+            icon: Zap,
+            color: "from-orange-500 to-amber-500",
+            bgColor: "bg-orange-500/10",
+            iconColor: "text-orange-400",
+            trend: { value: "6.8", isPositive: true },
+          },
+          {
+            label: "Revenue",
+            value: formatCurrency(data?.summary?.revenue || 0),
+            icon: DollarSign,
+            color: "from-emerald-500 to-teal-500",
+            bgColor: "bg-emerald-500/10",
+            iconColor: "text-emerald-400",
+            trend: { value: "15.7", isPositive: true },
+          },
+        ].map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative group cursor-pointer rounded-2xl p-5 md:p-6 border transition-all duration-300 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20 backdrop-blur-sm"
+            >
+              {/* Gradient Glow */}
+              <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300 bg-gradient-to-br ${stat.color}`} />
+
+              {/* Content */}
+              <div className="relative">
+                {/* Icon and Trend */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
+                    <Icon className={`w-6 h-6 ${stat.iconColor}`} />
+                  </div>
+                  {stat.trend && (
+                    <div
+                      className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${
+                        stat.trend.isPositive
+                          ? "bg-emerald-500/20 text-emerald-400"
+                          : "bg-rose-500/20 text-rose-400"
+                      }`}
+                    >
+                      {stat.trend.isPositive ? (
+                        <ArrowUpRight className="w-3 h-3" />
+                      ) : (
+                        <ArrowDownRight className="w-3 h-3" />
+                      )}
+                      {stat.trend.value}%
+                    </div>
+                  )}
+                </div>
+
+                {/* Value */}
+                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm font-medium text-white/60">{stat.label}</div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Top Courses */}

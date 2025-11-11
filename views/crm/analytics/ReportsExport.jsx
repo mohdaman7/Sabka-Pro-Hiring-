@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Download, FileText, FileSpreadsheet, Calendar, Filter, CheckCircle } from "lucide-react";
+import { Download, FileText, FileSpreadsheet, Calendar, Filter, CheckCircle, ArrowUpRight, BarChart3, Clock } from "lucide-react";
 import { exportReport } from "@/services/analyticsService";
 import { customToast } from "@/components/ui/toast";
 
@@ -43,15 +43,42 @@ export default function ReportsExport({ filters }) {
     }
   };
 
+  const stats = [
+    {
+      label: "Total Exports",
+      value: "247",
+      icon: Download,
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "bg-blue-500/10",
+      iconColor: "text-blue-400",
+      trend: { value: "12.5", isPositive: true },
+    },
+    {
+      label: "This Month",
+      value: "38",
+      icon: Calendar,
+      color: "from-purple-500 to-pink-500",
+      bgColor: "bg-purple-500/10",
+      iconColor: "text-purple-400",
+      trend: { value: "8.3", isPositive: true },
+    },
+    {
+      label: "Popular Format",
+      value: "CSV",
+      icon: FileSpreadsheet,
+      color: "from-emerald-500 to-green-500",
+      bgColor: "bg-emerald-500/10",
+      iconColor: "text-emerald-400",
+      trend: { value: "65%", isPositive: true },
+    },
+  ];
+
   return (
     <div className="space-y-6 text-white">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-8 border border-white/15 shadow-xl backdrop-blur-md">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl bg-white/5 border border-white/10 p-6 md:p-8 backdrop-blur-sm">
         <div className="flex items-center gap-4 mb-4">
-          <div
-            className="w-16 h-16 rounded-xl flex items-center justify-center border border-white/20 shadow-inner"
-            style={{ background: "linear-gradient(135deg, rgba(128,55,145,0.85), rgba(184,123,209,0.65))" }}
-          >
+          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
             <Download className="w-8 h-8 text-white" />
           </div>
           <div>
@@ -60,6 +87,46 @@ export default function ReportsExport({ filters }) {
           </div>
         </div>
       </motion.div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {stats.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative group cursor-pointer rounded-2xl p-5 md:p-6 border transition-all duration-300 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20 backdrop-blur-sm"
+            >
+              {/* Gradient Glow */}
+              <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300 bg-gradient-to-br ${stat.color}`} />
+
+              {/* Content */}
+              <div className="relative">
+                {/* Icon and Trend */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
+                    <Icon className={`w-6 h-6 ${stat.iconColor}`} />
+                  </div>
+                  {stat.trend && (
+                    <div className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400">
+                      <ArrowUpRight className="w-3 h-3" />
+                      {stat.trend.value}
+                    </div>
+                  )}
+                </div>
+
+                {/* Value */}
+                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm font-medium text-white/60">{stat.label}</div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
 
       {/* Report Selection */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">

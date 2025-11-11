@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Target, TrendingUp, DollarSign, Award, Users } from "lucide-react";
+import { Target, TrendingUp, DollarSign, Award, Users, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { getStaffPerformance, formatPercentage, formatNumber, formatCurrency } from "@/services/analyticsService";
 
 export default function StaffPerformance({ filters, isRefreshing }) {
@@ -25,7 +25,25 @@ export default function StaffPerformance({ filters, isRefreshing }) {
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-96"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-t-purple-500 animate-spin"></div>
+            <Users className="absolute inset-0 m-auto w-8 h-8 text-purple-400" />
+          </div>
+          <p className="text-white/70 font-semibold text-lg">Loading Staff Performance...</p>
+          <p className="text-white/50 text-sm mt-2">Fetching team metrics</p>
+        </motion.div>
+      </div>
+    );
+  }
   if (!data || !data.staffPerformance || !data.staffPerformance.length) return <div className="text-center py-12"><p className="text-white/70">No staff performance data available</p></div>;
 
   // Calculate totals
@@ -38,28 +56,81 @@ export default function StaffPerformance({ filters, isRefreshing }) {
   return (
     <div className="space-y-6 text-white">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-          <div className="w-12 h-12 rounded-xl bg-indigo-500/30 flex items-center justify-center mb-4 border-2 border-indigo-500/40">
-            <Users className="w-6 h-6 text-indigo-300" />
-          </div>
-          <p className="text-sm text-white/70">Total Staff</p>
-          <p className="text-3xl font-bold text-white">{formatNumber(data?.summary?.totalStaff || 0)}</p>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/30 flex items-center justify-center mb-4 border-2 border-emerald-500/40">
-            <TrendingUp className="w-6 h-6 text-emerald-300" />
-          </div>
-          <p className="text-sm text-white/70">Avg Conversion Rate</p>
-          <p className="text-3xl font-bold text-white">{formatPercentage(data?.summary?.avgConversionRate || 0)}</p>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-indigo-600/20 rounded-2xl p-6 shadow-lg border-2 border-indigo-500/30 backdrop-blur-sm">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/30 flex items-center justify-center mb-4 border-2 border-purple-500/40">
-            <DollarSign className="w-6 h-6 text-purple-300" />
-          </div>
-          <p className="text-sm text-white/70">Total Revenue</p>
-          <p className="text-3xl font-bold text-white">{formatCurrency(data?.summary?.totalRevenue || 0)}</p>
-        </motion.div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {[
+          {
+            label: "Total Staff",
+            value: formatNumber(data?.summary?.totalStaff || 0),
+            icon: Users,
+            color: "from-indigo-500 to-purple-500",
+            bgColor: "bg-indigo-500/10",
+            iconColor: "text-indigo-400",
+            trend: { value: "5.2", isPositive: true },
+          },
+          {
+            label: "Avg Conversion Rate",
+            value: formatPercentage(data?.summary?.avgConversionRate || 0),
+            icon: TrendingUp,
+            color: "from-emerald-500 to-green-500",
+            bgColor: "bg-emerald-500/10",
+            iconColor: "text-emerald-400",
+            trend: { value: "12.8", isPositive: true },
+          },
+          {
+            label: "Total Revenue",
+            value: formatCurrency(data?.summary?.totalRevenue || 0),
+            icon: DollarSign,
+            color: "from-purple-500 to-pink-500",
+            bgColor: "bg-purple-500/10",
+            iconColor: "text-purple-400",
+            trend: { value: "18.3", isPositive: true },
+          },
+        ].map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative group cursor-pointer rounded-2xl p-5 md:p-6 border transition-all duration-300 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20 backdrop-blur-sm"
+            >
+              {/* Gradient Glow */}
+              <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300 bg-gradient-to-br ${stat.color}`} />
+
+              {/* Content */}
+              <div className="relative">
+                {/* Icon and Trend */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
+                    <Icon className={`w-6 h-6 ${stat.iconColor}`} />
+                  </div>
+                  {stat.trend && (
+                    <div
+                      className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${
+                        stat.trend.isPositive
+                          ? "bg-emerald-500/20 text-emerald-400"
+                          : "bg-rose-500/20 text-rose-400"
+                      }`}
+                    >
+                      {stat.trend.isPositive ? (
+                        <ArrowUpRight className="w-3 h-3" />
+                      ) : (
+                        <ArrowDownRight className="w-3 h-3" />
+                      )}
+                      {stat.trend.value}%
+                    </div>
+                  )}
+                </div>
+
+                {/* Value */}
+                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm font-medium text-white/60">{stat.label}</div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Top Performers */}

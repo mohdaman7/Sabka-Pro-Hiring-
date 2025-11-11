@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Briefcase, FileText, Users, TrendingUp, List, BarChart3, Building2, Award, CheckCircle, Send, ExternalLink } from "lucide-react";
+import { Briefcase, TrendingUp, BarChart3, Building2, Award, ExternalLink, ArrowUpRight } from "lucide-react";
 import { getEmployerEngagement, getTopEmployersByJobPosts, getTopEmployersByApplications, formatPercentage, formatNumber } from "@/services/analyticsService";
 import AllEmployersListing from "./AllEmployersListing";
 
@@ -51,13 +51,55 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-96"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-t-purple-500 animate-spin"></div>
+            <Briefcase className="absolute inset-0 m-auto w-8 h-8 text-purple-400" />
+          </div>
+          <p className="text-white/70 font-semibold text-lg">Loading Employer Analytics...</p>
+          <p className="text-white/50 text-sm mt-2">Fetching engagement data</p>
+        </motion.div>
+      </div>
+    );
+  }
   if (!data) return <div className="text-center py-12"><p className="text-gray-500">No data available</p></div>;
 
   const stats = [
-    { title: 'Total Employers', value: formatNumber(data.summary.totalEmployers), icon: Briefcase },
-    { title: 'Active Employers', value: formatNumber(data.summary.activeEmployers), icon: TrendingUp },
-    { title: 'Engagement Rate', value: formatPercentage(data.summary.engagementRate), icon: FileText },
+    { 
+      title: 'Total Employers', 
+      value: formatNumber(data.summary.totalEmployers), 
+      icon: Briefcase,
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "bg-blue-500/10",
+      iconColor: "text-blue-400",
+      trend: { value: "12.5", isPositive: true }
+    },
+    { 
+      title: 'Active Employers', 
+      value: formatNumber(data.summary.activeEmployers), 
+      icon: TrendingUp,
+      color: "from-emerald-500 to-green-500",
+      bgColor: "bg-emerald-500/10",
+      iconColor: "text-emerald-400",
+      trend: { value: "8.3", isPositive: true }
+    },
+    { 
+      title: 'Engagement Rate', 
+      value: formatPercentage(data.summary.engagementRate), 
+      icon: Award,
+      color: "from-purple-500 to-pink-500",
+      bgColor: "bg-purple-500/10",
+      iconColor: "text-purple-400",
+      trend: { value: "5.7", isPositive: true }
+    },
   ];
 
   return (
@@ -94,19 +136,44 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
       ) : (
         <>
           {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <motion.div key={stat.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="bg-white/8 rounded-2xl p-6 border border-white/15 shadow-xl backdrop-blur-md">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border border-white/20 shadow-inner"
-                style={{ background: "linear-gradient(135deg, rgba(128,55,145,0.85), rgba(184,123,209,0.65))" }}
-              >
-                <Icon className="w-6 h-6 text-white" />
+            <motion.div 
+              key={stat.title} 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative group cursor-pointer rounded-2xl p-5 md:p-6 border transition-all duration-300 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20 backdrop-blur-sm"
+            >
+              {/* Gradient Glow */}
+              <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300 bg-gradient-to-br ${stat.color}`} />
+
+              {/* Content */}
+              <div className="relative">
+                {/* Icon and Trend */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
+                    <Icon className={`w-6 h-6 ${stat.iconColor}`} />
+                  </div>
+                  {stat.trend && (
+                    <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${
+                      stat.trend.isPositive
+                        ? "bg-emerald-500/20 text-emerald-400"
+                        : "bg-rose-500/20 text-rose-400"
+                    }`}>
+                      <ArrowUpRight className="w-3 h-3" />
+                      {stat.trend.value}%
+                    </div>
+                  )}
+                </div>
+
+                {/* Value */}
+                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm font-medium text-white/60">{stat.title}</div>
               </div>
-              <p className="text-sm text-white/70 mb-2">{stat.title}</p>
-              <p className="text-3xl font-bold text-white">{stat.value}</p>
             </motion.div>
           );
         })}
@@ -205,66 +272,6 @@ export default function EmployerEngagement({ filters, isRefreshing }) {
         </motion.div>
       )}
 
-      {/* Job Stats */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-8 border border-white/20 shadow-2xl backdrop-blur-md">
-        <div className="flex items-center justify-between mb-8">
-          <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30">
-              <Briefcase className="w-6 h-6 text-blue-400" />
-            </div>
-            Job Statistics
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Total Jobs */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
-            <div className="flex items-start justify-between mb-4">
-              <div className="p-3 rounded-lg bg-blue-500/20 border border-blue-500/30">
-                <Briefcase className="w-5 h-5 text-blue-400" />
-              </div>
-              <span className="text-xs font-bold text-blue-300 bg-blue-500/20 px-2 py-1 rounded-full">Total</span>
-            </div>
-            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.totalJobs)}</p>
-            <p className="text-sm text-white/70 font-medium">Total Jobs</p>
-          </motion.div>
-
-          {/* Active Jobs */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
-            <div className="flex items-start justify-between mb-4">
-              <div className="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
-                <CheckCircle className="w-5 h-5 text-emerald-400" />
-              </div>
-              <span className="text-xs font-bold text-emerald-300 bg-emerald-500/20 px-2 py-1 rounded-full">Active</span>
-            </div>
-            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.activeJobs)}</p>
-            <p className="text-sm text-white/70 font-medium">Active Jobs</p>
-          </motion.div>
-
-          {/* Applications */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
-            <div className="flex items-start justify-between mb-4">
-              <div className="p-3 rounded-lg bg-purple-500/20 border border-purple-500/30">
-                <Send className="w-5 h-5 text-purple-400" />
-              </div>
-              <span className="text-xs font-bold text-purple-300 bg-purple-500/20 px-2 py-1 rounded-full">Received</span>
-            </div>
-            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.totalApplications)}</p>
-            <p className="text-sm text-white/70 font-medium">Applications</p>
-          </motion.div>
-
-          {/* Hired */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="group relative p-6 rounded-xl bg-gradient-to-br from-rose-500/20 to-rose-600/10 border border-rose-500/30 hover:border-rose-500/50 hover:shadow-lg hover:shadow-rose-500/20 transition-all duration-300">
-            <div className="flex items-start justify-between mb-4">
-              <div className="p-3 rounded-lg bg-rose-500/20 border border-rose-500/30">
-                <Users className="w-5 h-5 text-rose-400" />
-              </div>
-              <span className="text-xs font-bold text-rose-300 bg-rose-500/20 px-2 py-1 rounded-full">Success</span>
-            </div>
-            <p className="text-3xl font-bold text-white mb-1">{formatNumber(data.jobStats.totalHired)}</p>
-            <p className="text-sm text-white/70 font-medium">Hired</p>
-          </motion.div>
-        </div>
-      </motion.div>
         </>
       )}
     </div>
