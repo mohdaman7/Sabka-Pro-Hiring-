@@ -55,7 +55,7 @@ export default function StudentCoursesEnhanced() {
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      const data = await courseService.publicList();
+      const data = await courseService.listPublic();
       setCourses(data);
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -130,8 +130,36 @@ export default function StudentCoursesEnhanced() {
     : filteredCourses;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="relative p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6 md:space-y-8 min-h-screen overflow-hidden">
+      {/* Enhanced Animated Background */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div
+          className="absolute -top-12 -left-12 md:-top-24 md:-left-24 w-48 h-48 md:w-96 md:h-96 rounded-full blur-2xl md:blur-3xl animate-pulse"
+          style={{
+            background: "rgba(128,55,145,0.12)",
+            animation: "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl animate-pulse"
+          style={{
+            background: "rgba(184,123,209,0.08)",
+            animation: "pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-2xl"
+          style={{
+            background: "rgba(240,194,238,0.04)",
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(128,55,145,0.04),_transparent_40%)]"
+        />
+      </div>
+
+      <div className="relative">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -281,6 +309,7 @@ export default function StudentCoursesEnhanced() {
             </AnimatePresence>
           </div>
         )}
+      </div>
       </div>
     </div>
   );
