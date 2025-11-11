@@ -94,7 +94,7 @@ const navigation = [
     id: "ats",
     name: "ATS Management",
     icon: Target,
-    badge: "New",
+    badge: null,
     color: "indigo",
     children: [
       {
@@ -110,13 +110,6 @@ const navigation = [
         href: "/crm/ats-management/interviews",
         icon: Calendar,
         description: "Schedule & manage interviews",
-      },
-      {
-        id: "ats-reports",
-        name: "ATS Reports",
-        href: "/crm/ats-management/reports",
-        icon: BarChart3,
-        description: "Analytics & insights",
       },
     ],
   },

@@ -26,6 +26,7 @@ import PlacementAnalytics from "./PlacementAnalytics";
 import EmployerEngagement from "./EmployerEngagement";
 import CourseAnalytics from "./CourseAnalytics";
 import StaffPerformance from "./StaffPerformance";
+import ATSAnalytics from "./ATSAnalytics";
 import ReportsExport from "./ReportsExport";
 
 const tabs = [
@@ -77,6 +78,13 @@ const tabs = [
     icon: Target,
     description: "Team Metrics",
     color: "from-indigo-500 to-purple-500",
+  },
+  {
+    id: "ats",
+    name: "ATS Analytics",
+    icon: Target,
+    description: "Recruitment Insights",
+    color: "from-fuchsia-500 to-purple-500",
   },
   {
     id: "reports",
@@ -132,6 +140,8 @@ export default function AnalyticsDashboard() {
         return <CourseAnalytics {...commonProps} />;
       case "staff":
         return <StaffPerformance {...commonProps} />;
+      case "ats":
+        return <ATSAnalytics {...commonProps} />;
       case "reports":
         return <ReportsExport {...commonProps} />;
       default:
