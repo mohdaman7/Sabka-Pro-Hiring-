@@ -30,6 +30,7 @@ import {
 import courseService from "@/services/courseService";
 import purchaseService from "@/services/purchaseService";
 import { studentService } from "@/services/studentService";
+import { enrollInCourse, getMyEnrollments, checkEnrollmentStatus } from "@/services/enrollmentService";
 import { customToast } from "@/components/ui/toast";
 import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
@@ -38,10 +39,13 @@ export default function StudentCourses() {
   const [hoveredCourse, setHoveredCourse] = useState(null);
   const [courses, setCourses] = useState([]);
   const [myAccess, setMyAccess] = useState([]);
+  const [enrollments, setEnrollments] = useState([]);
+  const [enrollmentStatus, setEnrollmentStatus] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isPro, setIsPro] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [enrollingCourseId, setEnrollingCourseId] = useState(null);
   const itemsPerPage = 6;
 
   const categories = [
@@ -60,13 +64,15 @@ export default function StudentCourses() {
     setLoading(true);
     setError("");
     try {
-      const [coursesData, accessData, profileRes] = await Promise.all([
+      const [coursesData, accessData, enrollmentsData, profileRes] = await Promise.all([
         courseService.listPublic(),
         courseService.myAccess().catch(() => []),
+        getMyEnrollments({ limit: 100 }).catch(() => ({ data: { enrollments: [] } })),
         studentService.getProfile().catch(() => null),
       ]);
       setCourses(coursesData || []);
       setMyAccess(accessData || []);
+      setEnrollments(enrollmentsData?.data?.enrollments || []);
 
       // Check if user is premium
       const studentData =
@@ -77,6 +83,11 @@ export default function StudentCourses() {
         "free"
       ).toLowerCase();
       setIsPro(plan === "pro");
+
+      // Check enrollment status for all courses
+      if (coursesData && coursesData.length > 0) {
+        checkAllEnrollmentStatus(coursesData);
+      }
     } catch (e) {
       const errorMsg = e?.response?.data?.message || e.message || "Failed to load courses";
       setError(errorMsg);
@@ -86,27 +97,73 @@ export default function StudentCourses() {
     }
   };
 
+  const checkAllEnrollmentStatus = async (coursesToCheck) => {
+    try {
+      const statusChecks = await Promise.all(
+        coursesToCheck.map(async (course) => {
+          try {
+            const response = await checkEnrollmentStatus(course._id);
+            return { courseId: course._id, ...response.data };
+          } catch (error) {
+            return { courseId: course._id, isEnrolled: false };
+          }
+        })
+      );
+
+      const statusMap = {};
+      statusChecks.forEach((status) => {
+        statusMap[status.courseId] = status;
+      });
+      setEnrollmentStatus(statusMap);
+    } catch (error) {
+      console.error("Error checking enrollment status:", error);
+    }
+  };
+
   const hasAccess = (courseId) => {
     return (
-      isPro || myAccess.some((access) => access.courseId?._id === courseId)
+      isPro || 
+      myAccess.some((access) => access.courseId?._id === courseId) ||
+      enrollmentStatus[courseId]?.isEnrolled
     );
   };
 
-  const handleEnrollFree = async (course) => {
+  const handleEnroll = async (course, e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    if (enrollingCourseId || hasAccess(course._id)) return;
+
     try {
+      setEnrollingCourseId(course._id);
+      
+      // Call enrollment API
+      const response = await enrollInCourse(course._id);
+      
       // Trigger success animation
       triggerSuccessAnimation({ type: "achievement" });
       
       customToast.success("Enrolled successfully!", {
-        description: `Welcome to ${course.title}!`,
+        description: `Welcome to ${course.title}! Start learning now.`,
       });
       
-      // Reload data to show updated enrollment status
-      setTimeout(() => loadData(), 1000);
+      // Update enrollment status immediately
+      setEnrollmentStatus(prev => ({
+        ...prev,
+        [course._id]: { isEnrolled: true, enrollment: response.data }
+      }));
+      
+      // Reload data to get updated enrollment list
+      setTimeout(() => loadData(), 500);
     } catch (error) {
+      console.error("Enrollment error:", error);
       customToast.error("Enrollment failed", {
-        description: error.message || "Please try again",
+        description: error.response?.data?.message || error.message || "Please try again",
       });
+    } finally {
+      setEnrollingCourseId(null);
     }
   };
 
@@ -132,8 +189,11 @@ export default function StudentCourses() {
   }, [selectedCategory]);
 
   const enrolledCourses = courses.filter((c) => hasAccess(c._id));
-  const avgProgress =
-    enrolledCourses.length > 0 ? Math.round(Math.random() * 40 + 10) : 0; // Mock progress - would be calculated from actual progress data
+  
+  // Calculate real average progress from enrollments
+  const avgProgress = enrollments.length > 0
+    ? Math.round(enrollments.reduce((sum, e) => sum + (e.progress || 0), 0) / enrollments.length)
+    : 0;
 
   const getLevelColor = (level) => {
     const colors = {
@@ -266,7 +326,7 @@ export default function StudentCourses() {
               )}
             </div>
             <div className="flex-1">
-              <h1 className="text-lg sm:text-xl md:text-2xl sm:text-3xl md:text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-2 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
                 {isPro ? "Premium Learning Hub" : "My Learning Journey"}
               </h1>
               <p className="text-white/90 text-lg font-medium flex items-center gap-2">
@@ -324,7 +384,7 @@ export default function StudentCourses() {
                     <p className="text-sm font-semibold text-white/70 mb-2 uppercase tracking-wider">
                       {stat.label}
                     </p>
-                    <p className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl sm:text-4xl md:text-5xl font-black text-white mb-1 group-hover:scale-110 transition-transform duration-300 inline-block">
+                    <p className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-1 group-hover:scale-110 transition-transform duration-300 inline-block">
                       {stat.value}
                       {stat.suffix}
                     </p>
@@ -510,14 +570,27 @@ export default function StudentCourses() {
 
                     {/* Action Button */}
                     <button
+                      onClick={(e) => {
+                        if (!enrolled && !isPro && course.bundlePrice === 0) {
+                          handleEnroll(course, e);
+                        }
+                      }}
+                      disabled={enrollingCourseId === course._id}
                       className={`group/btn relative w-full px-6 py-4 rounded-2xl font-black transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden ${
                         enrolled || isPro
                           ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:opacity-95 text-white shadow-2xl shadow-purple-500/40 hover:scale-105 active:scale-95"
+                          : enrollingCourseId === course._id
+                          ? "bg-white/5 text-white/50 cursor-not-allowed"
                           : "bg-white/8 hover:bg-white/15 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 border border-white/15"
                       }`}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
-                      {enrolled || isPro ? (
+                      {enrollingCourseId === course._id ? (
+                        <>
+                          <Clock className="w-5 h-5 animate-spin" />
+                          <span className="relative">Enrolling...</span>
+                        </>
+                      ) : enrolled || isPro ? (
                         <>
                           <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
                           <span className="relative">
@@ -528,7 +601,7 @@ export default function StudentCourses() {
                       ) : course.bundlePrice === 0 ? (
                         <>
                           <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                          <span className="relative">Start Free Course</span>
+                          <span className="relative">Enroll Free</span>
                           <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </>
                       ) : (
