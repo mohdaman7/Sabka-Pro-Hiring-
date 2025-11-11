@@ -146,9 +146,7 @@ export default function StudentCourses() {
       // Trigger success animation
       triggerSuccessAnimation({ type: "achievement" });
       
-      customToast.success("Enrolled successfully!", {
-        description: `Welcome to ${course.title}! Start learning now.`,
-      });
+      customToast.success("Enrolled successfully!", `Welcome to ${course.title}! Start learning now.`);
       
       // Update enrollment status immediately
       setEnrollmentStatus(prev => ({
@@ -160,9 +158,7 @@ export default function StudentCourses() {
       setTimeout(() => loadData(), 500);
     } catch (error) {
       console.error("Enrollment error:", error);
-      customToast.error("Enrollment failed", {
-        description: error.response?.data?.message || error.message || "Please try again",
-      });
+      customToast.error("Enrollment failed", error.response?.data?.message || error.message || "Please try again");
     } finally {
       setEnrollingCourseId(null);
     }
@@ -622,9 +618,10 @@ export default function StudentCourses() {
                       </div>
                     )}
 
-                    {/* Action Button */}
+                    {/* Action Button - Professional Logic */}
                     <button
                       onClick={(e) => {
+                        // Free course enrollment logic
                         if (!enrolled && !isPro && course.bundlePrice === 0) {
                           handleEnroll(course, e);
                         }
@@ -632,9 +629,11 @@ export default function StudentCourses() {
                       disabled={enrollingCourseId === course._id}
                       className={`group/btn relative w-full px-6 py-4 rounded-2xl font-black transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden ${
                         enrolled || isPro
-                          ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:opacity-95 text-white shadow-2xl shadow-purple-500/40 hover:scale-105 active:scale-95"
+                          ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 text-white shadow-2xl shadow-emerald-500/40 hover:scale-105 active:scale-95"
                           : enrollingCourseId === course._id
                           ? "bg-white/5 text-white/50 cursor-not-allowed"
+                          : course.bundlePrice === 0
+                          ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:opacity-95 text-white shadow-2xl shadow-purple-500/40 hover:scale-105 active:scale-95"
                           : "bg-white/8 hover:bg-white/15 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 border border-white/15"
                       }`}
                     >
@@ -646,22 +645,20 @@ export default function StudentCourses() {
                         </>
                       ) : enrolled || isPro ? (
                         <>
-                          <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                          <span className="relative">
-                            {isPro ? "Start Learning" : "Continue Learning"}
-                          </span>
+                          <CheckCircle className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                          <span className="relative">Enrolled - Start Learning</span>
                           <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </>
                       ) : course.bundlePrice === 0 ? (
                         <>
-                          <Play className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                          <span className="relative">Enroll Free</span>
+                          <Zap className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                          <span className="relative">Enroll Free Now</span>
                           <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </>
                       ) : (
                         <>
                           <ShoppingCart className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                          <span className="relative">View Course</span>
+                          <span className="relative">View Details</span>
                           <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </>
                       )}

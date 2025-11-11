@@ -19,7 +19,11 @@ import {
   Award,
   Target,
   Crown,
+  Zap,
 } from "lucide-react";
+import { enrollInCourse, checkEnrollmentStatus } from "@/services/enrollmentService";
+import { customToast } from "@/components/ui/toast";
+import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -33,6 +37,8 @@ export default function CourseDetailPage() {
   const [purchasing, setPurchasing] = useState(false);
   const [myAccess, setMyAccess] = useState([]);
   const [isPro, setIsPro] = useState(false);
+  const [enrolling, setEnrolling] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   const isParent = course?.type === "parent";
   const isModule = course?.type === "module";
@@ -40,12 +46,20 @@ export default function CourseDetailPage() {
   const hasFullAccess = useMemo(() => {
     if (!course) return false;
     if (isPro) return true;
+    // Check enrollment status or legacy access
+    if (isEnrolled) return true;
     return myAccess.some(
       (access) =>
         access.courseId?._id === course._id ||
         access.courseId?._id === course.parentCourse
     );
-  }, [myAccess, course, isPro]);
+  }, [myAccess, course, isPro, isEnrolled]);
+
+  // Check if course is free
+  const isFree = useMemo(() => {
+    if (!course) return false;
+    return Number(course.bundlePrice || course.pricing?.bundlePrice || 0) === 0;
+  }, [course]);
 
   const lessons = useMemo(
     () => (isModule ? course?.lessons || [] : []),
@@ -73,15 +87,18 @@ export default function CourseDetailPage() {
     if (!id) return;
     try {
       setLoading(true);
-      const [courseData, accessData, profileRes] = await Promise.all([
+      const [courseData, accessData, profileRes, enrollmentCheck] = await Promise.all([
         courseService.getById(id),
         courseService.myAccess().catch(() => []),
         studentService.getProfile().catch(() => null),
+        checkEnrollmentStatus(id).catch(() => ({ data: { isEnrolled: false } })),
       ]);
       setCourse(courseData);
       setMyAccess(accessData || []);
+      setIsEnrolled(enrollmentCheck?.data?.isEnrolled || false);
+      
       const studentData =
-        profileRes?.data || profileRes?.data?.data || profileRes?.data; // handle different shapes defensively
+        profileRes?.data || profileRes?.data?.data || profileRes?.data;
       const plan = (
         studentData?.plan ||
         studentData?.data?.plan ||
@@ -101,17 +118,42 @@ export default function CourseDetailPage() {
     }
   };
 
+  async function handleEnroll() {
+    if (enrolling || hasFullAccess) return;
+    
+    try {
+      setEnrolling(true);
+      await enrollInCourse(id);
+      
+      triggerSuccessAnimation({ type: "achievement" });
+      customToast.success("Enrolled successfully!", `Welcome to ${course.title}! Start learning now.`);
+      
+      setIsEnrolled(true);
+      loadData();
+    } catch (error) {
+      console.error("Enrollment error:", error);
+      customToast.error("Enrollment failed", error.response?.data?.message || error.message || "Please try again");
+    } finally {
+      setEnrolling(false);
+    }
+  }
+
   async function purchaseModule(moduleId) {
     try {
       setPurchasing(true);
-      await purchaseService.create({
+      const response = await purchaseService.create({
         type: "sub_course",
         moduleCourseId: moduleId,
       });
-      alert("Module purchased successfully!");
+      
+      triggerSuccessAnimation({ type: "achievement" });
+      customToast.success("Module purchased!", "You now have access to this module.");
+      
+      // Purchase automatically creates enrollment on backend
+      setIsEnrolled(true);
       loadData();
     } catch (e) {
-      alert(e?.response?.data?.message || e.message || "Purchase failed");
+      customToast.error("Purchase failed", e?.response?.data?.message || e.message || "Please try again");
     } finally {
       setPurchasing(false);
     }
@@ -120,11 +162,16 @@ export default function CourseDetailPage() {
   async function purchaseFull(courseId) {
     try {
       setPurchasing(true);
-      await purchaseService.create({ type: "full_course", courseId });
-      alert("Course bundle unlocked successfully!");
+      const response = await purchaseService.create({ type: "full_course", courseId });
+      
+      triggerSuccessAnimation({ type: "achievement" });
+      customToast.success("Course unlocked!", "You now have full access to all content.");
+      
+      // Purchase automatically creates enrollment on backend
+      setIsEnrolled(true);
       loadData();
     } catch (e) {
-      alert(e?.response?.data?.message || e.message || "Purchase failed");
+      customToast.error("Purchase failed", e?.response?.data?.message || e.message || "Please try again");
     } finally {
       setPurchasing(false);
     }
@@ -263,21 +310,10 @@ export default function CourseDetailPage() {
               </div>
             )}
           </div>
-          {isParent && !hasFullAccess && !isPro && (
-            <div className="flex flex-col items-end gap-2 sm:gap-3">
-              <div className="text-2xl sm:text-3xl font-black">
-                ₹{course.pricing?.bundlePrice || 0}
-              </div>
-              <button
-                onClick={() => purchaseFull(course._id)}
-                disabled={purchasing}
-                className="px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black flex items-center gap-2 hover:opacity-95 disabled:opacity-50 shadow-lg"
-              >
-                <ShoppingCart className="w-5 h-5" /> Buy Complete Bundle
-              </button>
-            </div>
-          )}
-          {isPro && (
+          
+          {/* Professional Header Button Logic */}
+          {isPro ? (
+            // Pro users - show badge only
             <div className="flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-lg sm:rounded-xl border border-yellow-500/50">
               <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" />
               <div className="text-center">
@@ -289,11 +325,63 @@ export default function CourseDetailPage() {
                 </div>
               </div>
             </div>
-          )}
-          {hasFullAccess && (
-            <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 rounded-xl border border-emerald-500/50">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-              <span className="font-bold">Full Access</span>
+          ) : hasFullAccess ? (
+            // Enrolled users - show access badge
+            <div className="flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-emerald-500/20 rounded-xl border border-emerald-500/50">
+              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
+              <div className="text-center">
+                <div className="text-emerald-400 font-bold text-lg">
+                  Enrolled
+                </div>
+                <div className="text-white/80 text-sm">
+                  Full Access
+                </div>
+              </div>
+            </div>
+          ) : isFree ? (
+            // Free course - show enroll button
+            <div className="flex flex-col items-end gap-2 sm:gap-3">
+              <button
+                onClick={handleEnroll}
+                disabled={enrolling}
+                className="px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black flex items-center gap-2 hover:opacity-95 disabled:opacity-50 shadow-lg hover:scale-105 transition-all"
+              >
+                {enrolling ? (
+                  <>
+                    <Clock className="w-5 h-5 animate-spin" />
+                    Enrolling...
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-5 h-5" />
+                    Enroll Free
+                  </>
+                )}
+              </button>
+            </div>
+          ) : (
+            // Paid course - show buy bundle button
+            <div className="flex flex-col items-end gap-2 sm:gap-3">
+              <div className="text-2xl sm:text-3xl font-black text-white">
+                ₹{course.bundlePrice || course.pricing?.bundlePrice || 0}
+              </div>
+              <button
+                onClick={() => purchaseFull(course._id)}
+                disabled={purchasing}
+                className="px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white font-black flex items-center gap-2 hover:opacity-95 disabled:opacity-50 shadow-lg hover:scale-105 transition-all"
+              >
+                {purchasing ? (
+                  <>
+                    <Clock className="w-5 h-5 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-5 h-5" />
+                    Buy Complete Bundle
+                  </>
+                )}
+              </button>
             </div>
           )}
         </div>
