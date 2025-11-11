@@ -35,6 +35,7 @@ import { customToast } from "@/components/ui/toast";
 import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function StudentCourses() {
+  const [viewMode, setViewMode] = useState("all"); // "all" or "enrolled"
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [hoveredCourse, setHoveredCourse] = useState(null);
   const [courses, setCourses] = useState([]);
@@ -167,10 +168,16 @@ export default function StudentCourses() {
     }
   };
 
+  // Filter by view mode first
+  const coursesByViewMode = viewMode === "enrolled"
+    ? enrollments.map(e => e.courseId).filter(Boolean)
+    : courses;
+
+  // Then filter by category
   const filteredCourses =
     selectedCategory === "all"
-      ? courses
-      : courses.filter((course) => course.category === selectedCategory);
+      ? coursesByViewMode
+      : coursesByViewMode.filter((course) => course.category === selectedCategory);
 
   // Pagination logic
   const totalPages = Math.max(1, Math.ceil(filteredCourses.length / itemsPerPage));
@@ -400,6 +407,53 @@ export default function StudentCourses() {
           })}
         </div>
 
+        {/* View Mode Toggle */}
+        <div className="flex gap-3 mb-6">
+          <button
+            onClick={() => {
+              setViewMode("all");
+              setCurrentPage(1);
+            }}
+            className={`group relative px-8 py-4 rounded-2xl font-bold transition-all duration-300 flex items-center gap-3 overflow-hidden ${
+              viewMode === "all"
+                ? "bg-gradient-to-r from-[#803791] to-[#b87bd1] text-white shadow-2xl shadow-purple-500/40 scale-105"
+                : "bg-white/6 text-white/80 hover:bg-white/12 hover:text-white shadow-lg hover:shadow-xl hover:scale-105 border border-white/10"
+            }`}
+          >
+            <div
+              className={`p-2 rounded-xl ${
+                viewMode === "all" ? "bg-white/20" : "bg-white/10"
+              } transition-all duration-300 group-hover:scale-110 group-hover:rotate-12`}
+            >
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <span className="relative">All Courses</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setViewMode("enrolled");
+              setCurrentPage(1);
+            }}
+            className={`group relative px-8 py-4 rounded-2xl font-bold transition-all duration-300 flex items-center gap-3 overflow-hidden ${
+              viewMode === "enrolled"
+                ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-2xl shadow-emerald-500/40 scale-105"
+                : "bg-white/6 text-white/80 hover:bg-white/12 hover:text-white shadow-lg hover:shadow-xl hover:scale-105 border border-white/10"
+            }`}
+          >
+            <div
+              className={`p-2 rounded-xl ${
+                viewMode === "enrolled" ? "bg-white/20" : "bg-white/10"
+              } transition-all duration-300 group-hover:scale-110 group-hover:rotate-12`}
+            >
+              <CheckCircle className="w-5 h-5" />
+            </div>
+            <span className="relative">
+              My Enrollments ({enrollments.length})
+            </span>
+          </button>
+        </div>
+
         {/* Premium Category Filters */}
         <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
           {categories.map((category) => {
@@ -617,8 +671,45 @@ export default function StudentCourses() {
               );
             })
           ) : (
-            <div className="col-span-3 text-center py-12 text-white/80">
-              No courses available
+            <div className="col-span-3 text-center py-20">
+              <div className="relative inline-block mb-6">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-20 animate-pulse" />
+                <div
+                  className="relative w-24 h-24 rounded-3xl flex items-center justify-center shadow-2xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))",
+                    border: "2px solid rgba(255,255,255,0.2)",
+                  }}
+                >
+                  {viewMode === "enrolled" ? (
+                    <CheckCircle className="w-12 h-12 text-white/40" />
+                  ) : (
+                    <BookOpen className="w-12 h-12 text-white/40" />
+                  )}
+                </div>
+              </div>
+              <p className="text-white/70 text-lg font-semibold mb-4">
+                {viewMode === "enrolled"
+                  ? "No enrollments yet"
+                  : "No courses available"}
+              </p>
+              {viewMode === "enrolled" && (
+                <p className="text-white/50 text-sm mb-6">
+                  Start by exploring available courses and enrolling in free ones!
+                </p>
+              )}
+              {viewMode === "enrolled" && (
+                <button
+                  onClick={() => {
+                    setViewMode("all");
+                    setCurrentPage(1);
+                  }}
+                  className="px-6 py-3 bg-gradient-to-r from-[#803791] to-[#b87bd1] hover:opacity-95 text-white rounded-2xl font-bold transition-all duration-300 hover:scale-105"
+                >
+                  Browse Courses
+                </button>
+              )}
             </div>
           )}
         </div>
