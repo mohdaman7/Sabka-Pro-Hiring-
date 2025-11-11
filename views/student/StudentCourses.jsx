@@ -35,6 +35,7 @@ import { customToast } from "@/components/ui/toast";
 import { triggerSuccessAnimation } from "@/utils/successAnimations";
 
 export default function StudentCourses() {
+  const [hasMounted, setHasMounted] = useState(false);
   const [viewMode, setViewMode] = useState("all"); // "all" or "enrolled"
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [hoveredCourse, setHoveredCourse] = useState(null);
@@ -58,8 +59,13 @@ export default function StudentCourses() {
   ];
 
   useEffect(() => {
-    loadData();
+    setHasMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return;
+    loadData();
+  }, [hasMounted]);
 
   const loadData = async () => {
     setLoading(true);
@@ -121,9 +127,13 @@ export default function StudentCourses() {
     }
   };
 
+  if (!hasMounted) {
+    return <div className="min-h-screen bg-slate-950" />;
+  }
+
   const hasAccess = (courseId) => {
     return (
-      isPro || 
+      isPro ||
       myAccess.some((access) => access.courseId?._id === courseId) ||
       enrollmentStatus[courseId]?.isEnrolled
     );
