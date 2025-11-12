@@ -114,9 +114,9 @@ export default function LandingHero() {
 
         {/* Services Grid - 3 columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20">
-          {/* Are You Looking For Jobs */}
+          {/* Are You Looking For Jobs - Coming Soon */}
           <a
-            href="/register?type=candidate"
+            href="/coming-soon"
             className="group relative overflow-hidden rounded-3xl transition-all duration-700 hover:scale-105 hover:-translate-y-3 cursor-pointer block shadow-2xl hover:shadow-purple-500/20"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-purple-600/95 to-indigo-600/95"></div>
@@ -127,8 +127,13 @@ export default function LandingHero() {
             />
             <div className="relative p-6 sm:p-8 min-h-[320px] sm:min-h-[380px] flex flex-col">
               <div className="mb-4 sm:mb-6">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-4 sm:mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  <Users className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    <Users className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                  </div>
+                  <div className="px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full text-xs font-bold text-yellow-300">
+                    COMING SOON
+                  </div>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 group-hover:translate-x-1 transition-transform duration-300">
                   Are You Looking For Jobs?
@@ -148,9 +153,9 @@ export default function LandingHero() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-full"></div>
           </a>
 
-          {/* Are You Looking for Employees */}
+          {/* Are You Looking for Employees - Coming Soon */}
           <a
-            href="/register?type=employer"
+            href="/coming-soon"
             className="group relative overflow-hidden rounded-3xl transition-all duration-700 hover:scale-105 hover:-translate-y-3 cursor-pointer block shadow-2xl hover:shadow-emerald-500/20"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/95 to-teal-600/95"></div>
@@ -161,8 +166,13 @@ export default function LandingHero() {
             />
             <div className="relative p-6 sm:p-8 min-h-[320px] sm:min-h-[380px] flex flex-col">
               <div className="mb-4 sm:mb-6">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-4 sm:mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  <Building2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    <Building2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                  </div>
+                  <div className="px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full text-xs font-bold text-yellow-300">
+                    COMING SOON
+                  </div>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 group-hover:translate-x-1 transition-transform duration-300">
                   Are You Looking For Employees?
@@ -184,7 +194,7 @@ export default function LandingHero() {
 
           {/* Sabka Skill Academy */}
           <a
-            href="/register?type=candidate"
+            href="/skill-academy/register"
             className="group relative overflow-hidden rounded-3xl transition-all duration-700 hover:scale-105 hover:-translate-y-3 cursor-pointer block shadow-2xl hover:shadow-orange-500/20"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-orange-600/95 to-red-600/95"></div>
@@ -195,8 +205,13 @@ export default function LandingHero() {
             />
             <div className="relative p-6 sm:p-8 min-h-[320px] sm:min-h-[380px] flex flex-col">
               <div className="mb-4 sm:mb-6">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl mb-4 sm:mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  <GraduationCap className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    <GraduationCap className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                  </div>
+                  <div className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-xs font-bold text-green-300">
+                    AVAILABLE
+                  </div>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 group-hover:translate-x-1 transition-transform duration-300">
                   Sabka Skill Academy
@@ -217,9 +232,9 @@ export default function LandingHero() {
           </a>
         </div>
 
-        {/* Sabka Visa - Featured Banner */}
+        {/* Sabka Visa - Coming Soon Banner */}
         <a
-          href="/visa"
+          href="/coming-soon"
           className="group block relative overflow-hidden rounded-3xl transition-all duration-700 hover:scale-[1.02] cursor-pointer mb-20 shadow-2xl hover:shadow-pink-500/20"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-pink-600/95 via-purple-600/95 to-blue-600/95"></div>
@@ -233,10 +248,15 @@ export default function LandingHero() {
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/20 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 flex-shrink-0">
                 <Plane className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
               </div>
-              <div>
-                <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3">
-                  Sabka Visa
-                </h3>
+              <div className="flex-1">
+                <div className="flex items-center justify-center sm:justify-start gap-4 mb-2 sm:mb-3">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+                    Sabka Visa
+                  </h3>
+                  <div className="px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full text-xs font-bold text-yellow-300">
+                    COMING SOON
+                  </div>
+                </div>
                 <p className="text-white/90 text-base sm:text-lg lg:text-xl max-w-2xl">
                   Your global mobility partner - Visa assistance and immigration
                   services
