@@ -39,18 +39,37 @@ const CourseCard = ({ course, index }) => {
         scale: 1.02,
         transition: { duration: 0.3 }
       }}
-      className="group relative bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:border-white/20 transition-all duration-500"
+      className="group relative bg-white/5 border-2 border-gray-700 rounded-3xl overflow-hidden hover:border-purple-500 hover:bg-white/10 transition-all duration-500 shadow-2xl"
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${course.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
-      
-      <div className="relative p-8">
+      {/* Course Image */}
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={course.image}
+          alt={course.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        
+        {/* Floating Icon */}
         <motion.div
+          animate={{
+            y: [0, -10, 0],
+            rotate: [0, 5, -5, 0],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            delay: index * 0.2,
+            ease: "easeInOut",
+          }}
           whileHover={{ rotate: 360, scale: 1.1 }}
-          transition={{ duration: 0.6 }}
-          className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${course.gradient} rounded-2xl mb-6 shadow-lg`}
+          className={`absolute top-4 right-4 w-12 h-12 bg-gradient-to-r ${course.gradient} rounded-xl flex items-center justify-center shadow-lg`}
         >
-          <Icon className="w-8 h-8 text-white" />
+          <Icon className="w-6 h-6 text-white" />
         </motion.div>
+      </div>
+      
+      <div className="relative p-6">
 
         <div className="flex items-center justify-between mb-4">
           <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm font-medium rounded-full">
@@ -123,7 +142,8 @@ export default function CoursesPage() {
       price: "Free",
       icon: Code,
       gradient: "from-blue-500 to-purple-600",
-      level: "Beginner"
+      level: "Beginner",
+      image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
       id: 2,
@@ -133,10 +153,11 @@ export default function CoursesPage() {
       students: "8.3k",
       rating: 4.8,
       duration: "35 hours",
-      price: "$299",
+      price: "₹24,999",
       icon: Brain,
       gradient: "from-emerald-500 to-teal-600",
-      level: "Intermediate"
+      level: "Intermediate",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
       id: 3,
@@ -146,12 +167,54 @@ export default function CoursesPage() {
       students: "6.7k",
       rating: 4.9,
       duration: "30 hours",
-      price: "$199",
+      price: "₹16,999",
       icon: Palette,
       gradient: "from-pink-500 to-rose-600",
-      level: "Beginner"
+      level: "Beginner",
+      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
-    // Add more courses...
+    {
+      id: 4,
+      title: "Digital Marketing Mastery",
+      category: "Marketing",
+      description: "Learn SEO, social media marketing, and digital advertising strategies",
+      students: "9.2k",
+      rating: 4.7,
+      duration: "25 hours",
+      price: "₹12,999",
+      icon: TrendingUp,
+      gradient: "from-orange-500 to-red-600",
+      level: "Beginner",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+      id: 5,
+      title: "Cybersecurity Fundamentals",
+      category: "Security",
+      description: "Protect systems and networks from digital attacks and threats",
+      students: "5.8k",
+      rating: 4.8,
+      duration: "45 hours",
+      price: "₹29,999",
+      icon: Shield,
+      gradient: "from-red-500 to-pink-600",
+      level: "Intermediate",
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+      id: 6,
+      title: "Mobile App Development",
+      category: "Development",
+      description: "Build native and cross-platform mobile applications",
+      students: "7.1k",
+      rating: 4.6,
+      duration: "50 hours",
+      price: "₹22,999",
+      icon: Smartphone,
+      gradient: "from-indigo-500 to-purple-600",
+      level: "Intermediate",
+      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    }
   ];
 
   const categories = [
@@ -182,7 +245,7 @@ export default function CoursesPage() {
     <div className="min-h-screen py-12">
       {/* Hero Section */}
       <section className="py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -218,7 +281,7 @@ export default function CoursesPage() {
                 placeholder="Search courses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-colors"
+                className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-gray-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors shadow-xl"
               />
             </div>
 
@@ -228,7 +291,7 @@ export default function CoursesPage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl text-white focus:outline-none focus:border-purple-500/50 transition-colors"
+                className="px-4 py-3 bg-white/5 border-2 border-gray-700 rounded-2xl text-white focus:outline-none focus:border-purple-500 transition-colors shadow-xl"
               >
                 {categories.map((category) => (
                   <option key={category.value} value={category.value} className="bg-gray-800">
@@ -240,7 +303,7 @@ export default function CoursesPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl text-white focus:outline-none focus:border-purple-500/50 transition-colors"
+                className="px-4 py-3 bg-white/5 border-2 border-gray-700 rounded-2xl text-white focus:outline-none focus:border-purple-500 transition-colors shadow-xl"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value} className="bg-gray-800">
@@ -255,7 +318,7 @@ export default function CoursesPage() {
 
       {/* Courses Grid */}
       <section className="py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.map((course, index) => (
               <CourseCard key={course.id} course={course} index={index} />

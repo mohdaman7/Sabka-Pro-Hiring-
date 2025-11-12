@@ -94,7 +94,7 @@ const DesktopHeader = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/skill-academy">
@@ -104,11 +104,15 @@ const DesktopHeader = () => {
             >
               <div className="relative">
                 <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center"
+                  whileHover={{ rotate: 12 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-12 h-12 rounded-xl overflow-hidden shadow-lg"
                 >
-                  <GraduationCap className="w-6 h-6 text-white" />
+                  <img
+                    src="/sabka-logo.png"
+                    alt="Sabka Skill Academy"
+                    className="w-full h-full object-cover"
+                  />
                 </motion.div>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
               </div>

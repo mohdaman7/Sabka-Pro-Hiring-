@@ -121,7 +121,7 @@ const FAQItem = ({ faq, index, isOpen, onToggle }) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-300"
+    className="bg-white/5 border-2 border-gray-700 rounded-2xl overflow-hidden hover:border-purple-500 hover:bg-white/10 transition-all duration-300 shadow-xl"
   >
     <motion.button
       onClick={onToggle}
@@ -195,7 +195,8 @@ export default function SkillAcademyHome() {
       price: "Free",
       icon: Code,
       gradient: "from-blue-500 to-purple-600",
-      description: "Master modern web development with React, Node.js, and MongoDB"
+      description: "Master modern web development with React, Node.js, and MongoDB",
+      image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
       id: 2,
@@ -204,10 +205,11 @@ export default function SkillAcademyHome() {
       students: "8.3k",
       rating: 4.8,
       duration: "35 hours",
-      price: "$299",
+      price: "₹24,999",
       icon: Brain,
       gradient: "from-emerald-500 to-teal-600",
-      description: "Learn machine learning, data analysis, and AI fundamentals"
+      description: "Learn machine learning, data analysis, and AI fundamentals",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
       id: 3,
@@ -216,10 +218,11 @@ export default function SkillAcademyHome() {
       students: "6.7k",
       rating: 4.9,
       duration: "30 hours",
-      price: "$199",
+      price: "₹16,999",
       icon: Palette,
       gradient: "from-pink-500 to-rose-600",
-      description: "Create stunning user interfaces and experiences"
+      description: "Create stunning user interfaces and experiences",
+      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
   ];
 
@@ -302,20 +305,15 @@ export default function SkillAcademyHome() {
           </FloatingElement>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-left">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <FloatingElement delay={0.5}>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-full mb-8">
-                <Sparkles className="w-4 h-4 text-purple-400" />
-                <span className="text-sm font-medium text-purple-300">
-                  Transform Your Career Today
-                </span>
-              </div>
-            </FloatingElement>
 
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -346,7 +344,7 @@ export default function SkillAcademyHome() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.6 }}
-              className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed"
             >
               Join the revolution of online learning with cutting-edge courses, 
               expert mentors, and industry-recognized certifications.
@@ -356,7 +354,7 @@ export default function SkillAcademyHome() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-6"
+              className="flex flex-col sm:flex-row items-start gap-6"
             >
               <MagneticButton
                 href="/skill-academy/courses"
@@ -381,6 +379,53 @@ export default function SkillAcademyHome() {
               </MagneticButton>
             </motion.div>
           </motion.div>
+            </div>
+            
+            {/* Right Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              className="relative"
+            >
+              <div className="relative w-full h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 z-10" />
+                <img
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                  alt="Students Learning"
+                  className="w-full h-full object-cover"
+                />
+                {/* Floating Elements */}
+                <FloatingElement delay={0} duration={4}>
+                  <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-white font-semibold">50,000+</p>
+                        <p className="text-gray-300 text-sm">Students</p>
+                      </div>
+                    </div>
+                  </div>
+                </FloatingElement>
+                
+                <FloatingElement delay={1} duration={5}>
+                  <div className="absolute bottom-8 left-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                        <Award className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-white font-semibold">95%</p>
+                        <p className="text-gray-300 text-sm">Success Rate</p>
+                      </div>
+                    </div>
+                  </div>
+                </FloatingElement>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Scroll Indicator */}
@@ -402,7 +447,7 @@ export default function SkillAcademyHome() {
       {/* Stats Section */}
       <ParallaxSection speed={0.3}>
         <section className="py-20 lg:py-32">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -433,7 +478,7 @@ export default function SkillAcademyHome() {
                       rotateY: 10,
                       transition: { duration: 0.3 }
                     }}
-                    className="group relative bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center hover:border-white/20 transition-all duration-300"
+                    className="group relative bg-white/5 border-2 border-gray-700 rounded-2xl p-8 text-center hover:border-purple-500 hover:bg-white/10 transition-all duration-300 shadow-xl"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`} />
                     
@@ -466,7 +511,7 @@ export default function SkillAcademyHome() {
       {/* Featured Courses Section */}
       <ParallaxSection speed={0.4}>
         <section className="py-20 lg:py-32">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -497,21 +542,31 @@ export default function SkillAcademyHome() {
                       rotateX: 5,
                       transition: { duration: 0.3 }
                     }}
-                    className="group relative bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:border-white/20 transition-all duration-500"
+                    className="group relative bg-white/5 border-2 border-gray-700 rounded-3xl overflow-hidden hover:border-purple-500 hover:bg-white/10 transition-all duration-500 shadow-2xl"
                   >
-                    {/* Gradient Overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${course.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                    {/* Course Image */}
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={course.image}
+                        alt={course.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      
+                      {/* Floating Icon */}
+                      <FloatingElement delay={index * 0.2} duration={3}>
+                        <motion.div
+                          whileHover={{ rotate: 360, scale: 1.1 }}
+                          transition={{ duration: 0.6 }}
+                          className={`absolute top-4 right-4 w-12 h-12 bg-gradient-to-r ${course.gradient} rounded-xl flex items-center justify-center shadow-lg`}
+                        >
+                          <Icon className="w-6 h-6 text-white" />
+                        </motion.div>
+                      </FloatingElement>
+                    </div>
                     
-                    {/* Course Icon */}
-                    <div className="relative p-8">
-                      <motion.div
-                        whileHover={{ rotate: 360, scale: 1.1 }}
-                        transition={{ duration: 0.6 }}
-                        className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${course.gradient} rounded-2xl mb-6 shadow-lg`}
-                      >
-                        <Icon className="w-8 h-8 text-white" />
-                      </motion.div>
-
+                    {/* Course Content */}
+                    <div className="relative p-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm font-medium rounded-full">
                           {course.category}
@@ -590,7 +645,7 @@ export default function SkillAcademyHome() {
       {/* Features Section */}
       <ParallaxSection speed={0.2}>
         <section className="py-20 lg:py-32">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -649,7 +704,7 @@ export default function SkillAcademyHome() {
       {/* FAQ Section */}
       <ParallaxSection speed={0.3}>
         <section className="py-20 lg:py-32">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -714,13 +769,13 @@ export default function SkillAcademyHome() {
       {/* CTA Section */}
       <ParallaxSection speed={0.1}>
         <section className="py-20 lg:py-32">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="relative bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/10 rounded-3xl p-8 lg:p-16 overflow-hidden"
+              className="relative bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-2 border-gray-700 rounded-3xl p-8 lg:p-16 overflow-hidden shadow-2xl hover:border-purple-500 transition-colors duration-300"
             >
               {/* Animated Background */}
               <div className="absolute inset-0">
