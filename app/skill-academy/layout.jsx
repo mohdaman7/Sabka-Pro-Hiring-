@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Home, 
-  BookOpen, 
-  Star, 
-  Users, 
+import {
+  Home,
+  BookOpen,
+  Star,
+  Users,
   Phone,
   Menu,
   X,
-  GraduationCap
+  GraduationCap,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,13 +19,13 @@ import SkillAcademyFooter from "@/components/ui/SkillAcademyFooter";
 // Mobile Bottom Navigation
 const MobileBottomNav = () => {
   const pathname = usePathname();
-  
+
   const navItems = [
     { icon: Home, label: "Home", href: "/skill-academy" },
     { icon: BookOpen, label: "Courses", href: "/skill-academy/courses" },
     { icon: Star, label: "Reviews", href: "/skill-academy/reviews" },
     { icon: Users, label: "About", href: "/skill-academy/about" },
-    { icon: Phone, label: "Contact", href: "/skill-academy/contact" }
+    { icon: Phone, label: "Contact", href: "/skill-academy/contact" },
   ];
 
   return (
@@ -34,14 +34,14 @@ const MobileBottomNav = () => {
         {navItems.map((item, index) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
-          
+
           return (
             <Link key={index} href={item.href}>
               <motion.div
                 whileTap={{ scale: 0.9 }}
                 className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all ${
-                  isActive 
-                    ? "text-purple-400 bg-purple-500/20" 
+                  isActive
+                    ? "text-purple-400 bg-purple-500/20"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -81,26 +81,26 @@ const DesktopHeader = () => {
     { label: "Courses", href: "/skill-academy/courses" },
     { label: "Reviews", href: "/skill-academy/reviews" },
     { label: "About", href: "/skill-academy/about" },
-    { label: "Contact", href: "/skill-academy/contact" }
+    { label: "Contact", href: "/skill-academy/contact" },
   ];
 
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? "bg-gray-900/95 backdrop-blur-xl border-b border-white/10 shadow-2xl" 
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
+        scrolled
+          ? "bg-gray-900/95 backdrop-blur-xl border-b border-white/10 shadow-2xl"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-0">
+        <div className="max-w-7xl mx-auto flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/skill-academy">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3"
+              className="flex items-center gap-3 flex-shrink-0"
             >
               <div className="relative">
                 <motion.div
@@ -116,7 +116,7 @@ const DesktopHeader = () => {
                 </motion.div>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
               </div>
-              <div>
+              <div className="hidden sm:block">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   Sabka Skill Academy
                 </h1>
@@ -134,8 +134,8 @@ const DesktopHeader = () => {
                   <motion.div
                     whileHover={{ y: -2 }}
                     className={`relative py-2 px-4 rounded-lg transition-all ${
-                      isActive 
-                        ? "text-purple-400 bg-purple-500/10" 
+                      isActive
+                        ? "text-purple-400 bg-purple-500/10"
                         : "text-gray-300 hover:text-white hover:bg-white/5"
                     }`}
                   >
@@ -153,10 +153,13 @@ const DesktopHeader = () => {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4 flex-shrink-0">
             <Link href="/skill-academy/register">
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)" }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)",
+                }}
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg hover:shadow-purple-500/25 transition-all"
               >
@@ -168,9 +171,13 @@ const DesktopHeader = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            className="md:hidden p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors flex-shrink-0"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -182,7 +189,7 @@ const DesktopHeader = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-gray-900/95 backdrop-blur-xl border-t border-white/10"
+            className="md:hidden bg-gray-900/95 backdrop-blur-xl border-t border-white/10 w-full"
           >
             <div className="px-4 py-4 space-y-2">
               {navItems.map((item, index) => {
@@ -193,8 +200,8 @@ const DesktopHeader = () => {
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setMobileMenuOpen(false)}
                       className={`block py-3 px-4 rounded-lg transition-all ${
-                        isActive 
-                          ? "text-purple-400 bg-purple-500/20" 
+                        isActive
+                          ? "text-purple-400 bg-purple-500/20"
                           : "text-gray-300 hover:text-white hover:bg-white/5"
                       }`}
                     >
@@ -231,7 +238,7 @@ export default function SkillAcademyLayout({ children }) {
       </div>
 
       <DesktopHeader />
-      
+
       <main className="relative z-10 pt-16 lg:pt-20 pb-20 md:pb-0">
         {children}
       </main>

@@ -91,11 +91,7 @@ const ParallaxSection = ({ children, speed = 0.5 }) => {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -50 * speed]);
 
-  return (
-    <motion.div style={{ y }}>
-      {children}
-    </motion.div>
-  );
+  return <motion.div style={{ y }}>{children}</motion.div>;
 };
 
 // Mouse Follower Component
@@ -138,7 +134,7 @@ const FAQItem = ({ faq, index, isOpen, onToggle }) => (
         <Plus className="w-5 h-5 text-white" />
       </motion.div>
     </motion.button>
-    
+
     <motion.div
       initial={false}
       animate={{
@@ -177,10 +173,30 @@ export default function SkillAcademyHome() {
 
   // Stats data
   const stats = [
-    { icon: Users, label: "Active Students", value: "50,000+", color: "from-blue-500 to-cyan-500" },
-    { icon: BookOpen, label: "Courses Available", value: "200+", color: "from-purple-500 to-pink-500" },
-    { icon: Award, label: "Certifications", value: "15,000+", color: "from-orange-500 to-red-500" },
-    { icon: TrendingUp, label: "Success Rate", value: "95%", color: "from-green-500 to-emerald-500" },
+    {
+      icon: Users,
+      label: "Active Students",
+      value: "50,000+",
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      icon: BookOpen,
+      label: "Courses Available",
+      value: "200+",
+      color: "from-purple-500 to-pink-500",
+    },
+    {
+      icon: Award,
+      label: "Certifications",
+      value: "15,000+",
+      color: "from-orange-500 to-red-500",
+    },
+    {
+      icon: TrendingUp,
+      label: "Success Rate",
+      value: "95%",
+      color: "from-green-500 to-emerald-500",
+    },
   ];
 
   // Featured courses
@@ -195,8 +211,10 @@ export default function SkillAcademyHome() {
       price: "Free",
       icon: Code,
       gradient: "from-blue-500 to-purple-600",
-      description: "Master modern web development with React, Node.js, and MongoDB",
-      image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      description:
+        "Master modern web development with React, Node.js, and MongoDB",
+      image:
+        "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
     {
       id: 2,
@@ -209,7 +227,8 @@ export default function SkillAcademyHome() {
       icon: Brain,
       gradient: "from-emerald-500 to-teal-600",
       description: "Learn machine learning, data analysis, and AI fundamentals",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
     {
       id: 3,
@@ -222,7 +241,8 @@ export default function SkillAcademyHome() {
       icon: Palette,
       gradient: "from-pink-500 to-rose-600",
       description: "Create stunning user interfaces and experiences",
-      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      image:
+        "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
   ];
 
@@ -232,25 +252,25 @@ export default function SkillAcademyHome() {
       icon: Rocket,
       title: "Fast-Track Learning",
       description: "Accelerated courses designed for quick skill acquisition",
-      color: "from-orange-500 to-red-500"
+      color: "from-orange-500 to-red-500",
     },
     {
       icon: Target,
       title: "Industry-Focused",
       description: "Curriculum aligned with current market demands",
-      color: "from-blue-500 to-indigo-500"
+      color: "from-blue-500 to-indigo-500",
     },
     {
       icon: Shield,
       title: "Certified Programs",
       description: "Globally recognized certifications and credentials",
-      color: "from-green-500 to-emerald-500"
+      color: "from-green-500 to-emerald-500",
     },
     {
       icon: Users,
       title: "Expert Mentors",
       description: "Learn from industry professionals and experts",
-      color: "from-purple-500 to-pink-500"
+      color: "from-purple-500 to-pink-500",
     },
   ];
 
@@ -258,34 +278,40 @@ export default function SkillAcademyHome() {
   const faqs = [
     {
       question: "How do I get started with Sabka Skill Academy?",
-      answer: "Getting started is easy! Simply create a free account, browse our course catalog, and enroll in courses that match your learning goals. Many of our courses are free, and you can start learning immediately."
+      answer:
+        "Getting started is easy! Simply create a free account, browse our course catalog, and enroll in courses that match your learning goals. Many of our courses are free, and you can start learning immediately.",
     },
     {
       question: "Are the certificates recognized by employers?",
-      answer: "Yes! Our certificates are industry-recognized and valued by employers worldwide. We partner with leading companies to ensure our curriculum meets current industry standards and requirements."
+      answer:
+        "Yes! Our certificates are industry-recognized and valued by employers worldwide. We partner with leading companies to ensure our curriculum meets current industry standards and requirements.",
     },
     {
       question: "Can I learn at my own pace?",
-      answer: "Absolutely! All our courses are self-paced, allowing you to learn when it's convenient for you. You have lifetime access to course materials, so you can revisit content anytime."
+      answer:
+        "Absolutely! All our courses are self-paced, allowing you to learn when it's convenient for you. You have lifetime access to course materials, so you can revisit content anytime.",
     },
     {
       question: "Do you offer job placement assistance?",
-      answer: "Yes, we provide comprehensive career support including resume reviews, interview preparation, and job placement assistance. Our career services team works with you to help achieve your professional goals."
+      answer:
+        "Yes, we provide comprehensive career support including resume reviews, interview preparation, and job placement assistance. Our career services team works with you to help achieve your professional goals.",
     },
     {
       question: "What if I'm not satisfied with a course?",
-      answer: "We offer a 30-day money-back guarantee on all paid courses. If you're not completely satisfied, contact our support team for a full refund within 30 days of purchase."
+      answer:
+        "We offer a 30-day money-back guarantee on all paid courses. If you're not completely satisfied, contact our support team for a full refund within 30 days of purchase.",
     },
     {
       question: "Are there any prerequisites for the courses?",
-      answer: "Most of our beginner courses have no prerequisites. For intermediate and advanced courses, we clearly list any required knowledge or skills. You can always start with our foundational courses if needed."
+      answer:
+        "Most of our beginner courses have no prerequisites. For intermediate and advanced courses, we clearly list any required knowledge or skills. You can always start with our foundational courses if needed.",
     },
   ];
 
   return (
     <div className="relative">
       <MouseFollower mousePosition={mousePosition} />
-      
+
       {/* Hero Section */}
       <motion.section
         ref={heroRef}
@@ -305,126 +331,128 @@ export default function SkillAcademyHome() {
           </FloatingElement>
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="text-left">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
-            >
-              <span className="bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
-                Master Skills
-              </span>
-              <br />
-              <motion.span
-                animate={{
-                  backgroundPosition: ["0%", "100%", "0%"],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent bg-[length:200%_auto]"
-              >
-                Shape Future
-              </motion.span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.6 }}
-              className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed"
-            >
-              Join the revolution of online learning with cutting-edge courses, 
-              expert mentors, and industry-recognized certifications.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="flex flex-col sm:flex-row items-start gap-6"
-            >
-              <MagneticButton
-                href="/skill-academy/courses"
-                className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold text-lg text-white shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-3"
-              >
-                <Rocket className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-                Start Learning Now
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left Content */}
+              <div className="text-left">
                 <motion.div
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.2 }}
                 >
-                  <ArrowRight className="w-5 h-5" />
-                </motion.div>
-              </MagneticButton>
+                  <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.4 }}
+                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
+                  >
+                    <span className="bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+                      Master Skills
+                    </span>
+                    <br />
+                    <motion.span
+                      animate={{
+                        backgroundPosition: ["0%", "100%", "0%"],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                      className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent bg-[length:200%_auto]"
+                    >
+                      Shape Future
+                    </motion.span>
+                  </motion.h1>
 
-              <MagneticButton
-                href="/skill-academy/about"
-                className="group px-8 py-4 bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl font-semibold text-lg text-white hover:bg-white/10 transition-all duration-300 flex items-center gap-3"
-              >
-                <Play className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                Watch Demo
-              </MagneticButton>
-            </motion.div>
-          </motion.div>
-            </div>
-            
-            {/* Right Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 1 }}
-              className="relative"
-            >
-              <div className="relative w-full h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 z-10" />
-                <img
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                  alt="Students Learning"
-                  className="w-full h-full object-cover"
-                />
-                {/* Floating Elements */}
-                <FloatingElement delay={0} duration={4}>
-                  <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                        <CheckCircle className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold">50,000+</p>
-                        <p className="text-gray-300 text-sm">Students</p>
-                      </div>
-                    </div>
-                  </div>
-                </FloatingElement>
-                
-                <FloatingElement delay={1} duration={5}>
-                  <div className="absolute bottom-8 left-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                        <Award className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold">95%</p>
-                        <p className="text-gray-300 text-sm">Success Rate</p>
-                      </div>
-                    </div>
-                  </div>
-                </FloatingElement>
+                  <motion.p
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.6 }}
+                    className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed"
+                  >
+                    Join the revolution of online learning with cutting-edge
+                    courses, expert mentors, and industry-recognized
+                    certifications.
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.8 }}
+                    className="flex flex-col sm:flex-row items-start gap-6"
+                  >
+                    <MagneticButton
+                      href="/skill-academy/courses"
+                      className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold text-lg text-white shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-3"
+                    >
+                      <Rocket className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                      Start Learning Now
+                      <motion.div
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        <ArrowRight className="w-5 h-5" />
+                      </motion.div>
+                    </MagneticButton>
+
+                    <MagneticButton
+                      href="/skill-academy/about"
+                      className="group px-8 py-4 bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl font-semibold text-lg text-white hover:bg-white/10 transition-all duration-300 flex items-center gap-3"
+                    >
+                      <Play className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                      Watch Demo
+                    </MagneticButton>
+                  </motion.div>
+                </motion.div>
               </div>
-            </motion.div>
+
+              {/* Right Image */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, delay: 1 }}
+                className="relative"
+              >
+                <div className="relative w-full h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 z-10" />
+                  <img
+                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                    alt="Students Learning"
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Floating Elements */}
+                  <FloatingElement delay={0} duration={4}>
+                    <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                          <CheckCircle className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <p className="text-white font-semibold">50,000+</p>
+                          <p className="text-gray-300 text-sm">Students</p>
+                        </div>
+                      </div>
+                    </div>
+                  </FloatingElement>
+
+                  <FloatingElement delay={1} duration={5}>
+                    <div className="absolute bottom-8 left-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                          <Award className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <p className="text-white font-semibold">95%</p>
+                          <p className="text-gray-300 text-sm">Success Rate</p>
+                        </div>
+                      </div>
+                    </div>
+                  </FloatingElement>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
 
@@ -446,8 +474,8 @@ export default function SkillAcademyHome() {
 
       {/* Stats Section */}
       <ParallaxSection speed={0.3}>
-        <section className="py-20 lg:py-32">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+        <section className="py-20 lg:py-32 w-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -459,7 +487,8 @@ export default function SkillAcademyHome() {
                 Trusted by Learners Worldwide
               </h2>
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                Join a community of ambitious learners and industry professionals
+                Join a community of ambitious learners and industry
+                professionals
               </p>
             </motion.div>
 
@@ -473,15 +502,17 @@ export default function SkillAcademyHome() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    whileHover={{ 
-                      scale: 1.05, 
+                    whileHover={{
+                      scale: 1.05,
                       rotateY: 10,
-                      transition: { duration: 0.3 }
+                      transition: { duration: 0.3 },
                     }}
                     className="group relative bg-white/5 border-2 border-gray-700 rounded-2xl p-8 text-center hover:border-purple-500 hover:bg-white/10 transition-all duration-300 shadow-xl"
                   >
-                    <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`} />
-                    
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
+                    />
+
                     <motion.div
                       whileHover={{ rotate: 360, scale: 1.2 }}
                       transition={{ duration: 0.6 }}
@@ -489,7 +520,7 @@ export default function SkillAcademyHome() {
                     >
                       <Icon className="w-8 h-8 text-white" />
                     </motion.div>
-                    
+
                     <motion.h3
                       initial={{ scale: 1 }}
                       whileInView={{ scale: [1, 1.1, 1] }}
@@ -498,7 +529,7 @@ export default function SkillAcademyHome() {
                     >
                       {stat.value}
                     </motion.h3>
-                    
+
                     <p className="text-gray-400 font-medium">{stat.label}</p>
                   </motion.div>
                 );
@@ -510,8 +541,8 @@ export default function SkillAcademyHome() {
 
       {/* Featured Courses Section */}
       <ParallaxSection speed={0.4}>
-        <section className="py-20 lg:py-32">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+        <section className="py-20 lg:py-32 w-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -537,10 +568,10 @@ export default function SkillAcademyHome() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.2 }}
-                    whileHover={{ 
+                    whileHover={{
                       y: -10,
                       rotateX: 5,
-                      transition: { duration: 0.3 }
+                      transition: { duration: 0.3 },
                     }}
                     className="group relative bg-white/5 border-2 border-gray-700 rounded-3xl overflow-hidden hover:border-purple-500 hover:bg-white/10 transition-all duration-500 shadow-2xl"
                   >
@@ -552,7 +583,7 @@ export default function SkillAcademyHome() {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      
+
                       {/* Floating Icon */}
                       <FloatingElement delay={index * 0.2} duration={3}>
                         <motion.div
@@ -564,18 +595,20 @@ export default function SkillAcademyHome() {
                         </motion.div>
                       </FloatingElement>
                     </div>
-                    
+
                     {/* Course Content */}
                     <div className="relative p-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm font-medium rounded-full">
                           {course.category}
                         </span>
-                        <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-                          course.price === "Free" 
-                            ? "bg-green-500/20 text-green-300" 
-                            : "bg-orange-500/20 text-orange-300"
-                        }`}>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-bold ${
+                            course.price === "Free"
+                              ? "bg-green-500/20 text-green-300"
+                              : "bg-orange-500/20 text-orange-300"
+                          }`}
+                        >
                           {course.price}
                         </span>
                       </div>
@@ -583,7 +616,7 @@ export default function SkillAcademyHome() {
                       <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">
                         {course.title}
                       </h3>
-                      
+
                       <p className="text-gray-400 mb-6 leading-relaxed">
                         {course.description}
                       </p>
@@ -644,8 +677,8 @@ export default function SkillAcademyHome() {
 
       {/* Features Section */}
       <ParallaxSection speed={0.2}>
-        <section className="py-20 lg:py-32">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+        <section className="py-20 lg:py-32 w-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -657,7 +690,8 @@ export default function SkillAcademyHome() {
                 Why Choose Sabka Skill Academy?
               </h2>
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                Experience the future of online learning with our innovative approach
+                Experience the future of online learning with our innovative
+                approach
               </p>
             </motion.div>
 
@@ -671,10 +705,10 @@ export default function SkillAcademyHome() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    whileHover={{ 
+                    whileHover={{
                       y: -10,
                       scale: 1.02,
-                      transition: { duration: 0.3 }
+                      transition: { duration: 0.3 },
                     }}
                     className="group text-center"
                   >
@@ -685,11 +719,11 @@ export default function SkillAcademyHome() {
                     >
                       <Icon className="w-10 h-10 text-white" />
                     </motion.div>
-                    
+
                     <h3 className="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors">
                       {feature.title}
                     </h3>
-                    
+
                     <p className="text-gray-400 leading-relaxed">
                       {feature.description}
                     </p>
@@ -724,7 +758,8 @@ export default function SkillAcademyHome() {
                 Frequently Asked Questions
               </h2>
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                Got questions? We've got answers. Here are the most common questions about our platform.
+                Got questions? We've got answers. Here are the most common
+                questions about our platform.
               </p>
             </motion.div>
 
@@ -796,7 +831,11 @@ export default function SkillAcademyHome() {
               <div className="relative z-10">
                 <motion.div
                   animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
                   className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-8 shadow-2xl"
                 >
                   <Rocket className="w-10 h-10 text-white" />
@@ -805,12 +844,12 @@ export default function SkillAcademyHome() {
                 <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   Ready to Transform Your Career?
                 </h2>
-                
+
                 <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                  Join thousands of successful students and start your journey today. 
-                  Your future self will thank you.
+                  Join thousands of successful students and start your journey
+                  today. Your future self will thank you.
                 </p>
-                
+
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                   <MagneticButton
                     href="/skill-academy/register"

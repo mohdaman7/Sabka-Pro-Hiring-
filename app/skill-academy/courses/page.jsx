@@ -27,17 +27,17 @@ import Link from "next/link";
 // Course Card Component
 const CourseCard = ({ course, index }) => {
   const Icon = course.icon;
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ 
+      whileHover={{
         y: -10,
         scale: 1.02,
-        transition: { duration: 0.3 }
+        transition: { duration: 0.3 },
       }}
       className="group relative bg-white/5 border-2 border-gray-700 rounded-3xl overflow-hidden hover:border-purple-500 hover:bg-white/10 transition-all duration-500 shadow-2xl"
     >
@@ -49,7 +49,7 @@ const CourseCard = ({ course, index }) => {
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        
+
         {/* Floating Icon */}
         <motion.div
           animate={{
@@ -68,18 +68,19 @@ const CourseCard = ({ course, index }) => {
           <Icon className="w-6 h-6 text-white" />
         </motion.div>
       </div>
-      
-      <div className="relative p-6">
 
+      <div className="relative p-6">
         <div className="flex items-center justify-between mb-4">
           <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm font-medium rounded-full">
             {course.category}
           </span>
-          <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-            course.price === "Free" 
-              ? "bg-green-500/20 text-green-300" 
-              : "bg-orange-500/20 text-orange-300"
-          }`}>
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-bold ${
+              course.price === "Free"
+                ? "bg-green-500/20 text-green-300"
+                : "bg-orange-500/20 text-orange-300"
+            }`}
+          >
             {course.price}
           </span>
         </div>
@@ -87,7 +88,7 @@ const CourseCard = ({ course, index }) => {
         <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">
           {course.title}
         </h3>
-        
+
         <p className="text-gray-400 mb-6 leading-relaxed">
           {course.description}
         </p>
@@ -135,7 +136,8 @@ export default function CoursesPage() {
       id: 1,
       title: "Full Stack Web Development",
       category: "Development",
-      description: "Master modern web development with React, Node.js, and MongoDB",
+      description:
+        "Master modern web development with React, Node.js, and MongoDB",
       students: "12.5k",
       rating: 4.9,
       duration: "40 hours",
@@ -143,7 +145,8 @@ export default function CoursesPage() {
       icon: Code,
       gradient: "from-blue-500 to-purple-600",
       level: "Beginner",
-      image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      image:
+        "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
     {
       id: 2,
@@ -157,7 +160,8 @@ export default function CoursesPage() {
       icon: Brain,
       gradient: "from-emerald-500 to-teal-600",
       level: "Intermediate",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
     {
       id: 3,
@@ -171,13 +175,15 @@ export default function CoursesPage() {
       icon: Palette,
       gradient: "from-pink-500 to-rose-600",
       level: "Beginner",
-      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      image:
+        "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
     {
       id: 4,
       title: "Digital Marketing Mastery",
       category: "Marketing",
-      description: "Learn SEO, social media marketing, and digital advertising strategies",
+      description:
+        "Learn SEO, social media marketing, and digital advertising strategies",
       students: "9.2k",
       rating: 4.7,
       duration: "25 hours",
@@ -185,13 +191,15 @@ export default function CoursesPage() {
       icon: TrendingUp,
       gradient: "from-orange-500 to-red-600",
       level: "Beginner",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      image:
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
     {
       id: 5,
       title: "Cybersecurity Fundamentals",
       category: "Security",
-      description: "Protect systems and networks from digital attacks and threats",
+      description:
+        "Protect systems and networks from digital attacks and threats",
       students: "5.8k",
       rating: 4.8,
       duration: "45 hours",
@@ -199,7 +207,8 @@ export default function CoursesPage() {
       icon: Shield,
       gradient: "from-red-500 to-pink-600",
       level: "Intermediate",
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+      image:
+        "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
     },
     {
       id: 6,
@@ -213,8 +222,9 @@ export default function CoursesPage() {
       icon: Smartphone,
       gradient: "from-indigo-500 to-purple-600",
       level: "Intermediate",
-      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    }
+      image:
+        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    },
   ];
 
   const categories = [
@@ -234,18 +244,20 @@ export default function CoursesPage() {
   ];
 
   // Filter and sort courses
-  const filteredCourses = courses.filter(course => {
-    const matchesCategory = selectedCategory === "all" || course.category === selectedCategory;
-    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.description.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredCourses = courses.filter((course) => {
+    const matchesCategory =
+      selectedCategory === "all" || course.category === selectedCategory;
+    const matchesSearch =
+      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   return (
     <div className="min-h-screen py-12">
       {/* Hero Section */}
-      <section className="py-20 lg:py-32">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+      <section className="py-20 lg:py-32 w-full px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -267,7 +279,8 @@ export default function CoursesPage() {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Discover world-class courses designed to accelerate your career growth
+              Discover world-class courses designed to accelerate your career
+              growth
             </p>
           </motion.div>
 
@@ -294,7 +307,11 @@ export default function CoursesPage() {
                 className="px-4 py-3 bg-white/5 border-2 border-gray-700 rounded-2xl text-white focus:outline-none focus:border-purple-500 transition-colors shadow-xl"
               >
                 {categories.map((category) => (
-                  <option key={category.value} value={category.value} className="bg-gray-800">
+                  <option
+                    key={category.value}
+                    value={category.value}
+                    className="bg-gray-800"
+                  >
                     {category.label}
                   </option>
                 ))}
@@ -306,7 +323,11 @@ export default function CoursesPage() {
                 className="px-4 py-3 bg-white/5 border-2 border-gray-700 rounded-2xl text-white focus:outline-none focus:border-purple-500 transition-colors shadow-xl"
               >
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-gray-800">
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="bg-gray-800"
+                  >
                     {option.label}
                   </option>
                 ))}
@@ -317,8 +338,8 @@ export default function CoursesPage() {
       </section>
 
       {/* Courses Grid */}
-      <section className="py-8">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+      <section className="py-8 w-full px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.map((course, index) => (
               <CourseCard key={course.id} course={course} index={index} />
@@ -327,7 +348,9 @@ export default function CoursesPage() {
 
           {filteredCourses.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-gray-400 text-xl">No courses found matching your criteria.</p>
+              <p className="text-gray-400 text-xl">
+                No courses found matching your criteria.
+              </p>
             </div>
           )}
         </div>
