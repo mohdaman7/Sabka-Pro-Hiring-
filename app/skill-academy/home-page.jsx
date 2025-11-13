@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import {
   MouseFollower,
   Hero,
+  WhyStandOut,
   Stats,
   FeaturedCourses,
   Features,
@@ -26,11 +27,12 @@ export default function SkillAcademyHome() {
     <div className="relative">
       <MouseFollower mousePosition={mousePosition} />
       <Hero />
+      <WhyStandOut />
       <Stats />
       <FeaturedCourses />
       <Features />
       <FAQ />
-      <CTA />
+      {/* <CTA /> */}
     </div>
   );
 }
