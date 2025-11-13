@@ -256,8 +256,8 @@ export default function CoursesPage() {
   return (
     <div className="min-h-screen py-12">
       {/* Hero Section */}
-      <section className="py-20 lg:py-32 w-full px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 lg:py-32">
+        <div className="max-w-[95%] mx-auto px-4 lg:px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -338,8 +338,8 @@ export default function CoursesPage() {
       </section>
 
       {/* Courses Grid */}
-      <section className="py-8 w-full px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-8">
+        <div className="max-w-[95%] mx-auto px-4 lg:px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.map((course, index) => (
               <CourseCard key={course.id} course={course} index={index} />

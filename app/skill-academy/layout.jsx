@@ -94,8 +94,8 @@ const DesktopHeader = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-0">
-        <div className="max-w-7xl mx-auto flex items-center justify-between h-16 lg:h-20">
+      <div className="max-w-[95%] mx-auto px-4 lg:px-6">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/skill-academy">
             <motion.div
