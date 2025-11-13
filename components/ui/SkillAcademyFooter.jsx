@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
+import {
   GraduationCap,
   Mail,
   Phone,
@@ -41,7 +41,10 @@ const SkillAcademyFooter = () => {
 
   const footerLinks = {
     courses: [
-      { label: "Web Development", href: "/skill-academy/courses/web-development" },
+      {
+        label: "Web Development",
+        href: "/skill-academy/courses/web-development",
+      },
       { label: "Data Science", href: "/skill-academy/courses/data-science" },
       { label: "UI/UX Design", href: "/skill-academy/courses/design" },
       { label: "Digital Marketing", href: "/skill-academy/courses/marketing" },
@@ -118,14 +121,17 @@ const SkillAcademyFooter = () => {
                       <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                         Sabka Skill Academy
                       </h3>
-                      <p className="text-sm text-purple-300">Learn • Grow • Succeed</p>
+                      <p className="text-sm text-purple-300">
+                        Learn • Grow • Succeed
+                      </p>
                     </div>
                   </div>
                 </Link>
 
                 <p className="text-gray-400 mb-6 leading-relaxed">
-                  Empowering learners worldwide with cutting-edge skills and industry-recognized certifications. 
-                  Join our community of successful professionals and transform your career today.
+                  Empowering learners worldwide with cutting-edge skills and
+                  industry-recognized certifications. Join our community of
+                  successful professionals and transform your career today.
                 </p>
 
                 {/* Stats */}
@@ -143,8 +149,12 @@ const SkillAcademyFooter = () => {
                         className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-4 text-center"
                       >
                         <Icon className="w-6 h-6 text-purple-400 mx-auto mb-2" />
-                        <div className="text-lg font-bold text-white">{stat.value}</div>
-                        <div className="text-xs text-gray-400">{stat.label}</div>
+                        <div className="text-lg font-bold text-white">
+                          {stat.value}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          {stat.label}
+                        </div>
                       </motion.div>
                     );
                   })}
@@ -177,7 +187,9 @@ const SkillAcademyFooter = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <h4 className="text-lg font-bold text-white mb-6">Popular Courses</h4>
+                <h4 className="text-lg font-bold text-white mb-6">
+                  Popular Courses
+                </h4>
                 <ul className="space-y-3">
                   {footerLinks.courses.map((link, index) => (
                     <li key={index}>
@@ -260,10 +272,14 @@ const SkillAcademyFooter = () => {
                 Stay Updated with Our Newsletter
               </h3>
               <p className="text-gray-400 mb-8">
-                Get the latest course updates, learning tips, and exclusive offers delivered to your inbox.
+                Get the latest course updates, learning tips, and exclusive
+                offers delivered to your inbox.
               </p>
 
-              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <form
+                onSubmit={handleNewsletterSubmit}
+                className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+              >
                 <input
                   type="email"
                   value={email}

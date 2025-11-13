@@ -229,12 +229,28 @@ const DesktopHeader = () => {
 
 export default function SkillAcademyLayout({ children }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(147,51,234,0.1),transparent_70%)]" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+    <div className="relative min-h-screen w-full overflow-x-hidden">
+      {/* Premium animated background */}
+      <div className="fixed inset-0 -z-10 w-full h-full">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a0f2e] via-[#0f0820] to-[#1a0f2e]" />
+
+        <motion.div
+          className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-900/30 to-purple-700/10 rounded-full blur-3xl"
+          animate={{
+            y: [0, 30, 0],
+            x: [0, 20, 0],
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+
+        <motion.div
+          className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-violet-900/20 to-purple-800/10 rounded-full blur-3xl"
+          animate={{
+            y: [0, -30, 0],
+            x: [0, -20, 0],
+          }}
+          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+        />
       </div>
 
       <DesktopHeader />
