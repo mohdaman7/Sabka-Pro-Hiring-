@@ -9,7 +9,6 @@ import {
   Features,
   FAQ,
   CTA,
-  Footer,
 } from "@/views/skill-academy";
 
 export default function SkillAcademyHome() {
@@ -32,7 +31,6 @@ export default function SkillAcademyHome() {
       <Features />
       <FAQ />
       <CTA />
-      <Footer />
     </div>
   );
 }
