@@ -310,7 +310,7 @@ export default function CoursesPage() {
 
   return (
     <div className="min-h-screen">
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-12 lg:py-16 overflow-hidden">
         <div className="absolute inset-0 opacity-30 pointer-events-none">
           <div className="absolute top-20 right-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl" />
           <div className="absolute bottom-10 left-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
@@ -397,7 +397,7 @@ export default function CoursesPage() {
         </div>
       </section>
 
-      <section className="relative py-8 lg:py-16">
+      <section className="relative py-8 lg:py-12">
         <div className="max-w-7xl mx-auto px-6">
           {filteredCourses.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
@@ -423,7 +423,7 @@ export default function CoursesPage() {
         </div>
       </section>
 
-      <section className="relative py-20 lg:py-24 overflow-hidden">
+      <section className="relative py-16 lg:py-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

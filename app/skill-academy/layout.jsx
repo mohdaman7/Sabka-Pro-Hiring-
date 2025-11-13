@@ -2,16 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Home,
-  BookOpen,
-  Star,
-  Users,
-  Phone,
-  Menu,
-  X,
-  GraduationCap,
-} from "lucide-react";
+import { Home, BookOpen, Star, Users, Phone, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SkillAcademyFooter from "@/components/ui/SkillAcademyFooter";
@@ -240,7 +231,7 @@ export default function SkillAcademyLayout({ children }) {
             y: [0, 30, 0],
             x: [0, 20, 0],
           }}
-          transition={{ duration: 8, repeat: Infinity }}
+          transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
         />
 
         <motion.div
@@ -249,7 +240,11 @@ export default function SkillAcademyLayout({ children }) {
             y: [0, -30, 0],
             x: [0, -20, 0],
           }}
-          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+          transition={{
+            duration: 10,
+            repeat: Number.POSITIVE_INFINITY,
+            delay: 1,
+          }}
         />
       </div>
 
