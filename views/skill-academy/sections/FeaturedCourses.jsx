@@ -124,18 +124,6 @@ export const FeaturedCourses = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 md:mb-16 px-4 md:px-6"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-4 md:mb-6"
-          >
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-xs md:text-sm font-semibold text-purple-300">
-              Explore Our Courses
-            </span>
-          </motion.div>
-
           <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6">
             Premium Courses{" "}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
