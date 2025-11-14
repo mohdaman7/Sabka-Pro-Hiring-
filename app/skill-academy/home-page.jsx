@@ -30,7 +30,7 @@ export default function SkillAcademyHome() {
       <WhyStandOut />
       <Stats />
       <FeaturedCourses />
-      <Features />
+      {/* <Features /> */}
       <FAQ />
       {/* <CTA /> */}
     </div>
