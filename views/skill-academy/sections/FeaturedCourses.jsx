@@ -347,14 +347,6 @@ export const FeaturedCourses = () => {
           </motion.div>
         </div>
 
-        <div className="text-center mt-6 md:mt-8 px-4">
-          <span className="text-xs md:text-sm text-purple-300/80 bg-purple-500/5 px-4 py-2 rounded-full border border-purple-500/20">
-            {isPaused
-              ? "Dragging - Swipe to control"
-              : "Hover, tap, or drag to control • Auto-scrolling"}
-          </span>
-        </div>
-
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
