@@ -1,168 +1,185 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Zap } from "lucide-react";
 
 export const WhyStandOut = () => {
-  const reasons = [
-    "Expert instructors with 10+ years industry experience",
-    "Live projects and real-world case studies",
-    "Job guarantee and career support",
-    "Lifetime access to course materials",
-  ];
-
   return (
-    <section className="relative w-full overflow-hidden py-12 lg:py-20">
-      {/* Animated background */}
+    <section className="relative w-full overflow-hidden py-12 md:py-20 lg:py-24">
       <div className="absolute inset-0">
         <motion.div
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY }}
-          className="absolute top-1/4 -left-96 w-96 h-96 bg-purple-900/30 rounded-full blur-3xl"
+          animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+          transition={{ duration: 15, repeat: Number.POSITIVE_INFINITY }}
+          className="absolute top-0 left-1/4 w-72 md:w-96 h-72 md:h-96 rounded-full blur-3xl"
+          style={{ backgroundColor: "rgba(128, 55, 145, 0.12)" }}
         />
         <motion.div
-          animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
+          animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
           transition={{
-            duration: 14,
+            duration: 18,
             repeat: Number.POSITIVE_INFINITY,
             delay: 2,
           }}
-          className="absolute bottom-1/4 -right-96 w-96 h-96 bg-pink-900/20 rounded-full blur-3xl"
+          className="absolute bottom-0 right-1/4 w-72 md:w-96 h-72 md:h-96 rounded-full blur-3xl"
+          style={{ backgroundColor: "rgba(184, 123, 209, 0.12)" }}
         />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          {/* Left - Image with 3D effect */}
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-stretch mb-16 md:mb-24">
+          {/* Left - Card with Person Image and Text */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="relative h-96 sm:h-[500px] lg:h-[550px]">
-              {/* 3D layered effect */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-                className="absolute inset-0 rounded-3xl overflow-hidden"
-              >
-                <div className="relative w-full h-full bg-gradient-to-br from-purple-600 to-purple-800 shadow-2xl rounded-3xl overflow-hidden">
-                  <img
-                    src="/teamabout.jpg"
-                    alt="Why Sabka Skill Academy stands out"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                </div>
-              </motion.div>
+            <div className="relative w-full h-auto md:h-[500px] lg:h-[550px] rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/30 border border-purple-400/20">
+              <img
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop"
+                alt="Professional instructor at Sabka Skill Academy"
+                className="w-full h-full object-cover"
+              />
 
-              {/* Floating stat card */}
-              <motion.div
-                animate={{ y: [0, -15, 0], rotate: [0, 2, 0] }}
-                transition={{
-                  duration: 5,
-                  repeat: Number.POSITIVE_INFINITY,
-                  delay: 1,
-                }}
-                className="absolute -bottom-6 -right-6 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-6 shadow-2xl border border-white/20 max-w-xs"
-              >
-                <div className="text-white">
-                  <h3 className="text-3xl sm:text-4xl font-bold mb-2">50K+</h3>
-                  <p className="text-sm sm:text-base font-semibold text-white/90">
-                    Happy Students Learning Daily
-                  </p>
-                </div>
-              </motion.div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-10 bg-gradient-to-t from-black via-black/80 to-transparent">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight text-balance">
+                  Why Sabka Skill Academy Stands Out?
+                </h3>
+              </div>
             </div>
           </motion.div>
 
-          {/* Right - Content */}
+          {/* Right - Card with Stats Banner */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-left"
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="relative"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full"
-            ></motion.div>
+            <div className="relative w-full h-[450px] md:h-[500px] lg:h-[550px] rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/30 border border-purple-400/20">
+              <img
+                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop"
+                alt="Happy students at Sabka Skill Academy"
+                className="w-full h-full object-cover"
+              />
 
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white"
-            >
-              Why Sabka Skill{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Academy Stands Out
-              </span>
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="text-lg text-gray-300 mb-8 leading-relaxed"
-            >
-              At Sabka Skill Academy, we've revolutionized education through
-              cutting-edge technology and expert mentorship. Our innovative
-              approach combines code-based learning with real-world projects,
-              ensuring you don't just learn—you master.
-            </motion.p>
-
-            {/* Reasons List */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="space-y-4 mb-10"
-            >
-              {reasons.map((reason, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.7 + index * 0.1 }}
-                  className="flex items-center gap-4 group"
-                >
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <CheckCircle className="w-4 h-4 text-white" />
-                  </div>
-                  <p className="text-gray-200 font-medium group-hover:text-white transition-colors">
-                    {reason}
+              <div className="absolute bottom-0 left-0 right-0 py-6 md:py-8 px-4 bg-gradient-to-t from-purple-900/95 via-purple-900/80 to-transparent">
+                <div className="text-center text-white">
+                  <p className="text-4xl md:text-5xl lg:text-6xl font-bold leading-none mb-2">
+                    600,000+
                   </p>
-                </motion.div>
-              ))}
-            </motion.div>
+                  <p className="text-sm md:text-base font-bold tracking-widest text-purple-200">
+                    HAPPY STUDENTS
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
-            {/* CTA Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1.1 }}
+        {/* Bottom Section - Content Grid with Detailed Benefits */}
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-6"
+          >
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight text-balance">
+              Transforming Education
+              <br />
+              Through Innovation
+            </h3>
+
+            <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+              At Sabka Skill Academy, we believe that education should be
+              practical, engaging, and directly applicable to real-world
+              challenges. Our platform bridges the gap between theoretical
+              knowledge and professional practice.
+            </p>
+
+            <div className="space-y-4">
+              <div className="p-5 rounded-xl bg-white/5 border border-purple-400/10 hover:border-purple-400/30 transition-all backdrop-blur-sm">
+                <h4 className="font-bold text-white text-base md:text-lg mb-2">
+                  Curriculum Excellence
+                </h4>
+                <p className="text-gray-400 text-sm md:text-base">
+                  Regularly updated courses reflecting current industry demands
+                  and best practices.
+                </p>
+              </div>
+              <div className="p-5 rounded-xl bg-white/5 border border-purple-400/10 hover:border-purple-400/30 transition-all backdrop-blur-sm">
+                <h4 className="font-bold text-white text-base md:text-lg mb-2">
+                  Career Growth Path
+                </h4>
+                <p className="text-gray-400 text-sm md:text-base">
+                  Structured learning paths designed to accelerate your
+                  professional advancement.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right - Key Points and CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="space-y-6"
+          >
+            <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+              Our comprehensive approach ensures you gain not just knowledge,
+              but the confidence and skills needed to excel in your chosen
+              field. Join thousands of successful students.
+            </p>
+
+            {/* Key Benefits - Numbered List */}
+            <div className="space-y-4">
+              {[
+                {
+                  num: "1",
+                  title: "Expert Instructors:",
+                  desc: "Learn from industry veterans with real-world experience and proven track records.",
+                },
+                {
+                  num: "2",
+                  title: "Practical Learning:",
+                  desc: "Hands-on projects that mirror real-world scenarios and challenges you'll face professionally.",
+                },
+                {
+                  num: "3",
+                  title: "Career Support:",
+                  desc: "Complete support from resume building to interview prep and job placement assistance.",
+                },
+              ].map((item) => (
+                <div key={item.num} className="flex items-start gap-4 group">
+                  <span className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 bg-gradient-to-br from-purple-600 to-purple-800 group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-all">
+                    {item.num}
+                  </span>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-white text-base md:text-lg mb-1">
+                      {item.title}
+                    </h4>
+                    <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Read More Button */}
+            <motion.button
+              whileHover={{ x: 5 }}
+              className="inline-flex items-center gap-2 font-medium transition-colors group mt-4 text-purple-400 hover:text-purple-300"
             >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-white font-bold flex items-center gap-3 shadow-lg hover:shadow-2xl transition-all group"
-              >
-                Start Your Journey
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </motion.div>
+              Explore all benefits
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
           </motion.div>
         </div>
       </div>

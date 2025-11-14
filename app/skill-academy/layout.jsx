@@ -20,7 +20,7 @@ const MobileBottomNav = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-xl border-t border-white/10 z-50 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-xl border-t border-white/10 z-50 md:hidden">
       <div className="flex items-center justify-around py-2">
         {navItems.map((item, index) => {
           const Icon = item.icon;
@@ -81,7 +81,7 @@ const DesktopHeader = () => {
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-gray-900/95 backdrop-blur-xl border-b border-white/10 shadow-2xl"
+          ? "bg-black/95 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-purple-500/5"
           : "bg-transparent"
       }`}
     >
@@ -97,7 +97,7 @@ const DesktopHeader = () => {
                 <motion.div
                   whileHover={{ rotate: 12 }}
                   transition={{ duration: 0.3 }}
-                  className="w-12 h-12 rounded-xl overflow-hidden shadow-lg"
+                  className="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-purple-500/20"
                 >
                   <img
                     src="/sabka-logo.png"
@@ -124,7 +124,7 @@ const DesktopHeader = () => {
                 <Link key={index} href={item.href}>
                   <motion.div
                     whileHover={{ y: -2 }}
-                    className={`relative py-2 px-4 rounded-lg transition-all ${
+                    className={`relative py-2 px-4 rounded-lg transition-all text-sm font-medium ${
                       isActive
                         ? "text-purple-400 bg-purple-500/10"
                         : "text-gray-300 hover:text-white hover:bg-white/5"
@@ -152,7 +152,7 @@ const DesktopHeader = () => {
                   boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)",
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg hover:shadow-purple-500/25 transition-all"
+                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all"
               >
                 Get Started
               </motion.button>
@@ -180,7 +180,7 @@ const DesktopHeader = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-gray-900/95 backdrop-blur-xl border-t border-white/10 w-full"
+            className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10 w-full"
           >
             <div className="px-4 py-4 space-y-2">
               {navItems.map((item, index) => {

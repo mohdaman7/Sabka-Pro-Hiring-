@@ -105,6 +105,7 @@ export const FeaturedCourses = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="text-center mb-16 lg:mb-24"
         >
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full">
@@ -130,10 +131,10 @@ export const FeaturedCourses = () => {
           {courses.map((course, index) => (
             <motion.div
               key={course.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: index * 0.15, duration: 0.6 }}
               whileHover={{ y: -16, transition: { duration: 0.3 } }}
               className="group relative"
             >
@@ -227,6 +228,7 @@ export const FeaturedCourses = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="mt-20 text-center"
         >
           <Link href="/skill-academy/courses">

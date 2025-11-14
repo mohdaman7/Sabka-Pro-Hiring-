@@ -71,11 +71,12 @@ const SkillAcademyFooter = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-t border-white/10">
-      {/* Subtle Background Effect */}
+    <footer className="relative bg-black border-t border-white/10">
+      {/* Premium Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 right-0 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10">
@@ -95,7 +96,7 @@ const SkillAcademyFooter = () => {
                     <motion.div
                       whileHover={{ rotate: 360 }}
                       transition={{ duration: 0.6 }}
-                      className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg"
+                      className="w-12 h-12 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20"
                     >
                       <GraduationCap className="w-7 h-7 text-white" />
                     </motion.div>
@@ -110,30 +111,38 @@ const SkillAcademyFooter = () => {
                   </div>
                 </a>
 
-                <p className="text-gray-400 mb-8 leading-relaxed">
+                <p className="text-gray-400 mb-8 leading-relaxed max-w-xs">
                   Empowering learners worldwide with cutting-edge skills and
                   industry-recognized certifications.
                 </p>
 
                 {/* Contact Info */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <a
                     href="mailto:hello@sabkaskillacademy.com"
-                    className="flex items-center gap-3 text-gray-400 hover:text-purple-400 transition-colors"
+                    className="flex items-center gap-3 text-gray-400 hover:text-purple-300 transition-all duration-300 group"
                   >
-                    <Mail className="w-5 h-5 text-purple-400" />
-                    <span>hello@sabkaskillacademy.com</span>
+                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+                      <Mail className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <span className="text-sm">hello@sabkaskillacademy.com</span>
                   </a>
                   <a
                     href="tel:+15551234567"
-                    className="flex items-center gap-3 text-gray-400 hover:text-purple-400 transition-colors"
+                    className="flex items-center gap-3 text-gray-400 hover:text-purple-300 transition-all duration-300 group"
                   >
-                    <Phone className="w-5 h-5 text-purple-400" />
-                    <span>+1 (555) 123-4567</span>
+                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+                      <Phone className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <span className="text-sm">+1 (555) 123-4567</span>
                   </a>
                   <div className="flex items-center gap-3 text-gray-400">
-                    <MapPin className="w-5 h-5 text-purple-400" />
-                    <span>123 Education St, Learning City</span>
+                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                      <MapPin className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <span className="text-sm">
+                      123 Education St, Learning City
+                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -148,10 +157,10 @@ const SkillAcademyFooter = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <h4 className="text-lg font-semibold text-white mb-4">
+                <h4 className="text-lg font-semibold text-white mb-6">
                   Courses
                 </h4>
-                <ul className="space-y-3">
+                <ul className="space-y-4">
                   {footerLinks.courses.map((link, index) => (
                     <li key={index}>
                       <a href={link.href}>
@@ -159,7 +168,7 @@ const SkillAcademyFooter = () => {
                           whileHover={{ x: 5 }}
                           className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
                         >
-                          <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                           {link.label}
                         </motion.div>
                       </a>
@@ -175,10 +184,10 @@ const SkillAcademyFooter = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <h4 className="text-lg font-semibold text-white mb-4">
+                <h4 className="text-lg font-semibold text-white mb-6">
                   Company
                 </h4>
-                <ul className="space-y-3">
+                <ul className="space-y-4">
                   {footerLinks.company.map((link, index) => (
                     <li key={index}>
                       <a href={link.href}>
@@ -186,7 +195,7 @@ const SkillAcademyFooter = () => {
                           whileHover={{ x: 5 }}
                           className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
                         >
-                          <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                           {link.label}
                         </motion.div>
                       </a>
@@ -202,10 +211,10 @@ const SkillAcademyFooter = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                <h4 className="text-lg font-semibold text-white mb-4">
+                <h4 className="text-lg font-semibold text-white mb-6">
                   Resources
                 </h4>
-                <ul className="space-y-3">
+                <ul className="space-y-4">
                   {footerLinks.resources.map((link, index) => (
                     <li key={index}>
                       <a href={link.href}>
@@ -213,7 +222,7 @@ const SkillAcademyFooter = () => {
                           whileHover={{ x: 5 }}
                           className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
                         >
-                          <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                           {link.label}
                         </motion.div>
                       </a>
@@ -229,8 +238,8 @@ const SkillAcademyFooter = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <h4 className="text-lg font-semibold text-white mb-4">Legal</h4>
-                <ul className="space-y-3">
+                <h4 className="text-lg font-semibold text-white mb-6">Legal</h4>
+                <ul className="space-y-4">
                   {footerLinks.legal.map((link, index) => (
                     <li key={index}>
                       <a href={link.href}>
@@ -238,7 +247,7 @@ const SkillAcademyFooter = () => {
                           whileHover={{ x: 5 }}
                           className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
                         >
-                          <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                           {link.label}
                         </motion.div>
                       </a>
@@ -271,16 +280,16 @@ const SkillAcademyFooter = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-colors"
+                  className="flex-1 px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all"
                 />
                 <motion.button
                   onClick={handleNewsletterSubmit}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2"
+                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 flex items-center gap-2 flex-shrink-0"
                 >
                   <Send className="w-4 h-4" />
-                  Subscribe
+                  <span className="hidden sm:inline">Subscribe</span>
                 </motion.button>
               </div>
 
@@ -297,12 +306,11 @@ const SkillAcademyFooter = () => {
           </motion.div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10 bg-black/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="border-t border-white/10 bg-black/50 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               {/* Copyright */}
-              <div className="text-gray-400 text-sm">
+              <div className="text-gray-500 text-sm">
                 © 2025 Sabka Skill Academy. All rights reserved.
               </div>
 
@@ -314,9 +322,9 @@ const SkillAcademyFooter = () => {
                     <motion.a
                       key={index}
                       href={social.href}
-                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileHover={{ scale: 1.15, y: -3 }}
                       whileTap={{ scale: 0.9 }}
-                      className={`w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg flex items-center justify-center text-gray-400 ${social.color} transition-all duration-300 hover:border-white/20`}
+                      className={`w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg flex items-center justify-center text-gray-400 ${social.color} transition-all duration-300 hover:border-white/30 hover:bg-white/10`}
                     >
                       <Icon className="w-5 h-5" />
                     </motion.a>
@@ -332,7 +340,7 @@ const SkillAcademyFooter = () => {
           onClick={scrollToTop}
           whileHover={{ scale: 1.1, y: -2 }}
           whileTap={{ scale: 0.9 }}
-          className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-purple-500/25 transition-all duration-300 z-50"
+          className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 z-50"
         >
           <ChevronUp className="w-6 h-6" />
         </motion.button>
