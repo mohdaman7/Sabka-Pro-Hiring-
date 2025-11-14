@@ -23,29 +23,66 @@ export const MouseFollower = ({ mousePosition }) => {
     <motion.div
       className="fixed top-0 left-0 pointer-events-none z-50"
       animate={{
-        x: mousePosition.x - 12,
-        y: mousePosition.y - 12,
+        x: mousePosition.x - 16,
+        y: mousePosition.y - 16,
       }}
       transition={{
         type: "spring",
-        stiffness: 600,
-        damping: 30,
+        stiffness: 800,
+        damping: 35,
+        mass: 0.5,
       }}
     >
-      {/* Professional premium mouse follower - elegant cross with gradient */}
       <motion.div
-        className="relative w-6 h-6"
+        className="relative w-8 h-8"
         animate={{
           opacity: isVisible ? 1 : 0,
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       >
-        {/* Vertical line */}
-        <div className="absolute left-1/2 top-0 w-0.5 h-6 -translate-x-1/2 bg-gradient-to-b from-purple-400 to-purple-600" />
-        {/* Horizontal line */}
-        <div className="absolute top-1/2 left-0 w-6 h-0.5 -translate-y-1/2 bg-gradient-to-r from-purple-400 to-pink-400" />
-        {/* Center dot */}
-        <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full shadow-lg shadow-purple-400/50" />
+        {/* Outer ring with glow effect */}
+        <motion.div
+          className="absolute top-0 left-0 w-8 h-8 rounded-full border border-blue-400/40"
+          animate={{
+            boxShadow: [
+              "0 0 0 0 rgba(147, 197, 253, 0.4)",
+              "0 0 0 8px rgba(147, 197, 253, 0)",
+            ],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+          }}
+        />
+
+        {/* Middle ring */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full border border-blue-300/60 shadow-lg shadow-blue-500/20" />
+
+        {/* Inner gradient circle */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg shadow-blue-400/60" />
+
+        {/* Premium accent dots */}
+        <motion.div
+          className="absolute top-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-300"
+          animate={{
+            opacity: [0.5, 1, 0.5],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-300"
+          animate={{
+            opacity: [0.5, 1, 0.5],
+          }}
+          transition={{
+            duration: 2,
+            delay: 0.5,
+            repeat: Infinity,
+          }}
+        />
       </motion.div>
     </motion.div>
   );

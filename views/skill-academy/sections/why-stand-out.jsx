@@ -79,7 +79,7 @@ export const WhyStandOut = () => {
               <motion.img
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.6 }}
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y2VvfGVufDB8fDB8fHww"
                 alt="Professional instructor at Sabka Skill Academy"
                 className="w-full h-full object-cover transition-transform duration-700"
               />
