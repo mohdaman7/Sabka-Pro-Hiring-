@@ -2,65 +2,25 @@
 
 import { motion } from "framer-motion";
 import {
-  GraduationCap,
-  Mail,
-  Phone,
-  MapPin,
   Facebook,
   Twitter,
   Instagram,
   Linkedin,
   Youtube,
-  ArrowRight,
-  Send,
   ChevronUp,
 } from "lucide-react";
-import { useState } from "react";
 
 const SkillAcademyFooter = () => {
-  const [email, setEmail] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
-
-  const handleNewsletterSubmit = () => {
-    if (email) {
-      setIsSubscribed(true);
-      setEmail("");
-      setTimeout(() => setIsSubscribed(false), 3000);
-    }
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const footerLinks = {
-    courses: [
-      {
-        label: "Web Development",
-        href: "/skill-academy/courses/web-development",
-      },
-      { label: "Data Science", href: "/skill-academy/courses/data-science" },
-      { label: "UI/UX Design", href: "/skill-academy/courses/design" },
-      { label: "Digital Marketing", href: "/skill-academy/courses/marketing" },
-    ],
-    company: [
-      { label: "About Us", href: "/skill-academy/about" },
-      { label: "Our Team", href: "/skill-academy/team" },
-      { label: "Careers", href: "/skill-academy/careers" },
-      { label: "Contact", href: "/skill-academy/contact" },
-    ],
-    resources: [
-      { label: "Help Center", href: "/skill-academy/help" },
-      { label: "Blog", href: "/skill-academy/blog" },
-      { label: "Community", href: "/skill-academy/community" },
-      { label: "Reviews", href: "/skill-academy/reviews" },
-    ],
-    legal: [
-      { label: "Privacy Policy", href: "/skill-academy/privacy" },
-      { label: "Terms of Service", href: "/skill-academy/terms" },
-      { label: "Refund Policy", href: "/skill-academy/refunds" },
-    ],
-  };
+  const quickLinks = [
+    { label: "Home", href: "/skill-academy" },
+    { label: "Courses", href: "/skill-academy/courses" },
+    { label: "About", href: "/skill-academy/about" },
+    { label: "Contact", href: "/skill-academy/contact" },
+  ];
 
   const socialLinks = [
     { icon: Facebook, href: "#", color: "hover:text-blue-500" },
@@ -72,269 +32,98 @@ const SkillAcademyFooter = () => {
 
   return (
     <footer className="relative bg-black border-t border-white/10">
-      {/* Premium Background Effects */}
+      {/* Subtle Background Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 right-0 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10">
         {/* Main Footer Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid lg:grid-cols-6 gap-12 mb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8">
             {/* Brand Section */}
-            <div className="lg:col-span-2">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <a href="/skill-academy" className="inline-block mb-6">
-                  <div className="flex items-center gap-3">
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                      className="w-12 h-12 rounded-xl flex items-center justify-center"
-                    >
-                      <img
-                        src="/sabka-logo.png"
-                        alt="Sabka Skill Academy Logo"
-                        className="w-12 h-12 object-contain"
-                      />
-                    </motion.div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-white">
-                        Sabka Skill Academy
-                      </h3>
-                      <p className="text-sm text-purple-300">
-                        Learn • Grow • Succeed
-                      </p>
-                    </div>
-                  </div>
-                </a>
-
-                <p className="text-gray-400 mb-8 leading-relaxed max-w-xs">
-                  Empowering learners worldwide with cutting-edge skills and
-                  industry-recognized certifications.
-                </p>
-
-                {/* Contact Info */}
-                <div className="space-y-4">
-                  <a
-                    href="mailto:hello@sabkaskillacademy.com"
-                    className="flex items-center gap-3 text-gray-400 hover:text-purple-300 transition-all duration-300 group"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex-shrink-0"
+            >
+              <a href="/skill-academy" className="inline-block">
+                <div className="flex items-center gap-2">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-8 h-8 rounded-lg overflow-hidden"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                      <Mail className="w-5 h-5 text-purple-400" />
-                    </div>
-                    <span className="text-sm">hello@sabkaskillacademy.com</span>
-                  </a>
-                  <a
-                    href="tel:+15551234567"
-                    className="flex items-center gap-3 text-gray-400 hover:text-purple-300 transition-all duration-300 group"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                      <Phone className="w-5 h-5 text-purple-400" />
-                    </div>
-                    <span className="text-sm">+1 (555) 123-4567</span>
-                  </a>
-                  <div className="flex items-center gap-3 text-gray-400">
-                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                      <MapPin className="w-5 h-5 text-purple-400" />
-                    </div>
-                    <span className="text-sm">
-                      123 Education St, Learning City
-                    </span>
+                    <img
+                      src="/sabka-logo.png"
+                      alt="Sabka Skill Academy Logo"
+                      className="w-full h-full object-contain"
+                    />
+                  </motion.div>
+                  <div>
+                    <h3 className="text-sm md:text-base font-bold text-white">
+                      Sabka Skill Academy
+                    </h3>
+                    <p className="text-xs text-purple-300 hidden sm:block">
+                      Learn • Grow • Succeed
+                    </p>
                   </div>
                 </div>
-              </motion.div>
-            </div>
+              </a>
+            </motion.div>
 
-            {/* Links Sections */}
-            <div className="lg:col-span-4 grid sm:grid-cols-2 md:grid-cols-4 gap-8">
-              {/* Courses */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <h4 className="text-lg font-semibold text-white mb-6">
-                  Courses
-                </h4>
-                <ul className="space-y-4">
-                  {footerLinks.courses.map((link, index) => (
-                    <li key={index}>
-                      <a href={link.href}>
-                        <motion.div
-                          whileHover={{ x: 5 }}
-                          className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
-                        >
-                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          {link.label}
-                        </motion.div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+            {/* Quick Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="flex items-center gap-4 md:gap-6"
+            >
+              {quickLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="text-gray-400 hover:text-purple-300 transition-colors text-xs md:text-sm"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </motion.div>
 
-              {/* Company */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <h4 className="text-lg font-semibold text-white mb-6">
-                  Company
-                </h4>
-                <ul className="space-y-4">
-                  {footerLinks.company.map((link, index) => (
-                    <li key={index}>
-                      <a href={link.href}>
-                        <motion.div
-                          whileHover={{ x: 5 }}
-                          className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
-                        >
-                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          {link.label}
-                        </motion.div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              {/* Resources */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                <h4 className="text-lg font-semibold text-white mb-6">
-                  Resources
-                </h4>
-                <ul className="space-y-4">
-                  {footerLinks.resources.map((link, index) => (
-                    <li key={index}>
-                      <a href={link.href}>
-                        <motion.div
-                          whileHover={{ x: 5 }}
-                          className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
-                        >
-                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          {link.label}
-                        </motion.div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              {/* Legal */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                <h4 className="text-lg font-semibold text-white mb-6">Legal</h4>
-                <ul className="space-y-4">
-                  {footerLinks.legal.map((link, index) => (
-                    <li key={index}>
-                      <a href={link.href}>
-                        <motion.div
-                          whileHover={{ x: 5 }}
-                          className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-2 group text-sm"
-                        >
-                          <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          {link.label}
-                        </motion.div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </div>
+            {/* Social Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-center gap-2"
+            >
+              {socialLinks.map((social, index) => {
+                const Icon = social.icon;
+                return (
+                  <motion.a
+                    key={index}
+                    href={social.href}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className={`w-8 h-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg flex items-center justify-center text-gray-400 ${social.color} transition-all duration-300 hover:border-white/30 hover:bg-white/10`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                  </motion.a>
+                );
+              })}
+            </motion.div>
           </div>
-
-          {/* Newsletter Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="pt-12 border-t border-white/10"
-          >
-            <div className="max-w-xl">
-              <h3 className="text-xl font-semibold text-white mb-3">
-                Subscribe to Our Newsletter
-              </h3>
-              <p className="text-gray-400 mb-6">
-                Get the latest course updates and exclusive offers.
-              </p>
-
-              <div className="flex gap-3">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all"
-                />
-                <motion.button
-                  onClick={handleNewsletterSubmit}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 flex items-center gap-2 flex-shrink-0"
-                >
-                  <Send className="w-4 h-4" />
-                  <span className="hidden sm:inline">Subscribe</span>
-                </motion.button>
-              </div>
-
-              {isSubscribed && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 text-green-400 text-sm"
-                >
-                  ✓ Thank you for subscribing!
-                </motion.div>
-              )}
-            </div>
-          </motion.div>
         </div>
 
+        {/* Bottom Copyright Bar */}
         <div className="border-t border-white/10 bg-black/50 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              {/* Copyright */}
-              <div className="text-gray-500 text-sm">
-                © 2025 Sabka Skill Academy. All rights reserved.
-              </div>
-
-              {/* Social Links */}
-              <div className="flex items-center gap-3">
-                {socialLinks.map((social, index) => {
-                  const Icon = social.icon;
-                  return (
-                    <motion.a
-                      key={index}
-                      href={social.href}
-                      whileHover={{ scale: 1.15, y: -3 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg flex items-center justify-center text-gray-400 ${social.color} transition-all duration-300 hover:border-white/30 hover:bg-white/10`}
-                    >
-                      <Icon className="w-5 h-5" />
-                    </motion.a>
-                  );
-                })}
-              </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div className="text-gray-500 text-xs text-center">
+              © 2025 Sabka Skill Academy. All rights reserved.
             </div>
           </div>
         </div>
@@ -344,9 +133,9 @@ const SkillAcademyFooter = () => {
           onClick={scrollToTop}
           whileHover={{ scale: 1.1, y: -2 }}
           whileTap={{ scale: 0.9 }}
-          className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 z-50"
+          className="fixed bottom-20 md:bottom-8 right-4 md:right-8 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 z-40"
         >
-          <ChevronUp className="w-6 h-6" />
+          <ChevronUp className="w-5 h-5 md:w-6 md:h-6" />
         </motion.button>
       </div>
     </footer>
