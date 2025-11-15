@@ -94,11 +94,15 @@ const SkillAcademyFooter = () => {
                 <a href="/skill-academy" className="inline-block mb-6">
                   <div className="flex items-center gap-3">
                     <motion.div
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                      className="w-12 h-12 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-12 h-12 rounded-xl flex items-center justify-center"
                     >
-                      <GraduationCap className="w-7 h-7 text-white" />
+                      <img
+                        src="/sabka-logo.png"
+                        alt="Sabka Skill Academy Logo"
+                        className="w-12 h-12 object-contain"
+                      />
                     </motion.div>
                     <div>
                       <h3 className="text-2xl font-bold text-white">

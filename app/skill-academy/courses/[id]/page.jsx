@@ -1,654 +1,596 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useState } from "react";
 import {
-  Star,
-  Users,
+  ChevronDown,
+  Play,
   Clock,
+  Star,
+  Lock,
+  Award,
+  Users,
   BookOpen,
-  Download,
   Share2,
   Heart,
-  ShoppingCart,
-  ChevronDown,
-  Check,
-  Lock,
-  Play,
-  Code,
-  Award,
-  Zap,
-  Target,
   TrendingUp,
-  MessageSquare,
-  Calendar,
-  BarChart3,
 } from "lucide-react";
-import Link from "next/link";
 
-export default function CourseDetailPage({ params }) {
-  const [selectedTab, setSelectedTab] = useState("overview");
+// Demo Data
+const DEMO_COURSE_DATA = {
+  _id: "demo-course-1",
+  title: "Complete Web Development Bootcamp 2024",
+  description:
+    "Master modern web development with HTML, CSS, JavaScript, React, Node.js, and more. Build real-world projects and launch your career as a full-stack developer.",
+  category: "Development",
+  thumbnail:
+    "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&q=80",
+  instructor: "Sarah Johnson",
+  level: "Beginner to Advanced",
+  status: "active",
+  enrolledCount: 15420,
+  rating: 4.8,
+  tags: ["Web Development", "React", "Node.js", "JavaScript", "Full Stack"],
+  type: "parent",
+  pricing: {
+    bundlePrice: 24999,
+    discountPercent: 40,
+    currency: "₹",
+  },
+};
+
+const DEMO_MODULES = [
+  {
+    _id: "module-1",
+    title: "Introduction to Web Development",
+    description: "Learn the fundamentals of web development",
+    thumbnail:
+      "https://images.unsplash.com/photo-1593720213428-28a5b9e94613?w=400&q=80",
+    lessons: [
+      {
+        _id: "lesson-1-1",
+        title: "Welcome to the Course",
+        description: "Course overview and what you'll learn",
+        durationSec: 480,
+        videoProvider: "youtube",
+        isFreePreview: true,
+        order: 1,
+      },
+      {
+        _id: "lesson-1-2",
+        title: "Setting Up Development Environment",
+        description: "Install VS Code, Node.js, and tools",
+        durationSec: 720,
+        videoProvider: "youtube",
+        isFreePreview: true,
+        order: 2,
+      },
+      {
+        _id: "lesson-1-3",
+        title: "Your First HTML Page",
+        durationSec: 900,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 3,
+      },
+      {
+        _id: "lesson-1-4",
+        title: "Understanding HTML Structure",
+        durationSec: 1080,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 4,
+      },
+    ],
+  },
+  {
+    _id: "module-2",
+    title: "CSS Fundamentals & Styling",
+    thumbnail:
+      "https://images.unsplash.com/photo-1523437113738-bbd3cc89fb19?w=400&q=80",
+    lessons: [
+      {
+        _id: "lesson-2-1",
+        title: "Introduction to CSS",
+        durationSec: 600,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 1,
+      },
+      {
+        _id: "lesson-2-2",
+        title: "Flexbox Layout",
+        durationSec: 1200,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 2,
+      },
+      {
+        _id: "lesson-2-3",
+        title: "CSS Grid System",
+        durationSec: 1320,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 3,
+      },
+      {
+        _id: "lesson-2-4",
+        title: "Responsive Design Principles",
+        durationSec: 960,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 4,
+      },
+      {
+        _id: "lesson-2-5",
+        title: "CSS Animations & Transitions",
+        durationSec: 840,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 5,
+      },
+    ],
+  },
+  {
+    _id: "module-3",
+    title: "JavaScript Essentials",
+    thumbnail:
+      "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400&q=80",
+    lessons: [
+      {
+        _id: "lesson-3-1",
+        title: "JavaScript Basics",
+        durationSec: 900,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 1,
+      },
+      {
+        _id: "lesson-3-2",
+        title: "Functions & Scope",
+        durationSec: 1080,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 2,
+      },
+      {
+        _id: "lesson-3-3",
+        title: "DOM Manipulation",
+        durationSec: 1440,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 3,
+      },
+      {
+        _id: "lesson-3-4",
+        title: "Asynchronous JavaScript",
+        durationSec: 1560,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 4,
+      },
+    ],
+  },
+  {
+    _id: "module-4",
+    title: "React - Modern Frontend",
+    thumbnail:
+      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&q=80",
+    lessons: [
+      {
+        _id: "lesson-4-1",
+        title: "Introduction to React",
+        durationSec: 720,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 1,
+      },
+      {
+        _id: "lesson-4-2",
+        title: "Components & Props",
+        durationSec: 1200,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 2,
+      },
+      {
+        _id: "lesson-4-3",
+        title: "State & Hooks",
+        durationSec: 1440,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 3,
+      },
+      {
+        _id: "lesson-4-4",
+        title: "Building Real Project",
+        durationSec: 2400,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 4,
+      },
+    ],
+  },
+  {
+    _id: "module-5",
+    title: "Backend with Node.js",
+    thumbnail:
+      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=80",
+    lessons: [
+      {
+        _id: "lesson-5-1",
+        title: "Introduction to Node.js",
+        durationSec: 840,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 1,
+      },
+      {
+        _id: "lesson-5-2",
+        title: "Express.js Framework",
+        durationSec: 1320,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 2,
+      },
+      {
+        _id: "lesson-5-3",
+        title: "REST API Development",
+        durationSec: 1680,
+        videoProvider: "youtube",
+        isFreePreview: false,
+        order: 3,
+      },
+    ],
+  },
+];
+
+export default function CourseDetailPage() {
   const [expandedModule, setExpandedModule] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedModules, setSelectedModules] = useState(new Set());
+  const courseData = DEMO_COURSE_DATA;
+  const modules = DEMO_MODULES;
 
-  // Mock course data - replace with API call
-  const course = {
-    id: params.id,
-    title: "Full Stack Web Development Masterclass",
-    category: "Web Development",
-    instructor: {
-      name: "John Doe",
-      image: "/instructor.jpg",
-      title: "Senior Full Stack Developer at Google",
-      students: "12.5k",
-      rating: 4.9,
-    },
-    image: "/course-hero.jpg",
-    rating: 4.8,
-    reviews: 1247,
-    students: 15420,
-    price: 4999,
-    originalPrice: 9999,
-    learningOutcomes: [
-      "Master React, Node.js, and MongoDB",
-      "Build production-ready applications",
-      "Deploy applications to cloud platforms",
-      "Implement authentication and security",
-    ],
-    description:
-      "Learn full-stack web development from scratch. This comprehensive course covers frontend, backend, and database technologies. Build real-world projects and become a professional full-stack developer.",
-    modules: [
-      {
-        id: 1,
-        title: "Module 1: JavaScript Fundamentals",
-        duration: "8 days",
-        lessons: 24,
-        hours: 16,
-        topics: [
-          "Variables and Data Types",
-          "Functions and Closures",
-          "ES6+ Features",
-          "Async/Await",
-          "DOM Manipulation",
-        ],
-        price: 599,
-      },
-      {
-        id: 2,
-        title: "Module 2: React.js Essentials",
-        duration: "10 days",
-        lessons: 32,
-        hours: 20,
-        topics: [
-          "Components and Props",
-          "Hooks and State Management",
-          "Context API",
-          "React Router",
-          "Performance Optimization",
-        ],
-        price: 799,
-      },
-      {
-        id: 3,
-        title: "Module 3: Node.js & Express",
-        duration: "9 days",
-        lessons: 28,
-        hours: 18,
-        topics: [
-          "Express Basics",
-          "RESTful APIs",
-          "Middleware",
-          "Error Handling",
-          "Security Best Practices",
-        ],
-        price: 799,
-      },
-      {
-        id: 4,
-        title: "Module 4: Database & MongoDB",
-        duration: "7 days",
-        lessons: 20,
-        hours: 14,
-        topics: [
-          "MongoDB Basics",
-          "CRUD Operations",
-          "Indexing and Aggregation",
-          "Schema Design",
-          "Database Optimization",
-        ],
-        price: 599,
-      },
-      {
-        id: 5,
-        title: "Module 5: Deployment & DevOps",
-        duration: "6 days",
-        lessons: 16,
-        hours: 12,
-        topics: [
-          "Docker Basics",
-          "Deployment to Cloud",
-          "CI/CD Pipelines",
-          "Monitoring",
-          "Scaling Applications",
-        ],
-        price: 699,
-      },
-    ],
-    requirements: [
-      "Basic JavaScript knowledge",
-      "Familiarity with HTML and CSS",
-      "A code editor (VS Code recommended)",
-      "Node.js installed on your computer",
-    ],
+  const calculateTotals = () => {
+    const totalLessons = modules.reduce(
+      (sum, mod) => sum + (mod?.lessons?.length || 0),
+      0
+    );
+    const totalDurationSec = modules.reduce(
+      (sum, mod) =>
+        sum +
+        (mod?.lessons?.reduce((ls, l) => ls + (l?.durationSec || 0), 0) || 0),
+      0
+    );
+    const hours = Math.floor(totalDurationSec / 3600);
+    const minutes = Math.floor((totalDurationSec % 3600) / 60);
+    return {
+      totalLessons,
+      totalDuration: `${hours}h ${minutes}m`,
+      totalDurationSec,
+    };
   };
 
-  const toggleModuleSelection = (moduleId) => {
-    const newSelected = new Set(selectedModules);
-    if (newSelected.has(moduleId)) {
-      newSelected.delete(moduleId);
-    } else {
-      newSelected.add(moduleId);
-    }
-    setSelectedModules(newSelected);
+  const totals = calculateTotals();
+  const originalPrice = courseData.pricing.bundlePrice;
+  const discountPercent = courseData.pricing.discountPercent;
+  const finalPrice = originalPrice - (originalPrice * discountPercent) / 100;
+  const currency = courseData.pricing.currency;
+
+  const formatDuration = (sec) => {
+    const m = Math.floor(sec / 60);
+    return m > 0 ? `${m}min` : `${sec}sec`;
   };
 
-  const calculateModulePrice = () => {
-    return Array.from(selectedModules).reduce((sum, id) => {
-      const module = course.modules.find((m) => m.id === parseInt(id));
-      return sum + (module?.price || 0);
-    }, 0);
-  };
+  const toggleModule = (id) =>
+    setExpandedModule(expandedModule === id ? null : id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a0f2e] via-[#0f0820] to-[#1a0f2e]">
-      {/* Hero Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="relative pt-20 pb-12 md:pb-16 lg:pb-20 overflow-hidden"
-      >
-        {/* Background Elements */}
-        <div className="absolute inset-0">
-          <motion.div
-            animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
-            transition={{ duration: 15, repeat: Infinity }}
-            className="absolute top-0 left-1/4 w-72 md:w-96 h-72 md:h-96 bg-purple-600/8 rounded-full blur-3xl"
+    <div className="min-h-screen">
+      <div className="relative">
+        <div className="relative h-64 md:h-80 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950 z-10" />
+          <img
+            src={courseData.thumbnail}
+            alt={courseData.title}
+            className="w-full h-full object-cover"
           />
-          <motion.div
-            animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
-            transition={{ duration: 18, repeat: Infinity, delay: 2 }}
-            className="absolute bottom-0 right-1/4 w-72 md:w-96 h-72 md:h-96 bg-pink-500/8 rounded-full blur-3xl"
-          />
+          <div className="absolute top-4 right-4 flex gap-2 z-20">
+            <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 hover:bg-white/20 transition-all">
+              <Share2 className="w-5 h-5 text-white" />
+            </button>
+            <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 hover:bg-white/20 transition-all">
+              <Heart className="w-5 h-5 text-white" />
+            </button>
+          </div>
         </div>
 
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-start">
-              {/* Left Content */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="md:col-span-2"
-              >
-                {/* Breadcrumb */}
-                <div className="flex items-center gap-2 mb-6 text-sm text-gray-400">
-                  <Link
-                    href="/skill-academy"
-                    className="hover:text-purple-300 transition-colors"
-                  >
-                    Home
-                  </Link>
-                  <span>/</span>
-                  <Link
-                    href="/skill-academy/courses"
-                    className="hover:text-purple-300 transition-colors"
-                  >
-                    Courses
-                  </Link>
-                  <span>/</span>
-                  <span className="text-purple-300">{course.category}</span>
+        <div className="px-4 -mt-8 relative z-20">
+          <div className="bg-gradient-to-br from-slate-900/98 to-slate-800/98 backdrop-blur-2xl rounded-3xl p-5 md:p-6 border-2 border-purple-500/30 shadow-[0_20px_60px_rgba(168,85,247,0.3)]">
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <span className="px-3 py-1.5 bg-gradient-to-r from-purple-500/30 to-pink-500/30 border-2 border-purple-400/50 rounded-full text-xs font-bold text-purple-200 shadow-lg">
+                {courseData.level}
+              </span>
+              <span className="px-3 py-1.5 bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-2 border-green-400/50 rounded-full text-xs font-bold text-green-200 flex items-center gap-1 shadow-lg animate-pulse">
+                <TrendingUp className="w-3 h-3" />
+                TRENDING
+              </span>
+              <span className="px-3 py-1.5 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 border-2 border-blue-400/50 rounded-full text-xs font-bold text-blue-200 shadow-lg">
+                {courseData.category}
+              </span>
+            </div>
+
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 leading-tight bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+              {courseData.title}
+            </h1>
+            <p className="text-sm md:text-base text-gray-300 leading-relaxed mb-4">
+              {courseData.description}
+            </p>
+
+            <div className="flex items-center gap-4 flex-wrap mb-5 pb-5 border-b border-white/10">
+              <div className="flex items-center gap-2 bg-yellow-500/10 px-3 py-2 rounded-xl border border-yellow-500/30">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(courseData.rating)
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "fill-gray-700 text-gray-700"
+                      }`}
+                    />
+                  ))}
                 </div>
+                <span className="text-sm font-bold text-yellow-400">
+                  {courseData.rating.toFixed(1)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 bg-purple-500/10 px-3 py-2 rounded-xl border border-purple-500/30">
+                <Users className="w-4 h-4 text-purple-400" />
+                <span className="text-sm font-bold text-purple-300">
+                  {courseData.enrolledCount.toLocaleString()}
+                </span>
+                <span className="text-xs text-gray-400">students</span>
+              </div>
+            </div>
 
-                {/* Title */}
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-                >
-                  {course.title}
-                </motion.h1>
-
-                {/* Rating and Stats */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="flex flex-wrap items-center gap-6 mb-8 text-sm md:text-base"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < 4
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "text-gray-600"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-yellow-400 font-semibold">
-                      {course.rating}
-                    </span>
-                    <span className="text-gray-400">
-                      ({course.reviews} reviews)
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <Users className="w-4 h-4" />
-                    <span>{course.students.toLocaleString()} students</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <Clock className="w-4 h-4" />
-                    <span>47 hours total</span>
-                  </div>
-                </motion.div>
-
-                {/* Description */}
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-lg text-gray-300 mb-8 leading-relaxed max-w-2xl"
-                >
-                  {course.description}
-                </motion.p>
-
-                {/* Instructor Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-2xl"
-                >
-                  <img
-                    src={course.instructor.image}
-                    alt={course.instructor.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-bold text-white">
-                      {course.instructor.name}
-                    </h3>
-                    <p className="text-sm text-gray-400">
-                      {course.instructor.title}
-                    </p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
-                      <span>{course.instructor.students} students</span>
-                      <span className="flex items-center gap-1">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        {course.instructor.rating}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-
-              {/* Right Sidebar - Pricing */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="md:col-span-1 sticky top-24"
-              >
-                {/* Course Image */}
-                <div className="relative h-64 rounded-2xl overflow-hidden mb-6 shadow-2xl">
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <div className="grid grid-cols-3 gap-3 mb-5">
+              <div className="text-center p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
+                <div className="flex items-center justify-center mb-2 bg-purple-500/20 w-10 h-10 rounded-lg mx-auto">
+                  <Clock className="w-5 h-5 text-purple-400" />
                 </div>
-
-                {/* Price Card */}
-                <div className="bg-gradient-to-b from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-2xl p-6 mb-6">
-                  <div className="mb-6">
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-4xl font-bold text-white">
-                        ₹{course.price}
-                      </span>
-                      <span className="text-xl text-gray-400 line-through">
-                        ₹{course.originalPrice}
-                      </span>
-                    </div>
-                    <p className="text-sm text-green-400 font-semibold">
-                      Save ₹{course.originalPrice - course.price} (50% off)
-                    </p>
-                  </div>
-
-                  {/* Bundle Info */}
-                  <div className="bg-white/5 rounded-lg p-4 mb-6">
-                    <p className="text-sm text-gray-300 mb-3">
-                      Or purchase modules individually:
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      Selected: {selectedModules.size} module(s) - ₹
-                      {calculateModulePrice()}
-                    </p>
-                  </div>
-
-                  {/* CTA Buttons */}
-                  <div className="space-y-3">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg"
-                    >
-                      <ShoppingCart className="w-5 h-5" />
-                      Enroll Now
-                    </motion.button>
-
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full py-3 border border-white/20 hover:border-white/40 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
-                    >
-                      <Heart
-                        className={`w-5 h-5 ${
-                          isFavorite ? "fill-red-500 text-red-500" : ""
-                        }`}
-                        onClick={() => setIsFavorite(!isFavorite)}
-                      />
-                      Wishlist
-                    </motion.button>
-
-                    <button className="w-full py-3 border border-white/20 hover:border-white/40 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
-                      <Share2 className="w-5 h-5" />
-                      Share
-                    </button>
-                  </div>
+                <p className="text-xs text-gray-400 mb-1">Duration</p>
+                <p className="text-sm font-bold text-white">
+                  {totals.totalDuration}
+                </p>
+              </div>
+              <div className="text-center p-3 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
+                <div className="flex items-center justify-center mb-2 bg-blue-500/20 w-10 h-10 rounded-lg mx-auto">
+                  <BookOpen className="w-5 h-5 text-blue-400" />
                 </div>
-
-                {/* Info Cards */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/10">
-                    <Certificate className="w-5 h-5 text-purple-400" />
-                    <span className="text-sm text-gray-300">
-                      Certificate on completion
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/10">
-                    <Download className="w-5 h-5 text-purple-400" />
-                    <span className="text-sm text-gray-300">
-                      Lifetime access
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/10">
-                    <Zap className="w-5 h-5 text-purple-400" />
-                    <span className="text-sm text-gray-300">
-                      Money-back guarantee
-                    </span>
-                  </div>
+                <p className="text-xs text-gray-400 mb-1">Lessons</p>
+                <p className="text-sm font-bold text-white">
+                  {totals.totalLessons}
+                </p>
+              </div>
+              <div className="text-center p-3 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/20">
+                <div className="flex items-center justify-center mb-2 bg-green-500/20 w-10 h-10 rounded-lg mx-auto">
+                  <Award className="w-5 h-5 text-green-400" />
                 </div>
-              </motion.div>
+                <p className="text-xs text-gray-400 mb-1">Certificate</p>
+                <p className="text-sm font-bold text-white">Yes</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {courseData.tags.map((tag, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/30 rounded-lg text-xs font-medium text-gray-300 transition-all cursor-pointer"
+                >
+                  #{tag}
+                </span>
+              ))}
             </div>
           </div>
         </div>
-      </motion.section>
+      </div>
 
-      {/* Tabs Section */}
-      <section className="relative w-full px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-7xl mx-auto">
-          {/* Tab Navigation */}
-          <div className="flex flex-wrap gap-2 mb-12 border-b border-white/10 pb-6">
-            {["overview", "modules", "requirements", "reviews"].map((tab) => (
-              <motion.button
-                key={tab}
-                onClick={() => setSelectedTab(tab)}
-                className={`px-6 py-3 font-semibold capitalize rounded-lg transition-all ${
-                  selectedTab === tab
-                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
-                }`}
-                whileHover={{ scale: 1.05 }}
-              >
-                {tab}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Tab Content */}
-          {selectedTab === "overview" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-12"
-            >
-              {/* Learning Outcomes */}
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
-                  What You'll Learn
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {course.learningOutcomes.map((outcome, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-start gap-4 p-6 bg-white/5 border border-white/10 rounded-xl hover:border-purple-500/30 transition-colors"
-                    >
-                      <Check className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
-                      <p className="text-gray-300">{outcome}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {selectedTab === "modules" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-white">
-                  Course Modules
-                </h2>
-                <p className="text-sm text-gray-400">
-                  {selectedModules.size}/{course.modules.length} selected
-                </p>
-              </div>
-
-              {course.modules.map((module, index) => (
-                <motion.div
-                  key={module.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-colors"
-                >
-                  <div
-                    className="p-6 bg-white/5 hover:bg-white/8 transition-colors cursor-pointer"
-                    onClick={() =>
-                      setExpandedModule(
-                        expandedModule === module.id ? null : module.id
-                      )
-                    }
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-4 mb-3">
-                          <input
-                            type="checkbox"
-                            checked={selectedModules.has(module.id)}
-                            onChange={() => toggleModuleSelection(module.id)}
-                            className="w-5 h-5 rounded-lg"
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                          <h3 className="text-lg font-bold text-white">
-                            {module.title}
-                          </h3>
-                        </div>
-
-                        <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400">
-                          <span className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            {module.duration}
-                          </span>
-                          <span className="flex items-center gap-2">
-                            <BookOpen className="w-4 h-4" />
-                            {module.lessons} lessons
-                          </span>
-                          <span className="flex items-center gap-2">
-                            <Clock className="w-4 h-4" />
-                            {module.hours}h
-                          </span>
-                          <span className="ml-auto font-bold text-purple-300">
-                            ₹{module.price}
-                          </span>
-                        </div>
-                      </div>
-
-                      <motion.div
-                        animate={{
-                          rotate: expandedModule === module.id ? 180 : 0,
-                        }}
-                        className="ml-4"
-                      >
-                        <ChevronDown className="w-6 h-6 text-gray-400" />
-                      </motion.div>
-                    </div>
-                  </div>
-
-                  {/* Expanded Content */}
-                  {expandedModule === module.id && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="px-6 py-6 bg-black/20 border-t border-white/10"
-                    >
-                      <p className="text-gray-300 mb-4 font-semibold">
-                        Topics covered:
-                      </p>
-                      <ul className="space-y-3">
-                        {module.topics.map((topic, idx) => (
-                          <motion.li
-                            key={idx}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.05 }}
-                            className="flex items-center gap-3 text-gray-300"
-                          >
-                            <Play className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                            {topic}
-                          </motion.li>
-                        ))}
-                      </ul>
-
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        className="mt-6 py-2 px-6 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors"
-                      >
-                        Preview Module
-                      </motion.button>
-                    </motion.div>
-                  )}
-                </motion.div>
-              ))}
-
-              {/* Module Summary */}
-              {selectedModules.size > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 border-t border-white/10 md:relative md:border-t-0 md:mt-12"
-                >
-                  <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div>
-                      <p className="text-gray-300 mb-2">
-                        {selectedModules.size} module(s) selected
-                      </p>
-                      <p className="text-2xl font-bold text-white">
-                        Total: ₹{calculateModulePrice()}
-                      </p>
-                    </div>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
-                    >
-                      <ShoppingCart className="w-5 h-5" />
-                      Buy Selected Modules
-                    </motion.button>
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
-          )}
-
-          {selectedTab === "requirements" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
-                Course Requirements
-              </h2>
-              {course.requirements.map((requirement, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-4 p-6 bg-white/5 border border-white/10 rounded-xl"
-                >
-                  <Check className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
-                  <p className="text-gray-300">{requirement}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-
-          {selectedTab === "reviews" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
-                Student Reviews
-              </h2>
-              <p className="text-gray-400 text-center py-12">
-                Reviews will appear here soon
-              </p>
-            </motion.div>
-          )}
+      <div className="px-4 mt-6 pb-32">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-white mb-1">Course Content</h2>
+          <p className="text-sm text-gray-400">
+            {modules.length} modules • {totals.totalLessons} lessons •{" "}
+            {totals.totalDuration}
+          </p>
         </div>
-      </section>
+
+        <div className="space-y-3">
+          {modules.map((mod, idx) => {
+            const dur =
+              mod.lessons?.reduce((s, l) => s + (l.durationSec || 0), 0) || 0;
+            const h = Math.floor(dur / 3600);
+            const m = Math.floor((dur % 3600) / 60);
+            const fmt = h > 0 ? `${h}h ${m}m` : `${m}m`;
+            const exp = expandedModule === mod._id;
+
+            return (
+              <div
+                key={mod._id}
+                className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-xl"
+              >
+                <button
+                  onClick={() => toggleModule(mod._id)}
+                  className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                >
+                  <div className="flex items-center gap-3 flex-1 text-left">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 flex-shrink-0">
+                      <span className="text-lg font-bold text-purple-300">
+                        {idx + 1}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm md:text-base font-bold text-white mb-1 leading-tight">
+                        {mod.title}
+                      </h3>
+                      <div className="flex items-center gap-3 text-xs text-gray-400">
+                        <span className="flex items-center gap-1">
+                          <Play className="w-3 h-3" />
+                          {mod.lessons?.length || 0} lessons
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {fmt}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronDown
+                    className={`w-5 h-5 text-purple-400 transition-transform duration-300 flex-shrink-0 ${
+                      exp ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {exp && mod.lessons && (
+                  <div className="px-4 pb-4 space-y-2">
+                    {mod.lessons
+                      .sort((a, b) => (a.order || 0) - (b.order || 0))
+                      .map((l) => {
+                        const locked = !l.isFreePreview;
+                        return (
+                          <div
+                            key={l._id}
+                            className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                              locked
+                                ? "bg-slate-800/50 border-white/5"
+                                : "bg-gradient-to-r from-purple-500/10 to-transparent border-purple-500/20 hover:border-purple-500/40 cursor-pointer"
+                            }`}
+                          >
+                            <div className="relative w-16 h-16 bg-gradient-to-br from-purple-600/30 to-pink-600/30 rounded-lg flex-shrink-0 overflow-hidden border border-purple-500/30">
+                              <img
+                                src={mod.thumbnail || courseData.thumbnail}
+                                alt=""
+                                className="w-full h-full object-cover opacity-60"
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                {locked ? (
+                                  <Lock className="w-5 h-5 text-gray-500" />
+                                ) : (
+                                  <div className="relative">
+                                    <Play className="w-5 h-5 text-white" />
+                                    <span className="absolute -top-2 -right-2 w-3 h-3 bg-green-500 rounded-full border border-slate-900" />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start gap-2 mb-1">
+                                <h4
+                                  className={`text-sm font-semibold leading-tight line-clamp-2 flex-1 ${
+                                    locked ? "text-gray-500" : "text-white"
+                                  }`}
+                                >
+                                  {l.title}
+                                </h4>
+                                {l.isFreePreview && (
+                                  <span className="px-2 py-0.5 bg-green-500/20 border border-green-500/30 rounded text-xs font-bold text-green-300 flex-shrink-0">
+                                    FREE
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-3 text-xs">
+                                <span
+                                  className={`px-2 py-0.5 rounded-full ${
+                                    locked
+                                      ? "bg-gray-700/50 text-gray-500"
+                                      : "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                                  }`}
+                                >
+                                  {l.videoProvider}
+                                </span>
+                                <span
+                                  className={
+                                    locked ? "text-gray-600" : "text-gray-400"
+                                  }
+                                >
+                                  {formatDuration(l.durationSec)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-5 border border-white/10">
+          <h2 className="text-lg font-bold text-white mb-4">Your Instructor</h2>
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-2xl font-bold text-white">
+              {courseData.instructor.charAt(0)}
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-white mb-1">
+                {courseData.instructor}
+              </h3>
+              <p className="text-sm text-gray-400">
+                Expert Web Developer & Instructor
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                10+ years experience • 50k+ students
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-2xl border-t-2 border-purple-500/30 shadow-[0_-10px_40px_rgba(168,85,247,0.4)] z-50">
+        <div className="absolute inset-x-0 -top-1 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+        <div className="px-4 py-3 max-w-7xl mx-auto">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+                  {currency}
+                  {finalPrice.toLocaleString()}
+                </span>
+                <span className="text-xs md:text-sm text-gray-500 line-through">
+                  {currency}
+                  {originalPrice.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="px-2.5 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/40 rounded-lg text-xs font-bold text-green-300 animate-pulse">
+                  SAVE {discountPercent}%
+                </span>
+                <span className="text-xs text-gray-400">Limited offer</span>
+              </div>
+            </div>
+            <button className="relative px-6 md:px-10 py-3.5 md:py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-500 hover:via-pink-500 hover:to-purple-500 rounded-2xl font-bold text-white text-sm md:text-base shadow-2xl shadow-purple-500/50 transition-all active:scale-95 group flex-shrink-0 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:translate-x-full transition-transform duration-700" />
+              <span className="relative flex items-center gap-2">
+                BUY NOW
+                <svg
+                  className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
-
-// Certificate Icon Component
-const Certificate = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
-  </svg>
-);
