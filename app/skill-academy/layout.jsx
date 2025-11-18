@@ -100,7 +100,7 @@ const DesktopHeader = () => {
                   className="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-purple-500/20"
                 >
                   <img
-                    src="/sabka-logo.png"
+                    src="/sabka-logo2.png"
                     alt="Sabka Skill Academy"
                     className="w-full h-full object-cover"
                   />

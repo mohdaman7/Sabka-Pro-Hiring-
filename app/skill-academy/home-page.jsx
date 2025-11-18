@@ -25,7 +25,7 @@ export default function SkillAcademyHome() {
 
   return (
     <div className="relative">
-      <MouseFollower mousePosition={mousePosition} />
+      {/* <MouseFollower mousePosition={mousePosition} /> */}
       <Hero />
       <WhyStandOut />
       <Stats />
