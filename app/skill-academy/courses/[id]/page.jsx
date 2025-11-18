@@ -15,7 +15,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-// Demo Data
 const DEMO_COURSE_DATA = {
   _id: "demo-course-1",
   title: "Complete Web Development Bootcamp 2024",
@@ -284,316 +283,334 @@ export default function CourseDetailPage() {
     setExpandedModule(expandedModule === id ? null : id);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-1">
-        <div className="relative">
-          <div className="relative h-64 md:h-80 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950 z-10" />
-            <img
-              src={courseData.thumbnail || "/placeholder.svg"}
-              alt={courseData.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute top-4 right-4 flex gap-2 z-20">
-              <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 hover:bg-white/20 transition-all">
-                <Share2 className="w-5 h-5 text-white" />
-              </button>
-              <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 hover:bg-white/20 transition-all">
-                <Heart className="w-5 h-5 text-white" />
-              </button>
-            </div>
-          </div>
+    <div className="min-h-screen bg-slate-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content - Left Side */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Course Header */}
+            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+              {/* Thumbnail */}
+              <div className="relative h-64 md:h-80 overflow-hidden bg-slate-900">
+                <img
+                  src={courseData.thumbnail}
+                  alt={courseData.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
 
-          <div className="px-4 -mt-8 relative z-20">
-            <div className="bg-gradient-to-br from-slate-900/98 to-slate-800/98 backdrop-blur-2xl rounded-3xl p-5 md:p-6 border-2 border-purple-500/30 shadow-[0_20px_60px_rgba(168,85,247,0.3)]">
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <span className="px-3 py-1.5 bg-gradient-to-r from-purple-500/30 to-pink-500/30 border-2 border-purple-400/50 rounded-full text-xs font-bold text-purple-200 shadow-lg">
-                  {courseData.level}
-                </span>
-                <span className="px-3 py-1.5 bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-2 border-green-400/50 rounded-full text-xs font-bold text-green-200 flex items-center gap-1 shadow-lg animate-pulse">
-                  <TrendingUp className="w-3 h-3" />
-                  TRENDING
-                </span>
-                <span className="px-3 py-1.5 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 border-2 border-blue-400/50 rounded-full text-xs font-bold text-blue-200 shadow-lg">
-                  {courseData.category}
-                </span>
+                {/* Action buttons */}
+                <div className="absolute top-4 right-4 flex gap-2 z-10">
+                  <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 hover:bg-white/20 transition-all">
+                    <Share2 className="w-5 h-5 text-white" />
+                  </button>
+                  <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 hover:bg-white/20 transition-all group">
+                    <Heart className="w-5 h-5 text-white group-hover:fill-red-500 group-hover:text-red-500 transition-colors" />
+                  </button>
+                </div>
               </div>
 
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 leading-tight bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                {courseData.title}
-              </h1>
-              <p className="text-sm md:text-base text-gray-300 leading-relaxed mb-4">
-                {courseData.description}
-              </p>
+              {/* Course Info */}
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
+                  <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-lg text-xs font-semibold text-purple-300">
+                    {courseData.level}
+                  </span>
+                  <span className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-lg text-xs font-semibold text-blue-300">
+                    {courseData.category}
+                  </span>
+                </div>
 
-              <div className="flex items-center gap-4 flex-wrap mb-5 pb-5 border-b border-white/10">
-                <div className="flex items-center gap-2 bg-yellow-500/10 px-3 py-2 rounded-xl border border-yellow-500/30">
-                  <div className="flex items-center gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.floor(courseData.rating)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "fill-gray-700 text-gray-700"
-                        }`}
-                      />
-                    ))}
+                <h1 className="text-2xl md:text-3xl font-bold mb-3 text-white">
+                  {courseData.title}
+                </h1>
+                <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-4">
+                  {courseData.description}
+                </p>
+
+                <div className="flex items-center gap-4 flex-wrap mb-4">
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < Math.floor(courseData.rating)
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "fill-gray-700 text-gray-700"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm font-semibold text-white">
+                      {courseData.rating.toFixed(1)}
+                    </span>
                   </div>
-                  <span className="text-sm font-bold text-yellow-400">
-                    {courseData.rating.toFixed(1)}
-                  </span>
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <Users className="w-4 h-4" />
+                    <span>
+                      {courseData.enrolledCount.toLocaleString()} students
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 bg-purple-500/10 px-3 py-2 rounded-xl border border-purple-500/30">
-                  <Users className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm font-bold text-purple-300">
-                    {courseData.enrolledCount.toLocaleString()}
-                  </span>
-                  <span className="text-xs text-gray-400">students</span>
+
+                <div className="flex flex-wrap gap-2">
+                  {courseData.tags.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-400 hover:border-purple-500/30 hover:text-purple-300 transition-colors"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
+            </div>
 
-              <div className="grid grid-cols-3 gap-3 mb-5">
-                <div className="text-center p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
-                  <div className="flex items-center justify-center mb-2 bg-purple-500/20 w-10 h-10 rounded-lg mx-auto">
+            {/* Course Stats */}
+            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+              <h2 className="text-lg font-bold text-white mb-4">
+                Course Includes
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center">
                     <Clock className="w-5 h-5 text-purple-400" />
                   </div>
-                  <p className="text-xs text-gray-400 mb-1">Duration</p>
-                  <p className="text-sm font-bold text-white">
-                    {totals.totalDuration}
-                  </p>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      {totals.totalDuration}
+                    </p>
+                    <p className="text-xs text-gray-400">Total duration</p>
+                  </div>
                 </div>
-                <div className="text-center p-3 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
-                  <div className="flex items-center justify-center mb-2 bg-blue-500/20 w-10 h-10 rounded-lg mx-auto">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
                     <BookOpen className="w-5 h-5 text-blue-400" />
                   </div>
-                  <p className="text-xs text-gray-400 mb-1">Lessons</p>
-                  <p className="text-sm font-bold text-white">
-                    {totals.totalLessons}
-                  </p>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      {totals.totalLessons} Lessons
+                    </p>
+                    <p className="text-xs text-gray-400">Video content</p>
+                  </div>
                 </div>
-                <div className="text-center p-3 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/20">
-                  <div className="flex items-center justify-center mb-2 bg-green-500/20 w-10 h-10 rounded-lg mx-auto">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
                     <Award className="w-5 h-5 text-green-400" />
                   </div>
-                  <p className="text-xs text-gray-400 mb-1">Certificate</p>
-                  <p className="text-sm font-bold text-white">Yes</p>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      Certificate
+                    </p>
+                    <p className="text-xs text-gray-400">On completion</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-pink-500/10 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-pink-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      Lifetime Access
+                    </p>
+                    <p className="text-xs text-gray-400">Learn at your pace</p>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div className="flex flex-wrap gap-2">
-                {courseData.tags.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/30 rounded-lg text-xs font-medium text-gray-300 transition-all cursor-pointer"
-                  >
-                    #{tag}
-                  </span>
-                ))}
+            {/* Course Content */}
+            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+              <div className="mb-4">
+                <h2 className="text-xl font-bold text-white mb-1">
+                  Course Content
+                </h2>
+                <p className="text-sm text-gray-400">
+                  {modules.length} modules • {totals.totalLessons} lessons •{" "}
+                  {totals.totalDuration}
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {modules.map((mod, idx) => {
+                  const dur =
+                    mod.lessons?.reduce(
+                      (s, l) => s + (l.durationSec || 0),
+                      0
+                    ) || 0;
+                  const h = Math.floor(dur / 3600);
+                  const m = Math.floor((dur % 3600) / 60);
+                  const fmt = h > 0 ? `${h}h ${m}m` : `${m}m`;
+                  const exp = expandedModule === mod._id;
+
+                  return (
+                    <div
+                      key={mod._id}
+                      className="bg-slate-800/50 rounded-xl border border-white/10 overflow-hidden"
+                    >
+                      <button
+                        onClick={() => toggleModule(mod._id)}
+                        className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 flex-1 text-left">
+                          <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center border border-purple-500/30 flex-shrink-0">
+                            <span className="text-sm font-bold text-purple-300">
+                              {idx + 1}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-sm font-semibold text-white mb-1">
+                              {mod.title}
+                            </h3>
+                            <div className="flex items-center gap-3 text-xs text-gray-400">
+                              <span>{mod.lessons?.length || 0} lessons</span>
+                              <span>•</span>
+                              <span>{fmt}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronDown
+                          className={`w-5 h-5 text-gray-400 transition-transform duration-200 flex-shrink-0 ${
+                            exp ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+
+                      {exp && mod.lessons && (
+                        <div className="px-4 pb-4 space-y-2 border-t border-white/5">
+                          {mod.lessons
+                            .sort((a, b) => (a.order || 0) - (b.order || 0))
+                            .map((l) => {
+                              const locked = !l.isFreePreview;
+                              return (
+                                <div
+                                  key={l._id}
+                                  className={`flex items-center gap-3 p-3 rounded-lg transition-all mt-2 ${
+                                    locked
+                                      ? "bg-slate-900/50"
+                                      : "bg-purple-500/5 border border-purple-500/20 cursor-pointer hover:bg-purple-500/10"
+                                  }`}
+                                >
+                                  <div
+                                    className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                      locked
+                                        ? "bg-slate-800"
+                                        : "bg-purple-500/20"
+                                    }`}
+                                  >
+                                    {locked ? (
+                                      <Lock className="w-4 h-4 text-gray-500" />
+                                    ) : (
+                                      <Play className="w-4 h-4 text-purple-400" />
+                                    )}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <h4
+                                        className={`text-sm font-medium flex-1 ${
+                                          locked
+                                            ? "text-gray-500"
+                                            : "text-white"
+                                        }`}
+                                      >
+                                        {l.title}
+                                      </h4>
+                                      {l.isFreePreview && (
+                                        <span className="px-2 py-0.5 bg-green-500/20 border border-green-500/30 rounded text-xs font-semibold text-green-300">
+                                          Preview
+                                        </span>
+                                      )}
+                                    </div>
+                                    <span
+                                      className={`text-xs ${
+                                        locked
+                                          ? "text-gray-600"
+                                          : "text-gray-400"
+                                      }`}
+                                    >
+                                      {formatDuration(l.durationSec)}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Instructor */}
+            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+              <h2 className="text-lg font-bold text-white mb-4">
+                Your Instructor
+              </h2>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-2xl font-bold text-white flex-shrink-0">
+                  {courseData.instructor.charAt(0)}
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white mb-1">
+                    {courseData.instructor}
+                  </h3>
+                  <p className="text-sm text-gray-400">
+                    Expert Web Developer & Instructor
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    10+ years experience • 50k+ students
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="px-4 mt-6 pb-6">
-          <div className="mb-4">
-            <h2 className="text-xl font-bold text-white mb-1">
-              Course Content
-            </h2>
-            <p className="text-sm text-gray-400">
-              {modules.length} modules • {totals.totalLessons} lessons •{" "}
-              {totals.totalDuration}
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {modules.map((mod, idx) => {
-              const dur =
-                mod.lessons?.reduce((s, l) => s + (l.durationSec || 0), 0) || 0;
-              const h = Math.floor(dur / 3600);
-              const m = Math.floor((dur % 3600) / 60);
-              const fmt = h > 0 ? `${h}h ${m}m` : `${m}m`;
-              const exp = expandedModule === mod._id;
-
-              return (
-                <div
-                  key={mod._id}
-                  className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-xl"
-                >
-                  <button
-                    onClick={() => toggleModule(mod._id)}
-                    className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
-                  >
-                    <div className="flex items-center gap-3 flex-1 text-left">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 flex-shrink-0">
-                        <span className="text-lg font-bold text-purple-300">
-                          {idx + 1}
-                        </span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm md:text-base font-bold text-white mb-1 leading-tight">
-                          {mod.title}
-                        </h3>
-                        <div className="flex items-center gap-3 text-xs text-gray-400">
-                          <span className="flex items-center gap-1">
-                            <Play className="w-3 h-3" />
-                            {mod.lessons?.length || 0} lessons
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {fmt}
-                          </span>
-                        </div>
-                      </div>
+          {/* Sidebar - Right Side */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+                <div className="p-6">
+                  <div className="mb-6">
+                    <div className="flex items-baseline gap-2 mb-2">
+                      <span className="text-3xl font-bold text-white">
+                        {currency}
+                        {finalPrice.toLocaleString()}
+                      </span>
+                      <span className="text-lg text-gray-500 line-through">
+                        {currency}
+                        {originalPrice.toLocaleString()}
+                      </span>
                     </div>
-                    <ChevronDown
-                      className={`w-5 h-5 text-purple-400 transition-transform duration-300 flex-shrink-0 ${
-                        exp ? "rotate-180" : ""
-                      }`}
-                    />
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-1 bg-green-500/20 border border-green-500/30 rounded-lg text-xs font-semibold text-green-300">
+                        {discountPercent}% OFF
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        Limited time offer
+                      </span>
+                    </div>
+                  </div>
+
+                  <button className="w-full px-6 py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-semibold text-white transition-all shadow-lg shadow-purple-500/50 hover:shadow-xl hover:shadow-purple-500/60">
+                    Enroll Now
                   </button>
 
-                  {exp && mod.lessons && (
-                    <div className="px-4 pb-4 space-y-2">
-                      {mod.lessons
-                        .sort((a, b) => (a.order || 0) - (b.order || 0))
-                        .map((l) => {
-                          const locked = !l.isFreePreview;
-                          return (
-                            <div
-                              key={l._id}
-                              className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                                locked
-                                  ? "bg-slate-800/50 border-white/5"
-                                  : "bg-gradient-to-r from-purple-500/10 to-transparent border-purple-500/20 hover:border-purple-500/40 cursor-pointer"
-                              }`}
-                            >
-                              <div className="relative w-16 h-16 bg-gradient-to-br from-purple-600/30 to-pink-600/30 rounded-lg flex-shrink-0 overflow-hidden border border-purple-500/30">
-                                <img
-                                  src={mod.thumbnail || courseData.thumbnail}
-                                  alt=""
-                                  className="w-full h-full object-cover opacity-60"
-                                />
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                  {locked ? (
-                                    <Lock className="w-5 h-5 text-gray-500" />
-                                  ) : (
-                                    <div className="relative">
-                                      <Play className="w-5 h-5 text-white" />
-                                      <span className="absolute -top-2 -right-2 w-3 h-3 bg-green-500 rounded-full border border-slate-900" />
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start gap-2 mb-1">
-                                  <h4
-                                    className={`text-sm font-semibold leading-tight line-clamp-2 flex-1 ${
-                                      locked ? "text-gray-500" : "text-white"
-                                    }`}
-                                  >
-                                    {l.title}
-                                  </h4>
-                                  {l.isFreePreview && (
-                                    <span className="px-2 py-0.5 bg-green-500/20 border border-green-500/30 rounded text-xs font-bold text-green-300 flex-shrink-0">
-                                      FREE
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-3 text-xs">
-                                  <span
-                                    className={`px-2 py-0.5 rounded-full ${
-                                      locked
-                                        ? "bg-gray-700/50 text-gray-500"
-                                        : "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                                    }`}
-                                  >
-                                    {l.videoProvider}
-                                  </span>
-                                  <span
-                                    className={
-                                      locked ? "text-gray-600" : "text-gray-400"
-                                    }
-                                  >
-                                    {formatDuration(l.durationSec)}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
+                  <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
+                    <div className="flex items-center justify-between text-sm"></div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Access</span>
+                      <span className="text-white font-semibold">Lifetime</span>
                     </div>
-                  )}
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Certificate</span>
+                      <span className="text-white font-semibold">Included</span>
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-6 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-5 border border-white/10">
-            <h2 className="text-lg font-bold text-white mb-4">
-              Your Instructor
-            </h2>
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-2xl font-bold text-white">
-                {courseData.instructor.charAt(0)}
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-white mb-1">
-                  {courseData.instructor}
-                </h3>
-                <p className="text-sm text-gray-400">
-                  Expert Web Developer & Instructor
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  10+ years experience • 50k+ students
-                </p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-slate-950/95 backdrop-blur-2xl border-t-2 border-purple-500/30 shadow-[0_-10px_40px_rgba(168,85,247,0.4)]">
-        <div className="absolute inset-x-0 -top-1 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-        <div className="px-4 py-3 sm:py-4 max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-                  {currency}
-                  {finalPrice.toLocaleString()}
-                </span>
-                <span className="text-xs sm:text-sm text-gray-500 line-through">
-                  {currency}
-                  {originalPrice.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 mt-1 flex-wrap">
-                <span className="px-2.5 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/40 rounded-lg text-xs font-bold text-green-300 animate-pulse">
-                  SAVE {discountPercent}%
-                </span>
-                <span className="text-xs text-gray-400">Limited offer</span>
-              </div>
-            </div>
-            <button className="relative px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-500 hover:via-pink-500 hover:to-purple-500 rounded-2xl font-bold text-white text-sm sm:text-base md:text-base shadow-2xl shadow-purple-500/50 transition-all active:scale-95 group flex-shrink-0 overflow-hidden w-full sm:w-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:translate-x-full transition-transform duration-700" />
-              <span className="relative flex items-center justify-center gap-2">
-                BUY NOW
-                <svg
-                  className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </span>
-            </button>
           </div>
         </div>
       </div>
