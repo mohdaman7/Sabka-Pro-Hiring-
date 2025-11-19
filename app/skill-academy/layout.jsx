@@ -91,13 +91,13 @@ const DesktopHeader = () => {
           <Link href="/skill-academy">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3 flex-shrink-0"
+              className="flex items-center gap-2 sm:gap-3 flex-shrink-0"
             >
               <div className="relative">
                 <motion.div
                   whileHover={{ rotate: 12 }}
                   transition={{ duration: 0.3 }}
-                  className="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-purple-500/20"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-lg shadow-purple-500/20"
                 >
                   <img
                     src="/sabka-logo2.png"
@@ -105,19 +105,20 @@ const DesktopHeader = () => {
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
               </div>
-              <div className="hidden sm:block">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              <div className="block">
+                <h1 className="text-sm sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent leading-tight">
                   Sabka Skill Academy
                 </h1>
-                <p className="text-xs text-gray-400">Learn • Grow • Succeed</p>
+                <p className="text-[10px] sm:text-xs text-gray-400 hidden xs:block">
+                  Learn • Grow • Succeed
+                </p>
               </div>
             </motion.div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             {navItems.map((item, index) => {
               const isActive = pathname === item.href;
               return (
@@ -144,7 +145,7 @@ const DesktopHeader = () => {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden md:flex items-center gap-4 flex-shrink-0">
+          <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
             <Link href="/skill-academy/register">
               <motion.button
                 whileHover={{
@@ -152,7 +153,7 @@ const DesktopHeader = () => {
                   boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)",
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all"
+                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all text-sm"
               >
                 Get Started
               </motion.button>
@@ -162,12 +163,13 @@ const DesktopHeader = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors flex-shrink-0"
+            className="lg:hidden p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors flex-shrink-0"
+            aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="w-6 h-6 text-white" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className="w-6 h-6 text-white" />
             )}
           </button>
         </div>
@@ -180,17 +182,18 @@ const DesktopHeader = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10 w-full"
+            transition={{ duration: 0.2 }}
+            className="lg:hidden bg-black/95 backdrop-blur-xl border-t border-white/10 w-full overflow-hidden"
           >
-            <div className="px-4 py-4 space-y-2">
+            <div className="px-4 py-4 space-y-2 max-h-[calc(100vh-4rem)] overflow-y-auto">
               {navItems.map((item, index) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link key={index} href={item.href}>
                     <motion.div
-                      whileTap={{ scale: 0.95 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`block py-3 px-4 rounded-lg transition-all ${
+                      className={`block py-3 px-4 rounded-lg transition-all font-medium ${
                         isActive
                           ? "text-purple-400 bg-purple-500/20"
                           : "text-gray-300 hover:text-white hover:bg-white/5"
@@ -203,9 +206,9 @@ const DesktopHeader = () => {
               })}
               <Link href="/skill-academy/register">
                 <motion.button
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full mt-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white"
+                  className="w-full mt-4 py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25"
                 >
                   Get Started
                 </motion.button>
