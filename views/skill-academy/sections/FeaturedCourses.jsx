@@ -112,15 +112,11 @@ export const FeaturedCourses = () => {
           className="text-center mb-8 md:mb-16 px-4 md:px-6"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 md:mb-6">
-            Premium Courses{" "}
+            Featured{" "}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Curated for You
+              Courses
             </span>
           </h2>
-          <p className="text-sm md:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Master in-demand skills with industry experts. Join thousands of
-            successful students transforming their careers.
-          </p>
         </motion.div>
 
         {/* Mobile - Horizontal Scroll */}
