@@ -21,9 +21,15 @@ import {
   Crown,
   Zap,
 } from "lucide-react";
-import { enrollInCourse, checkEnrollmentStatus } from "@/services/enrollmentService";
+import {
+  enrollInCourse,
+  checkEnrollmentStatus,
+} from "@/services/enrollmentService";
 import { customToast } from "@/components/ui/toast";
 import { triggerSuccessAnimation } from "@/utils/successAnimations";
+
+const isValidObjectId = (value) =>
+  typeof value === "string" && /^[0-9a-fA-F]{24}$/.test(value);
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -85,18 +91,31 @@ export default function CourseDetailPage() {
 
   const loadData = async () => {
     if (!id) return;
+
+    // Guard against invalid ids to avoid hitting backend with bad ObjectId
+    if (!isValidObjectId(id)) {
+      setError(
+        "Invalid course link. Please open this course from the courses list again."
+      );
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      const [courseData, accessData, profileRes, enrollmentCheck] = await Promise.all([
-        courseService.getById(id),
-        courseService.myAccess().catch(() => []),
-        studentService.getProfile().catch(() => null),
-        checkEnrollmentStatus(id).catch(() => ({ data: { isEnrolled: false } })),
-      ]);
+      const [courseData, accessData, profileRes, enrollmentCheck] =
+        await Promise.all([
+          courseService.getById(id),
+          courseService.myAccess().catch(() => []),
+          studentService.getProfile().catch(() => null),
+          checkEnrollmentStatus(id).catch(() => ({
+            data: { isEnrolled: false },
+          })),
+        ]);
       setCourse(courseData);
       setMyAccess(accessData || []);
       setIsEnrolled(enrollmentCheck?.data?.isEnrolled || false);
-      
+
       const studentData =
         profileRes?.data || profileRes?.data?.data || profileRes?.data;
       const plan = (
@@ -120,19 +139,25 @@ export default function CourseDetailPage() {
 
   async function handleEnroll() {
     if (enrolling || hasFullAccess) return;
-    
+
     try {
       setEnrolling(true);
       await enrollInCourse(id);
-      
+
       triggerSuccessAnimation({ type: "achievement" });
-      customToast.success("Enrolled successfully!", `Welcome to ${course.title}! Start learning now.`);
-      
+      customToast.success(
+        "Enrolled successfully!",
+        `Welcome to ${course.title}! Start learning now.`
+      );
+
       setIsEnrolled(true);
       loadData();
     } catch (error) {
       console.error("Enrollment error:", error);
-      customToast.error("Enrollment failed", error.response?.data?.message || error.message || "Please try again");
+      customToast.error(
+        "Enrollment failed",
+        error.response?.data?.message || error.message || "Please try again"
+      );
     } finally {
       setEnrolling(false);
     }
@@ -145,15 +170,21 @@ export default function CourseDetailPage() {
         type: "sub_course",
         moduleCourseId: moduleId,
       });
-      
+
       triggerSuccessAnimation({ type: "achievement" });
-      customToast.success("Module purchased!", "You now have access to this module.");
-      
+      customToast.success(
+        "Module purchased!",
+        "You now have access to this module."
+      );
+
       // Purchase automatically creates enrollment on backend
       setIsEnrolled(true);
       loadData();
     } catch (e) {
-      customToast.error("Purchase failed", e?.response?.data?.message || e.message || "Please try again");
+      customToast.error(
+        "Purchase failed",
+        e?.response?.data?.message || e.message || "Please try again"
+      );
     } finally {
       setPurchasing(false);
     }
@@ -162,16 +193,25 @@ export default function CourseDetailPage() {
   async function purchaseFull(courseId) {
     try {
       setPurchasing(true);
-      const response = await purchaseService.create({ type: "full_course", courseId });
-      
+      const response = await purchaseService.create({
+        type: "full_course",
+        courseId,
+      });
+
       triggerSuccessAnimation({ type: "achievement" });
-      customToast.success("Course unlocked!", "You now have full access to all content.");
-      
+      customToast.success(
+        "Course unlocked!",
+        "You now have full access to all content."
+      );
+
       // Purchase automatically creates enrollment on backend
       setIsEnrolled(true);
       loadData();
     } catch (e) {
-      customToast.error("Purchase failed", e?.response?.data?.message || e.message || "Please try again");
+      customToast.error(
+        "Purchase failed",
+        e?.response?.data?.message || e.message || "Please try again"
+      );
     } finally {
       setPurchasing(false);
     }
@@ -180,7 +220,9 @@ export default function CourseDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen p-4 sm:p-6 flex items-center justify-center">
-        <div className="text-white/80 text-base sm:text-lg">Loading course...</div>
+        <div className="text-white/80 text-base sm:text-lg">
+          Loading course...
+        </div>
       </div>
     );
   }
@@ -310,7 +352,7 @@ export default function CourseDetailPage() {
               </div>
             )}
           </div>
-          
+
           {/* Professional Header Button Logic */}
           {isPro ? (
             // Pro users - show badge only
@@ -333,9 +375,7 @@ export default function CourseDetailPage() {
                 <div className="text-emerald-400 font-bold text-lg">
                   Enrolled
                 </div>
-                <div className="text-white/80 text-sm">
-                  Full Access
-                </div>
+                <div className="text-white/80 text-sm">Full Access</div>
               </div>
             </div>
           ) : isFree ? (

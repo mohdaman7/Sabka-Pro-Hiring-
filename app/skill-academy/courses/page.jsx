@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import courseService from "@/services/courseService";
 import {
   Search,
   Filter,
@@ -270,120 +271,105 @@ export default function CoursesPage() {
   const [sortBy, setSortBy] = useState("popular");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const courses = [
-    {
-      id: 1,
-      title: "Full Stack Web Development",
-      category: "Development",
-      description:
-        "Master modern web development with React, Node.js, and MongoDB",
-      students: "12.5k",
-      rating: 4.9,
-      duration: "40 hours",
-      price: "Free",
-      originalPrice: null,
-      discount: null,
-      icon: Code,
-      gradient: "from-blue-500 to-blue-600",
-      level: "Beginner",
-      image:
-        "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      isFree: true,
-    },
-    {
-      id: 2,
-      title: "Data Science & AI",
-      category: "Data Science",
-      description: "Learn machine learning, data analysis, and AI fundamentals",
-      students: "8.3k",
-      rating: 4.8,
-      duration: "35 hours",
-      price: "₹24,999",
-      originalPrice: "₹34,999",
-      discount: "28%",
-      icon: Brain,
-      gradient: "from-emerald-500 to-emerald-600",
-      level: "Intermediate",
-      image:
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      isFree: false,
-    },
-    {
-      id: 3,
-      title: "UI/UX Design Mastery",
-      category: "Design",
-      description: "Create stunning user interfaces and experiences",
-      students: "6.7k",
-      rating: 4.9,
-      duration: "30 hours",
-      price: "₹16,999",
-      originalPrice: null,
-      discount: null,
-      icon: Palette,
-      gradient: "from-pink-500 to-pink-600",
-      level: "Beginner",
-      image:
-        "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      isFree: false,
-    },
-    {
-      id: 4,
-      title: "Digital Marketing Mastery",
-      category: "Marketing",
-      description:
-        "Learn SEO, social media marketing, and digital advertising strategies",
-      students: "9.2k",
-      rating: 4.7,
-      duration: "25 hours",
-      price: "₹12,999",
-      originalPrice: "₹18,999",
-      discount: "31%",
-      icon: TrendingUp,
-      gradient: "from-orange-500 to-orange-600",
-      level: "Beginner",
-      image:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      isFree: false,
-    },
-    {
-      id: 5,
-      title: "Cybersecurity Fundamentals",
-      category: "Security",
-      description:
-        "Protect systems and networks from digital attacks and threats",
-      students: "5.8k",
-      rating: 4.8,
-      duration: "45 hours",
-      price: "₹29,999",
-      originalPrice: null,
-      discount: null,
-      icon: Shield,
-      gradient: "from-red-500 to-red-600",
-      level: "Intermediate",
-      image:
-        "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      isFree: false,
-    },
-    {
-      id: 6,
-      title: "Mobile App Development",
-      category: "Development",
-      description: "Build native and cross-platform mobile applications",
-      students: "7.1k",
-      rating: 4.6,
-      duration: "50 hours",
-      price: "₹22,999",
-      originalPrice: null,
-      discount: null,
-      icon: Smartphone,
-      gradient: "from-indigo-500 to-indigo-600",
-      level: "Intermediate",
-      image:
-        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      isFree: false,
-    },
+  const iconOptions = [Code, Brain, Palette, TrendingUp, Shield, Smartphone];
+  const gradientOptions = [
+    "from-blue-500 to-blue-600",
+    "from-emerald-500 to-emerald-600",
+    "from-pink-500 to-pink-600",
+    "from-orange-500 to-orange-600",
+    "from-red-500 to-red-600",
+    "from-indigo-500 to-indigo-600",
   ];
+
+  const mapCourseFromApi = (course, index) => {
+    const bundlePrice =
+      typeof course.bundlePrice === "number" ? course.bundlePrice : 0;
+    const isFree = bundlePrice === 0;
+
+    const sumModulePrice =
+      typeof course.sumModulePrice === "number" ? course.sumModulePrice : 0;
+
+    let originalPrice = null;
+    let discountLabel = null;
+
+    if (!isFree && sumModulePrice > bundlePrice && sumModulePrice > 0) {
+      originalPrice = `₹${sumModulePrice.toLocaleString("en-IN")}`;
+      const discountPercent = Math.round(
+        ((sumModulePrice - bundlePrice) / sumModulePrice) * 100
+      );
+      if (discountPercent > 0) {
+        discountLabel = `${discountPercent}%`;
+      }
+    }
+
+    const IconComponent = iconOptions[index % iconOptions.length];
+    const gradient = gradientOptions[index % gradientOptions.length];
+
+    const enrolledCount = course.enrolledCount || 0;
+    let studentsLabel = "0";
+    if (enrolledCount >= 1000) {
+      const formatted = (enrolledCount / 1000).toFixed(1);
+      studentsLabel = `${
+        formatted.endsWith(".0") ? formatted.slice(0, -2) : formatted
+      }k`;
+    } else if (enrolledCount > 0) {
+      studentsLabel = `${enrolledCount}`;
+    }
+
+    const rating =
+      typeof course.rating === "number" ? Number(course.rating.toFixed(1)) : 0;
+
+    return {
+      id: course._id,
+      title: course.title,
+      category: course.category || "General",
+      description: course.description || "",
+      students: studentsLabel,
+      rating,
+      duration: course.moduleCount
+        ? `${course.moduleCount} modules`
+        : "Self paced",
+      price: isFree ? "Free" : `₹${bundlePrice.toLocaleString("en-IN")}`,
+      originalPrice,
+      discount: discountLabel,
+      icon: IconComponent,
+      gradient,
+      level: course.level || "Beginner",
+      image: course.thumbnail || "/placeholder.svg",
+      isFree,
+    };
+  };
+
+  const loadCourses = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const data = await courseService.listPublic();
+      const mapped = (data || []).map((course, index) =>
+        mapCourseFromApi(course, index)
+      );
+
+      setCourses(mapped);
+    } catch (e) {
+      console.error("Failed to load Skill Academy courses", e);
+      const message =
+        e?.response?.data?.message ||
+        e.message ||
+        "Failed to load courses. Please try again.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCourses();
+  }, []);
 
   const categories = [
     { value: "all", label: "All Courses" },
@@ -410,7 +396,10 @@ export default function CoursesPage() {
     return matchesCategory && matchesSearch;
   });
 
-  const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredCourses.length / itemsPerPage)
+  );
   const startIdx = (currentPage - 1) * itemsPerPage;
   const paginatedCourses = filteredCourses.slice(
     startIdx,
@@ -560,7 +549,48 @@ export default function CoursesPage() {
 
       <section className="relative py-6 lg:py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {paginatedCourses.length > 0 ? (
+          {loading ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-16 px-4"
+            >
+              <div className="max-w-md mx-auto">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-white/5 border-2 border-white/10 flex items-center justify-center">
+                  <Zap className="w-10 h-10 text-purple-400 animate-spin" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Loading courses
+                </h3>
+                <p className="text-gray-400 text-base">
+                  Please wait while we fetch the latest courses for you.
+                </p>
+              </div>
+            </motion.div>
+          ) : error ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-16 px-4"
+            >
+              <div className="max-w-md mx-auto">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-500/10 border-2 border-red-500/40 flex items-center justify-center">
+                  <X className="w-10 h-10 text-red-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Failed to load courses
+                </h3>
+                <p className="text-gray-400 text-base mb-4">{error}</p>
+                <button
+                  onClick={loadCourses}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600/20 hover:bg-purple-600/30 border-2 border-purple-500/30 hover:border-purple-500/50 text-white font-semibold rounded-xl transition-all duration-300"
+                >
+                  <Filter className="w-4 h-4" />
+                  Try Again
+                </button>
+              </div>
+            </motion.div>
+          ) : paginatedCourses.length > 0 ? (
             <>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
                 {paginatedCourses.map((course, index) => (

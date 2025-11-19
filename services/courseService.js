@@ -5,6 +5,10 @@ const courseService = {
     const res = await api.get("/api/courses");
     return res.data.data;
   },
+  listPublicPaginated: async (params) => {
+    const res = await api.get("/api/courses/paginated", { params });
+    return res.data.data;
+  },
   getById: async (id) => {
     const res = await api.get(`/api/courses/${id}`);
     return res.data.data;
