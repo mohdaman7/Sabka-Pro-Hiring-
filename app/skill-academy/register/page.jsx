@@ -29,7 +29,7 @@ export default function SkillAcademyRegister() {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [errors, setErrors] = useState({});
-  
+
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -43,23 +43,23 @@ export default function SkillAcademyRegister() {
 
   const validateStep1 = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email";
     }
-    
+
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
     } else if (!/^\+?[\d\s-()]{10,}$/.test(formData.phone)) {
       newErrors.phone = "Please enter a valid phone number";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -80,7 +80,7 @@ export default function SkillAcademyRegister() {
       setErrors({ otp: "Please enter the OTP" });
       return;
     }
-    
+
     setIsVerifying(true);
     // Simulate OTP verification
     setTimeout(() => {
@@ -217,17 +217,27 @@ export default function SkillAcademyRegister() {
           className="flex items-center justify-center mb-8"
         >
           <div className="flex items-center gap-4">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
-              step >= 1 ? "bg-purple-500 border-purple-500 text-white" : "border-gray-600 text-gray-400"
-            }`}>
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
+                step >= 1
+                  ? "bg-purple-500 border-purple-500 text-white"
+                  : "border-gray-600 text-gray-400"
+              }`}
+            >
               {step > 1 ? <CheckCircle className="w-5 h-5" /> : "1"}
             </div>
-            <div className={`w-16 h-1 rounded-full transition-all ${
-              step >= 2 ? "bg-purple-500" : "bg-gray-600"
-            }`} />
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
-              step >= 2 ? "bg-purple-500 border-purple-500 text-white" : "border-gray-600 text-gray-400"
-            }`}>
+            <div
+              className={`w-16 h-1 rounded-full transition-all ${
+                step >= 2 ? "bg-purple-500" : "bg-gray-600"
+              }`}
+            />
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
+                step >= 2
+                  ? "bg-purple-500 border-purple-500 text-white"
+                  : "border-gray-600 text-gray-400"
+              }`}
+            >
               2
             </div>
           </div>
@@ -242,8 +252,10 @@ export default function SkillAcademyRegister() {
         >
           {step === 1 ? (
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-center mb-6">Create Your Account</h2>
-              
+              <h2 className="text-xl font-semibold text-center mb-6">
+                Create Your Account
+              </h2>
+
               {/* Name Input */}
               <div className="space-y-2">
                 <label className="text-sm text-gray-300 flex items-center gap-2">
@@ -256,7 +268,9 @@ export default function SkillAcademyRegister() {
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   placeholder="Enter your full name"
                   className={`w-full px-4 py-3 bg-white/10 border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all ${
-                    errors.name ? "border-red-500" : "border-white/20 focus:border-purple-500"
+                    errors.name
+                      ? "border-red-500"
+                      : "border-white/20 focus:border-purple-500"
                   }`}
                 />
                 {errors.name && (
@@ -279,7 +293,9 @@ export default function SkillAcademyRegister() {
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   placeholder="Enter your email"
                   className={`w-full px-4 py-3 bg-white/10 border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all ${
-                    errors.email ? "border-red-500" : "border-white/20 focus:border-purple-500"
+                    errors.email
+                      ? "border-red-500"
+                      : "border-white/20 focus:border-purple-500"
                   }`}
                 />
                 {errors.email && (
@@ -302,7 +318,9 @@ export default function SkillAcademyRegister() {
                   onChange={(e) => handleInputChange("phone", e.target.value)}
                   placeholder="Enter your phone number"
                   className={`w-full px-4 py-3 bg-white/10 border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all ${
-                    errors.phone ? "border-red-500" : "border-white/20 focus:border-purple-500"
+                    errors.phone
+                      ? "border-red-500"
+                      : "border-white/20 focus:border-purple-500"
                   }`}
                 />
                 {errors.phone && (
@@ -324,7 +342,11 @@ export default function SkillAcademyRegister() {
                   <>
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
                     >
                       <Sparkles className="w-5 h-5" />
                     </motion.div>
@@ -342,10 +364,15 @@ export default function SkillAcademyRegister() {
             <div className="space-y-6">
               <div className="text-center">
                 <Shield className="w-16 h-16 text-purple-400 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold mb-2">Verify Your Phone</h2>
+                <h2 className="text-xl font-semibold mb-2">
+                  Verify Your Phone
+                </h2>
                 <p className="text-gray-400 text-sm">
-                  We've sent a verification code to<br />
-                  <span className="text-white font-medium">{formData.phone}</span>
+                  We've sent a verification code to
+                  <br />
+                  <span className="text-white font-medium">
+                    {formData.phone}
+                  </span>
                 </p>
               </div>
 
@@ -357,10 +384,17 @@ export default function SkillAcademyRegister() {
                 <input
                   type="text"
                   value={formData.otp}
-                  onChange={(e) => handleInputChange("otp", e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "otp",
+                      e.target.value.replace(/\D/g, "").slice(0, 6)
+                    )
+                  }
                   placeholder="Enter 6-digit code"
                   className={`w-full px-4 py-3 bg-white/10 border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none text-center text-2xl tracking-widest transition-all ${
-                    errors.otp ? "border-red-500" : "border-white/20 focus:border-purple-500"
+                    errors.otp
+                      ? "border-red-500"
+                      : "border-white/20 focus:border-purple-500"
                   }`}
                   maxLength={6}
                 />
@@ -383,7 +417,11 @@ export default function SkillAcademyRegister() {
                   <>
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
                     >
                       <Sparkles className="w-5 h-5" />
                     </motion.div>
