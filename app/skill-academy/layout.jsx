@@ -32,7 +32,7 @@ const MobileBottomNav = () => {
                 whileTap={{ scale: 0.9 }}
                 className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all ${
                   isActive
-                    ? "text-purple-400 bg-purple-500/20"
+                    ? "text-[#d8b4f0] bg-[#692c7a]/20"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -41,7 +41,7 @@ const MobileBottomNav = () => {
                 {isActive && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute -top-1 w-1 h-1 bg-purple-400 rounded-full"
+                    className="absolute -top-1 w-1 h-1 bg-[#d8b4f0] rounded-full"
                   />
                 )}
               </motion.div>
@@ -81,7 +81,7 @@ const DesktopHeader = () => {
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-black/95 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-purple-500/5"
+          ? "bg-black/95 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-[#692c7a]/5"
           : "bg-transparent"
       }`}
     >
@@ -97,7 +97,7 @@ const DesktopHeader = () => {
                 <motion.div
                   whileHover={{ rotate: 12 }}
                   transition={{ duration: 0.3 }}
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-lg shadow-purple-500/20"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-lg shadow-[#692c7a]/20"
                 >
                   <img
                     src="/sabka-logo2.png"
@@ -127,7 +127,7 @@ const DesktopHeader = () => {
                     whileHover={{ y: -2 }}
                     className={`relative py-2 px-4 rounded-lg transition-all text-sm font-medium ${
                       isActive
-                        ? "text-purple-400 bg-purple-500/10"
+                        ? "text-[#d8b4f0] bg-[#692c7a]/10"
                         : "text-gray-300 hover:text-white hover:bg-white/5"
                     }`}
                   >
@@ -135,7 +135,7 @@ const DesktopHeader = () => {
                     {isActive && (
                       <motion.div
                         layoutId="activeDesktopTab"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#692c7a] to-[#d8b4f0] rounded-full"
                       />
                     )}
                   </motion.div>
@@ -144,16 +144,16 @@ const DesktopHeader = () => {
             })}
           </nav>
 
-          {/* CTA Button */}
+          {/* CTA Button - Updated button colors to match brand #692c7a */}
           <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
             <Link href="/skill-academy/register">
               <motion.button
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)",
+                  boxShadow: "0 20px 40px rgba(105, 44, 122, 0.3)",
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all text-sm"
+                className="px-6 py-3 bg-gradient-to-r from-[#692c7a] to-[#9463a8] rounded-xl font-semibold text-white shadow-lg shadow-[#692c7a]/25 hover:shadow-[#692c7a]/40 transition-all text-sm"
               >
                 Get Started
               </motion.button>
@@ -195,7 +195,7 @@ const DesktopHeader = () => {
                       onClick={() => setMobileMenuOpen(false)}
                       className={`block py-3 px-4 rounded-lg transition-all font-medium ${
                         isActive
-                          ? "text-purple-400 bg-purple-500/20"
+                          ? "text-[#d8b4f0] bg-[#692c7a]/20"
                           : "text-gray-300 hover:text-white hover:bg-white/5"
                       }`}
                     >
@@ -208,7 +208,7 @@ const DesktopHeader = () => {
                 <motion.button
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full mt-4 py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25"
+                  className="w-full mt-4 py-3.5 bg-gradient-to-r from-[#692c7a] to-[#9463a8] rounded-xl font-semibold text-white shadow-lg shadow-[#692c7a]/25"
                 >
                   Get Started
                 </motion.button>
@@ -224,12 +224,11 @@ const DesktopHeader = () => {
 export default function SkillAcademyLayout({ children }) {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden">
-      {/* Premium animated background */}
       <div className="fixed inset-0 -z-10 w-full h-full">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a0f2e] via-[#0f0820] to-[#1a0f2e]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
 
         <motion.div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-900/30 to-purple-700/10 rounded-full blur-3xl"
+          className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/15 rounded-full blur-3xl"
           animate={{
             y: [0, 30, 0],
             x: [0, 20, 0],
@@ -238,7 +237,7 @@ export default function SkillAcademyLayout({ children }) {
         />
 
         <motion.div
-          className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-violet-900/20 to-purple-800/10 rounded-full blur-3xl"
+          className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-[#8b4fa8]/30 to-[#692c7a]/10 rounded-full blur-3xl"
           animate={{
             y: [0, -30, 0],
             x: [0, -20, 0],
