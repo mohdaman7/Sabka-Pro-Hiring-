@@ -11,6 +11,7 @@ import {
   FAQ,
   CTA,
 } from "@/views/skill-academy";
+import { SuccessStories } from "@/views/skill-academy/sections/success-stories";
 
 export default function SkillAcademyHome() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -31,6 +32,7 @@ export default function SkillAcademyHome() {
       <WhyStandOut />
       {/* <Stats /> */}
       {/* <Features /> */}
+      <SuccessStories />
       <FAQ />
       {/* <CTA /> */}
     </div>
