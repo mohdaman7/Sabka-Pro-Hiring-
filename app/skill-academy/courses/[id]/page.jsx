@@ -283,21 +283,30 @@ export default function CourseDetailPage() {
     setExpandedModule(expandedModule === id ? null : id);
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-[#0f0820]">
+      {/* Background Effects */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/15 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-[#8b4fa8]/30 to-[#692c7a]/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content - Left Side */}
           <div className="lg:col-span-2 space-y-6">
             {/* Course Header */}
-            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
               {/* Thumbnail */}
-              <div className="relative h-64 md:h-80 overflow-hidden bg-slate-900">
+              <div className="relative h-64 md:h-80 overflow-hidden bg-[#1a0d2e]">
                 <img
                   src={courseData.thumbnail}
                   alt={courseData.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a0d2e] via-[#1a0d2e]/50 to-transparent" />
 
                 {/* Action buttons */}
                 <div className="absolute top-4 right-4 flex gap-2 z-10">
@@ -313,7 +322,7 @@ export default function CourseDetailPage() {
               {/* Course Info */}
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-4 flex-wrap">
-                  <span className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-lg text-xs font-semibold text-purple-300">
+                  <span className="px-3 py-1 bg-[#7e4ba3]/20 border border-[#a87bcc]/30 rounded-lg text-xs font-semibold text-[#c99ee6]">
                     {courseData.level}
                   </span>
                   <span className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-lg text-xs font-semibold text-blue-300">
@@ -358,7 +367,7 @@ export default function CourseDetailPage() {
                   {courseData.tags.map((tag, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-400 hover:border-purple-500/30 hover:text-purple-300 transition-colors"
+                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-400 hover:border-[#a87bcc]/30 hover:text-[#c99ee6] transition-colors"
                     >
                       {tag}
                     </span>
@@ -368,14 +377,14 @@ export default function CourseDetailPage() {
             </div>
 
             {/* Course Stats */}
-            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
               <h2 className="text-lg font-bold text-white mb-4">
                 Course Includes
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-purple-400" />
+                  <div className="w-10 h-10 bg-[#7e4ba3]/10 rounded-lg flex items-center justify-center border border-[#a87bcc]/20">
+                    <Clock className="w-5 h-5 text-[#c99ee6]" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">
@@ -385,7 +394,7 @@ export default function CourseDetailPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-400/20">
                     <BookOpen className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
@@ -396,7 +405,7 @@ export default function CourseDetailPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center border border-green-400/20">
                     <Award className="w-5 h-5 text-green-400" />
                   </div>
                   <div>
@@ -407,7 +416,7 @@ export default function CourseDetailPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-pink-500/10 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-pink-500/10 rounded-lg flex items-center justify-center border border-pink-400/20">
                     <TrendingUp className="w-5 h-5 text-pink-400" />
                   </div>
                   <div>
@@ -421,7 +430,7 @@ export default function CourseDetailPage() {
             </div>
 
             {/* Course Content */}
-            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
               <div className="mb-4">
                 <h2 className="text-xl font-bold text-white mb-1">
                   Course Content
@@ -447,15 +456,15 @@ export default function CourseDetailPage() {
                   return (
                     <div
                       key={mod._id}
-                      className="bg-slate-800/50 rounded-xl border border-white/10 overflow-hidden"
+                      className="bg-white/[0.03] rounded-xl border border-white/10 overflow-hidden hover:border-white/20 transition-colors"
                     >
                       <button
                         onClick={() => toggleModule(mod._id)}
                         className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1 text-left">
-                          <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center border border-purple-500/30 flex-shrink-0">
-                            <span className="text-sm font-bold text-purple-300">
+                          <div className="w-10 h-10 bg-[#7e4ba3]/20 rounded-lg flex items-center justify-center border border-[#a87bcc]/30 flex-shrink-0">
+                            <span className="text-sm font-bold text-[#c99ee6]">
                               {idx + 1}
                             </span>
                           </div>
@@ -488,21 +497,21 @@ export default function CourseDetailPage() {
                                   key={l._id}
                                   className={`flex items-center gap-3 p-3 rounded-lg transition-all mt-2 ${
                                     locked
-                                      ? "bg-slate-900/50"
-                                      : "bg-purple-500/5 border border-purple-500/20 cursor-pointer hover:bg-purple-500/10"
+                                      ? "bg-white/[0.02]"
+                                      : "bg-[#7e4ba3]/5 border border-[#a87bcc]/20 cursor-pointer hover:bg-[#7e4ba3]/10"
                                   }`}
                                 >
                                   <div
                                     className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                                       locked
-                                        ? "bg-slate-800"
-                                        : "bg-purple-500/20"
+                                        ? "bg-white/[0.05]"
+                                        : "bg-[#7e4ba3]/20"
                                     }`}
                                   >
                                     {locked ? (
                                       <Lock className="w-4 h-4 text-gray-500" />
                                     ) : (
-                                      <Play className="w-4 h-4 text-purple-400" />
+                                      <Play className="w-4 h-4 text-[#c99ee6]" />
                                     )}
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -544,12 +553,12 @@ export default function CourseDetailPage() {
             </div>
 
             {/* Instructor */}
-            <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
               <h2 className="text-lg font-bold text-white mb-4">
                 Your Instructor
               </h2>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-2xl font-bold text-white flex-shrink-0">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#7e4ba3] to-[#a87bcc] rounded-full flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 shadow-lg shadow-[#7e4ba3]/30">
                   {courseData.instructor.charAt(0)}
                 </div>
                 <div>
@@ -570,7 +579,7 @@ export default function CourseDetailPage() {
           {/* Sidebar - Right Side */}
           <div className="lg:col-span-1">
             <div className="sticky top-8">
-              <div className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+              <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
                 <div className="p-6">
                   <div className="mb-6">
                     <div className="flex items-baseline gap-2 mb-2">
@@ -593,12 +602,11 @@ export default function CourseDetailPage() {
                     </div>
                   </div>
 
-                  <button className="w-full px-6 py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-semibold text-white transition-all shadow-lg shadow-purple-500/50 hover:shadow-xl hover:shadow-purple-500/60">
+                  <button className="w-full px-6 py-3.5 bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] hover:from-[#692c7a] hover:to-[#9463a8] rounded-xl font-semibold text-white transition-all shadow-lg shadow-[#7e4ba3]/50 hover:shadow-xl hover:shadow-[#7e4ba3]/60">
                     Enroll Now
                   </button>
 
                   <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
-                    <div className="flex items-center justify-between text-sm"></div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400">Access</span>
                       <span className="text-white font-semibold">Lifetime</span>
