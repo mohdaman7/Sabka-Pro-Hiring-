@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import courseService from "@/services/courseService";
@@ -20,122 +20,192 @@ import {
   Zap,
   X,
   ChevronDown,
+  Sparkles,
+  Award,
+  Play,
 } from "lucide-react";
 
 const CourseCard = ({ course, index }) => {
   const Icon = course.icon;
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      whileHover={{ y: -12, transition: { duration: 0.3 } }}
-      className="group relative"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="group relative h-full"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 to-pink-500/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+      {/* Premium Glow Effect */}
+      <motion.div
+        className="absolute -inset-0.5 bg-gradient-to-br from-[#a87bcc]/30 via-[#7e4ba3]/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
+        animate={isHovered ? { scale: [1, 1.05, 1] } : {}}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
 
-      <div className="relative h-full bg-gradient-to-b from-white/8 to-white/5 border border-white/10 group-hover:border-purple-500/50 rounded-3xl overflow-hidden transition-all duration-500 backdrop-blur-xl shadow-2xl flex flex-col">
-        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-purple-600/30 to-purple-500/20">
-          <img
-            src={course.image || "/placeholder.svg"}
-            alt={course.title}
-            className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-700"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+      <motion.div
+        whileHover={{ y: -12 }}
+        transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+        className="relative h-full bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent border border-white/10 group-hover:border-[#a87bcc]/40 rounded-3xl overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col"
+      >
+        {/* Shine Effect on Hover */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          initial={{ x: "-100%" }}
+          animate={isHovered ? { x: "100%" } : { x: "-100%" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          style={{ pointerEvents: "none" }}
+        />
 
+        {/* Course Image Header */}
+        <div className="relative h-44 overflow-hidden">
           <motion.div
-            animate={{
-              y: [0, -12, 0],
-              rotate: [0, 5, -5, 0],
-            }}
+            className="absolute inset-0 bg-gradient-to-br from-[#7e4ba3]/30 via-[#a87bcc]/20 to-transparent"
+            animate={{ opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+
+          <motion.img
+            src={course.image || "/api/placeholder/400/320"}
+            alt={course.title}
+            className="w-full h-full object-cover"
+            animate={isHovered ? { scale: 1.1 } : { scale: 1 }}
+            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          />
+
+          {/* Enhanced Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+          {/* Premium Floating Icon */}
+          <motion.div
+            animate={
+              isHovered
+                ? { y: -8, rotate: 8, scale: 1.1 }
+                : { y: [0, -6, 0], rotate: [0, 3, -3, 0] }
+            }
             transition={{
-              duration: 3,
-              repeat: Infinity,
+              duration: isHovered ? 0.3 : 5,
+              repeat: isHovered ? 0 : Infinity,
               delay: index * 0.2,
-              ease: "easeInOut",
             }}
-            whileHover={{ rotate: 360, scale: 1.15 }}
-            className={`absolute top-4 right-4 w-14 h-14 bg-gradient-to-br ${course.gradient} rounded-2xl flex items-center justify-center shadow-lg border border-white/20`}
+            className={`absolute top-4 right-4 w-14 h-14 bg-gradient-to-br ${course.gradient} rounded-2xl flex items-center justify-center shadow-2xl border border-white/30 backdrop-blur-sm`}
           >
-            <Icon className="w-7 h-7 text-white" />
+            <Icon className="w-7 h-7 text-white drop-shadow-lg" />
           </motion.div>
 
-          {course.isFree ? (
-            <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: index * 0.15 + 0.2 }}
-              className="absolute top-4 left-4 inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-2 rounded-lg shadow-lg"
-            >
-              <Zap className="w-4 h-4" />
-              <span className="text-xs font-bold text-white">FREE</span>
-            </motion.div>
-          ) : (
-            course.discount && (
+          {/* Premium Badges */}
+          <AnimatePresence>
+            {course.isFree ? (
               <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: index * 0.15 + 0.2 }}
-                className="absolute top-4 left-4 inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 rounded-lg shadow-lg"
+                transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
+                className="absolute top-4 left-4 inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg backdrop-blur-sm border border-white/20"
               >
-                <TrendingUp className="w-4 h-4" />
-                <span className="text-xs font-bold text-white">
-                  Save {course.discount}
-                </span>
+                <Sparkles className="w-4 h-4" />
+                <span>FREE ACCESS</span>
               </motion.div>
-            )
-          )}
+            ) : (
+              course.discount && (
+                <motion.div
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
+                  className="absolute top-4 left-4 inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg backdrop-blur-sm border border-white/20"
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span>{course.discount} OFF</span>
+                </motion.div>
+              )
+            )}
+          </AnimatePresence>
+
+          {/* Play Button Overlay on Hover */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={
+              isHovered ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
+            }
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center">
+              <Play className="w-7 h-7 text-white ml-1" fill="white" />
+            </div>
+          </motion.div>
         </div>
 
-        <div className="relative p-6 sm:p-7 flex flex-col flex-grow">
-          <div className="flex items-center justify-between mb-4">
-            <span className="px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-bold rounded-full border border-purple-500/30">
+        {/* Course Content */}
+        <div className="relative p-5 flex flex-col flex-grow">
+          {/* Category & Rating Row */}
+          <div className="flex items-center justify-between mb-3">
+            <motion.span
+              whileHover={{ scale: 1.05 }}
+              className="px-3 py-1.5 bg-gradient-to-r from-[#7e4ba3]/20 to-[#a87bcc]/10 text-[#c99ee6] text-xs font-bold rounded-full border border-[#a87bcc]/30 backdrop-blur-sm shadow-sm"
+            >
               {course.category}
-            </span>
-            <div className="flex items-center gap-1 bg-black/30 backdrop-blur px-2.5 py-1.5 rounded-lg">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-xs font-bold text-yellow-400">
+            </motion.span>
+            <div className="flex items-center gap-1.5 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 px-3 py-1.5 rounded-full border border-yellow-400/20 backdrop-blur-sm">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 drop-shadow-lg" />
+              <span className="font-bold text-yellow-300 text-sm">
                 {course.rating}
               </span>
             </div>
           </div>
 
-          <h3 className="text-lg lg:text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors leading-tight">
+          {/* Course Title */}
+          <h3 className="text-lg lg:text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#c99ee6] group-hover:bg-clip-text leading-tight min-h-[3rem] transition-all duration-300">
             {course.title}
           </h3>
 
-          <p className="text-gray-400 text-xs mb-4 leading-relaxed line-clamp-2">
+          {/* Description */}
+          <p className="text-gray-300 text-sm mb-4 leading-relaxed line-clamp-2 flex-grow">
             {course.description}
           </p>
 
-          <div className="flex items-center justify-between text-xs text-gray-400 mb-6 pb-6 border-b border-white/10 mt-auto">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-purple-400" />
-              <span className="font-medium">{course.students}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-purple-400" />
-              <span className="font-medium">{course.duration}</span>
-            </div>
+          {/* Stats with Icons */}
+          <div className="flex items-center justify-between text-sm mb-4 pb-4 border-b border-white/10">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg border border-white/10"
+            >
+              <Users className="w-4 h-4 text-[#c99ee6]" />
+              <span className="font-semibold text-gray-200">
+                {course.students}
+              </span>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg border border-white/10"
+            >
+              <Clock className="w-4 h-4 text-[#c99ee6]" />
+              <span className="font-semibold text-gray-200">
+                {course.duration}
+              </span>
+            </motion.div>
           </div>
 
+          {/* Price Section */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex flex-col gap-1">
               {course.isFree ? (
                 <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-green-400" />
-                  <span className="text-xl font-bold text-green-400">Free</span>
+                  <Sparkles className="w-5 h-5 text-green-400" />
+                  <span className="text-2xl font-black bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                    Free
+                  </span>
                 </div>
               ) : (
                 <>
-                  <span className="text-xl font-bold text-white">
+                  <span className="text-2xl font-black bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                     {course.price}
                   </span>
                   {course.originalPrice && (
-                    <span className="text-xs text-gray-400 line-through">
+                    <span className="text-sm text-gray-400 line-through font-medium">
                       {course.originalPrice}
                     </span>
                   )}
@@ -143,23 +213,33 @@ const CourseCard = ({ course, index }) => {
               )}
             </div>
             {course.isFree && (
-              <span className="text-xs font-bold text-green-300 bg-green-500/20 px-3 py-1 rounded-full border border-green-500/30">
-                COMPLIMENTARY
-              </span>
+              <motion.div
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="flex items-center gap-1.5 text-xs font-black text-green-300 bg-green-500/15 px-3 py-1.5 rounded-full border border-green-400/30 backdrop-blur-sm"
+              >
+                <Award className="w-4 h-4" />
+                <span>LIMITED</span>
+              </motion.div>
             )}
           </div>
 
+          {/* Premium Enroll Button */}
           <motion.button
             onClick={() => router.push(`/skill-academy/courses/${course.id}`)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-2.5 px-3 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-2 border-purple-500/30 hover:border-purple-400 hover:from-purple-600/40 hover:to-pink-600/40 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-lg text-sm"
+            className="w-full relative group/btn overflow-hidden"
           >
-            <span>Enroll Now</span>
-            <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#7e4ba3] via-[#9d6fcc] to-[#a87bcc] opacity-100 group-hover/btn:opacity-90 transition-opacity rounded-xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
+            <div className="relative py-3.5 px-4 flex items-center justify-center gap-2 text-white font-bold text-sm">
+              <span>Enroll Now</span>
+              <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+            </div>
           </motion.button>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
@@ -175,35 +255,39 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col sm:flex-row items-center justify-center gap-4 py-12 md:py-16"
+      transition={{ duration: 0.4 }}
+      className="flex flex-col sm:flex-row items-center justify-center gap-4 py-6"
     >
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-2">
+        {/* Previous Button */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
-          className="p-2.5 sm:p-3 rounded-xl border-2 border-white/10 hover:border-purple-500/50 disabled:opacity-40 disabled:cursor-not-allowed text-white transition-all duration-300 hover:bg-purple-500/20 backdrop-blur-xl"
+          className="p-3 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-white hover:bg-white/10 hover:border-[#a87bcc]/40 transition-all duration-200 backdrop-blur-sm"
         >
-          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transform rotate-180" />
+          <ArrowRight className="w-5 h-5 transform rotate-180" />
         </motion.button>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Page Numbers */}
+        <div className="flex items-center gap-2">
           {startPage > 1 && (
             <>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onPageChange(1)}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border-2 border-white/10 hover:border-purple-500 text-white text-sm font-semibold transition-all duration-300 hover:bg-white/5 backdrop-blur-xl"
+                className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#a87bcc]/40 text-white text-sm font-bold transition-all duration-200 backdrop-blur-sm"
               >
                 1
               </motion.button>
               {startPage > 2 && (
-                <span className="px-1 text-gray-400 text-sm">...</span>
+                <span className="px-2 text-gray-400 text-sm font-bold">
+                  ...
+                </span>
               )}
             </>
           )}
@@ -214,14 +298,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           ).map((page) => (
             <motion.button
               key={page}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: page === currentPage ? 1 : 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onPageChange(page)}
-              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg text-sm font-semibold transition-all duration-300 backdrop-blur-xl border-2 ${
+              className={`w-10 h-10 rounded-xl text-sm font-bold transition-all duration-200 ${
                 page === currentPage
-                  ? "bg-gradient-to-r from-purple-600 to-pink-600 border-purple-500 text-white shadow-lg shadow-purple-500/50"
-                  : "border-white/10 hover:border-purple-500 text-white hover:bg-white/5"
-              }`}
+                  ? "bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] border-[#a87bcc]/50 text-white shadow-lg shadow-[#a87bcc]/20 scale-105"
+                  : "bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-[#a87bcc]/40 backdrop-blur-sm"
+              } border`}
             >
               {page}
             </motion.button>
@@ -230,13 +314,15 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           {endPage < totalPages && (
             <>
               {endPage < totalPages - 1 && (
-                <span className="px-1 text-gray-400 text-sm">...</span>
+                <span className="px-2 text-gray-400 text-sm font-bold">
+                  ...
+                </span>
               )}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onPageChange(totalPages)}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border-2 border-white/10 hover:border-purple-500 text-white text-sm font-semibold transition-all duration-300 hover:bg-white/5 backdrop-blur-xl"
+                className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#a87bcc]/40 text-white text-sm font-bold transition-all duration-200 backdrop-blur-sm"
               >
                 {totalPages}
               </motion.button>
@@ -244,23 +330,31 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           )}
         </div>
 
+        {/* Next Button */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
-          className="p-2.5 sm:p-3 rounded-xl border-2 border-white/10 hover:border-purple-500/50 disabled:opacity-40 disabled:cursor-not-allowed text-white transition-all duration-300 hover:bg-purple-500/20 backdrop-blur-xl"
+          className="p-3 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-white hover:bg-white/10 hover:border-[#a87bcc]/40 transition-all duration-200 backdrop-blur-sm"
         >
-          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+          <ArrowRight className="w-5 h-5" />
         </motion.button>
       </div>
 
-      <div className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl">
-        <span className="text-xs sm:text-sm text-gray-300">
-          Page <span className="font-bold text-purple-300">{currentPage}</span>{" "}
+      {/* Page Info */}
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm"
+      >
+        <span className="text-sm text-gray-300 font-medium">
+          Page{" "}
+          <span className="font-black bg-gradient-to-r from-[#c99ee6] to-[#a87bcc] bg-clip-text text-transparent">
+            {currentPage}
+          </span>{" "}
           of <span className="font-bold text-white">{totalPages}</span>
         </span>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
@@ -411,193 +505,264 @@ export default function CoursesPage() {
   }, [selectedCategory, searchTerm, sortBy]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900/20 to-gray-900">
-      <section className="relative py-8 lg:py-12 overflow-hidden">
-        <div className="absolute inset-0 opacity-30 pointer-events-none">
-          <div className="absolute top-20 right-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 left-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
+    <div className="min-h-screen">
+      {/* Hero Section with Search & Filters */}
+      <section className="relative py-8 overflow-hidden">
+        {/* Background Effects - Matching Layout Theme */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/15 rounded-full blur-3xl"
+            animate={{
+              y: [0, 30, 0],
+              x: [0, 20, 0],
+            }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-[#8b4fa8]/30 to-[#692c7a]/10 rounded-full blur-3xl"
+            animate={{
+              y: [0, -30, 0],
+              x: [0, -20, 0],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              delay: 1,
+            }}
+          />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Enhanced Header */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-10 lg:mb-12"
+            transition={{ duration: 0.7 }}
+            className="text-center mb-8"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 px-4">
-              <span className="bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4 leading-tight"
+            >
+              <span className="bg-gradient-to-r from-white via-[#c99ee6] to-[#a87bcc] bg-clip-text text-transparent drop-shadow-lg">
                 Explore Our Courses
               </span>
-            </h1>
-
-            <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed px-4">
-              Discover world-class courses designed to accelerate your career
-              growth. From free beginner-friendly courses to advanced
-              professional certifications.
-            </p>
+            </motion.h1>
           </motion.div>
 
-          {/* Search and Filters - Mobile Optimized */}
-          <div className="space-y-4 mb-10 lg:mb-12">
-            {/* Search Bar */}
+          {/* Enhanced Search and Filters */}
+          <div className="space-y-4">
+            {/* Premium Search Bar */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="relative w-full"
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="relative w-full max-w-3xl mx-auto group"
             >
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Search courses..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-white/5 border-2 border-white/10 hover:border-purple-500/50 rounded-2xl text-white text-sm sm:text-base placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-all duration-300 shadow-xl backdrop-blur-xl"
-              />
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] rounded-2xl opacity-30 group-hover:opacity-50 blur transition-opacity duration-300" />
+              <div className="relative">
+                <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#c99ee6] pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search for courses, skills, or topics..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-14 pr-6 py-4 bg-white/10 border border-white/20 focus:border-[#a87bcc]/60 rounded-2xl text-white text-base placeholder-gray-400 focus:outline-none transition-all duration-300 backdrop-blur-xl shadow-xl"
+                />
+              </div>
             </motion.div>
 
-            {/* Filters Row */}
+            {/* Enhanced Filters */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-4xl mx-auto"
             >
-              {/* Filter Icon + Label (Hidden on mobile, shows on sm+) */}
-              <div className="hidden sm:flex items-center gap-2 text-gray-400 shrink-0">
-                <Filter className="w-5 h-5" />
-                <span className="text-sm font-medium">Filter:</span>
+              {/* Filter Label */}
+              <div className="hidden sm:flex items-center gap-2 text-gray-200">
+                <Filter className="w-5 h-5 text-[#c99ee6]" />
+                <span className="text-sm font-bold">Filters:</span>
               </div>
 
-              {/* Category Filter */}
-              <div className="relative flex-1 sm:flex-initial sm:min-w-[180px]">
+              {/* Category Dropdown */}
+              <div className="relative flex-1 sm:max-w-[240px]">
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full appearance-none px-4 py-3 sm:py-3.5 bg-white/5 border-2 border-white/10 hover:border-purple-500/50 rounded-xl text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 transition-all duration-300 shadow-xl backdrop-blur-xl cursor-pointer"
-                  style={{ paddingRight: "2.5rem" }}
+                  className="w-full appearance-none px-5 py-3 bg-white/10 border border-white/20 focus:border-[#a87bcc]/60 rounded-xl text-white text-sm font-medium focus:outline-none backdrop-blur-xl shadow-lg transition-all duration-200 cursor-pointer"
                 >
                   {categories.map((category) => (
                     <option
                       key={category.value}
                       value={category.value}
-                      className="bg-gray-900 text-white"
+                      className="bg-[#1a0d2e] text-white"
                     >
                       {category.label}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#c99ee6] pointer-events-none" />
               </div>
 
-              {/* Sort Filter */}
-              <div className="relative flex-1 sm:flex-initial sm:min-w-[180px]">
+              {/* Sort Dropdown */}
+              <div className="relative flex-1 sm:max-w-[240px]">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full appearance-none px-4 py-3 sm:py-3.5 bg-white/5 border-2 border-white/10 hover:border-purple-500/50 rounded-xl text-white text-sm sm:text-base focus:outline-none focus:border-purple-500 transition-all duration-300 shadow-xl backdrop-blur-xl cursor-pointer"
-                  style={{ paddingRight: "2.5rem" }}
+                  className="w-full appearance-none px-5 py-3 bg-white/10 border border-white/20 focus:border-[#a87bcc]/60 rounded-xl text-white text-sm font-medium focus:outline-none backdrop-blur-xl shadow-lg transition-all duration-200 cursor-pointer"
                 >
                   {sortOptions.map((option) => (
                     <option
                       key={option.value}
                       value={option.value}
-                      className="bg-gray-900 text-white"
+                      className="bg-[#1a0d2e] text-white"
                     >
                       {option.label}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#c99ee6] pointer-events-none" />
               </div>
             </motion.div>
 
-            {/* Active Filters Summary (Mobile only) */}
-            {(selectedCategory !== "all" || searchTerm) && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="sm:hidden flex flex-wrap items-center gap-2 px-1"
-              >
-                {selectedCategory !== "all" && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-medium rounded-lg border border-purple-500/30">
-                    {
-                      categories.find((c) => c.value === selectedCategory)
-                        ?.label
-                    }
-                    <X
-                      className="w-3 h-3 cursor-pointer hover:text-white transition-colors"
+            {/* Active Filters Pills */}
+            <AnimatePresence>
+              {(selectedCategory !== "all" || searchTerm) && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="flex flex-wrap items-center justify-center gap-3 px-4"
+                >
+                  {selectedCategory !== "all" && (
+                    <motion.span
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      whileHover={{ scale: 1.05 }}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7e4ba3]/25 to-[#a87bcc]/20 text-[#c99ee6] text-sm font-bold rounded-full border border-[#a87bcc]/30 backdrop-blur-sm cursor-pointer"
                       onClick={() => setSelectedCategory("all")}
-                    />
-                  </span>
-                )}
-                {searchTerm && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-pink-500/20 text-pink-300 text-xs font-medium rounded-lg border border-pink-500/30">
-                    Search: {searchTerm.slice(0, 15)}...
-                    <X
-                      className="w-3 h-3 cursor-pointer hover:text-white transition-colors"
+                    >
+                      {
+                        categories.find((c) => c.value === selectedCategory)
+                          ?.label
+                      }
+                      <X className="w-4 h-4 hover:text-white transition-colors" />
+                    </motion.span>
+                  )}
+                  {searchTerm && (
+                    <motion.span
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      whileHover={{ scale: 1.05 }}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500/25 to-purple-500/20 text-pink-300 text-sm font-bold rounded-full border border-pink-400/30 backdrop-blur-sm cursor-pointer"
                       onClick={() => setSearchTerm("")}
-                    />
-                  </span>
-                )}
-              </motion.div>
-            )}
+                    >
+                      {searchTerm.slice(0, 20)}
+                      {searchTerm.length > 20 && "..."}
+                      <X className="w-4 h-4 hover:text-white transition-colors" />
+                    </motion.span>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </section>
 
-      <section className="relative py-6 lg:py-8">
+      {/* Courses Grid Section */}
+      <section className="relative py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {loading ? (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-16 px-4"
             >
               <div className="max-w-md mx-auto">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-white/5 border-2 border-white/10 flex items-center justify-center">
-                  <Zap className="w-10 h-10 text-purple-400 animate-spin" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">
-                  Loading courses
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] p-1 shadow-2xl"
+                >
+                  <div className="w-full h-full rounded-3xl bg-[#1a0d2e] flex items-center justify-center">
+                    <Sparkles className="w-10 h-10 text-[#a87bcc]" />
+                  </div>
+                </motion.div>
+                <h3 className="text-2xl font-black text-white mb-3 bg-gradient-to-r from-white to-[#c99ee6] bg-clip-text text-transparent">
+                  Loading Courses
                 </h3>
-                <p className="text-gray-400 text-base">
-                  Please wait while we fetch the latest courses for you.
+                <p className="text-gray-300 text-base leading-relaxed">
+                  Please wait while we fetch the latest courses for you...
                 </p>
               </div>
             </motion.div>
           ) : error ? (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-16 px-4"
             >
               <div className="max-w-md mx-auto">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-500/10 border-2 border-red-500/40 flex items-center justify-center">
+                <div className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-red-500/10 border-2 border-red-500/30 flex items-center justify-center backdrop-blur-xl shadow-2xl">
                   <X className="w-10 h-10 text-red-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">
-                  Failed to load courses
+                <h3 className="text-2xl font-black text-white mb-3 bg-gradient-to-r from-white to-red-300 bg-clip-text text-transparent">
+                  Failed to Load Courses
                 </h3>
-                <p className="text-gray-400 text-base mb-4">{error}</p>
-                <button
+                <p className="text-gray-300 text-base mb-6 leading-relaxed">
+                  {error}
+                </p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={loadCourses}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600/20 hover:bg-purple-600/30 border-2 border-purple-500/30 hover:border-purple-500/50 text-white font-semibold rounded-xl transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] text-white font-bold rounded-xl shadow-lg hover:shadow-[#a87bcc]/25 transition-all duration-300"
                 >
-                  <Filter className="w-4 h-4" />
+                  <Filter className="w-5 h-5" />
                   Try Again
-                </button>
+                </motion.button>
               </div>
             </motion.div>
           ) : paginatedCourses.length > 0 ? (
             <>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
+              {/* Results Count with Premium Design */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 text-center"
+              >
+                <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-xl">
+                  <span className="text-gray-300 text-sm font-medium">
+                    Showing{" "}
+                    <span className="text-[#c99ee6] font-bold">
+                      {startIdx + 1}-
+                      {Math.min(
+                        startIdx + itemsPerPage,
+                        filteredCourses.length
+                      )}
+                    </span>{" "}
+                    of{" "}
+                    <span className="text-white font-bold">
+                      {filteredCourses.length}
+                    </span>{" "}
+                    courses
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Premium Courses Grid */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8">
                 {paginatedCourses.map((course, index) => (
                   <CourseCard key={course.id} course={course} index={index} />
                 ))}
               </div>
 
+              {/* Pagination */}
               {totalPages > 1 && (
                 <Pagination
                   currentPage={currentPage}
@@ -608,30 +773,41 @@ export default function CoursesPage() {
             </>
           ) : (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
               className="text-center py-16 px-4"
             >
               <div className="max-w-md mx-auto">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-white/5 border-2 border-white/10 flex items-center justify-center">
-                  <X className="w-10 h-10 text-gray-500" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">
-                  No courses found
+                <motion.div
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border-2 border-white/20 flex items-center justify-center backdrop-blur-xl shadow-2xl"
+                >
+                  <Search className="w-12 h-12 text-gray-400" />
+                </motion.div>
+                <h3 className="text-2xl font-black text-white mb-3 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  No Courses Found
                 </h3>
-                <p className="text-gray-400 text-base mb-4">
-                  We couldn't find any courses matching your criteria.
+                <p className="text-gray-300 text-base mb-6 leading-relaxed">
+                  We couldn't find any courses matching your search criteria.
+                  Try adjusting your filters or search terms.
                 </p>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setSelectedCategory("all");
                     setSearchTerm("");
                   }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600/20 hover:bg-purple-600/30 border-2 border-purple-500/30 hover:border-purple-500/50 text-white font-semibold rounded-xl transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] text-white font-bold rounded-xl shadow-lg hover:shadow-[#a87bcc]/25 transition-all duration-300"
                 >
-                  <Filter className="w-4 h-4" />
-                  Clear Filters
-                </button>
+                  <Filter className="w-5 h-5" />
+                  Clear All Filters
+                </motion.button>
               </div>
             </motion.div>
           )}
