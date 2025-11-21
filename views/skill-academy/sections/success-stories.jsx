@@ -86,6 +86,8 @@ export function SuccessStories() {
               content:
                 "This program completely transformed my career. The practical projects and mentorship gave me the confidence to grow from a junior role.",
               image: "/diverse-person-portrait.png",
+              bgImage:
+                "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80",
               initials: "SC",
             },
             {
@@ -94,6 +96,8 @@ export function SuccessStories() {
               content:
                 "The design curriculum is exceptional. I built a portfolio that impressed every company I interviewed with.",
               image: "/thoughtful-artist.png",
+              bgImage:
+                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
               initials: "MJ",
             },
             {
@@ -102,6 +106,8 @@ export function SuccessStories() {
               content:
                 "Hands-on projects made the difference. I learned real-world skills, not just theory. Highly recommend!",
               image: "/professional-working-on-laptop-in-modern-office.jpg",
+              bgImage:
+                "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80",
               initials: "ER",
             },
             {
@@ -110,6 +116,8 @@ export function SuccessStories() {
               content:
                 "Started with zero coding experience. The structured curriculum and support helped me land my first developer job.",
               image: "/diverse-person-portrait.png",
+              bgImage:
+                "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
               initials: "DK",
             },
             {
@@ -118,6 +126,8 @@ export function SuccessStories() {
               content:
                 "The mentors here genuinely care about your success. I got personalized guidance that accelerated my learning.",
               image: "/thoughtful-artist.png",
+              bgImage:
+                "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=80",
               initials: "PP",
             },
             {
@@ -126,6 +136,8 @@ export function SuccessStories() {
               content:
                 "Best investment I made for my career. The community and peer learning were as valuable as the curriculum.",
               image: "/professional-working-on-laptop-in-modern-office.jpg",
+              bgImage:
+                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80",
               initials: "JW",
             },
           ].map((story, i) => (
@@ -137,62 +149,100 @@ export function SuccessStories() {
               transition={{ duration: 0.6, delay: i * 0.08 }}
             >
               <motion.div
-                whileHover={{ scale: 1.02, translateY: -8 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                whileHover={{ scale: 1.03, translateY: -12 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="h-full"
               >
-                <Card className="relative h-full bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-pink-400/40 transition-all duration-500 group overflow-hidden shadow-2xl shadow-purple-900/20 hover:shadow-pink-500/20">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 z-0"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: "200%" }}
-                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                <Card className="relative h-full bg-gradient-to-br from-white/[0.12] via-white/[0.08] to-white/[0.04] border-2 border-white/20 hover:border-pink-300/60 transition-all duration-700 group overflow-hidden shadow-[0_20px_60px_-15px_rgba(168,85,247,0.4)] hover:shadow-[0_30px_90px_-20px_rgba(236,72,153,0.6)]">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center opacity-90 group-hover:opacity-[0.15] transition-opacity duration-700 z-0"
+                    style={{
+                      backgroundImage: `url(${story.bgImage})`,
+                    }}
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900/60 via-pink-900/40 to-violet-900/60 backdrop-blur-sm z-[1]" />
 
-                  <CardHeader className="relative z-10 space-y-5 p-6 md:p-7 h-full flex flex-col">
-                    <div className="flex gap-1.5">
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-pink-400/10 to-transparent opacity-0 group-hover:opacity-100 z-[2]"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "200%" }}
+                    transition={{ duration: 1.2, ease: "easeInOut" }}
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-purple-500/5 to-violet-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-[2]" />
+
+                  <div className="absolute inset-[1px] rounded-[calc(0.5rem-1px)] bg-gradient-to-br from-white/5 to-transparent opacity-50 z-[2]" />
+
+                  <CardHeader className="relative z-[3] space-y-6 p-7 md:p-8 h-full flex flex-col">
+                    <div className="flex gap-2 items-center">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <motion.div
                           key={star}
-                          initial={{ opacity: 0, scale: 0 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
+                          initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
                           transition={{
-                            delay: 0.15 + star * 0.04,
+                            delay: 0.15 + star * 0.05,
                             type: "spring",
+                            stiffness: 300,
                           }}
+                          whileHover={{ scale: 1.3, rotate: 15 }}
                         >
-                          <Star className="w-4 h-4 fill-pink-400 text-pink-400 drop-shadow-sm" />
+                          <Star className="w-5 h-5 fill-gradient-to-br from-pink-400 to-pink-500 text-pink-400 drop-shadow-[0_2px_8px_rgba(244,114,182,0.5)] filter" />
                         </motion.div>
                       ))}
+                      <motion.span
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="text-sm font-semibold text-pink-300/90 ml-2 tracking-wider"
+                      >
+                        5.0
+                      </motion.span>
                     </div>
 
-                    <div className="relative">
-                      <Quote className="w-8 h-8 text-pink-400/30 absolute -top-1 -left-1" />
-                      <p className="text-white/95 leading-relaxed text-[15px] md:text-base flex-1 pl-6 font-light tracking-wide">
-                        {story.content}
+                    <div className="relative flex-1">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="absolute -top-3 -left-3"
+                      >
+                        <Quote className="w-12 h-12 text-pink-400/20 drop-shadow-lg" />
+                      </motion.div>
+                      <p className="text-white/95 leading-[1.75] text-base md:text-[17px] pl-8 font-normal tracking-wide relative">
+                        <span className="bg-gradient-to-br from-white via-white to-gray-200 bg-clip-text text-transparent">
+                          {story.content}
+                        </span>
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-4 pt-5 mt-auto border-t border-white/10 group-hover:border-pink-400/20 transition-colors duration-500">
-                      <Avatar className="w-12 h-12 border-2 border-pink-500/30 ring-4 ring-pink-500/10 flex-shrink-0 shadow-lg">
-                        <AvatarImage
-                          src={story.image || "/placeholder.svg"}
-                          alt={story.name}
-                          className="object-cover"
-                        />
-                        <AvatarFallback className="bg-gradient-to-br from-pink-500/30 to-purple-500/30 text-pink-100 text-sm font-bold backdrop-blur-sm">
-                          {story.initials}
-                        </AvatarFallback>
-                      </Avatar>
+                    <div className="flex items-center gap-4 pt-6 mt-auto border-t-2 border-white/10 group-hover:border-gradient-to-r group-hover:from-pink-400/30 group-hover:to-purple-400/30 transition-all duration-700">
+                      <motion.div
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                      >
+                        <Avatar className="w-14 h-14 border-3 border-pink-400/40 ring-4 ring-pink-500/15 flex-shrink-0 shadow-[0_8px_30px_rgba(236,72,153,0.35)] group-hover:shadow-[0_12px_40px_rgba(236,72,153,0.5)] transition-shadow duration-500">
+                          <AvatarImage
+                            src={story.image || "/placeholder.svg"}
+                            alt={story.name}
+                            className="object-cover"
+                          />
+                          <AvatarFallback className="bg-gradient-to-br from-pink-500/40 to-purple-500/40 text-white text-base font-bold backdrop-blur-sm">
+                            {story.initials}
+                          </AvatarFallback>
+                        </Avatar>
+                      </motion.div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[15px] font-semibold text-white tracking-wide">
+                        <p className="text-[16px] font-bold text-white tracking-wide mb-0.5 bg-gradient-to-r from-white to-gray-100 bg-clip-text">
                           {story.name}
                         </p>
-                        <p className="text-sm text-gray-300/70 font-light">
+                        <Badge
+                          variant="secondary"
+                          className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-200/90 border border-pink-400/30 text-xs font-medium px-2.5 py-0.5 hover:from-pink-500/30 hover:to-purple-500/30 transition-all duration-300"
+                        >
                           {story.role}
-                        </p>
+                        </Badge>
                       </div>
                     </div>
                   </CardHeader>
