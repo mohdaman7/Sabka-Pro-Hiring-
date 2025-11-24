@@ -13,8 +13,11 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
+import api from "@/lib/axios";
+import { useRouter } from "next/navigation";
 
 export default function SkillAcademyRegister() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -65,12 +68,34 @@ export default function SkillAcademyRegister() {
 
   const handleSendOtp = async () => {
     if (!validateStep1()) return;
-    setIsOtpSent(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsOtpSent(false);
+
+    try {
+      setApiError("");
+      setIsOtpSent(true);
+
+      const response = await api.post("/api/auth/skill-academy/send-otp", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      });
+
+      const data = response.data;
+
+      if (!data?.success) {
+        setApiError(data?.message || "Failed to send OTP. Please try again.");
+        return;
+      }
+
       setStep(2);
-    }, 1500);
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Failed to send OTP. Please try again.";
+      setApiError(message);
+    } finally {
+      setIsOtpSent(false);
+    }
   };
 
   const handleVerifyOtp = async () => {
@@ -78,16 +103,40 @@ export default function SkillAcademyRegister() {
       setErrors({ otp: "Please enter the OTP" });
       return;
     }
-    setIsVerifying(true);
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      setApiError("");
+      setIsVerifying(true);
+
+      const verifyResponse = await api.post(
+        "/api/auth/skill-academy/verify-otp",
+        {
+          phone: formData.phone,
+          otp: formData.otp,
+        }
+      );
+
+      const verifyData = verifyResponse.data;
+
+      if (!verifyData?.success) {
+        setErrors({ otp: verifyData?.message || "Invalid or expired OTP" });
+        return;
+      }
+
+      router.push("/skill-academy");
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Verification failed. Please try again.";
+      setApiError(message);
+    } finally {
       setIsVerifying(false);
-      alert("Registration successful!");
-    }, 1500);
+    }
   };
 
   const handleSkip = () => {
-    alert("Skipped to main page");
+    router.push("/skill-academy");
   };
 
   return (
