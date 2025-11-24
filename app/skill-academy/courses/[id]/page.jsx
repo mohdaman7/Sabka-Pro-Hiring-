@@ -43,7 +43,6 @@ export default function CourseDetailPage() {
   useEffect(() => {
     if (!id) return;
 
-    // avoid sending invalid ObjectIds to backend
     if (!isValidObjectId(id)) {
       setError(
         "Invalid course link. Please open this course from the Skill Academy courses list again."
@@ -68,11 +67,9 @@ export default function CourseDetailPage() {
         if (data.type === "parent") {
           setModules(Array.isArray(data.modules) ? data.modules : []);
         } else {
-          // If a module course is opened directly
           setModules([data]);
         }
 
-        // Try to load access info (ignore errors like 401 silently here)
         try {
           const access = await courseService.myAccess();
           setMyAccess(access || []);
@@ -116,7 +113,6 @@ export default function CourseDetailPage() {
 
   const isParentCourse = courseData?.type === "parent";
 
-  // Pricing: bundle vs sum of module prices
   const bundlePrice = Number(courseData?.pricing?.bundlePrice || 0);
   const isFreeBundle = bundlePrice === 0;
 
@@ -128,7 +124,7 @@ export default function CourseDetailPage() {
         )
       : 0;
 
-  let finalPrice = bundlePrice;
+  const finalPrice = bundlePrice;
   let originalPrice = null;
   let discountPercentLabel = null;
 
@@ -144,7 +140,6 @@ export default function CourseDetailPage() {
 
   const currency = "₹";
 
-  // Access indicators from /api/courses/me/access
   const bundleAccessTypes = ["full_course", "bundle", "admin_grant", "gift"];
   const moduleAccessTypes = ["sub_course", "admin_grant", "gift"];
 
@@ -162,7 +157,6 @@ export default function CourseDetailPage() {
         (access) =>
           access.courseId &&
           moduleAccessTypes.includes(access.accessType) &&
-          // either module belongs to this parent, or we don't care in single-module context
           (!courseData ||
             access.courseId.parentCourse === courseData._id ||
             courseData.type !== "parent")
@@ -170,7 +164,6 @@ export default function CourseDetailPage() {
       .map((access) => access.courseId._id)
   );
 
-  // Safe display helpers
   const rating = typeof courseData?.rating === "number" ? courseData.rating : 0;
   const ratingLabel = rating.toFixed(1);
   const enrolledLabel = (courseData?.enrolledCount || 0).toLocaleString(
@@ -185,7 +178,6 @@ export default function CourseDetailPage() {
   const handleBundleAction = async () => {
     if (!courseData || purchasingBundle) return;
 
-    // If user already owns the bundle, just go to learning page
     if (hasFullBundleAccess || isFreeBundle) {
       router.push(`/student/courses/${courseData._id}`);
       return;
@@ -251,9 +243,12 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0820] flex items-center justify-center">
-        <div className="text-white/80 text-base md:text-lg">
-          Loading course...
+      <div className="min-h-screen relative">
+        <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="text-white/80 text-base md:text-lg">
+            Loading course...
+          </div>
         </div>
       </div>
     );
@@ -261,9 +256,12 @@ export default function CourseDetailPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#0f0820] flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-red-500/10 border border-red-500/40 text-white px-4 py-3 rounded-xl text-sm md:text-base">
-          {error}
+      <div className="min-h-screen relative">
+        <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
+        <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+          <div className="max-w-md w-full bg-red-500/10 border border-red-500/40 text-white px-4 py-3 rounded-xl text-sm md:text-base">
+            {error}
+          </div>
         </div>
       </div>
     );
@@ -274,49 +272,44 @@ export default function CourseDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0820]">
-      {/* Background Effects */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/15 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-[#8b4fa8]/30 to-[#692c7a]/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
+    <div className="min-h-screen relative">
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-10 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-gradient-to-l from-[#9463a8]/30 to-[#692c7a]/15 rounded-full blur-3xl animate-pulse" />
       </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* main content placed above page background */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content - Left Side */}
+          {/* Left (main) */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Course Header */}
-            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
-              {/* Thumbnail */}
-              <div className="relative h-64 md:h-80 overflow-hidden bg-[#1a0d2e]">
+            {/* Course header */}
+            <div className="bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-2xl border border-white/8 overflow-hidden shadow-2xl">
+              <div className="relative h-64 md:h-80 overflow-hidden bg-[#2a1138]">
                 <img
                   src={
                     courseData.thumbnail ||
-                    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80"
+                    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80" ||
+                    "/placeholder.svg"
                   }
                   alt={courseData.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1a0d2e] via-[#1a0d2e]/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#2a1138] via-[#4a1f52]/60 to-transparent" />
 
-                {/* Action buttons */}
                 <div className="absolute top-4 right-4 flex gap-2 z-10">
-                  <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 hover:bg-white/20 transition-all">
+                  <button className="p-2.5 bg-white/8 backdrop-blur-xl rounded-lg border border-white/10 hover:bg-white/14 transition-all">
                     <Share2 className="w-5 h-5 text-white" />
                   </button>
-                  <button className="p-2.5 bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 hover:bg-white/20 transition-all group">
+                  <button className="p-2.5 bg-white/8 backdrop-blur-xl rounded-lg border border-white/10 hover:bg-white/14 transition-all group">
                     <Heart className="w-5 h-5 text-white group-hover:fill-red-500 group-hover:text-red-500 transition-colors" />
                   </button>
                 </div>
               </div>
 
-              {/* Course Info */}
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-4 flex-wrap">
-                  <span className="px-3 py-1 bg-[#7e4ba3]/20 border border-[#a87bcc]/30 rounded-lg text-xs font-semibold text-[#c99ee6]">
+                  <span className="px-3 py-1 bg-[#692c7a]/20 border border-[#9463a8]/30 rounded-lg text-xs font-semibold text-[#e9d5ff]">
                     {levelLabel}
                   </span>
                   <span className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-lg text-xs font-semibold text-blue-300">
@@ -334,7 +327,7 @@ export default function CourseDetailPage() {
                 <h1 className="text-2xl md:text-3xl font-bold mb-3 text-white">
                   {courseData.title}
                 </h1>
-                <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-4">
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
                   {courseData.description}
                 </p>
 
@@ -356,7 +349,7 @@ export default function CourseDetailPage() {
                       {ratingLabel}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <div className="flex items-center gap-2 text-sm text-gray-300">
                     <Users className="w-4 h-4" />
                     <span>{enrolledLabel} students</span>
                   </div>
@@ -366,7 +359,7 @@ export default function CourseDetailPage() {
                   {tags.map((tag, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-400 hover:border-[#a87bcc]/30 hover:text-[#c99ee6] transition-colors"
+                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-300 hover:border-[#9463a8]/30 hover:text-[#e9d5ff] transition-colors"
                     >
                       {tag}
                     </span>
@@ -375,21 +368,21 @@ export default function CourseDetailPage() {
               </div>
             </div>
 
-            {/* Course Stats */}
-            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+            {/* Course includes */}
+            <div className="bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-2xl border border-white/8 p-6 shadow-2xl">
               <h2 className="text-lg font-bold text-white mb-4">
                 Course Includes
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#7e4ba3]/10 rounded-lg flex items-center justify-center border border-[#a87bcc]/20">
-                    <Clock className="w-5 h-5 text-[#c99ee6]" />
+                  <div className="w-10 h-10 bg-[#692c7a]/10 rounded-lg flex items-center justify-center border border-[#9463a8]/20">
+                    <Clock className="w-5 h-5 text-[#e9d5ff]" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">
                       {totals.totalDuration}
                     </p>
-                    <p className="text-xs text-gray-400">Total duration</p>
+                    <p className="text-xs text-gray-300">Total duration</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -400,9 +393,10 @@ export default function CourseDetailPage() {
                     <p className="text-sm font-semibold text-white">
                       {totals.totalLessons} Lessons
                     </p>
-                    <p className="text-xs text-gray-400">Video content</p>
+                    <p className="text-xs text-gray-300">Video content</p>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center border border-green-400/20">
                     <Award className="w-5 h-5 text-green-400" />
@@ -411,9 +405,10 @@ export default function CourseDetailPage() {
                     <p className="text-sm font-semibold text-white">
                       Certificate
                     </p>
-                    <p className="text-xs text-gray-400">On completion</p>
+                    <p className="text-xs text-gray-300">On completion</p>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-pink-500/10 rounded-lg flex items-center justify-center border border-pink-400/20">
                     <TrendingUp className="w-5 h-5 text-pink-400" />
@@ -422,19 +417,19 @@ export default function CourseDetailPage() {
                     <p className="text-sm font-semibold text-white">
                       Lifetime Access
                     </p>
-                    <p className="text-xs text-gray-400">Learn at your pace</p>
+                    <p className="text-xs text-gray-300">Learn at your pace</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Course Content */}
-            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+            <div className="bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-2xl border border-white/8 p-6 shadow-2xl">
               <div className="mb-4">
                 <h2 className="text-xl font-bold text-white mb-1">
                   Course Content
                 </h2>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-300">
                   {modules.length} modules • {totals.totalLessons} lessons •{" "}
                   {totals.totalDuration}
                 </p>
@@ -469,8 +464,8 @@ export default function CourseDetailPage() {
                         className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1 text-left">
-                          <div className="w-10 h-10 bg-[#7e4ba3]/20 rounded-lg flex items-center justify-center border border-[#a87bcc]/30 flex-shrink-0">
-                            <span className="text-sm font-bold text-[#c99ee6]">
+                          <div className="w-10 h-10 bg-[#692c7a]/20 rounded-lg flex items-center justify-center border border-[#9463a8]/30 flex-shrink-0">
+                            <span className="text-sm font-bold text-[#e9d5ff]">
                               {idx + 1}
                             </span>
                           </div>
@@ -478,7 +473,7 @@ export default function CourseDetailPage() {
                             <h3 className="text-sm font-semibold text-white mb-1">
                               {mod.title}
                             </h3>
-                            <div className="flex items-center gap-3 text-xs text-gray-400">
+                            <div className="flex items-center gap-3 text-xs text-gray-300">
                               <span>{mod.lessons?.length || 0} lessons</span>
                               <span>•</span>
                               <span>{fmt}</span>
@@ -518,9 +513,8 @@ export default function CourseDetailPage() {
                         />
                       </button>
 
-                      {/* Module-level purchase/owned indicator */}
                       <div className="px-4 pb-3 flex items-center justify-between border-t border-white/5">
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-300">
                           {isOwnedModule
                             ? "You already own this module"
                             : isFreeModule
@@ -578,20 +572,20 @@ export default function CourseDetailPage() {
                                   className={`flex items-center gap-3 p-3 rounded-lg transition-all mt-2 ${
                                     locked
                                       ? "bg-white/[0.02]"
-                                      : "bg-[#7e4ba3]/5 border border-[#a87bcc]/20 cursor-pointer hover:bg-[#7e4ba3]/10"
+                                      : "bg-[#692c7a]/5 border border-[#9463a8]/20 cursor-pointer hover:bg-[#692c7a]/10"
                                   }`}
                                 >
                                   <div
                                     className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                                       locked
                                         ? "bg-white/[0.05]"
-                                        : "bg-[#7e4ba3]/20"
+                                        : "bg-[#692c7a]/20"
                                     }`}
                                   >
                                     {locked ? (
                                       <Lock className="w-4 h-4 text-gray-500" />
                                     ) : (
-                                      <Play className="w-4 h-4 text-[#c99ee6]" />
+                                      <Play className="w-4 h-4 text-[#e9d5ff]" />
                                     )}
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -615,7 +609,7 @@ export default function CourseDetailPage() {
                                       className={`text-xs ${
                                         locked
                                           ? "text-gray-600"
-                                          : "text-gray-400"
+                                          : "text-gray-300"
                                       }`}
                                     >
                                       {formatDuration(l.durationSec)}
@@ -633,22 +627,22 @@ export default function CourseDetailPage() {
             </div>
 
             {/* Instructor */}
-            <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+            <div className="bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-2xl border border-white/8 p-6 shadow-2xl">
               <h2 className="text-lg font-bold text-white mb-4">
                 Your Instructor
               </h2>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#7e4ba3] to-[#a87bcc] rounded-full flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 shadow-lg shadow-[#7e4ba3]/30">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#692c7a] to-[#9463a8] rounded-full flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 shadow-lg shadow-[#692c7a]/30">
                   {instructorInitial}
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-white mb-1">
                     {instructorName}
                   </h3>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-gray-300">
                     Expert Instructor at Sabka Skill Academy
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-400 mt-1">
                     Learn with structured modules and real-world projects
                   </p>
                 </div>
@@ -656,10 +650,10 @@ export default function CourseDetailPage() {
             </div>
           </div>
 
-          {/* Sidebar - Right Side */}
+          {/* Right Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-8">
-              <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+              <div className="bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-2xl border border-white/8 overflow-hidden shadow-2xl">
                 <div className="p-6">
                   <div className="mb-6">
                     {isFreeBundle ? (
@@ -667,7 +661,7 @@ export default function CourseDetailPage() {
                         <span className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-emerald-200 bg-clip-text text-transparent">
                           Free
                         </span>
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-300">
                           Full bundle is free for a limited time
                         </span>
                       </div>
@@ -676,7 +670,7 @@ export default function CourseDetailPage() {
                         <span className="text-3xl font-bold text-white">
                           {currency}0
                         </span>
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-300">
                           Pricing not configured
                         </span>
                       </div>
@@ -688,7 +682,7 @@ export default function CourseDetailPage() {
                             {finalPrice.toLocaleString("en-IN")}
                           </span>
                           {originalPrice && (
-                            <span className="text-lg text-gray-500 line-through">
+                            <span className="text-lg text-gray-400 line-through">
                               {currency}
                               {originalPrice.toLocaleString("en-IN")}
                             </span>
@@ -699,7 +693,7 @@ export default function CourseDetailPage() {
                             <span className="px-2.5 py-1 bg-green-500/20 border border-green-500/30 rounded-lg text-xs font-semibold text-green-300">
                               {discountPercentLabel}
                             </span>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-gray-300">
                               Limited time offer
                             </span>
                           </div>
@@ -711,7 +705,7 @@ export default function CourseDetailPage() {
                   <button
                     onClick={handleBundleAction}
                     disabled={purchasingBundle || !isParentCourse}
-                    className="w-full px-6 py-3.5 bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] hover:from-[#692c7a] hover:to-[#9463a8] rounded-xl font-semibold text-white transition-all shadow-lg shadow-[#7e4ba3]/50 hover:shadow-xl hover:shadow-[#7e4ba3]/60 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full px-6 py-3.5 bg-gradient-to-r from-[#692c7a] to-[#9463a8] hover:from-[#5a1f68] hover:to-[#8a5299] rounded-xl font-semibold text-white transition-all shadow-lg shadow-[#692c7a]/50 hover:shadow-xl hover:shadow-[#692c7a]/60 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {hasFullBundleAccess ? (
                       <>
@@ -738,21 +732,21 @@ export default function CourseDetailPage() {
 
                   <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Access</span>
+                      <span className="text-gray-300">Access</span>
                       <span className="text-white font-semibold">Lifetime</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Certificate</span>
+                      <span className="text-gray-300">Certificate</span>
                       <span className="text-white font-semibold">Included</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Modules</span>
+                      <span className="text-gray-300">Modules</span>
                       <span className="text-white font-semibold">
                         {modules.length || 0}
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Total lessons</span>
+                      <span className="text-gray-300">Total lessons</span>
                       <span className="text-white font-semibold">
                         {totals.totalLessons}
                       </span>
@@ -762,7 +756,6 @@ export default function CourseDetailPage() {
               </div>
             </div>
           </div>
-          {/* End Sidebar */}
         </div>
       </div>
     </div>
