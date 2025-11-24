@@ -1,265 +1,231 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Quote, Star } from "lucide-react";
-import { Card, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+} from "framer-motion";
+import { Quote, Star, ArrowUpRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRef } from "react";
 
+const stories = [
+  {
+    name: "Sarah Chen",
+    role: "Senior Engineer at Google",
+    content:
+      "This program completely transformed my career. The practical projects and mentorship gave me the confidence to grow from a junior role to a senior position in just 2 years.",
+    image:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80",
+    initials: "SC",
+    company: "Google",
+    impact: "+140% Salary Hike",
+  },
+  {
+    name: "Marcus Johnson",
+    role: "Product Designer at Airbnb",
+    content:
+      "The design curriculum is exceptional. I built a portfolio that impressed every company I interviewed with. The focus on real-world problem solving is unmatched.",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+    initials: "MJ",
+    company: "Airbnb",
+    impact: "Landed Dream Job",
+  },
+  {
+    name: "Elena Rodriguez",
+    role: "Data Scientist at Netflix",
+    content:
+      "Hands-on projects made the difference. I learned real-world skills, not just theory. The capstone project directly helped me secure my role at Netflix.",
+    image:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80",
+    initials: "ER",
+    company: "Netflix",
+    impact: "Career Switch",
+  },
+  {
+    name: "David Kim",
+    role: "Frontend Dev at Vercel",
+    content:
+      "Started with zero coding experience. The structured curriculum and support helped me land my first developer job. The community here is incredible.",
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
+    initials: "DK",
+    company: "Vercel",
+    impact: "Zero to Hero",
+  },
+  {
+    name: "Priya Patel",
+    role: "Full Stack at Amazon",
+    content:
+      "The mentors here genuinely care about your success. I got personalized guidance that accelerated my learning. Best investment I've ever made.",
+    image:
+      "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=80",
+    initials: "PP",
+    company: "Amazon",
+    impact: "Top Performer",
+  },
+];
+
+function StoryCard({ story, index }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-100, 100], [10, -10]), {
+    stiffness: 150,
+    damping: 20,
+  });
+  const rotateY = useSpring(useTransform(x, [-100, 100], [-10, 10]), {
+    stiffness: 150,
+    damping: 20,
+  });
+
+  console.log(window);
+
+  function handleMouseMove(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct * 200);
+    y.set(yPct * 200);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <motion.div
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative w-[350px] md:w-[400px] flex-shrink-0 h-full mx-4 perspective-1000"
+    >
+      <div className="relative h-full bg-gradient-to-br from-white/[0.08] via-white/[0.05] to-transparent border border-white/10 rounded-3xl p-12 backdrop-blur-xl overflow-hidden group hover:border-purple-500/30 transition-colors duration-500">
+        {/* Glass Shine Effect */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+        {/* Quote Icon Background */}
+        <div className="absolute -top-6 -right-6 text-purple-500/10 transform rotate-12 group-hover:rotate-0 transition-transform duration-700">
+          <Quote size={120} />
+        </div>
+
+        <div className="relative z-10 flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur opacity-40 group-hover:opacity-70 transition-opacity" />
+                <Avatar className="w-12 h-12 border-2 border-white/20">
+                  <AvatarImage
+                    src={story.image || "/placeholder.svg"}
+                    alt={story.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback>{story.initials}</AvatarFallback>
+                </Avatar>
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-lg leading-tight">
+                  {story.name}
+                </h3>
+                <p className="text-purple-200/60 text-xs font-medium">
+                  {story.role}
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Content */}
+          <p className="text-gray-300 leading-relaxed text-sm mb-6 flex-grow font-light">
+            "{story.content}"
+          </p>
+
+          {/* Footer */}
+          <div className="pt-6 border-t border-white/5 flex items-center justify-between mt-auto">
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-1">
+                Impact
+              </span>
+              <span className="text-sm font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {story.impact}
+              </span>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+              <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-purple-300 transition-colors" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export function SuccessStories() {
-  const sectionRef = useRef(null);
+  const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: containerRef,
     offset: ["start end", "end start"],
   });
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [80, -80]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [-60, 60]);
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative w-full overflow-hidden py-16 md:py-24 lg:py-32 text-white"
-    >
-      <div className="absolute inset-0">
-        <motion.div
-          style={{ y: y1, opacity }}
-          className="absolute top-0 left-1/4 w-72 md:w-96 h-72 md:h-96 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
-        >
-          <div
-            className="w-full h-full"
-            style={{ backgroundColor: "rgba(128, 55, 145, 0.15)" }}
-          />
-        </motion.div>
-        <motion.div
-          style={{ y: y2, opacity }}
-          className="absolute bottom-0 right-1/4 w-72 md:w-96 h-72 md:h-96 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2] }}
-          transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY }}
-        >
-          <div
-            className="w-full h-full"
-            style={{ backgroundColor: "rgba(184, 123, 209, 0.15)" }}
-          />
+    <section ref={containerRef} className="relative py-16 overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] mix-blend-screen" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-pink-600/10 rounded-full blur-[120px] mix-blend-screen" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 mb-14 text-center">
+        <motion.div style={{ opacity, y }}>
+          <h2 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+              Success Stories
+            </span>
+          </h2>
         </motion.div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center text-center space-y-6 mb-20 md:mb-28 max-w-3xl mx-auto"
-        >
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-br from-white via-white to-gray-300 bg-clip-text text-transparent leading-tight text-balance"
-          >
-            Student Success Stories
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-base md:text-lg text-gray-300/90 leading-relaxed max-w-2xl font-light"
-          >
-            Real transformations from students who mastered their skills and
-            achieved their goals
-          </motion.p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
-          {[
-            {
-              name: "Sarah Chen",
-              role: "Senior Engineer",
-              content:
-                "This program completely transformed my career. The practical projects and mentorship gave me the confidence to grow from a junior role.",
-              image: "/diverse-person-portrait.png",
-              bgImage:
-                "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80",
-              initials: "SC",
-            },
-            {
-              name: "Marcus Johnson",
-              role: "Product Designer",
-              content:
-                "The design curriculum is exceptional. I built a portfolio that impressed every company I interviewed with.",
-              image: "/thoughtful-artist.png",
-              bgImage:
-                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
-              initials: "MJ",
-            },
-            {
-              name: "Elena Rodriguez",
-              role: "Data Scientist",
-              content:
-                "Hands-on projects made the difference. I learned real-world skills, not just theory. Highly recommend!",
-              image: "/professional-working-on-laptop-in-modern-office.jpg",
-              bgImage:
-                "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80",
-              initials: "ER",
-            },
-            {
-              name: "David Kim",
-              role: "Frontend Developer",
-              content:
-                "Started with zero coding experience. The structured curriculum and support helped me land my first developer job.",
-              image: "/diverse-person-portrait.png",
-              bgImage:
-                "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
-              initials: "DK",
-            },
-            {
-              name: "Priya Patel",
-              role: "Full Stack Developer",
-              content:
-                "The mentors here genuinely care about your success. I got personalized guidance that accelerated my learning.",
-              image: "/thoughtful-artist.png",
-              bgImage:
-                "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=80",
-              initials: "PP",
-            },
-            {
-              name: "James Wilson",
-              role: "UX/UI Designer",
-              content:
-                "Best investment I made for my career. The community and peer learning were as valuable as the curriculum.",
-              image: "/professional-working-on-laptop-in-modern-office.jpg",
-              bgImage:
-                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80",
-              initials: "JW",
-            },
-          ].map((story, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.08 }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.03, translateY: -12 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="h-full"
-              >
-                <Card className="relative h-full bg-gradient-to-br from-white/[0.12] via-white/[0.08] to-white/[0.04] border-2 border-white/20 hover:border-pink-300/60 transition-all duration-700 group overflow-hidden shadow-[0_20px_60px_-15px_rgba(168,85,247,0.4)] hover:shadow-[0_30px_90px_-20px_rgba(236,72,153,0.6)]">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center opacity-90 group-hover:opacity-[0.15] transition-opacity duration-700 z-0"
-                    style={{
-                      backgroundImage: `url(${story.bgImage})`,
-                    }}
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900/60 via-pink-900/40 to-violet-900/60 backdrop-blur-sm z-[1]" />
-
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-pink-400/10 to-transparent opacity-0 group-hover:opacity-100 z-[2]"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: "200%" }}
-                    transition={{ duration: 1.2, ease: "easeInOut" }}
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-purple-500/5 to-violet-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-[2]" />
-
-                  <div className="absolute inset-[1px] rounded-[calc(0.5rem-1px)] bg-gradient-to-br from-white/5 to-transparent opacity-50 z-[2]" />
-
-                  <CardHeader className="relative z-[3] space-y-6 p-7 md:p-8 h-full flex flex-col">
-                    <div className="flex gap-2 items-center">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <motion.div
-                          key={star}
-                          initial={{ opacity: 0, scale: 0, rotate: -180 }}
-                          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                          transition={{
-                            delay: 0.15 + star * 0.05,
-                            type: "spring",
-                            stiffness: 300,
-                          }}
-                          whileHover={{ scale: 1.3, rotate: 15 }}
-                        >
-                          <Star className="w-5 h-5 fill-gradient-to-br from-pink-400 to-pink-500 text-pink-400 drop-shadow-[0_2px_8px_rgba(244,114,182,0.5)] filter" />
-                        </motion.div>
-                      ))}
-                      <motion.span
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="text-sm font-semibold text-pink-300/90 ml-2 tracking-wider"
-                      >
-                        5.0
-                      </motion.span>
-                    </div>
-
-                    <div className="relative flex-1">
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="absolute -top-3 -left-3"
-                      >
-                        <Quote className="w-12 h-12 text-pink-400/20 drop-shadow-lg" />
-                      </motion.div>
-                      <p className="text-white/95 leading-[1.75] text-base md:text-[17px] pl-8 font-normal tracking-wide relative">
-                        <span className="bg-gradient-to-br from-white via-white to-gray-200 bg-clip-text text-transparent">
-                          {story.content}
-                        </span>
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-4 pt-6 mt-auto border-t-2 border-white/10 group-hover:border-gradient-to-r group-hover:from-pink-400/30 group-hover:to-purple-400/30 transition-all duration-700">
-                      <motion.div
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ type: "spring", stiffness: 400 }}
-                      >
-                        <Avatar className="w-14 h-14 border-3 border-pink-400/40 ring-4 ring-pink-500/15 flex-shrink-0 shadow-[0_8px_30px_rgba(236,72,153,0.35)] group-hover:shadow-[0_12px_40px_rgba(236,72,153,0.5)] transition-shadow duration-500">
-                          <AvatarImage
-                            src={story.image || "/placeholder.svg"}
-                            alt={story.name}
-                            className="object-cover"
-                          />
-                          <AvatarFallback className="bg-gradient-to-br from-pink-500/40 to-purple-500/40 text-white text-base font-bold backdrop-blur-sm">
-                            {story.initials}
-                          </AvatarFallback>
-                        </Avatar>
-                      </motion.div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[16px] font-bold text-white tracking-wide mb-0.5 bg-gradient-to-r from-white to-gray-100 bg-clip-text">
-                          {story.name}
-                        </p>
-                        <Badge
-                          variant="secondary"
-                          className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-200/90 border border-pink-400/30 text-xs font-medium px-2.5 py-0.5 hover:from-pink-500/30 hover:to-purple-500/30 transition-all duration-300"
-                        >
-                          {story.role}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-              </motion.div>
-            </motion.div>
+      {/* Marquee Container */}
+      <div className="relative w-full overflow-hidden py-4">
+        <div className="flex animate-marquee hover:[animation-play-state:paused]">
+          {[...stories, ...stories].map((story, i) => (
+            <StoryCard key={i} story={story} index={i} />
           ))}
         </div>
       </div>
 
-      <motion.div
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.8, duration: 1, ease: "easeInOut" }}
-        className="mt-16 md:mt-20 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-      />
+      <style jsx global>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+          width: max-content;
+        }
+      `}</style>
     </section>
   );
 }

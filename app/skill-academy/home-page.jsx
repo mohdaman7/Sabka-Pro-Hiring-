@@ -29,11 +29,11 @@ export default function SkillAcademyHome() {
       {/* <MouseFollower mousePosition={mousePosition} /> */}
       <Hero />
       <FeaturedCourses />
-      <WhyStandOut />
+      {/* <WhyStandOut /> */}
       {/* <Stats /> */}
       {/* <Features /> */}
       <SuccessStories />
-      <FAQ />
+      {/* <FAQ /> */}
       {/* <CTA /> */}
     </div>
   );
