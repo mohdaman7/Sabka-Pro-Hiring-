@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import api from "@/lib/axios";
 
 export default function SkillAcademyRegister() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function SkillAcademyRegister() {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -38,6 +40,9 @@ export default function SkillAcademyRegister() {
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+    if (apiError) {
+      setApiError("");
     }
   };
 
@@ -64,29 +69,73 @@ export default function SkillAcademyRegister() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSendOtp = () => {
-    if (validateStep1()) {
+  const handleSendOtp = async () => {
+    if (!validateStep1()) return;
+
+    try {
+      setApiError("");
       setIsOtpSent(true);
+
+      const response = await api.post("/api/auth/skill-academy/send-otp", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      });
+
+      const data = response.data;
+
+      if (!data?.success) {
+        setApiError(data?.message || "Failed to send OTP. Please try again.");
+        return;
+      }
+
       setStep(2);
-      // Simulate OTP sending
-      setTimeout(() => {
-        setIsOtpSent(false);
-      }, 2000);
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Failed to send OTP. Please try again.";
+      setApiError(message);
+    } finally {
+      setIsOtpSent(false);
     }
   };
 
-  const handleVerifyOtp = () => {
+  const handleVerifyOtp = async () => {
     if (!formData.otp.trim()) {
       setErrors({ otp: "Please enter the OTP" });
       return;
     }
 
-    setIsVerifying(true);
-    // Simulate OTP verification
-    setTimeout(() => {
-      setIsVerifying(false);
+    try {
+      setApiError("");
+      setIsVerifying(true);
+
+      const verifyResponse = await api.post(
+        "/api/auth/skill-academy/verify-otp",
+        {
+          phone: formData.phone,
+          otp: formData.otp,
+        }
+      );
+
+      const verifyData = verifyResponse.data;
+
+      if (!verifyData?.success) {
+        setErrors({ otp: verifyData?.message || "Invalid or expired OTP" });
+        return;
+      }
+
       router.push("/skill-academy");
-    }, 2000);
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Verification failed. Please try again.";
+      setApiError(message);
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const handleSkip = () => {
@@ -448,6 +497,12 @@ export default function SkillAcademyRegister() {
                 </button>
               </div>
             </div>
+          )}
+          {apiError && (
+            <p className="mt-4 text-sm text-red-400 flex items-center gap-1">
+              <X className="w-3 h-3" />
+              {apiError}
+            </p>
           )}
         </motion.div>
 
