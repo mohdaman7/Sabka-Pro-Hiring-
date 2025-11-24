@@ -473,14 +473,16 @@ export default function CourseDetailPage() {
                             <h3 className="text-sm font-semibold text-white mb-1">
                               {mod.title}
                             </h3>
-                            <div className="flex items-center gap-3 text-xs text-gray-300">
-                              <span>{mod.lessons?.length || 0} lessons</span>
-                              <span>•</span>
-                              <span>{fmt}</span>
+                            <div className="flex flex-wrap items-center gap-2 text-[13px] text-gray-100">
+                              <span className="font-medium">
+                                {mod.lessons?.length || 0} lessons
+                              </span>
+                              <span className="text-gray-400">•</span>
+                              <span className="text-gray-100">{fmt}</span>
                               {!isFreeModule && modulePrice > 0 && (
                                 <>
-                                  <span>•</span>
-                                  <span>
+                                  <span className="text-gray-400">•</span>
+                                  <span className="font-semibold text-amber-300">
                                     {currency}
                                     {modulePrice.toLocaleString("en-IN")}
                                   </span>
@@ -488,16 +490,16 @@ export default function CourseDetailPage() {
                               )}
                               {isFreeModule && (
                                 <>
-                                  <span>•</span>
-                                  <span className="text-emerald-400">
+                                  <span className="text-gray-400">•</span>
+                                  <span className="text-emerald-300 font-semibold">
                                     Free module
                                   </span>
                                 </>
                               )}
                               {isOwnedModule && (
                                 <>
-                                  <span>•</span>
-                                  <span className="text-emerald-400 flex items-center gap-1">
+                                  <span className="text-gray-400">•</span>
+                                  <span className="text-emerald-300 font-semibold flex items-center gap-1">
                                     <CheckCircle2 className="w-3 h-3" />
                                     Owned
                                   </span>
@@ -534,7 +536,7 @@ export default function CourseDetailPage() {
                           disabled={
                             purchasingModuleId === mod._id || isOwnedModule
                           }
-                          className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-white flex items-center gap-1.5 border border-white/20 disabled:opacity-60"
+                          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-xs font-semibold text-[#111827] flex items-center gap-1.5 border border-amber-300/70 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md hover:shadow-amber-500/40"
                         >
                           {isOwnedModule ? (
                             <>
@@ -606,10 +608,10 @@ export default function CourseDetailPage() {
                                       )}
                                     </div>
                                     <span
-                                      className={`text-xs ${
+                                      className={`text-[13px] font-medium ${
                                         locked
-                                          ? "text-gray-600"
-                                          : "text-gray-300"
+                                          ? "text-gray-400"
+                                          : "text-gray-100"
                                       }`}
                                     >
                                       {formatDuration(l.durationSec)}
