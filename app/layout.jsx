@@ -4,6 +4,7 @@ import ReduxProvider from "./providers/ReduxProvider";
 import ConfettiProvider from "@/components/providers/ConfettiProvider";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import OfflineIndicator from "@/components/OfflineIndicator";
+import PWAProvider from "@/components/providers/PWAProvider";
 
 export const metadata = {
   title: "Sabka Pro HIRIN - Job Consultancy & Training Platform",
@@ -75,11 +76,13 @@ export default function RootLayout({ children }) {
       </head>
       <body className="font-sans overflow-x-hidden">
         <OfflineIndicator />
-        <ConfettiProvider />
-        <ReduxProvider>
-          {children}
-          <PWAInstallPrompt />
-        </ReduxProvider>
+        <PWAProvider>
+          <ConfettiProvider />
+          <ReduxProvider>
+            {children}
+            <PWAInstallPrompt />
+          </ReduxProvider>
+        </PWAProvider>
         <Toaster
           position="top-right"
           theme="dark"

@@ -81,8 +81,6 @@ function StoryCard({ story, index }) {
     damping: 20,
   });
 
-  console.log(window);
-
   function handleMouseMove(event) {
     const rect = event.currentTarget.getBoundingClientRect();
     const width = rect.width;

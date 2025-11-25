@@ -1,8 +1,12 @@
-"use client"
+"use client";
 
-import EmployerApplication from "@/views/employer/EmployerApplications"
+import { Suspense } from "react";
+import EmployerApplication from "@/views/employer/EmployerApplications";
 
 export default function EmployerApplicationsPage() {
-  return <EmployerApplication/>
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EmployerApplication />
+    </Suspense>
+  );
 }
-
