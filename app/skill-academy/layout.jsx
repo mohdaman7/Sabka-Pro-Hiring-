@@ -1,10 +1,23 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Home, BookOpen, Star, Users, Phone, Menu, X } from "lucide-react";
+import {
+  Home,
+  BookOpen,
+  Star,
+  Users,
+  Phone,
+  Menu,
+  X,
+  LogOut,
+  Settings,
+  User,
+  ChevronDown,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import SkillAcademyFooter from "@/components/ui/SkillAcademyFooter";
 
 /**
@@ -60,14 +73,47 @@ const MobileBottomNav = () => {
 const DesktopHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const pathname = usePathname();
+  const router = useRouter();
 
-  // scroll listener (client-only)
-  if (typeof window !== "undefined") {
+  // Load user from localStorage and setup scroll listener
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("skillAcademyUser");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Failed to load user:", error);
+    }
+
     const handleScroll = () => setScrolled(window.scrollY > 50);
-    // attach/detach via effect in real app — simple approach here:
     window.addEventListener("scroll", handleScroll);
-  }
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("skillAcademyUser");
+    localStorage.removeItem("skillAcademyToken");
+    setUser(null);
+    setMobileMenuOpen(false);
+    setProfileDropdownOpen(false);
+    router.push("/skill-academy");
+  };
+
+  // Generate avatar initials from user name
+  const getInitials = () => {
+    if (!user) return "";
+    const name = user.name || user.email;
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   const navItems = [
     { label: "Home", href: "/skill-academy" },
@@ -138,20 +184,143 @@ const DesktopHeader = () => {
             })}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
-            <Link href="/skill-academy/register">
-              <motion.button
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(105, 44, 122, 0.3)",
-                }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-[#692c7a] to-[#9463a8] rounded-xl font-semibold text-white shadow-lg shadow-[#692c7a]/25 hover:shadow-[#692c7a]/40 transition-all text-sm"
-              >
-                Get Started
-              </motion.button>
-            </Link>
+          {/* CTA Button / Profile Dropdown */}
+          <div className="hidden lg:flex items-center gap-4 flex-shrink-0 relative">
+            {user ? (
+              <div className="relative">
+                {/* Profile Button */}
+                <motion.button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#692c7a]/20 via-[#9463a8]/10 to-[#692c7a]/20 border border-white/15 hover:border-white/30 hover:bg-gradient-to-r hover:from-[#692c7a]/30 hover:via-[#9463a8]/20 hover:to-[#692c7a]/30 transition-all group cursor-pointer"
+                >
+                  {/* Avatar */}
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#692c7a]/30 group-hover:shadow-[#692c7a]/50 transition-shadow">
+                      {getInitials()}
+                    </div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-[#0f0820] shadow-lg" />
+                  </div>
+
+                  {/* Name and Status */}
+                  <div className="hidden sm:block text-left">
+                    <p className="text-sm font-semibold text-white leading-tight">
+                      {user.name
+                        ? user.name.split(" ")[0]
+                        : user.email.split("@")[0]}
+                    </p>
+                    <p className="text-xs text-gray-400">Student</p>
+                  </div>
+
+                  {/* Dropdown Indicator */}
+                  <ChevronDown
+                    className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                      profileDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </motion.button>
+
+                {/* Profile Dropdown Menu */}
+                <AnimatePresence>
+                  {profileDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full right-0 mt-3 w-72 bg-gradient-to-br from-[#2a1a40]/95 via-[#3d2557]/90 to-[#2a1a40]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-[#692c7a]/30 overflow-hidden z-50"
+                    >
+                      {/* Profile Header */}
+                      <div className="p-4 border-b border-white/10 bg-gradient-to-r from-[#692c7a]/20 to-transparent">
+                        <div className="flex items-center gap-3">
+                          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-[#692c7a]/30">
+                            {getInitials()}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-white">
+                              {user.name || user.email}
+                            </p>
+                            <p className="text-xs text-gray-400">
+                              {user.email}
+                            </p>
+                            <p className="text-xs text-[#d8b4f0] mt-1">
+                              ✓ Active Student
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Menu Items */}
+                      <div className="p-2">
+                        {/* Profile Option */}
+                        <motion.button
+                          whileHover={{
+                            backgroundColor: "rgba(105, 44, 122, 0.15)",
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white transition-colors group/item"
+                        >
+                          <User className="w-4 h-4 text-[#692c7a] group-hover/item:text-[#d8b4f0] transition-colors" />
+                          <span className="text-sm font-medium">
+                            My Profile
+                          </span>
+                        </motion.button>
+
+                        {/* Settings Option */}
+                        <motion.button
+                          whileHover={{
+                            backgroundColor: "rgba(105, 44, 122, 0.15)",
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white transition-colors group/item"
+                        >
+                          <Settings className="w-4 h-4 text-[#692c7a] group-hover/item:text-[#d8b4f0] transition-colors" />
+                          <span className="text-sm font-medium">Settings</span>
+                        </motion.button>
+
+                        {/* Divider */}
+                        <div className="my-2 h-px bg-white/10" />
+
+                        {/* Logout Option */}
+                        <motion.button
+                          onClick={handleLogout}
+                          whileHover={{
+                            backgroundColor: "rgba(239, 68, 68, 0.15)",
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:text-red-300 transition-colors group/item"
+                        >
+                          <LogOut className="w-4 h-4 group-hover/item:text-red-400 transition-colors" />
+                          <span className="text-sm font-medium">Logout</span>
+                        </motion.button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link href="/skill-academy/login">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-3 border-2 border-white/30 rounded-xl font-semibold text-white hover:bg-white/10 transition-all text-sm"
+                  >
+                    Sign In
+                  </motion.button>
+                </Link>
+                <Link href="/skill-academy/register">
+                  <motion.button
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 20px 40px rgba(105, 44, 122, 0.3)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-3 bg-gradient-to-r from-[#692c7a] to-[#9463a8] rounded-xl font-semibold text-white shadow-lg shadow-[#692c7a]/25 hover:shadow-[#692c7a]/40 transition-all text-sm"
+                  >
+                    Get Started
+                  </motion.button>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -171,7 +340,108 @@ const DesktopHeader = () => {
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {/** NOTE: For brevity we're showing a simple mobile menu. */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden bg-black/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
+          >
+            <nav className="max-w-[95%] mx-auto px-4 py-4 space-y-2">
+              {/* Navigation Items */}
+              {[
+                { label: "Home", href: "/skill-academy" },
+                { label: "Courses", href: "/skill-academy/courses" },
+                { label: "Reviews", href: "/skill-academy/reviews" },
+                { label: "About", href: "/skill-academy/about" },
+                { label: "Contact", href: "/skill-academy/contact" },
+              ].map((item, index) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link key={index} href={item.href}>
+                    <motion.div
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`py-3 px-4 rounded-lg transition-all font-medium text-sm ${
+                        isActive
+                          ? "text-[#d8b4f0] bg-[#692c7a]/20"
+                          : "text-gray-300 hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      {item.label}
+                    </motion.div>
+                  </Link>
+                );
+              })}
+
+              {/* Divider */}
+              <div className="my-2 h-px bg-white/10" />
+
+              {/* Auth Actions */}
+              {user ? (
+                <>
+                  {/* Mobile Profile Card */}
+                  <div className="bg-gradient-to-r from-[#692c7a]/20 to-transparent p-4 rounded-lg border border-white/10 mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                        {getInitials()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-white">
+                          {user.name
+                            ? user.name.split(" ")[0]
+                            : user.email.split("@")[0]}
+                        </p>
+                        <p className="text-xs text-gray-400">Student</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Profile Menu Items for Mobile */}
+                  <motion.div className="py-3 px-4 rounded-lg flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                    <User className="w-4 h-4 text-[#692c7a]" />
+                    <span className="text-sm font-medium">My Profile</span>
+                  </motion.div>
+
+                  <motion.div className="py-3 px-4 rounded-lg flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                    <Settings className="w-4 h-4 text-[#692c7a]" />
+                    <span className="text-sm font-medium">Settings</span>
+                  </motion.div>
+
+                  <div className="my-2 h-px bg-white/10" />
+
+                  <motion.button
+                    onClick={handleLogout}
+                    whileHover={{ backgroundColor: "rgba(220, 38, 38, 0.1)" }}
+                    className="w-full py-3 px-4 text-red-400 hover:text-red-300 rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-red-500/10 transition-all"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </motion.button>
+                </>
+              ) : (
+                <>
+                  <Link href="/skill-academy/login">
+                    <motion.div
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="py-3 px-4 rounded-lg font-medium text-sm text-white hover:bg-white/5 transition-all"
+                    >
+                      Sign In
+                    </motion.div>
+                  </Link>
+                  <Link href="/skill-academy/register">
+                    <motion.div
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="py-3 px-4 rounded-lg font-medium text-sm bg-gradient-to-r from-[#692c7a] to-[#9463a8] text-white hover:shadow-lg transition-all"
+                    >
+                      Get Started
+                    </motion.div>
+                  </Link>
+                </>
+              )}
+            </nav>
+          </motion.div>
+        )}
       </AnimatePresence>
     </motion.header>
   );
@@ -185,10 +455,13 @@ export default function SkillAcademyLayout({ children }) {
     pathname?.startsWith("/skill-academy/courses/") &&
     pathname.split("/").filter(Boolean).length >= 3;
 
+  // Hide navbar and footer on register page
+  const isRegisterPage = pathname === "/skill-academy/register";
+
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden">
-      {/* Layout background — only show when NOT on course detail pages */}
-      {!isCourseDetail && (
+      {/* Layout background — only show when NOT on course detail pages or register page */}
+      {!isCourseDetail && !isRegisterPage && (
         <div className="fixed inset-0 -z-10 w-full h-full">
           <div className="absolute inset-0 bg-gradient-to-br from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
 
@@ -216,14 +489,18 @@ export default function SkillAcademyLayout({ children }) {
         </div>
       )}
 
-      <DesktopHeader />
+      {!isRegisterPage && <DesktopHeader />}
 
-      <main className="relative z-10 pt-16 lg:pt-20 pb-20 md:pb-0">
+      <main
+        className={`relative z-10 ${
+          !isRegisterPage ? "pt-16 lg:pt-20 pb-20 md:pb-0" : ""
+        }`}
+      >
         {children}
       </main>
 
-      <SkillAcademyFooter />
-      <MobileBottomNav />
+      {!isRegisterPage && <SkillAcademyFooter />}
+      {!isRegisterPage && <MobileBottomNav />}
     </div>
   );
 }

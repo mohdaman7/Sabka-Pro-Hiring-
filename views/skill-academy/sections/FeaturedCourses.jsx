@@ -19,16 +19,19 @@ import { useRef } from "react";
 
 const course = {
   id: 1,
-  title: "Full Stack Web Development",
-  category: "Development",
+  title: "STEP - Systematic Training For Employment & Professionalism",
+  category: "Professional Development",
   students: "12.5k+",
   rating: 4.9,
-  image:
-    "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  image: "/step-course.jpg",
   badge: "Bestseller",
   description:
-    "Master modern web development. Build real-world projects and launch your career.",
-  highlights: ["industry experts", "Job Assistance", "Certificate"],
+    "Master professional skills through systematic training. Gain practical knowledge and launch your career with confidence.",
+  highlights: [
+    "Expert Trainers",
+    "Job Placement Assistance",
+    "Professional Certificate",
+  ],
 };
 
 export const FeaturedCourses = () => {

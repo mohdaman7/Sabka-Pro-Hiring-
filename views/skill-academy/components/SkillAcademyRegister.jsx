@@ -136,6 +136,16 @@ export default function SkillAcademyRegister() {
         return;
       }
 
+      // Save user to localStorage for auth
+      localStorage.setItem(
+        "skillAcademyUser",
+        JSON.stringify({
+          email: formData.email,
+          name: formData.name,
+          phone: formData.phone,
+        })
+      );
+
       router.push("/skill-academy");
     } catch (error) {
       const message =

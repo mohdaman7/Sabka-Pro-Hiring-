@@ -3,17 +3,34 @@
 import { useEffect, useState } from "react";
 import { X, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function PWAInstallPrompt() {
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
   const [isInstallable, setIsInstallable] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(false);
 
+  // Only show PWA install prompt on skill-academy pages (not on main landing page or admin)
+  const shouldShowOnPage =
+    pathname?.includes("/skill-academy") && !pathname?.includes("/admin");
+
   useEffect(() => {
     // Check if PWA is already installed
     if (window.matchMedia("(display-mode: standalone)").matches) {
       setIsInstalled(true);
+      return;
+    }
+
+    // Only show prompt on skill-academy pages
+    if (!shouldShowOnPage) {
+      return;
+    }
+
+    // Check if user has dismissed prompt before (stored in localStorage)
+    const isDismissed = localStorage.getItem("pwa_install_dismissed");
+    if (isDismissed) {
       return;
     }
 
@@ -68,6 +85,8 @@ export default function PWAInstallPrompt() {
 
   const handleDismiss = () => {
     setIsVisible(false);
+    // Store dismissal in localStorage to prevent repeated prompts
+    localStorage.setItem("pwa_install_dismissed", "true");
   };
 
   if (isInstalled || !isInstallable || !isVisible) {
