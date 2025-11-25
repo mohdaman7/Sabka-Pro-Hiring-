@@ -1,24 +1,70 @@
 {
-  "theme_color": "#7f18a5",
-  "background_color": "#673870",
-  "icons": [
+  "name": "Sabka Pro HIRIN - Skill Academy",
+  "short_name": "Sabka Academy",
+  "description": "Connect verified candidates with verified employers. Professional job consultancy and training platform.",
+  "start_url": "/skill-academy",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1a0f2e",
+  "background_color": "#0f0820",
+  "dir": "ltr",
+  "lang": "en-US",
+  "categories": ["education", "productivity"],
+  "screenshots": [
     {
-      "purpose": "maskable",
+      "src": "icon512_rounded.png",
       "sizes": "512x512",
-      "src": "icon512_maskable.png",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "purpose": "any",
+      "src": "icon512_maskable.png",
       "sizes": "512x512",
-      "src": "icon512_rounded.png",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "orientation": "any",
-  "display": "standalone",
-  "dir": "auto",
-  "lang": "en-US",
-  "name": "Sabka Skill Academy",
-  "short_name": "Sabka"
+  "icons": [
+    {
+      "src": "icon512_rounded.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon512_maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Explore Courses",
+      "short_name": "Courses",
+      "description": "Browse all available courses",
+      "url": "/skill-academy/courses",
+      "icons": [
+        {
+          "src": "icon512_rounded.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "My Enrollments",
+      "short_name": "My Courses",
+      "description": "View your enrolled courses",
+      "url": "/student/my-enrollments",
+      "icons": [
+        {
+          "src": "icon512_rounded.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
 }
