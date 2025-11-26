@@ -89,7 +89,7 @@ export default function LessonView({
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3 flex-wrap">
-                    <h1 className="text-2xl md:text-3xl font-bold text-white">
+                    <h1 className="text-1xl md:text-2xl font-bold text-white">
                       {lesson.title}
                     </h1>
                     {lesson.isFreePreview && (

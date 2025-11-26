@@ -203,19 +203,26 @@ export default function VideoPlayer({
           Your browser does not support the video tag.
         </video>
 
-        {/* Watermark - Bottom Right (moved from top to avoid collision with title) */}
-        <div className="absolute bottom-20 right-4 pointer-events-none z-20">
-          <div className="flex items-center gap-1.5 px-2 py-1 bg-black/30 backdrop-blur-sm rounded-lg">
-            <img
-              src="/sabka-logo.png"
-              alt="Sabka Logo"
-              className="w-4 h-4 object-contain"
-            />
-            <div className="text-[10px] text-white/60 font-medium">
-              {userEmail.split("@")[0]}
+        {/* Watermark - Shows only when playing */}
+        {isPlaying && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="absolute top-4 left-4 pointer-events-none z-20"
+          >
+            <div className="flex items-center gap-1.5 px-3 py-2 bg-black/30 backdrop-blur-sm rounded-lg">
+              <img
+                src="/sabka-logo2.png"
+                alt="Sabka Logo"
+                className="w-4 h-4 object-contain"
+              />
+              <div className="text-[10px] text-white/70 font-medium">
+                {userEmail.split("@")[0]}
+              </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        )}
 
         {/* Play Button Overlay (when paused) */}
         {!isPlaying && (
