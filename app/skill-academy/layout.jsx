@@ -193,29 +193,25 @@ const DesktopHeader = () => {
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#692c7a]/20 via-[#9463a8]/10 to-[#692c7a]/20 border border-white/15 hover:border-white/30 hover:bg-gradient-to-r hover:from-[#692c7a]/30 hover:via-[#9463a8]/20 hover:to-[#692c7a]/30 transition-all group cursor-pointer"
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all group cursor-pointer"
                 >
                   {/* Avatar */}
-                  <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#692c7a]/30 group-hover:shadow-[#692c7a]/50 transition-shadow">
-                      {getInitials()}
-                    </div>
-                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-[#0f0820] shadow-lg" />
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-semibold text-xs shadow-lg shadow-[#692c7a]/30">
+                    {getInitials()}
                   </div>
 
-                  {/* Name and Status */}
+                  {/* Name Only - Professional */}
                   <div className="hidden sm:block text-left">
-                    <p className="text-sm font-semibold text-white leading-tight">
+                    <p className="text-sm font-medium text-white leading-none">
                       {user.name
                         ? user.name.split(" ")[0]
                         : user.email.split("@")[0]}
                     </p>
-                    <p className="text-xs text-gray-400">Student</p>
                   </div>
 
                   {/* Dropdown Indicator */}
                   <ChevronDown
-                    className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                    className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-300 ${
                       profileDropdownOpen ? "rotate-180" : ""
                     }`}
                   />
@@ -232,20 +228,17 @@ const DesktopHeader = () => {
                       className="absolute top-full right-0 mt-3 w-72 bg-gradient-to-br from-[#2a1a40]/95 via-[#3d2557]/90 to-[#2a1a40]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-[#692c7a]/30 overflow-hidden z-50"
                     >
                       {/* Profile Header */}
-                      <div className="p-4 border-b border-white/10 bg-gradient-to-r from-[#692c7a]/20 to-transparent">
+                      <div className="p-4 border-b border-white/10">
                         <div className="flex items-center gap-3">
-                          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-[#692c7a]/30">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#692c7a]/30">
                             {getInitials()}
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-white">
+                            <p className="text-sm font-semibold text-white">
                               {user.name || user.email}
                             </p>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-gray-500">
                               {user.email}
-                            </p>
-                            <p className="text-xs text-[#d8b4f0] mt-1">
-                              ✓ Active Student
                             </p>
                           </div>
                         </div>
