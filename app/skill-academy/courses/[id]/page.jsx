@@ -7,6 +7,7 @@ import purchaseService from "@/services/purchaseService";
 import { customToast } from "@/components/ui/toast";
 import { triggerSuccessAnimation } from "@/utils/successAnimations";
 import { handleApiError } from "@/utils/globalErrorHandler";
+import VideoPlayer from "@/components/ui/VideoPlayer";
 import {
   ChevronDown,
   Play,
@@ -39,6 +40,22 @@ export default function CourseDetailPage() {
   const [purchasingBundle, setPurchasingBundle] = useState(false);
   const [purchasingModuleId, setPurchasingModuleId] = useState(null);
   const [myAccess, setMyAccess] = useState([]);
+  const [userEmail, setUserEmail] = useState("user@sabka.com");
+
+  // Get user email from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("skillAcademyUser");
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          setUserEmail(user.email || "user@sabka.com");
+        } catch (e) {
+          setUserEmail("user@sabka.com");
+        }
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -283,6 +300,19 @@ export default function CourseDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left (main) */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Video Player */}
+            {courseData?.videoUrl && (
+              <div className="bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-2xl border border-white/8 overflow-hidden shadow-2xl">
+                <VideoPlayer
+                  videoUrl={courseData.videoUrl}
+                  title={courseData.title}
+                  duration={totals.totalDurationSec}
+                  thumbnail={courseData.thumbnail}
+                  userEmail={userEmail}
+                />
+              </div>
+            )}
+
             {/* Course header */}
             <div className="bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-2xl border border-white/8 overflow-hidden shadow-2xl">
               <div className="relative h-64 md:h-80 overflow-hidden bg-[#2a1138]">
@@ -571,6 +601,13 @@ export default function CourseDetailPage() {
                               return (
                                 <div
                                   key={l._id}
+                                  onClick={() => {
+                                    if (!locked) {
+                                      router.push(
+                                        `/skill-academy/courses/${id}/lesson/${l._id}`
+                                      );
+                                    }
+                                  }}
                                   className={`flex items-center gap-3 p-3 rounded-lg transition-all mt-2 ${
                                     locked
                                       ? "bg-white/[0.02]"
