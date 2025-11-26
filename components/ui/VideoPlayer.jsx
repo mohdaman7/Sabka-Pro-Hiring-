@@ -8,6 +8,7 @@ import {
   Volume2,
   VolumeX,
   Maximize,
+  Minimize,
 } from "lucide-react";
 
 export default function VideoPlayer({
@@ -26,6 +27,7 @@ export default function VideoPlayer({
   const [volume, setVolume] = useState(100);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [showFullscreenControls, setShowFullscreenControls] = useState(true);
   const controlsTimeoutRef = useRef(null);
 
   // Format time helper
@@ -180,11 +182,11 @@ export default function VideoPlayer({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       ref={containerRef}
-      className="w-full bg-black rounded-2xl overflow-hidden shadow-2xl shadow-[#692c7a]/30 group"
+      className="w-full bg-gradient-to-b from-[#3d1642] via-[#2a1138] to-[#4a1f52] rounded-2xl overflow-hidden shadow-2xl shadow-[#692c7a]/30 group"
     >
       {/* Video Container */}
       <div
-        className="relative w-full bg-black cursor-pointer"
+        className="relative w-full bg-gradient-to-b from-[#3d1642] via-[#2a1138] to-[#1a0f2e] cursor-pointer"
         style={{ aspectRatio: "16/9" }}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => isPlaying && setShowControls(false)}
@@ -203,25 +205,20 @@ export default function VideoPlayer({
 
         {/* Watermark - Top Left */}
         <div className="absolute top-4 left-4 pointer-events-none z-20">
-          <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20">
+          <div className="flex items-center gap-2 px-3 py-2">
             <img
               src="/sabka-logo.png"
               alt="Sabka Logo"
-              className="w-6 h-6 object-contain"
+              className="w-5 h-5 object-contain opacity-60"
             />
-            <div className="text-xs text-white">
-              <p className="font-semibold">Sabka Academy</p>
-              <p className="text-gray-300 truncate max-w-[150px]">{userEmail}</p>
-            </div>
           </div>
         </div>
 
         {/* Watermark - Bottom Right */}
         <div className="absolute bottom-4 right-4 pointer-events-none z-20">
-          <div className="bg-black/40 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20">
-            <p className="text-[10px] text-gray-300 font-medium">
-              © Sabka Academy<br/>
-              Unauthorized recording prohibited
+          <div className="px-3 py-2">
+            <p className="text-[10px] text-gray-400 font-medium opacity-50">
+              © Sabka Academy
             </p>
           </div>
         </div>
@@ -295,13 +292,13 @@ export default function VideoPlayer({
                 )}
               </motion.button>
 
-              {/* Volume Control */}
-              <div className="flex items-center gap-2 px-2 hover:bg-white/20 rounded-lg transition-all group/volume">
+              {/* Volume Control - Only shows slider on hover */}
+              <div className="relative group/volume">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={toggleMute}
-                  className="p-1"
+                  className="p-2 hover:bg-white/20 rounded-lg transition-all"
                 >
                   {isMuted || volume === 0 ? (
                     <VolumeX className="w-5 h-5 text-white" />
@@ -310,22 +307,24 @@ export default function VideoPlayer({
                   )}
                 </motion.button>
 
-                {/* Volume Slider */}
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={isMuted ? 0 : volume}
-                  onChange={handleVolumeChange}
-                  className="w-0 group-hover/volume:w-16 transition-all appearance-none bg-white/20 rounded-lg h-1 cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, #692c7a 0%, #692c7a ${
-                      isMuted ? 0 : volume
-                    }%, rgba(255,255,255,0.2) ${
-                      isMuted ? 0 : volume
-                    }%, rgba(255,255,255,0.2) 100%)`,
-                  }}
-                />
+                {/* Volume Slider - Appears on hover */}
+                <div className="hidden group-hover/volume:flex absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 items-center justify-center">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={isMuted ? 0 : volume}
+                    onChange={handleVolumeChange}
+                    className="w-20 appearance-none bg-white/20 rounded-lg h-1 cursor-pointer accent-blue-500"
+                    style={{
+                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${
+                        isMuted ? 0 : volume
+                      }%, rgba(255,255,255,0.2) ${
+                        isMuted ? 0 : volume
+                      }%, rgba(255,255,255,0.2) 100%)`,
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Time Display */}
@@ -336,6 +335,21 @@ export default function VideoPlayer({
 
             {/* Right Controls */}
             <div className="flex items-center gap-2">
+              {/* Show/Hide Controls Toggle (Fullscreen only) */}
+              {isFullscreen && (
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() =>
+                    setShowFullscreenControls(!showFullscreenControls)
+                  }
+                  className="p-2 hover:bg-white/20 rounded-lg transition-all text-xs font-medium text-white"
+                  title="Toggle controls visibility"
+                >
+                  {showFullscreenControls ? "Hide" : "Show"}
+                </motion.button>
+              )}
+
               {/* Fullscreen */}
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -343,24 +357,21 @@ export default function VideoPlayer({
                 onClick={toggleFullscreen}
                 className="p-2 hover:bg-white/20 rounded-lg transition-all"
               >
-                <Maximize className="w-5 h-5 text-white" />
+                {isFullscreen ? (
+                  <Minimize className="w-5 h-5 text-white" />
+                ) : (
+                  <Maximize className="w-5 h-5 text-white" />
+                )}
               </motion.button>
             </div>
           </div>
         </motion.div>
 
-        {/* Keyboard Shortcuts Info */}
-        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="bg-black/80 backdrop-blur-md px-3 py-2 rounded-lg text-xs text-gray-300 border border-white/10">
-            <p className="font-semibold text-white mb-1">Shortcuts:</p>
-            <p>Space: Play/Pause | F: Fullscreen</p>
-            <p>↑ ↓: Volume</p>
-          </div>
-        </div>
+        {/* Keyboard Shortcuts Info - Hidden */}
       </div>
 
       {/* Video Info Footer */}
-      <div className="bg-gradient-to-b from-black/30 to-black/50 px-4 sm:px-6 py-4 border-t border-white/5">
+      <div className="bg-gradient-to-b from-[#3d1642]/50 to-[#2a1138]/50 px-4 sm:px-6 py-4 border-t border-white/5">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-white font-semibold text-sm sm:text-base">

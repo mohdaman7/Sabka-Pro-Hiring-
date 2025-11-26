@@ -58,7 +58,7 @@ export default function LessonView({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a0f2e] via-[#0f0820] to-[#1a0f2e]">
+    <div className="min-h-screen bg-gradient-to-b from-[#3d1642] via-[#2a1138] to-[#4a1f52]">
       {/* Background Elements */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/20 rounded-full blur-3xl animate-pulse" />
