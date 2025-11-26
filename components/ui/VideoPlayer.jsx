@@ -203,26 +203,17 @@ export default function VideoPlayer({
           Your browser does not support the video tag.
         </video>
 
-        {/* Watermark - Top Left */}
-        <div className="absolute top-4 left-4 pointer-events-none z-20">
-          <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm px-3 py-2 rounded-lg">
+        {/* Watermark - Top Right */}
+        <div className="absolute top-4 right-4 pointer-events-none z-20">
+          <div className="flex items-center gap-2 px-3 py-2">
             <img
               src="/sabka-logo.png"
               alt="Sabka Logo"
               className="w-5 h-5 object-contain"
             />
-            <div className="text-xs text-white">
-              <p className="font-semibold text-gray-100">{userEmail}</p>
+            <div className="text-xs text-white/70">
+              <p className="font-semibold">{userEmail}</p>
             </div>
-          </div>
-        </div>
-
-        {/* Watermark - Bottom Right */}
-        <div className="absolute bottom-4 right-4 pointer-events-none z-20">
-          <div className="px-3 py-2">
-            <p className="text-[10px] text-gray-400 font-medium opacity-50">
-              © Sabka Academy
-            </p>
           </div>
         </div>
 
