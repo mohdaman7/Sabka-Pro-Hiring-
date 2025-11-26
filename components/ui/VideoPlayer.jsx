@@ -205,12 +205,15 @@ export default function VideoPlayer({
 
         {/* Watermark - Top Left */}
         <div className="absolute top-4 left-4 pointer-events-none z-20">
-          <div className="flex items-center gap-2 px-3 py-2">
+          <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm px-3 py-2 rounded-lg">
             <img
               src="/sabka-logo.png"
               alt="Sabka Logo"
-              className="w-5 h-5 object-contain opacity-60"
+              className="w-5 h-5 object-contain"
             />
+            <div className="text-xs text-white">
+              <p className="font-semibold text-gray-100">{userEmail}</p>
+            </div>
           </div>
         </div>
 
@@ -293,7 +296,7 @@ export default function VideoPlayer({
               </motion.button>
 
               {/* Volume Control - Only shows slider on hover */}
-              <div className="relative group/volume">
+              <div className="relative group/volume flex items-center">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
@@ -307,8 +310,8 @@ export default function VideoPlayer({
                   )}
                 </motion.button>
 
-                {/* Volume Slider - Appears on hover */}
-                <div className="hidden group-hover/volume:flex absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 items-center justify-center">
+                {/* Volume Slider - Appears on hover with proper pointer events */}
+                <div className="hidden group-hover/volume:flex absolute left-full ml-2 items-center justify-center pointer-events-auto">
                   <input
                     type="range"
                     min="0"
