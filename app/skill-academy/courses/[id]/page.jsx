@@ -202,6 +202,13 @@ export default function CourseDetailPage() {
 
     try {
       setPurchasingBundle(true);
+      
+      // Show demo/trial toast
+      customToast.info(
+        "Demo Purchase Mode",
+        "In production, this would redirect to payment gateway. Purchase recorded for testing."
+      );
+      
       await purchaseService.create({
         type: "full_course",
         courseId: courseData._id,
@@ -210,7 +217,7 @@ export default function CourseDetailPage() {
       triggerSuccessAnimation({ type: "achievement" });
       customToast.success(
         "Course unlocked!",
-        "You now have full access to all modules."
+        "You now have full access to all modules. Complete the course to earn your certificate!"
       );
 
       router.push(`/student/courses/${courseData._id}`);
@@ -219,6 +226,16 @@ export default function CourseDetailPage() {
     } finally {
       setPurchasingBundle(false);
     }
+  };
+
+  const handleTryCourse = () => {
+    customToast.info(
+      "Demo Access Enabled",
+      "You can now preview the course content. Purchase to unlock full access and earn certificates."
+    );
+    
+    // Scroll to content
+    document.getElementById("course-content")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleModulePurchase = async (moduleId, isFreeModule) => {
@@ -768,6 +785,16 @@ export default function CourseDetailPage() {
                       </>
                     )}
                   </button>
+
+                  {!hasFullBundleAccess && !isFreeBundle && (
+                    <button
+                      onClick={handleTryCourse}
+                      className="w-full px-6 py-3 mt-3 border-2 border-white/30 hover:border-white/60 rounded-xl font-semibold text-white transition-all hover:bg-white/5 flex items-center justify-center gap-2"
+                    >
+                      <Play className="w-5 h-5" />
+                      Try Course Demo
+                    </button>
+                  )}
 
                   <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
                     <div className="flex items-center justify-between text-sm">
