@@ -304,15 +304,35 @@ export default function SkillAcademyLoginPage() {
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </div>
 
-            {/* Sign Up Link */}
-            <p className="text-center text-sm text-gray-400">
-              Don't have an account?{" "}
+            {/* Sign Up Link with Better UI */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="space-y-4"
+            >
+              <p className="text-center text-sm text-gray-400">
+                Don't have an account?{" "}
+                <Link href="/skill-academy/register">
+                  <span className="text-purple-400 hover:text-pink-300 font-bold transition-colors cursor-pointer">
+                    Sign up here
+                  </span>
+                </Link>
+              </p>
+
+              {/* Register Button Alternative */}
               <Link href="/skill-academy/register">
-                <span className="text-purple-400 hover:text-pink-300 font-bold transition-colors">
-                  Sign up here
-                </span>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-3 sm:py-3.5 bg-gradient-to-r from-white/10 via-white/5 to-white/10 border-2 border-white/20 hover:border-purple-400/60 rounded-2xl text-white font-bold text-base sm:text-base transition-all flex items-center justify-center gap-2 group/signup"
+                >
+                  <span className="relative z-10">Create New Account</span>
+                  <ArrowRight className="w-5 h-5 relative z-10 group-hover/signup:translate-x-1 transition-transform" />
+                </motion.button>
               </Link>
-            </p>
+            </motion.div>
           </div>
         </motion.div>
 

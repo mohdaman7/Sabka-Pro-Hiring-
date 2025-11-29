@@ -100,7 +100,7 @@ const DesktopHeader = () => {
     setUser(null);
     setMobileMenuOpen(false);
     setProfileDropdownOpen(false);
-    router.push("/skill-academy");
+    router.push("/skill-academy/login");
   };
 
   // Generate avatar initials from user name

@@ -14,9 +14,11 @@ import {
   AlertCircle,
   Lock,
   Zap,
+  LogIn,
 } from "lucide-react";
 import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SkillAcademyRegister() {
   const router = useRouter();
@@ -776,6 +778,35 @@ export default function SkillAcademyRegister() {
             Privacy Policy
           </button>
         </motion.p>
+
+        {/* Login Link Section - Similar to Login Page */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1.0 }}
+          className="space-y-4 mt-8 sm:mt-10"
+        >
+          <p className="text-center text-sm text-gray-400">
+            Already have an account?{" "}
+            <Link href="/skill-academy/login">
+              <span className="text-purple-400 hover:text-pink-300 font-bold transition-colors cursor-pointer">
+                Sign in here
+              </span>
+            </Link>
+          </p>
+
+          <Link href="/skill-academy/login">
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full py-3 sm:py-3.5 bg-gradient-to-r from-white/10 via-white/5 to-white/10 border-2 border-white/20 hover:border-purple-400/60 rounded-2xl text-white font-bold text-base sm:text-base transition-all flex items-center justify-center gap-2 group/signin"
+            >
+              <span className="relative z-10">Already Registered? Sign In</span>
+              <LogIn className="w-5 h-5 relative z-10 group-hover/signin:translate-x-1 transition-transform" />
+            </motion.button>
+          </Link>
+        </motion.div>
       </div>
 
       <style jsx>{`
