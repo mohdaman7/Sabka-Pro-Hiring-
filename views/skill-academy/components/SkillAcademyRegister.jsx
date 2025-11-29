@@ -27,6 +27,7 @@ export default function SkillAcademyRegister() {
     name: "",
     email: "",
     phone: "",
+    password: "",
     otp: "",
   });
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -138,22 +139,73 @@ export default function SkillAcademyRegister() {
         return;
       }
 
-      // Save user to localStorage for auth
+      // OTP verified, now register the user with password
+      setStep(3); // Move to password step
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Verification failed. Please try again.";
+      setApiError(message);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleCreateAccount = async () => {
+    if (!formData.password) {
+      setErrors({ password: "Password is required" });
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setErrors({ password: "Password must be at least 6 characters" });
+      return;
+    }
+
+    try {
+      setApiError("");
+      setIsVerifying(true);
+
+      // Register user account
+      const registerResponse = await api.post(
+        "/api/auth/skill-academy/register",
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+        }
+      );
+
+      const registerData = registerResponse.data;
+
+      if (!registerData?.success) {
+        setApiError(
+          registerData?.message || "Registration failed. Please try again."
+        );
+        return;
+      }
+
+      // Save user and token to localStorage
+      const userData = registerData.data.user;
       localStorage.setItem(
         "skillAcademyUser",
         JSON.stringify({
-          email: formData.email,
-          name: formData.name,
-          phone: formData.phone,
+          id: userData.id,
+          email: userData.email,
+          name: userData.name,
+          phone: userData.phone,
         })
       );
+      localStorage.setItem("skillAcademyToken", registerData.data.token);
 
       router.push("/skill-academy");
     } catch (error) {
       const message =
         error?.response?.data?.message ||
         error.message ||
-        "Verification failed. Please try again.";
+        "Registration failed. Please try again.";
       setApiError(message);
     } finally {
       setIsVerifying(false);
@@ -382,7 +434,49 @@ export default function SkillAcademyRegister() {
                   : "border-gray-700/60 text-gray-600 bg-gray-900/40 backdrop-blur-sm"
               }`}
             >
-              <span>2</span>
+              {step > 2 ? (
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", duration: 0.6 }}
+                >
+                  <CheckCircle className="w-8 h-8 sm:w-9 sm:h-9" />
+                </motion.div>
+              ) : (
+                <span>2</span>
+              )}
+            </motion.div>
+
+            {/* Progress Line 2 */}
+            <div className="relative w-24 sm:w-32 h-1.5 rounded-full bg-gradient-to-r from-gray-800 to-gray-700 overflow-hidden shadow-inner shadow-black/50">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: step >= 3 ? "100%" : "0%" }}
+                transition={{ duration: 0.7, ease: "easeInOut" }}
+                className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded-full shadow-2xl shadow-purple-500/70"
+              />
+            </div>
+
+            {/* Step 3 Circle */}
+            <motion.div
+              animate={{
+                scale: step === 3 ? [1, 1.2, 1] : 1,
+                boxShadow:
+                  step === 3
+                    ? "0 0 40px rgba(168, 85, 247, 0.8), inset 0 0 20px rgba(168, 85, 247, 0.4)"
+                    : "0 0 0px rgba(168, 85, 247, 0)",
+              }}
+              transition={{
+                duration: 2,
+                repeat: step === 3 ? Infinity : 0,
+              }}
+              className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center border-2 transition-all font-bold text-lg sm:text-xl ${
+                step >= 3
+                  ? "bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 border-purple-300 text-white shadow-2xl"
+                  : "border-gray-700/60 text-gray-600 bg-gray-900/40 backdrop-blur-sm"
+              }`}
+            >
+              <span>3</span>
             </motion.div>
           </div>
         </motion.div>
@@ -739,6 +833,141 @@ export default function SkillAcademyRegister() {
                       </span>
                     </button>
                   </motion.div>
+                </motion.div>
+              )}
+
+              {/* Step 3: Create Password */}
+              {step === 3 && (
+                <motion.div
+                  key="step3"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.5 }}
+                  className="space-y-7 sm:space-y-8 relative z-10"
+                >
+                  {/* Password Header */}
+                  <div className="text-center mb-8 sm:mb-10">
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180, opacity: 0 }}
+                      animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                      transition={{
+                        type: "spring",
+                        duration: 0.7,
+                        stiffness: 80,
+                      }}
+                      className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-600/50 relative group"
+                    >
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <Lock className="w-10 h-10 sm:w-12 sm:h-12 text-white relative z-10" />
+                    </motion.div>
+                    <h2 className="text-3xl sm:text-4xl font-black mb-3 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent">
+                      Create Password
+                    </h2>
+                    <p className="text-sm sm:text-base text-gray-400">
+                      Set a secure password to protect your account
+                    </p>
+                  </div>
+
+                  {/* Password Input */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="space-y-3"
+                  >
+                    <label className="text-xs sm:text-sm font-bold text-gray-200 flex items-center gap-2 uppercase tracking-widest">
+                      <Lock className="w-4 h-4 text-purple-400" />
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      value={formData.password}
+                      onChange={(e) =>
+                        handleInputChange("password", e.target.value)
+                      }
+                      placeholder="Enter a secure password"
+                      className={`w-full px-6 py-4 bg-white/8 backdrop-blur-xl border-2 rounded-2xl text-white placeholder-gray-500/60 focus:outline-none focus:border-purple-400/80 focus:bg-white/12 hover:bg-white/10 transition-all duration-300 text-sm sm:text-base font-medium ${
+                        errors.password
+                          ? "border-red-500/60 bg-red-500/10"
+                          : "border-white/20"
+                      }`}
+                    />
+                    <AnimatePresence>
+                      {errors.password && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          className="text-red-400 text-xs sm:text-sm flex items-center gap-2 font-semibold"
+                        >
+                          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                          {errors.password}
+                        </motion.p>
+                      )}
+                    </AnimatePresence>
+                    <p className="text-xs text-gray-400 mt-2">
+                      Minimum 6 characters required
+                    </p>
+                  </motion.div>
+
+                  {/* Create Account Button */}
+                  <motion.button
+                    onClick={handleCreateAccount}
+                    whileHover={{ scale: 1.03, y: -3 }}
+                    whileTap={{ scale: 0.97 }}
+                    disabled={isVerifying || formData.password.length < 6}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                    className="w-full py-4.5 sm:py-5 bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 rounded-2xl text-white font-black text-base sm:text-lg hover:shadow-2xl hover:shadow-purple-500/50 transition-all flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed border border-purple-400/40 hover:border-pink-300/60 relative overflow-hidden group/btn"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
+                    {isVerifying ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
+                        >
+                          <Sparkles className="w-5 h-5" />
+                        </motion.div>
+                        <span className="relative z-10">
+                          Creating Account...
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="relative z-10">Create Account</span>
+                        <motion.div
+                          whileHover={{ x: 6 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <CheckCircle className="w-5 h-5 relative z-10" />
+                        </motion.div>
+                      </>
+                    )}
+                  </motion.button>
+
+                  {/* Back Button */}
+                  <motion.button
+                    onClick={() => setStep(2)}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="w-full py-3 text-gray-400 hover:text-gray-200 transition-all text-sm flex items-center justify-center gap-2.5 group/back font-semibold"
+                  >
+                    <motion.div
+                      whileHover={{ x: -4 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                    </motion.div>
+                    Back
+                  </motion.button>
                 </motion.div>
               )}
             </AnimatePresence>

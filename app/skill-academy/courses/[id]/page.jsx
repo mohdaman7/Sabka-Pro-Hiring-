@@ -87,11 +87,15 @@ export default function CourseDetailPage() {
           setModules([data]);
         }
 
+        // Try to get user access, but don't fail if not logged in
         try {
           const access = await courseService.myAccess();
           setMyAccess(access || []);
-        } catch {
+        } catch (accessError) {
+          // User is not logged in or token expired - that's ok for viewing course details
+          // Only set myAccess to empty - don't redirect
           setMyAccess([]);
+          console.log("No user access data (user not logged in)");
         }
       } catch (err) {
         const message = handleApiError(err, "Loading course");

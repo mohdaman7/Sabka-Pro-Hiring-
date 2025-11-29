@@ -34,11 +34,11 @@ export default function SkillAcademyLoginPage() {
         return;
       }
 
-      // Call backend API for login
+      // Call backend API for skill-academy login
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
-        }/api/auth/login`,
+        }/api/auth/skill-academy/login`,
         {
           method: "POST",
           headers: {
@@ -65,11 +65,9 @@ export default function SkillAcademyLoginPage() {
       const userData = {
         id: data.data.user.id,
         email: data.data.user.email,
-        name: data.data.user.name || email.split("@")[0],
-        phone: data.data.user.phone || "",
-        role: data.data.user.role,
+        name: data.data.user.name,
+        phone: data.data.user.phone,
         token: data.data.token,
-        profile: data.data.profile || null,
       };
 
       localStorage.setItem("skillAcademyUser", JSON.stringify(userData));
