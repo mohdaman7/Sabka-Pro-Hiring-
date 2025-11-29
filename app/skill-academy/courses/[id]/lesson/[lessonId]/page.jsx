@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import LessonView from "@/components/ui/LessonView";
+import CertificateModal from "@/components/ui/CertificateModal";
 import axios from "@/lib/axios";
 
 export default function LessonPage() {
@@ -19,6 +20,9 @@ export default function LessonPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userEmail, setUserEmail] = useState("user@sabka.com");
+  const [userName, setUserName] = useState("Student");
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [isCourseCompleted, setIsCourseCompleted] = useState(false);
 
   // Get user email from localStorage
   useEffect(() => {
@@ -28,8 +32,10 @@ export default function LessonPage() {
         try {
           const user = JSON.parse(userData);
           setUserEmail(user.email || "user@sabka.com");
+          setUserName(user.name || user.email?.split("@")[0] || "Student");
         } catch (e) {
           setUserEmail("user@sabka.com");
+          setUserName("Student");
         }
       }
     }
@@ -89,14 +95,48 @@ export default function LessonPage() {
   const handleLessonComplete = async (completeItemId) => {
     try {
       // Mark lesson as complete on backend
-      await axios.post(`/api/progress/mark-complete`, {
+      const response = await axios.post(`/api/progress/mark-complete`, {
         courseId,
         lessonId: completeItemId,
       });
 
       console.log("Lesson marked as complete");
+
+      // Check if course is fully completed
+      if (
+        response.data?.courseCompleted ||
+        response.data?.data?.courseCompleted
+      ) {
+        setIsCourseCompleted(true);
+        setShowCertificate(true);
+      }
+
+      // Alternative: Check total lessons completed vs total lessons
+      if (response.data?.data?.progress) {
+        const progress = response.data.data.progress;
+        if (
+          progress.completedLessons &&
+          progress.totalLessons &&
+          progress.completedLessons === progress.totalLessons
+        ) {
+          setIsCourseCompleted(true);
+          setShowCertificate(true);
+        }
+      }
     } catch (err) {
       console.error("Error marking lesson complete:", err);
+    }
+  };
+
+  // Check course completion status
+  const checkCourseCompletion = async () => {
+    try {
+      const response = await axios.get(`/api/progress/course/${courseId}`);
+      if (response.data?.data?.courseCompleted) {
+        setIsCourseCompleted(true);
+      }
+    } catch (err) {
+      console.error("Error checking course completion:", err);
     }
   };
 
@@ -172,14 +212,26 @@ export default function LessonPage() {
   }
 
   return (
-    <LessonView
-      lesson={lesson}
-      module={module}
-      courseId={courseId}
-      allModules={course.modules || []}
-      onLessonComplete={handleLessonComplete}
-      onNavigateLesson={handleNavigateLesson}
-      userEmail={userEmail}
-    />
+    <>
+      <LessonView
+        lesson={lesson}
+        module={module}
+        courseId={courseId}
+        allModules={course.modules || []}
+        onLessonComplete={handleLessonComplete}
+        onNavigateLesson={handleNavigateLesson}
+        userEmail={userEmail}
+      />
+
+      {/* Certificate Modal */}
+      <CertificateModal
+        isOpen={showCertificate}
+        onClose={() => setShowCertificate(false)}
+        courseTitle={course?.title || "Course"}
+        userName={userName}
+        completionDate={new Date().toISOString()}
+        courseId={courseId}
+      />
+    </>
   );
 }
