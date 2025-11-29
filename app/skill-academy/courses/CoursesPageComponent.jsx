@@ -46,7 +46,6 @@ export default function CoursesPageComponent() {
   ];
 
   const categories = [
-    "All",
     "Development",
     "Design",
     "Data Science",
@@ -239,7 +238,7 @@ export default function CoursesPageComponent() {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Search & Filters */}
-      <section className="relative py-8 overflow-hidden">
+      <section className="relative py-8 overflow-visible">
         {/* Background Effects */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
@@ -287,7 +286,7 @@ export default function CoursesPageComponent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="max-w-4xl mx-auto"
+            className="max-w-4xl mx-auto relative z-40"
           >
             <CourseFilters
               onSearchChange={setSearchTerm}
