@@ -3,6 +3,7 @@
 ## ✅ What's Been Implemented
 
 ### 1. **Video Player System** (Complete)
+
 - Professional video player with play/pause controls
 - Volume slider (appears on speaker hover, positioned right)
 - Progress bar with seek capability
@@ -16,6 +17,7 @@
 ---
 
 ### 2. **Lesson View Component** (Complete)
+
 - Two-column layout (video + course outline sidebar)
 - Module and lesson expansion
 - Lesson navigation between modules
@@ -30,6 +32,7 @@
 ### 3. **Course Purchase System** (Complete)
 
 #### Buy Complete Bundle Button
+
 - Full course purchase with single click
 - Shows "Processing..." spinner during purchase
 - Toast notifications for purchase status
@@ -38,6 +41,7 @@
 - Shows "Go to Course" button for already purchased courses
 
 #### Try Course Demo Button (NEW)
+
 - Demo access button without purchasing
 - Shows info toast: "Demo Access Enabled"
 - Scrolls to course content for preview
@@ -46,6 +50,7 @@
 
 **File:** `/app/skill-academy/courses/[id]/page.jsx`
 **Updated Functions:**
+
 - `handleBundleAction()` - Enhanced with toast notifications
 - `handleTryCourse()` - NEW function for demo access
 
@@ -54,6 +59,7 @@
 ### 4. **Certificate System** (Complete)
 
 #### Certificate Modal on Completion
+
 - Automatically triggers when final lesson is completed
 - Shows beautiful certificate design with:
   - Student name
@@ -65,7 +71,9 @@
   - Golden/amber certificate styling
 
 #### Certificate Downloads
+
 - **PDF Download:**
+
   - A4 landscape format
   - Professional certificate layout
   - Naming: `{StudentName}_Certificate_{CourseName}.pdf`
@@ -77,6 +85,7 @@
   - Uses html2canvas
 
 #### Certificate Viewing Page
+
 - Dedicated page: `/skill-academy/certificates`
 - Displays all completed courses with certificates
 - Responsive grid layout (1/2/3 columns based on screen size)
@@ -89,6 +98,7 @@
 - Fetches from API: `/api/progress/completed-courses`
 
 **Files:**
+
 - `/components/ui/CertificateModal.jsx` - Modal component
 - `/app/skill-academy/courses/[id]/lesson/[lessonId]/page.jsx` - Integration point
 - `/app/skill-academy/certificates/page.jsx` - Certificates listing page
@@ -98,11 +108,13 @@
 ### 5. **Toast Notification System** (Enhanced)
 
 #### Toast Types Used:
+
 - **Info Toast (Blue):** Demo modes, informational messages
 - **Success Toast (Green):** Purchase completed, course unlocked
 - **Error Toast (Red):** API errors, purchase failures
 
 #### Key Toasts:
+
 1. Demo Button Click: "Demo Access Enabled"
 2. Purchase Start: "Demo Purchase Mode - Testing Payment Gateway"
 3. Purchase Success: "Course unlocked! You now have full access..."
@@ -204,6 +216,7 @@
 ## 📊 API Endpoints Used
 
 ### Purchase Endpoint
+
 ```
 POST /api/purchases
 Body: {
@@ -213,6 +226,7 @@ Body: {
 ```
 
 ### Course Completion Check
+
 ```
 GET /api/progress/course/[courseId]
 Returns: {
@@ -224,6 +238,7 @@ Returns: {
 ```
 
 ### Mark Lesson Complete
+
 ```
 POST /api/progress/mark-complete
 Body: {
@@ -238,6 +253,7 @@ Returns: {
 ```
 
 ### Fetch Completed Courses (Certificates)
+
 ```
 GET /api/progress/completed-courses
 Returns: Array[{
@@ -253,6 +269,7 @@ Returns: Array[{
 ## 🎨 Design & Styling
 
 ### Color Scheme
+
 - **Primary Gradient:** `from-[#3d1642] via-[#2a1138] to-[#4a1f52]` (Dark Purple)
 - **Accent Purple:** #692c7a, #9463a8
 - **Success Green:** Emerald-500
@@ -261,12 +278,14 @@ Returns: Array[{
 - **Secondary:** Gray-300/400
 
 ### Button Styling
+
 - **Primary Button (Buy):** Gradient purple with shadow
 - **Secondary Button (Demo):** Outlined white with hover effect
 - **Disabled State:** 60% opacity
 - **Hover:** Darker gradient + increased shadow
 
 ### Responsive Breakpoints
+
 - **Mobile:** 1 column layout
 - **Tablet:** 2 columns for grid
 - **Desktop:** 3 columns for grid
@@ -311,6 +330,7 @@ Returns: Array[{
 Complete testing guide available in: `PURCHASE_CERTIFICATE_TESTING.md`
 
 ### Key Test Scenarios:
+
 1. ✅ Demo Button Shows Toast
 2. ✅ Buy Button Processes Purchase
 3. ✅ Mark Lessons Complete
@@ -325,7 +345,9 @@ Complete testing guide available in: `PURCHASE_CERTIFICATE_TESTING.md`
 ## 🔧 Configuration & Customization
 
 ### User Data Source
+
 Currently uses localStorage: `localStorage.skillAcademyUser`
+
 ```javascript
 {
   name: "Student Name",
@@ -335,7 +357,9 @@ Currently uses localStorage: `localStorage.skillAcademyUser`
 ```
 
 ### Certificate Styling
+
 Edit in `/components/ui/CertificateModal.jsx`:
+
 - Font sizes and styles
 - Certificate background colors
 - Award icon appearance
@@ -343,11 +367,14 @@ Edit in `/components/ui/CertificateModal.jsx`:
 - Text layout and positioning
 
 ### Download Filename Format
+
 Default: `{StudentName}_Certificate_{CourseName}.{ext}`
 Customize in `CertificateModal.jsx` lines 85-92
 
 ### Toast Position & Duration
+
 Configure in `/components/ui/toast.js`:
+
 - Default duration: 3 seconds
 - Position: top-right (customizable)
 
@@ -356,33 +383,40 @@ Configure in `/components/ui/toast.js`:
 ## 🚀 Future Enhancements
 
 ### Suggested Improvements:
+
 1. **Real Payment Integration**
+
    - Replace demo toast with Stripe/Razorpay integration
    - Handle payment gateway callbacks
    - Store payment transaction IDs
 
 2. **Email Certificates**
+
    - Send certificate PDF via email on completion
    - Include certificate in course completion email
 
 3. **Certificate Sharing**
+
    - Generate shareable certificate links
    - Public certificate verification
    - Social media sharing buttons
 
 4. **Advanced Progress Tracking**
+
    - Quiz integration with scores
    - Video watch time tracking
    - Assignment submission tracking
    - Overall course progress percentage
 
 5. **Certificate Templates**
+
    - Multiple certificate designs
    - Instructor signature option
    - Course logo customization
    - Issue date vs. completion date
 
 6. **Bulk Purchase**
+
    - Bundle multiple courses together
    - Discount for bundle purchases
 
@@ -396,13 +430,16 @@ Configure in `/components/ui/toast.js`:
 ## 📝 Notes for Future Development
 
 ### Payment Integration
+
 When ready to implement real payments:
+
 1. Update `handleBundleAction()` in `/app/skill-academy/courses/[id]/page.jsx`
 2. Replace `customToast.info("Demo Purchase Mode", ...)` with payment redirect
 3. Implement payment callback handler
 4. Verify transaction before granting access
 
 ### Backend Integration Checklist
+
 - [ ] Course purchase endpoint returns proper response
 - [ ] User authentication middleware on protected endpoints
 - [ ] Course completion detection logic (courseCompleted flag)
@@ -416,9 +453,11 @@ When ready to implement real payments:
 ## 💡 Key Implementation Details
 
 ### Certificate Modal Trigger
+
 Location: `/app/skill-academy/courses/[id]/lesson/[lessonId]/page.jsx`
 
 The certificate modal is triggered when:
+
 1. `handleLessonComplete()` is called
 2. API response includes `courseCompleted: true`
 3. State `showCertificate` is set to true
@@ -426,6 +465,7 @@ The certificate modal is triggered when:
 5. CertificateModal component receives `show={showCertificate}`
 
 ### Demo Button Behavior
+
 - Shows toast with info message
 - Scrolls to course content
 - Does NOT purchase or grant access
@@ -433,6 +473,7 @@ The certificate modal is triggered when:
 - Can be extended to show specific demo content
 
 ### Purchase Handler Flow
+
 1. Click Buy button
 2. Check if already purchased (if yes, navigate to course)
 3. Show "Demo Purchase Mode" toast
@@ -471,6 +512,7 @@ Track these to ensure system is working correctly:
 ## 📞 Support & Troubleshooting
 
 For issues, check:
+
 1. **Certificate Not Showing:** Verify API returns `courseCompleted: true`
 2. **Toast Missing:** Check toast component styles and z-index
 3. **Download Fails:** Check browser console for html2canvas/jsPDF errors

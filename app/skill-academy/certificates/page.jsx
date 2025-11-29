@@ -28,7 +28,7 @@ export default function CertificatesPage() {
         }
       }
     }
-    
+
     // Fetch completed courses
     const fetchCertificates = async () => {
       try {
@@ -74,11 +74,15 @@ export default function CertificatesPage() {
               
               <p style="font-size: 20px; margin: 20px 0; color: #92400e;">has successfully completed the course</p>
               
-              <h3 style="font-size: 32px; font-style: italic; margin: 20px 0; color: #78350f;">${course.title}</h3>
+              <h3 style="font-size: 32px; font-style: italic; margin: 20px 0; color: #78350f;">${
+                course.title
+              }</h3>
               
               <div style="margin-top: 40px; color: #92400e; font-size: 14px;">
                 <p>Date: ${new Date().toLocaleDateString()}</p>
-                <p style="margin-top: 10px; font-size: 12px;">Certificate ID: ${course._id}-${Date.now()}</p>
+                <p style="margin-top: 10px; font-size: 12px;">Certificate ID: ${
+                  course._id
+                }-${Date.now()}</p>
               </div>
               
               <p style="font-size: 16px; font-style: italic; margin-top: 30px; color: #92400e;">Issued by Sabka Academy</p>
@@ -142,7 +146,10 @@ export default function CertificatesPage() {
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-l from-[#9463a8]/30 to-[#692c7a]/15 rounded-full blur-3xl animate-pulse" />
         </div>
         <div className="relative z-10 flex items-center justify-center min-h-screen">
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          >
             <Award className="w-16 h-16 text-[#9463a8]" />
           </motion.div>
         </div>
@@ -173,7 +180,9 @@ export default function CertificatesPage() {
             Back
           </button>
 
-          <h1 className="text-4xl font-bold text-white mb-2">Your Certificates</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">
+            Your Certificates
+          </h1>
           <p className="text-gray-300">Download and share your achievements</p>
         </motion.div>
 
@@ -197,14 +206,21 @@ export default function CertificatesPage() {
                   <div className="mb-4 p-4 bg-gradient-to-b from-amber-50 to-amber-100 rounded-lg border-2 border-amber-800">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-amber-700 mx-auto mb-2" />
-                      <p className="text-sm font-bold text-amber-900">{course.title}</p>
+                      <p className="text-sm font-bold text-amber-900">
+                        {course.title}
+                      </p>
                     </div>
                   </div>
 
                   {/* Course Info */}
-                  <h3 className="text-lg font-bold text-white mb-2">{course.title}</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    {course.title}
+                  </h3>
                   <p className="text-sm text-gray-300 mb-4">
-                    Completed on {new Date(course.completedAt || Date.now()).toLocaleDateString()}
+                    Completed on{" "}
+                    {new Date(
+                      course.completedAt || Date.now()
+                    ).toLocaleDateString()}
                   </p>
 
                   {/* Download Buttons */}
@@ -241,7 +257,9 @@ export default function CertificatesPage() {
               className="text-center py-16"
             >
               <Award className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-white mb-2">No Certificates Yet</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                No Certificates Yet
+              </h2>
               <p className="text-gray-300 mb-6">
                 Complete courses to earn and download your certificates
               </p>

@@ -202,13 +202,13 @@ export default function CourseDetailPage() {
 
     try {
       setPurchasingBundle(true);
-      
+
       // Show demo/trial toast
       customToast.info(
         "Demo Purchase Mode",
         "In production, this would redirect to payment gateway. Purchase recorded for testing."
       );
-      
+
       await purchaseService.create({
         type: "full_course",
         courseId: courseData._id,
@@ -233,9 +233,11 @@ export default function CourseDetailPage() {
       "Demo Access Enabled",
       "You can now preview the course content. Purchase to unlock full access and earn certificates."
     );
-    
+
     // Scroll to content
-    document.getElementById("course-content")?.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("course-content")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleModulePurchase = async (moduleId, isFreeModule) => {

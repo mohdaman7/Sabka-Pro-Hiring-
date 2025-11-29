@@ -39,34 +39,38 @@
 
 ## 📁 File Locations
 
-| Feature | File | Lines | Purpose |
-|---------|------|-------|---------|
-| **Demo Button** | `/app/skill-academy/courses/[id]/page.jsx` | 229-231 | Handle demo click |
-| **Buy Button Logic** | `/app/skill-academy/courses/[id]/page.jsx` | 197-227 | Purchase handler |
-| **Buy Button UI** | `/app/skill-academy/courses/[id]/page.jsx` | 768-792 | Button display |
-| **Demo Button UI** | `/app/skill-academy/courses/[id]/page.jsx` | 794-802 | Demo button display |
-| **Certificate Modal** | `/components/ui/CertificateModal.jsx` | Full | Cert design & download |
-| **Certificates Page** | `/app/skill-academy/certificates/page.jsx` | Full | Cert listing view |
-| **Video Player** | `/components/ui/VideoPlayer.jsx` | Full | Video & watermark |
-| **Lesson View** | `/components/ui/LessonView.jsx` | Full | Two-column layout |
-| **Lesson Page** | `/app/skill-academy/courses/[id]/lesson/[lessonId]/page.jsx` | Full | Cert modal integration |
+| Feature               | File                                                         | Lines   | Purpose                |
+| --------------------- | ------------------------------------------------------------ | ------- | ---------------------- |
+| **Demo Button**       | `/app/skill-academy/courses/[id]/page.jsx`                   | 229-231 | Handle demo click      |
+| **Buy Button Logic**  | `/app/skill-academy/courses/[id]/page.jsx`                   | 197-227 | Purchase handler       |
+| **Buy Button UI**     | `/app/skill-academy/courses/[id]/page.jsx`                   | 768-792 | Button display         |
+| **Demo Button UI**    | `/app/skill-academy/courses/[id]/page.jsx`                   | 794-802 | Demo button display    |
+| **Certificate Modal** | `/components/ui/CertificateModal.jsx`                        | Full    | Cert design & download |
+| **Certificates Page** | `/app/skill-academy/certificates/page.jsx`                   | Full    | Cert listing view      |
+| **Video Player**      | `/components/ui/VideoPlayer.jsx`                             | Full    | Video & watermark      |
+| **Lesson View**       | `/components/ui/LessonView.jsx`                              | Full    | Two-column layout      |
+| **Lesson Page**       | `/app/skill-academy/courses/[id]/lesson/[lessonId]/page.jsx` | Full    | Cert modal integration |
 
 ---
 
 ## 🎯 Core Functions
 
 ### 1. Handle Demo Button Click
+
 **Function:** `handleTryCourse()`
 **Location:** `/app/skill-academy/courses/[id]/page.jsx` line 229
 **Does:**
+
 - Shows info toast
 - Scrolls to course content
 - No purchase or access granted
 
 ### 2. Handle Buy Button Click
+
 **Function:** `handleBundleAction()`
 **Location:** `/app/skill-academy/courses/[id]/page.jsx` line 197
 **Does:**
+
 - Shows demo purchase toast
 - Makes API call to `/api/purchases`
 - Shows success toast
@@ -74,8 +78,10 @@
 - Triggers success animation
 
 ### 3. Handle Lesson Completion
+
 **Location:** `/app/skill-academy/courses/[id]/lesson/[lessonId]/page.jsx`
 **Does:**
+
 - API call to `/api/progress/mark-complete`
 - Checks if course fully completed
 - Shows certificate modal if done
@@ -85,18 +91,19 @@
 
 ## 🔌 API Endpoints
 
-| Endpoint | Method | Purpose | Response |
-|----------|--------|---------|----------|
-| `/api/purchases` | POST | Buy course | `{ success: true }` |
-| `/api/progress/mark-complete` | POST | Mark lesson done | `{ courseCompleted: boolean }` |
-| `/api/progress/course/[id]` | GET | Check completion | `{ courseCompleted: boolean }` |
-| `/api/progress/completed-courses` | GET | Get all certs | `Array[{ title, completedAt }]` |
+| Endpoint                          | Method | Purpose          | Response                        |
+| --------------------------------- | ------ | ---------------- | ------------------------------- |
+| `/api/purchases`                  | POST   | Buy course       | `{ success: true }`             |
+| `/api/progress/mark-complete`     | POST   | Mark lesson done | `{ courseCompleted: boolean }`  |
+| `/api/progress/course/[id]`       | GET    | Check completion | `{ courseCompleted: boolean }`  |
+| `/api/progress/completed-courses` | GET    | Get all certs    | `Array[{ title, completedAt }]` |
 
 ---
 
 ## 🎨 Key UI Elements
 
 ### Buttons
+
 ```
 Buy Button:
 - Color: Purple gradient #692c7a → #9463a8
@@ -111,6 +118,7 @@ Demo Button:
 ```
 
 ### Toasts
+
 ```
 Info Toast (Demo/Start):
 - Color: Blue
@@ -124,6 +132,7 @@ Success Toast (Unlocked):
 ```
 
 ### Certificate
+
 ```
 - Style: Golden/Amber gradient
 - Shows: Name, Course, Date, ID
@@ -136,11 +145,13 @@ Success Toast (Unlocked):
 ## 🧪 Test Scenarios
 
 ### Fast Test (5 minutes)
+
 1. Click Demo button → See toast
 2. Click Buy button → See spinner & toasts
 3. Complete lesson → See progress update
 
 ### Full Test (70 minutes)
+
 Follow `PURCHASE_CERTIFICATE_TESTING.md` with 10 detailed scenarios
 
 ---
@@ -148,32 +159,31 @@ Follow `PURCHASE_CERTIFICATE_TESTING.md` with 10 detailed scenarios
 ## 💻 Code Snippets
 
 ### Display Demo Button
+
 ```javascript
-{!hasFullBundleAccess && !isFreeBundle && (
-  <button
-    onClick={handleTryCourse}
-    className="w-full px-6 py-3 mt-3 border-2 border-white/30 hover:border-white/60 rounded-xl font-semibold text-white transition-all hover:bg-white/5 flex items-center justify-center gap-2"
-  >
-    <Play className="w-5 h-5" />
-    Try Course Demo
-  </button>
-)}
+{
+  !hasFullBundleAccess && !isFreeBundle && (
+    <button
+      onClick={handleTryCourse}
+      className="w-full px-6 py-3 mt-3 border-2 border-white/30 hover:border-white/60 rounded-xl font-semibold text-white transition-all hover:bg-white/5 flex items-center justify-center gap-2"
+    >
+      <Play className="w-5 h-5" />
+      Try Course Demo
+    </button>
+  );
+}
 ```
 
 ### Show Toast Notification
-```javascript
-customToast.info(
-  "Title",
-  "Your message here"
-);
 
-customToast.success(
-  "Success Title",
-  "Success message"
-);
+```javascript
+customToast.info("Title", "Your message here");
+
+customToast.success("Success Title", "Success message");
 ```
 
 ### Check Course Completion
+
 ```javascript
 const response = await axios.get(`/api/progress/course/${courseId}`);
 if (response.data?.courseCompleted) {
@@ -186,20 +196,21 @@ if (response.data?.courseCompleted) {
 
 ## 🔑 Key Variables
 
-| Variable | Source | Purpose |
-|----------|--------|---------|
-| `courseData._id` | API response | Course identifier |
-| `purchasingBundle` | State | Track purchase in progress |
-| `hasFullBundleAccess` | Computed | Check if user owns course |
-| `showCertificate` | State | Toggle certificate modal |
-| `studentName` | localStorage | Display on certificate |
-| `studentEmail` | localStorage | Watermark on video |
+| Variable              | Source       | Purpose                    |
+| --------------------- | ------------ | -------------------------- |
+| `courseData._id`      | API response | Course identifier          |
+| `purchasingBundle`    | State        | Track purchase in progress |
+| `hasFullBundleAccess` | Computed     | Check if user owns course  |
+| `showCertificate`     | State        | Toggle certificate modal   |
+| `studentName`         | localStorage | Display on certificate     |
+| `studentEmail`        | localStorage | Watermark on video         |
 
 ---
 
 ## 📊 Flow Diagrams
 
 ### Simple Flow
+
 ```
 User → Demo Button → Toast
 User → Buy Button → Processing → Success Toast → Redirect
@@ -207,6 +218,7 @@ User → Complete Lessons → Certificate Modal → Download
 ```
 
 ### Detailed Flow
+
 ```
 1. Browse Course Detail Page
    ↓
@@ -227,16 +239,19 @@ User → Complete Lessons → Certificate Modal → Download
 ## 🛠️ Configuration
 
 ### Toast Duration
+
 **File:** `/components/ui/toast.js`
 **Default:** 3 seconds
 **Change:** Modify `setTimeout` value
 
 ### Certificate Colors
+
 **File:** `/components/ui/CertificateModal.jsx`
 **Colors:** Amber/Gold theme
 **Change:** Update Tailwind classes
 
 ### Button Styling
+
 **File:** `/app/skill-academy/courses/[id]/page.jsx`
 **Change:** Modify className props
 
@@ -244,13 +259,13 @@ User → Complete Lessons → Certificate Modal → Download
 
 ## ⚠️ Common Issues & Fixes
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
+| Issue               | Cause                | Fix                  |
+| ------------------- | -------------------- | -------------------- |
 | Button not updating | State not refreshing | Clear cache & reload |
-| Toast not showing | z-index conflict | Check CSS |
-| Certificate missing | API not responding | Check network tab |
-| Download failing | Browser permission | Enable downloads |
-| Name not showing | localStorage empty | Check user login |
+| Toast not showing   | z-index conflict     | Check CSS            |
+| Certificate missing | API not responding   | Check network tab    |
+| Download failing    | Browser permission   | Enable downloads     |
+| Name not showing    | localStorage empty   | Check user login     |
 
 ---
 
@@ -292,6 +307,7 @@ Edge Cases:
 ## 🚀 Deployment
 
 Before going live:
+
 - [ ] Test all scenarios from checklist
 - [ ] Verify API endpoints responding
 - [ ] Test on mobile devices
@@ -340,14 +356,14 @@ A: Currently downloadable locally, can add sharing
 
 ## 📚 Documentation Files
 
-| File | Purpose | Length |
-|------|---------|--------|
-| `PURCHASE_QUICK_START.md` | Quick overview | 280 lines |
-| `PURCHASE_CERTIFICATE_TESTING.md` | Detailed tests | 470 lines |
-| `PURCHASE_CERTIFICATE_IMPLEMENTATION.md` | Technical guide | 380 lines |
-| `VISUAL_GUIDE.md` | UI/UX reference | 400+ lines |
-| `IMPLEMENTATION_COMPLETE.md` | Full report | 450+ lines |
-| `README.md` (this file) | Quick reference | 280 lines |
+| File                                     | Purpose         | Length     |
+| ---------------------------------------- | --------------- | ---------- |
+| `PURCHASE_QUICK_START.md`                | Quick overview  | 280 lines  |
+| `PURCHASE_CERTIFICATE_TESTING.md`        | Detailed tests  | 470 lines  |
+| `PURCHASE_CERTIFICATE_IMPLEMENTATION.md` | Technical guide | 380 lines  |
+| `VISUAL_GUIDE.md`                        | UI/UX reference | 400+ lines |
+| `IMPLEMENTATION_COMPLETE.md`             | Full report     | 450+ lines |
+| `README.md` (this file)                  | Quick reference | 280 lines  |
 
 ---
 
@@ -372,6 +388,7 @@ A: Currently downloadable locally, can add sharing
 ## 📞 Support
 
 For issues:
+
 1. Check browser console for errors
 2. Check network tab for API calls
 3. Refer to debugging section in testing guide

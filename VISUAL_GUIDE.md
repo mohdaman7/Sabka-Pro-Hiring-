@@ -5,6 +5,7 @@
 ### 1. Course Detail Page - Before vs After
 
 #### BEFORE (Course Page Without Demo Button)
+
 ```
 ┌─────────────────────────────────────────┐
 │          Course Detail Page             │
@@ -14,7 +15,7 @@
 │  Description                            │
 │  Video Player                           │
 │                                          │
-│  Course Content                         │  
+│  Course Content                         │
 │  Modules & Lessons                      │
 │                                          │
 │                          ┌────────────┐ │
@@ -25,6 +26,7 @@
 ```
 
 #### AFTER (With New Demo Button)
+
 ```
 ┌─────────────────────────────────────────┐
 │          Course Detail Page             │
@@ -34,7 +36,7 @@
 │  Description                            │
 │  Video Player                           │
 │                                          │
-│  Course Content                         │  
+│  Course Content                         │
 │  Modules & Lessons                      │
 │                                          │
 │                          ┌──────────────────┐
@@ -56,6 +58,7 @@
 #### BUY BUTTON - Different States
 
 **State 1: Normal (Not Purchased)**
+
 ```
 ┌─────────────────────────────────────────┐
 │ 🛒 Buy Complete Bundle                   │
@@ -64,6 +67,7 @@
 ```
 
 **State 2: Processing (Clicked)**
+
 ```
 ┌─────────────────────────────────────────┐
 │ 🛒⟳ Processing...                        │
@@ -72,6 +76,7 @@
 ```
 
 **State 3: Success (Already Purchased)**
+
 ```
 ┌─────────────────────────────────────────┐
 │ ✓ Go to Course                           │
@@ -82,6 +87,7 @@
 #### TRY DEMO BUTTON - States
 
 **Normal State**
+
 ```
 ┌─────────────────────────────────────────┐
 │ ▶ Try Course Demo                        │
@@ -90,6 +96,7 @@
 ```
 
 **Hover State**
+
 ```
 ┌─────────────────────────────────────────┐
 │ ▶ Try Course Demo                        │
@@ -98,6 +105,7 @@
 ```
 
 **When Hidden (Already Purchased)**
+
 ```
 [Button doesn't appear]
 ```
@@ -107,6 +115,7 @@
 ### 3. Toast Notifications - What You'll See
 
 #### Demo Button Toast
+
 ```
 ╔════════════════════════════════════════════╗
 ║ ℹ️  Demo Access Enabled                    ║
@@ -118,9 +127,11 @@
 ║ [Auto-close in 3 seconds]                 ║
 ╚════════════════════════════════════════════╝
 ```
+
 Position: Top-right corner
 
 #### Buy Button - Start Toast
+
 ```
 ╔════════════════════════════════════════════╗
 ║ ℹ️  Demo Purchase Mode                     ║
@@ -134,6 +145,7 @@ Position: Top-right corner
 ```
 
 #### Buy Button - Success Toast
+
 ```
 ╔════════════════════════════════════════════╗
 ║ ✓ Course unlocked!                         ║
@@ -151,6 +163,7 @@ Position: Top-right corner
 ### 4. Lesson Completion Flow
 
 #### Lesson View (Two-Column Layout)
+
 ```
 ┌────────────────────────────────────────────────────────┐
 │           Lesson View                                  │
@@ -174,6 +187,7 @@ Position: Top-right corner
 ```
 
 #### Watermark on Video
+
 ```
 ┌──────────────────────────────────────────┐
 │ 📧 student@example.com                    │
@@ -192,6 +206,7 @@ Position: Top-right corner
 ### 5. Certificate Modal - On Completion
 
 #### When Last Lesson Completed
+
 ```
 ╔════════════════════════════════════════════════════════╗
 ║                  Certificate Modal                    ║
@@ -225,6 +240,7 @@ Position: Top-right corner
 ```
 
 #### Certificate Design Elements
+
 - **Background:** Golden/Amber gradient (parchment effect)
 - **Border:** Decorative corner elements
 - **Icons:** Award and certificate icons
@@ -237,6 +253,7 @@ Position: Top-right corner
 ### 6. Certificates Page - `/skill-academy/certificates`
 
 #### Desktop View (3 Columns)
+
 ```
 ┌──────────────────────────────────────────────────────┐
 │  My Certificates                                     │
@@ -271,6 +288,7 @@ Position: Top-right corner
 ```
 
 #### Mobile View (1 Column)
+
 ```
 ┌────────────────────────┐
 │ My Certificates        │
@@ -304,6 +322,7 @@ Position: Top-right corner
 ```
 
 #### Empty State (No Certificates)
+
 ```
 ┌────────────────────────────────────────┐
 │  My Certificates                       │
@@ -326,6 +345,7 @@ Position: Top-right corner
 ### 7. Download File Names
 
 #### PDF Download
+
 ```
 When you download, you get file:
 
@@ -337,6 +357,7 @@ Format: A4 Landscape
 ```
 
 #### PNG Download
+
 ```
 When you download, you get file:
 
@@ -374,7 +395,7 @@ STUDENT JOURNEY - Visual Timeline
    ├─ See Watermark (email + logo)
    ├─ Mark Lesson Complete
    └─ Toast: "Lesson Complete"
-   
+
    (Repeat for each lesson)
 
 3. COMPLETE COURSE
@@ -411,6 +432,7 @@ STUDENT JOURNEY - Visual Timeline
 ### 9. Color & Style Reference
 
 #### Buttons
+
 ```
 Buy Complete Bundle (Primary)
 ┌────────────────────────────┐
@@ -432,6 +454,7 @@ Try Demo (Secondary)
 ```
 
 #### Toasts
+
 ```
 Info Toast (Blue)
 ╔────────────────────────╗
@@ -449,6 +472,7 @@ Success Toast (Green)
 ```
 
 #### Certificate Colors
+
 ```
 Main Certificate:
 - Background: Amber gradient (gold parchment effect)
@@ -463,6 +487,7 @@ Main Certificate:
 ### 10. Responsive Breakpoints
 
 #### Mobile (< 768px)
+
 - Buttons stack vertically
 - One column certificate grid
 - Sidebar on lesson view stacks below video
@@ -470,12 +495,14 @@ Main Certificate:
 - Larger touch targets
 
 #### Tablet (768px - 1024px)
+
 - Buttons side-by-side (if space allows)
 - Two column certificate grid
 - Lesson view: video top, sidebar below (or side by side)
 - Better spacing
 
 #### Desktop (> 1024px)
+
 - Buttons horizontal layout
 - Three column certificate grid
 - Two-column lesson layout (video 2/3, sidebar 1/3)
@@ -486,6 +513,7 @@ Main Certificate:
 ### 11. Animation Examples
 
 #### Button Hover Effects
+
 ```
 Buy Button:
   Hover → Darker gradient + Larger shadow
@@ -499,6 +527,7 @@ Processing:
 ```
 
 #### Toast Animations
+
 ```
 Appearance:
   Slide-in from top-right
@@ -511,6 +540,7 @@ Disappearance:
 ```
 
 #### Modal Animations
+
 ```
 Certificate Modal:
   Spring animation on appear
@@ -527,6 +557,7 @@ Download Button:
 ### 12. Error States
 
 #### Network Error
+
 ```
 ╔════════════════════════════════════════╗
 ║ ✗ Error                                ║
@@ -540,6 +571,7 @@ Download Button:
 ```
 
 #### Download Error
+
 ```
 ╔════════════════════════════════════════╗
 ║ ✗ Download Failed                      ║
@@ -553,14 +585,14 @@ Download Button:
 
 ## 🎬 Animation Timing
 
-| Animation | Duration | Type |
-|-----------|----------|------|
-| Button hover | 200ms | Spring |
-| Toast appear | 200ms | Spring |
-| Toast disappear | 300ms | Fade |
-| Modal appear | 300ms | Spring |
-| Spinner | Continuous | Rotate |
-| Download status | Instant | Spinner → Done |
+| Animation       | Duration   | Type           |
+| --------------- | ---------- | -------------- |
+| Button hover    | 200ms      | Spring         |
+| Toast appear    | 200ms      | Spring         |
+| Toast disappear | 300ms      | Fade           |
+| Modal appear    | 300ms      | Spring         |
+| Spinner         | Continuous | Rotate         |
+| Download status | Instant    | Spinner → Done |
 
 ---
 
