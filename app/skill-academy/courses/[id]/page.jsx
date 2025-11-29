@@ -204,14 +204,31 @@ export default function CourseDetailPage() {
       return;
     }
 
+    // Check if user is logged in
+    const user = localStorage.getItem("skillAcademyUser");
+    const token = localStorage.getItem("skillAcademyToken");
+
+    if (!user || !token) {
+      customToast.error(
+        "Login Required",
+        "Please login to your Sabka Skill Academy account to purchase courses."
+      );
+      router.push("/skill-academy/login");
+      return;
+    }
+
+    // Show purchase confirmation alert
+    const confirmed = window.confirm(
+      `Are you sure you want to purchase "${courseData.name}"?\n\nPrice: ₹${courseData?.pricing?.bundlePrice || 0}\n\nClick OK to confirm and complete your purchase.`
+    );
+
+    if (!confirmed) {
+      customToast.info("Purchase Cancelled", "Purchase was not completed.");
+      return;
+    }
+
     try {
       setPurchasingBundle(true);
-
-      // Show demo/trial toast
-      customToast.info(
-        "Demo Purchase Mode",
-        "In production, this would redirect to payment gateway. Purchase recorded for testing."
-      );
 
       await purchaseService.create({
         type: "full_course",
@@ -220,13 +237,29 @@ export default function CourseDetailPage() {
 
       triggerSuccessAnimation({ type: "achievement" });
       customToast.success(
-        "Course unlocked!",
+        "Course Unlocked! 🎉",
         "You now have full access to all modules. Complete the course to earn your certificate!"
       );
 
-      router.push(`/student/courses/${courseData._id}`);
+      // Refresh access list to show purchased course
+      try {
+        const access = await courseService.myAccess();
+        setMyAccess(access || []);
+      } catch {
+        setMyAccess([]);
+      }
+
+      // Redirect to course
+      setTimeout(() => {
+        router.push(`/student/courses/${courseData._id}`);
+      }, 2000);
     } catch (error) {
-      handleApiError(error, "Purchase Course");
+      console.error("Purchase error:", error);
+      const errorMsg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to complete purchase. Please try again.";
+      customToast.error("Purchase Failed", errorMsg);
     } finally {
       setPurchasingBundle(false);
     }
@@ -252,6 +285,34 @@ export default function CourseDetailPage() {
       return;
     }
 
+    // Check if user is logged in
+    const user = localStorage.getItem("skillAcademyUser");
+    const token = localStorage.getItem("skillAcademyToken");
+
+    if (!user || !token) {
+      customToast.error(
+        "Login Required",
+        "Please login to your Sabka Skill Academy account to purchase modules."
+      );
+      router.push("/skill-academy/login");
+      return;
+    }
+
+    // Find module details for confirmation
+    const module = modules.find((m) => m._id === moduleId);
+    const moduleName = module?.name || "Module";
+    const modulePrice = module?.pricing?.individualPrice || 0;
+
+    // Show purchase confirmation alert
+    const confirmed = window.confirm(
+      `Are you sure you want to purchase "${moduleName}"?\n\nPrice: ₹${modulePrice}\n\nClick OK to confirm and complete your purchase.`
+    );
+
+    if (!confirmed) {
+      customToast.info("Purchase Cancelled", "Purchase was not completed.");
+      return;
+    }
+
     try {
       setPurchasingModuleId(moduleId);
       await purchaseService.create({
@@ -261,13 +322,29 @@ export default function CourseDetailPage() {
 
       triggerSuccessAnimation({ type: "achievement" });
       customToast.success(
-        "Module purchased!",
+        "Module Unlocked! 🎉",
         "You now have access to this module."
       );
 
-      router.push(`/student/courses/${moduleId}`);
+      // Refresh access list to show purchased module
+      try {
+        const access = await courseService.myAccess();
+        setMyAccess(access || []);
+      } catch {
+        setMyAccess([]);
+      }
+
+      // Redirect to module
+      setTimeout(() => {
+        router.push(`/student/courses/${moduleId}`);
+      }, 2000);
     } catch (error) {
-      handleApiError(error, "Purchase Module");
+      console.error("Purchase error:", error);
+      const errorMsg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to complete purchase. Please try again.";
+      customToast.error("Purchase Failed", errorMsg);
     } finally {
       setPurchasingModuleId(null);
     }
