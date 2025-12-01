@@ -22,6 +22,7 @@ import {
   TrendingUp,
   ShoppingCart,
   CheckCircle2,
+  Circle,
 } from "lucide-react";
 
 const isValidObjectId = (value) =>
@@ -40,6 +41,7 @@ export default function CourseDetailPage() {
   const [purchasingBundle, setPurchasingBundle] = useState(false);
   const [purchasingModuleId, setPurchasingModuleId] = useState(null);
   const [myAccess, setMyAccess] = useState([]);
+  const [completedLessons, setCompletedLessons] = useState(new Set());
   const [userEmail, setUserEmail] = useState("user@sabka.com");
 
   // Get user email from localStorage
@@ -96,6 +98,18 @@ export default function CourseDetailPage() {
           // Only set myAccess to empty - don't redirect
           setMyAccess([]);
           console.log("No user access data (user not logged in)");
+        }
+
+        // Try to get lesson progress
+        try {
+          const progress = await courseService.myProgress(id);
+          if (progress && progress.completedLessons) {
+            setCompletedLessons(new Set(progress.completedLessons));
+          }
+        } catch (progressError) {
+          // Progress fetch failed, just show no completed lessons
+          setCompletedLessons(new Set());
+          console.log("No progress data available");
         }
       } catch (err) {
         const message = handleApiError(err, "Loading course");
@@ -219,7 +233,9 @@ export default function CourseDetailPage() {
 
     // Show purchase confirmation alert
     const confirmed = window.confirm(
-      `Are you sure you want to purchase "${courseData.name}"?\n\nPrice: ₹${courseData?.pricing?.bundlePrice || 0}\n\nClick OK to confirm and complete your purchase.`
+      `Are you sure you want to purchase "${courseData.name}"?\n\nPrice: ₹${
+        courseData?.pricing?.bundlePrice || 0
+      }\n\nClick OK to confirm and complete your purchase.`
     );
 
     if (!confirmed) {
@@ -697,7 +713,7 @@ export default function CourseDetailPage() {
                           {mod.lessons
                             .sort((a, b) => (a.order || 0) - (b.order || 0))
                             .map((l) => {
-                              const locked = !l.isFreePreview;
+                              const locked = !isOwnedModule && !l.isFreePreview;
                               return (
                                 <div
                                   key={l._id}
@@ -708,52 +724,90 @@ export default function CourseDetailPage() {
                                       );
                                     }
                                   }}
-                                  className={`flex items-center gap-3 p-3 rounded-lg transition-all mt-2 ${
+                                  className={`flex items-center gap-3 p-4 rounded-lg transition-all duration-300 mt-2 group ${
                                     locked
-                                      ? "bg-white/[0.02]"
-                                      : "bg-[#692c7a]/5 border border-[#9463a8]/20 cursor-pointer hover:bg-[#692c7a]/10"
+                                      ? "bg-gradient-to-r from-white/[0.02] to-white/[0.01] border border-white/5 hover:border-red-500/30"
+                                      : "bg-gradient-to-r from-[#692c7a]/10 to-[#9463a8]/5 border-2 border-[#9463a8]/40 cursor-pointer hover:bg-gradient-to-r hover:from-[#692c7a]/20 hover:to-[#9463a8]/15 hover:border-[#9463a8]/60 hover:shadow-lg hover:shadow-[#9463a8]/20"
                                   }`}
                                 >
+                                  {/* Lock/Play Icon */}
                                   <div
-                                    className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                    className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                                       locked
-                                        ? "bg-white/[0.05]"
-                                        : "bg-[#692c7a]/20"
+                                        ? "bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/40 text-red-400"
+                                        : "bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 border border-emerald-500/50 text-emerald-300 group-hover:from-emerald-500/40 group-hover:to-emerald-600/30 group-hover:shadow-lg group-hover:shadow-emerald-500/30"
                                     }`}
                                   >
                                     {locked ? (
-                                      <Lock className="w-4 h-4 text-gray-500" />
+                                      <Lock className="w-5 h-5 font-bold" />
                                     ) : (
-                                      <Play className="w-4 h-4 text-[#e9d5ff]" />
+                                      <Play className="w-5 h-5 font-bold fill-current" />
                                     )}
                                   </div>
-                                  <div className="flex-1 min-w-0">
+
+                                  {/* Lesson Info */}
+                                  <div className={`flex-1 min-w-0 transition-opacity duration-300 ${
+                                    locked ? "opacity-60" : completedLessons.has(l._id) ? "opacity-100" : "opacity-75"
+                                  }`}>
                                     <div className="flex items-center gap-2 mb-1">
                                       <h4
-                                        className={`text-sm font-medium flex-1 ${
+                                        className={`text-sm font-semibold flex-1 transition-colors duration-300 ${
                                           locked
                                             ? "text-gray-500"
-                                            : "text-white"
+                                            : completedLessons.has(l._id)
+                                            ? "text-white group-hover:text-emerald-100"
+                                            : "text-gray-300 group-hover:text-white"
                                         }`}
                                       >
                                         {l.title}
                                       </h4>
+                                      {completedLessons.has(l._id) && (
+                                        <span className="px-2 py-1 bg-gradient-to-r from-emerald-500/30 to-teal-500/20 border border-emerald-500/50 rounded-md text-xs font-semibold text-emerald-200 flex items-center gap-1">
+                                          <CheckCircle2 className="w-3 h-3" />
+                                          Completed
+                                        </span>
+                                      )}
+                                      {!completedLessons.has(l._id) && !locked && (
+                                        <span className="px-2 py-1 bg-gradient-to-r from-gray-500/20 to-gray-600/10 border border-gray-500/40 rounded-md text-xs font-semibold text-gray-300 flex items-center gap-1">
+                                          <Circle className="w-3 h-3" />
+                                          Unwatched
+                                        </span>
+                                      )}
                                       {l.isFreePreview && (
-                                        <span className="px-2 py-0.5 bg-green-500/20 border border-green-500/30 rounded text-xs font-semibold text-green-300">
-                                          Preview
+                                        <span className="px-2.5 py-1 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/40 rounded-md text-xs font-semibold text-blue-200">
+                                          Free Preview
                                         </span>
                                       )}
                                     </div>
                                     <span
-                                      className={`text-[13px] font-medium ${
+                                      className={`text-[13px] font-medium transition-colors duration-300 ${
                                         locked
-                                          ? "text-gray-400"
-                                          : "text-gray-100"
+                                          ? "text-gray-500"
+                                          : completedLessons.has(l._id)
+                                          ? "text-gray-300 group-hover:text-emerald-100"
+                                          : "text-gray-400 group-hover:text-gray-300"
                                       }`}
                                     >
                                       {formatDuration(l.durationSec)}
                                     </span>
                                   </div>
+
+                                  {/* Status Indicator */}
+                                  {locked && (
+                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/40 flex-shrink-0">
+                                      <Lock className="w-4 h-4 text-red-400" />
+                                    </div>
+                                  )}
+                                  {!locked && completedLessons.has(l._id) && (
+                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/40 border border-emerald-500/60 flex-shrink-0 group-hover:bg-emerald-500/50 transition-colors duration-300">
+                                      <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                                    </div>
+                                  )}
+                                  {!locked && !completedLessons.has(l._id) && (
+                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/30 border border-emerald-500/50 flex-shrink-0 group-hover:bg-emerald-500/40 transition-colors duration-300">
+                                      <Play className="w-4 h-4 text-emerald-300" />
+                                    </div>
+                                  )}
                                 </div>
                               );
                             })}
