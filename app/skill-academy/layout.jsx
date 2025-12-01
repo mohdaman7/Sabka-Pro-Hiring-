@@ -20,6 +20,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SkillAcademyFooter from "@/components/ui/SkillAcademyFooter";
+import { SocketProvider, useSocket } from "@/context/SocketContext";
 
 /**
  * SkillAcademyLayout
@@ -78,29 +79,16 @@ const DesktopHeader = () => {
   const [notificationDropdownOpen, setNotificationDropdownOpen] =
     useState(false);
   const [user, setUser] = useState(null);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      message: "Welcome to Skill Academy!",
-      time: "2 hours ago",
-      read: false,
-    },
-    {
-      id: 2,
-      message: "Your course Figma Basics is now available",
-      time: "1 day ago",
-      read: false,
-    },
-    {
-      id: 3,
-      message: "You completed module 3",
-      time: "2 days ago",
-      read: true,
-    },
-  ]);
   const pathname = usePathname();
   const router = useRouter();
-  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  // Use socket notifications from context
+  const {
+    notifications: socketNotifications,
+    unreadCount,
+    markAsRead,
+    isConnected,
+  } = useSocket();
 
   // Load user from localStorage and setup scroll listener
   useEffect(() => {
@@ -253,10 +241,15 @@ const DesktopHeader = () => {
 
                         {/* Notifications List */}
                         <div className="max-h-96 overflow-y-auto">
-                          {notifications.length > 0 ? (
-                            notifications.map((notification) => (
+                          {socketNotifications.length > 0 ? (
+                            socketNotifications.map((notification) => (
                               <motion.div
-                                key={notification.id}
+                                key={notification._id}
+                                onClick={() => {
+                                  if (!notification.read && markAsRead) {
+                                    markAsRead(notification._id);
+                                  }
+                                }}
                                 whileHover={{
                                   backgroundColor: "rgba(105, 44, 122, 0.1)",
                                 }}
@@ -269,11 +262,19 @@ const DesktopHeader = () => {
                                     <div className="w-2 h-2 bg-[#d8b4f0] rounded-full mt-1.5 flex-shrink-0" />
                                   )}
                                   <div className="flex-1 min-w-0">
+                                    <p className="font-semibold text-xs text-gray-100 mb-1">
+                                      {notification.title}
+                                    </p>
                                     <p className="text-sm text-gray-200 leading-relaxed">
                                       {notification.message}
                                     </p>
                                     <p className="text-xs text-gray-500 mt-1">
-                                      {notification.time}
+                                      {new Date(
+                                        notification.createdAt
+                                      ).toLocaleDateString("en-US", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })}
                                     </p>
                                   </div>
                                 </div>
@@ -282,7 +283,7 @@ const DesktopHeader = () => {
                           ) : (
                             <div className="p-6 text-center">
                               <p className="text-sm text-gray-400">
-                                No notifications
+                                No notifications yet
                               </p>
                             </div>
                           )}
@@ -568,48 +569,50 @@ export default function SkillAcademyLayout({ children }) {
   const isRegisterPage = pathname === "/skill-academy/register";
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden">
-      {/* Layout background — only show when NOT on course detail pages or register page */}
-      {!isCourseDetail && !isRegisterPage && (
-        <div className="fixed inset-0 -z-10 w-full h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
+    <SocketProvider>
+      <div className="relative min-h-screen w-full overflow-x-hidden">
+        {/* Layout background — only show when NOT on course detail pages or register page */}
+        {!isCourseDetail && !isRegisterPage && (
+          <div className="fixed inset-0 -z-10 w-full h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
 
-          <motion.div
-            className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/15 rounded-full blur-3xl"
-            animate={{
-              y: [0, 30, 0],
-              x: [0, 20, 0],
-            }}
-            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
-          />
+            <motion.div
+              className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/15 rounded-full blur-3xl"
+              animate={{
+                y: [0, 30, 0],
+                x: [0, 20, 0],
+              }}
+              transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
+            />
 
-          <motion.div
-            className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-[#8b4fa8]/30 to-[#692c7a]/10 rounded-full blur-3xl"
-            animate={{
-              y: [0, -30, 0],
-              x: [0, -20, 0],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: 1,
-            }}
-          />
-        </div>
-      )}
+            <motion.div
+              className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-l from-[#8b4fa8]/30 to-[#692c7a]/10 rounded-full blur-3xl"
+              animate={{
+                y: [0, -30, 0],
+                x: [0, -20, 0],
+              }}
+              transition={{
+                duration: 10,
+                repeat: Number.POSITIVE_INFINITY,
+                delay: 1,
+              }}
+            />
+          </div>
+        )}
 
-      {!isRegisterPage && <DesktopHeader />}
+        {!isRegisterPage && <DesktopHeader />}
 
-      <main
-        className={`relative z-10 ${
-          !isRegisterPage ? "pt-16 lg:pt-20 pb-20 md:pb-0" : ""
-        }`}
-      >
-        {children}
-      </main>
+        <main
+          className={`relative z-10 ${
+            !isRegisterPage ? "pt-16 lg:pt-20 pb-20 md:pb-0" : ""
+          }`}
+        >
+          {children}
+        </main>
 
-      {!isRegisterPage && <SkillAcademyFooter />}
-      {!isRegisterPage && <MobileBottomNav />}
-    </div>
+        {!isRegisterPage && <SkillAcademyFooter />}
+        {!isRegisterPage && <MobileBottomNav />}
+      </div>
+    </SocketProvider>
   );
 }
