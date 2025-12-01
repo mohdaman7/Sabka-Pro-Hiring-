@@ -252,31 +252,9 @@ export default function LessonView({
                               expandedModule === mod._id ? null : mod._id
                             )
                           }
-                          className={`w-full p-3 flex items-center justify-between transition-colors text-left ${
-                            isModuleLocked
-                              ? "hover:bg-white/[0.02] opacity-60"
-                              : "hover:bg-white/5 opacity-100"
-                          }`}
+                          className="w-full p-3 flex items-center justify-between transition-colors text-left hover:bg-white/5"
                         >
                           <div className="flex items-center gap-3 flex-1 min-w-0">
-                            {/* Module Lock/Access Icon */}
-                            <div
-                              className={`w-6 h-6 rounded flex items-center justify-center flex-shrink-0 ${
-                                isModuleLocked
-                                  ? "bg-red-500/20 border border-red-500/40"
-                                  : "bg-emerald-500/20 border border-emerald-500/40"
-                              }`}
-                            >
-                              {isModuleLocked ? (
-                                <Lock className="w-3.5 h-3.5 text-red-400" />
-                              ) : completedCount === moduleLessonCount &&
-                                moduleLessonCount > 0 ? (
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                              ) : (
-                                <PlayCircle className="w-3.5 h-3.5 text-emerald-400" />
-                              )}
-                            </div>
-
                             <div className="flex-1 min-w-0">
                               <h3 className="text-sm font-semibold text-white truncate">
                                 {mod.title}
@@ -285,7 +263,7 @@ export default function LessonView({
                                 <p className="text-xs text-gray-400">
                                   {moduleLessonCount} lessons
                                 </p>
-                                {!isModuleLocked && moduleLessonCount > 0 && (
+                                {moduleLessonCount > 0 && (
                                   <div className="flex items-center gap-1">
                                     <div className="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
                                       <div
@@ -297,11 +275,6 @@ export default function LessonView({
                                       {progressPercent}%
                                     </span>
                                   </div>
-                                )}
-                                {isModuleLocked && (
-                                  <p className="text-xs text-red-400 font-semibold">
-                                    Locked
-                                  </p>
                                 )}
                               </div>
                             </div>
@@ -321,38 +294,31 @@ export default function LessonView({
                               const isCurrentLesson =
                                 les._id === lesson._id &&
                                 mod._id === module._id;
-                              const isLocked = !les.isFreePreview;
                               const isCompleted = completedLessons.has(les._id);
 
                               return (
                                 <motion.button
                                   key={les._id}
                                   onClick={() =>
-                                    !isLocked &&
                                     onNavigateLesson(les._id, mod._id)
                                   }
-                                  whileHover={{ x: isLocked ? 0 : 4 }}
-                                  disabled={isLocked}
+                                  whileHover={{ x: 4 }}
                                   className={`w-full p-3 flex items-center gap-3 text-left transition-all group ${
                                     isCurrentLesson
                                       ? "bg-gradient-to-r from-[#692c7a]/40 to-[#9463a8]/20 border-l-2 border-[#9463a8]"
-                                      : isLocked
-                                      ? "opacity-40 cursor-not-allowed"
                                       : "hover:bg-white/5"
                                   }`}
                                 >
-                                  <div className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center transition-all ${
-                                    isLocked
-                                      ? "bg-red-500/20 border border-red-500/40"
-                                      : isCurrentLesson
-                                      ? "bg-[#9463a8]/40 border border-[#9463a8]/60 shadow-lg shadow-[#9463a8]/30"
-                                      : isCompleted
-                                      ? "bg-emerald-500/30 border border-emerald-500/50"
-                                      : "bg-white/10 border border-white/20 group-hover:bg-white/20 group-hover:border-white/40"
-                                  }`}>
-                                    {isLocked ? (
-                                      <Lock className="w-3.5 h-3.5 text-red-400" />
-                                    ) : isCompleted ? (
+                                  <div
+                                    className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center transition-all ${
+                                      isCurrentLesson
+                                        ? "bg-[#9463a8]/40 border border-[#9463a8]/60 shadow-lg shadow-[#9463a8]/30"
+                                        : isCompleted
+                                        ? "bg-emerald-500/30 border border-emerald-500/50"
+                                        : "bg-white/10 border border-white/20 group-hover:bg-white/20 group-hover:border-white/40"
+                                    }`}
+                                  >
+                                    {isCompleted ? (
                                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                                     ) : isCurrentLesson ? (
                                       <PlayCircle className="w-3.5 h-3.5 text-[#d8b4f0] fill-current" />
@@ -367,8 +333,6 @@ export default function LessonView({
                                           ? "text-white"
                                           : isCompleted
                                           ? "text-emerald-300"
-                                          : isLocked
-                                          ? "text-gray-500"
                                           : "text-gray-300 group-hover:text-white"
                                       }`}
                                     >

@@ -757,7 +757,13 @@ export default function CourseDetailPage() {
                                   >
                                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 mb-1">
                                       <h4
-                                        className={`text-sm font-semibold flex-1 transition-colors duration-300 mb-2 sm:mb-0 ${l.isFreePreview ? "text-blue-300" : locked ? "text-gray-500" : "text-gray-300 group-hover:text-white"}`}
+                                        className={`text-sm font-semibold flex-1 transition-colors duration-300 mb-2 sm:mb-0 ${
+                                          l.isFreePreview
+                                            ? "text-blue-300"
+                                            : locked
+                                            ? "text-gray-500"
+                                            : "text-gray-300 group-hover:text-white"
+                                        }`}
                                       >
                                         {l.title}
                                       </h4>
@@ -780,7 +786,6 @@ export default function CourseDetailPage() {
                                       {formatDuration(l.durationSec)}
                                     </span>
                                   </div>
-
                                 </div>
                               );
                             })}
