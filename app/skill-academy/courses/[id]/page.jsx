@@ -214,7 +214,7 @@ export default function CourseDetailPage() {
     if (!courseData || purchasingBundle) return;
 
     if (hasFullBundleAccess || isFreeBundle) {
-      router.push(`/student/courses/${courseData._id}`);
+      router.push(`/skill-academy/courses/${courseData._id}`);
       return;
     }
 
@@ -267,7 +267,7 @@ export default function CourseDetailPage() {
 
       // Redirect to course
       setTimeout(() => {
-        router.push(`/student/courses/${courseData._id}`);
+        router.push(`/skill-academy/courses/${courseData._id}`);
       }, 2000);
     } catch (error) {
       console.error("Purchase error:", error);
@@ -297,7 +297,7 @@ export default function CourseDetailPage() {
     if (!moduleId || purchasingModuleId === moduleId) return;
 
     if (isFreeModule) {
-      router.push(`/student/courses/${moduleId}`);
+      router.push(`/skill-academy/courses/${moduleId}`);
       return;
     }
 
@@ -352,7 +352,7 @@ export default function CourseDetailPage() {
 
       // Redirect to module
       setTimeout(() => {
-        router.push(`/student/courses/${moduleId}`);
+        router.push(`/skill-academy/courses/${moduleId}`);
       }, 2000);
     } catch (error) {
       console.error("Purchase error:", error);
@@ -674,7 +674,7 @@ export default function CourseDetailPage() {
                         <button
                           onClick={() => {
                             if (isOwnedModule) {
-                              router.push(`/student/courses/${mod._id}`);
+                              router.push(`/skill-academy/courses/${mod._id}`);
                               return;
                             }
                             handleModulePurchase(mod._id, isFreeModule);
@@ -724,7 +724,7 @@ export default function CourseDetailPage() {
                                       );
                                     }
                                   }}
-                                  className={`flex items-center gap-3 p-4 rounded-lg transition-all duration-300 mt-2 group ${
+                                  className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg transition-all duration-300 mt-2 group ${
                                     locked
                                       ? "bg-gradient-to-r from-white/[0.02] to-white/[0.01] border border-white/5 hover:border-red-500/30"
                                       : "bg-gradient-to-r from-[#692c7a]/10 to-[#9463a8]/5 border-2 border-[#9463a8]/40 cursor-pointer hover:bg-gradient-to-r hover:from-[#692c7a]/20 hover:to-[#9463a8]/15 hover:border-[#9463a8]/60 hover:shadow-lg hover:shadow-[#9463a8]/20"
@@ -732,50 +732,39 @@ export default function CourseDetailPage() {
                                 >
                                   {/* Lock/Play Icon */}
                                   <div
-                                    className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                                       locked
                                         ? "bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/40 text-red-400"
                                         : "bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 border border-emerald-500/50 text-emerald-300 group-hover:from-emerald-500/40 group-hover:to-emerald-600/30 group-hover:shadow-lg group-hover:shadow-emerald-500/30"
                                     }`}
                                   >
                                     {locked ? (
-                                      <Lock className="w-5 h-5 font-bold" />
+                                      <Lock className="w-4 h-4 sm:w-5 sm:h-5 font-bold" />
                                     ) : (
-                                      <Play className="w-5 h-5 font-bold fill-current" />
+                                      <Play className="w-4 h-4 sm:w-5 sm:h-5 font-bold fill-current" />
                                     )}
                                   </div>
 
                                   {/* Lesson Info */}
-                                  <div className={`flex-1 min-w-0 transition-opacity duration-300 ${
-                                    locked ? "opacity-60" : completedLessons.has(l._id) ? "opacity-100" : "opacity-75"
-                                  }`}>
-                                    <div className="flex items-center gap-2 mb-1">
+                                  <div
+                                    className={`flex-1 min-w-0 transition-opacity duration-300 ${
+                                      locked
+                                        ? "opacity-60"
+                                        : completedLessons.has(l._id)
+                                        ? "opacity-100"
+                                        : "opacity-75"
+                                    }`}
+                                  >
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 mb-1">
                                       <h4
-                                        className={`text-sm font-semibold flex-1 transition-colors duration-300 ${
-                                          locked
-                                            ? "text-gray-500"
-                                            : completedLessons.has(l._id)
-                                            ? "text-white group-hover:text-emerald-100"
-                                            : "text-gray-300 group-hover:text-white"
-                                        }`}
+                                        className={`text-sm font-semibold flex-1 transition-colors duration-300 mb-2 sm:mb-0 ${l.isFreePreview ? "text-blue-300" : locked ? "text-gray-500" : "text-gray-300 group-hover:text-white"}`}
                                       >
                                         {l.title}
                                       </h4>
-                                      {completedLessons.has(l._id) && (
-                                        <span className="px-2 py-1 bg-gradient-to-r from-emerald-500/30 to-teal-500/20 border border-emerald-500/50 rounded-md text-xs font-semibold text-emerald-200 flex items-center gap-1">
-                                          <CheckCircle2 className="w-3 h-3" />
-                                          Completed
-                                        </span>
-                                      )}
-                                      {!completedLessons.has(l._id) && !locked && (
-                                        <span className="px-2 py-1 bg-gradient-to-r from-gray-500/20 to-gray-600/10 border border-gray-500/40 rounded-md text-xs font-semibold text-gray-300 flex items-center gap-1">
-                                          <Circle className="w-3 h-3" />
-                                          Unwatched
-                                        </span>
-                                      )}
                                       {l.isFreePreview && (
-                                        <span className="px-2.5 py-1 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/40 rounded-md text-xs font-semibold text-blue-200">
-                                          Free Preview
+                                        <span className="w-fit px-3 py-1 bg-gradient-to-r from-blue-600/40 to-cyan-600/30 border border-blue-400/60 rounded-lg text-xs font-bold text-blue-100 flex items-center gap-1.5 whitespace-nowrap shadow-lg shadow-blue-500/20 hover:from-blue-600/50 hover:to-cyan-600/40 transition-all">
+                                          <div className="w-1.5 h-1.5 bg-blue-300 rounded-full animate-pulse" />
+                                          FREE
                                         </span>
                                       )}
                                     </div>
@@ -792,22 +781,6 @@ export default function CourseDetailPage() {
                                     </span>
                                   </div>
 
-                                  {/* Status Indicator */}
-                                  {locked && (
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/40 flex-shrink-0">
-                                      <Lock className="w-4 h-4 text-red-400" />
-                                    </div>
-                                  )}
-                                  {!locked && completedLessons.has(l._id) && (
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/40 border border-emerald-500/60 flex-shrink-0 group-hover:bg-emerald-500/50 transition-colors duration-300">
-                                      <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                                    </div>
-                                  )}
-                                  {!locked && !completedLessons.has(l._id) && (
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/30 border border-emerald-500/50 flex-shrink-0 group-hover:bg-emerald-500/40 transition-colors duration-300">
-                                      <Play className="w-4 h-4 text-emerald-300" />
-                                    </div>
-                                  )}
                                 </div>
                               );
                             })}

@@ -48,6 +48,7 @@ MODULE 2: Advanced Patterns
 ## Key Visual Elements Explained
 
 ### Opacity Levels
+
 ```
 LOCKED (60%)                    UNWATCHED (75%)                COMPLETED (100%)
 ┌──────────────────┐           ┌──────────────────┐           ┌──────────────────┐
@@ -141,14 +142,17 @@ START: User opens course
 ## Real Code Output Example
 
 ### HTML Structure (Simplified)
+
 ```html
 <!-- COMPLETED LESSON -->
 <div class="flex items-center gap-3 p-4 rounded-lg opacity-100">
   <!-- Icon Circle -->
-  <div class="w-10 h-10 rounded-lg bg-emerald-500/40 border border-emerald-500/60">
+  <div
+    class="w-10 h-10 rounded-lg bg-emerald-500/40 border border-emerald-500/60"
+  >
     <!-- Checkmark Icon -->
   </div>
-  
+
   <!-- Info Section -->
   <div class="flex-1 opacity-100">
     <div class="flex items-center gap-2">
@@ -157,7 +161,7 @@ START: User opens course
     </div>
     <span class="text-gray-300">23:45</span>
   </div>
-  
+
   <!-- Status Icon -->
   <div class="w-8 h-8 rounded-lg bg-emerald-500/40">
     <!-- Checkmark Icon -->
@@ -167,10 +171,12 @@ START: User opens course
 <!-- UNWATCHED LESSON -->
 <div class="flex items-center gap-3 p-4 rounded-lg opacity-75">
   <!-- Icon Circle -->
-  <div class="w-10 h-10 rounded-lg bg-emerald-500/30 border border-emerald-500/50">
+  <div
+    class="w-10 h-10 rounded-lg bg-emerald-500/30 border border-emerald-500/50"
+  >
     <!-- Play Icon -->
   </div>
-  
+
   <!-- Info Section -->
   <div class="flex-1 opacity-75">
     <div class="flex items-center gap-2">
@@ -179,7 +185,7 @@ START: User opens course
     </div>
     <span class="text-gray-400">42:15</span>
   </div>
-  
+
   <!-- Status Icon -->
   <div class="w-8 h-8 rounded-lg bg-emerald-500/30">
     <!-- Play Icon -->
@@ -192,7 +198,7 @@ START: User opens course
   <div class="w-10 h-10 rounded-lg bg-red-500/20 border border-red-500/40">
     <!-- Lock Icon -->
   </div>
-  
+
   <!-- Info Section -->
   <div class="flex-1 opacity-60">
     <div class="flex items-center gap-2">
@@ -200,7 +206,7 @@ START: User opens course
     </div>
     <span class="text-gray-500">18:30</span>
   </div>
-  
+
   <!-- Status Icon -->
   <div class="w-8 h-8 rounded-lg bg-red-500/20">
     <!-- Lock Icon -->
@@ -211,6 +217,7 @@ START: User opens course
 ## Color Palette
 
 ### Emerald (Accessible/Completed)
+
 ```
 Text:              #10b981 (emerald-500)
 Light Text:        #a7f3d0 (emerald-200)
@@ -221,6 +228,7 @@ Shadow:            rgba(16, 185, 129, 0.3)
 ```
 
 ### Red (Locked)
+
 ```
 Text:              #ef4444 (red-500)
 Light Text:        #fca5a5 (red-200)
@@ -229,6 +237,7 @@ Border:            rgba(239, 68, 68, 0.4)
 ```
 
 ### Gray (Muted/Disabled)
+
 ```
 Text (Locked):     #6b7280 (gray-500)
 Text (Unwatched):  #d1d5db (gray-300)
@@ -236,6 +245,7 @@ Text (Duration):   #9ca3af (gray-400)
 ```
 
 ### Blue (Free Preview)
+
 ```
 Text:              #3b82f6 (blue-500)
 Light Text:        #93c5fd (blue-200)
@@ -246,21 +256,25 @@ Border:            rgba(59, 130, 246, 0.4)
 ## Accessibility Features
 
 ✅ **High Contrast:**
+
 - White text on dark backgrounds
 - Color-coded icons (red/green/gray)
 - Opacity levels provide visual hierarchy
 
 ✅ **Icons + Text:**
+
 - Never rely on color alone
 - Icons + badges provide meaning
 - Text labels always present
 
 ✅ **Interactive Feedback:**
+
 - Hover effects (background brightens)
 - Smooth transitions (300ms)
 - Clear cursor changes (clickable vs locked)
 
 ✅ **Screen Readers:**
+
 - Semantic HTML structure
 - Meaningful alt text on icons
 - Badge text provides context
@@ -268,6 +282,7 @@ Border:            rgba(59, 130, 246, 0.4)
 ## Responsive Design
 
 ### Desktop (>1024px)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ [ICON] Lesson Title         [BADGE] [DURATION] [STATUS ICON]   │
@@ -276,6 +291,7 @@ Full spacing, all elements visible
 ```
 
 ### Tablet (768px-1024px)
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │ [ICON] Lesson Title    [BADGE] [DURATION] [STATUS ICON]    │
@@ -284,6 +300,7 @@ Slightly condensed spacing
 ```
 
 ### Mobile (<768px)
+
 ```
 ┌────────────────────────────────────┐
 │ [ICON] Lesson Title                │
@@ -298,7 +315,7 @@ Stacked layout, simplified display
 
 ```
 Opacity Transition:     300ms ease-in-out
-Hover Effect:           300ms ease-in-out  
+Hover Effect:           300ms ease-in-out
 Background Change:      300ms ease-in-out
 Border Change:          300ms ease-in-out
 Icon Color Change:      300ms ease-in-out
@@ -307,6 +324,7 @@ Icon Color Change:      300ms ease-in-out
 ## Performance Impact
 
 ✅ **Minimal:**
+
 - No animation heavy effects
 - Set-based lookups (O(1))
 - Single progress API call per course load
@@ -316,12 +334,14 @@ Icon Color Change:      300ms ease-in-out
 ## Browser Support
 
 ✅ **All Modern Browsers:**
+
 - Chrome/Edge: Full support
 - Firefox: Full support
 - Safari: Full support
 - Mobile browsers: Full support
 
 CSS Features Used:
+
 - `opacity` - Full support
 - `transition` - Full support
 - `background-gradient` - Full support
