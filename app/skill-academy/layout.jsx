@@ -15,6 +15,7 @@ import {
   Settings,
   User,
   ChevronDown,
+  Bell,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -74,9 +75,32 @@ const DesktopHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [notificationDropdownOpen, setNotificationDropdownOpen] =
+    useState(false);
   const [user, setUser] = useState(null);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      message: "Welcome to Skill Academy!",
+      time: "2 hours ago",
+      read: false,
+    },
+    {
+      id: 2,
+      message: "Your course Figma Basics is now available",
+      time: "1 day ago",
+      read: false,
+    },
+    {
+      id: 3,
+      message: "You completed module 3",
+      time: "2 days ago",
+      read: true,
+    },
+  ]);
   const pathname = usePathname();
   const router = useRouter();
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   // Load user from localStorage and setup scroll listener
   useEffect(() => {
@@ -185,110 +209,202 @@ const DesktopHeader = () => {
           </nav>
 
           {/* CTA Button / Profile Dropdown */}
-          <div className="hidden lg:flex items-center gap-4 flex-shrink-0 relative">
+          <div className="hidden lg:flex items-center gap-3 flex-shrink-0 relative">
             {user ? (
-              <div className="relative">
-                {/* Profile Button */}
-                <motion.button
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all group cursor-pointer"
-                >
-                  {/* Avatar */}
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-semibold text-xs shadow-lg shadow-[#692c7a]/30">
-                    {getInitials()}
-                  </div>
+              <>
+                {/* Notification Icon */}
+                <div className="relative">
+                  <motion.button
+                    onClick={() =>
+                      setNotificationDropdownOpen(!notificationDropdownOpen)
+                    }
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-2.5 rounded-lg bg-gradient-to-br from-white/5 to-white/[0.02] hover:from-white/10 hover:to-white/5 transition-all group relative"
+                  >
+                    <Bell className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+                    {unreadCount > 0 && (
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-red-500/50"
+                      >
+                        {unreadCount}
+                      </motion.span>
+                    )}
+                  </motion.button>
 
-                  {/* Name Only - Professional */}
-                  <div className="hidden sm:block text-left">
-                    <p className="text-sm font-medium text-white leading-none">
-                      {user.name
-                        ? user.name.split(" ")[0]
-                        : user.email.split("@")[0]}
-                    </p>
-                  </div>
+                  {/* Notification Dropdown */}
+                  <AnimatePresence>
+                    {notificationDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full right-0 mt-2 w-80 bg-gradient-to-br from-[#2a1a40]/95 via-[#3d2557]/90 to-[#2a1a40]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-[#692c7a]/30 overflow-hidden z-50"
+                      >
+                        {/* Header */}
+                        <div className="p-4 border-b border-white/10 bg-gradient-to-r from-[#692c7a]/20 to-transparent">
+                          <h3 className="text-sm font-bold text-white">
+                            Notifications
+                          </h3>
+                        </div>
 
-                  {/* Dropdown Indicator */}
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-300 ${
-                      profileDropdownOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </motion.button>
+                        {/* Notifications List */}
+                        <div className="max-h-96 overflow-y-auto">
+                          {notifications.length > 0 ? (
+                            notifications.map((notification) => (
+                              <motion.div
+                                key={notification.id}
+                                whileHover={{
+                                  backgroundColor: "rgba(105, 44, 122, 0.1)",
+                                }}
+                                className={`p-3 border-b border-white/5 cursor-pointer transition-all ${
+                                  !notification.read ? "bg-[#692c7a]/10" : ""
+                                }`}
+                              >
+                                <div className="flex gap-2 items-start">
+                                  {!notification.read && (
+                                    <div className="w-2 h-2 bg-[#d8b4f0] rounded-full mt-1.5 flex-shrink-0" />
+                                  )}
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm text-gray-200 leading-relaxed">
+                                      {notification.message}
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                      {notification.time}
+                                    </p>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            ))
+                          ) : (
+                            <div className="p-6 text-center">
+                              <p className="text-sm text-gray-400">
+                                No notifications
+                              </p>
+                            </div>
+                          )}
+                        </div>
 
-                {/* Profile Dropdown Menu */}
-                <AnimatePresence>
-                  {profileDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full right-0 mt-3 w-72 bg-gradient-to-br from-[#2a1a40]/95 via-[#3d2557]/90 to-[#2a1a40]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-[#692c7a]/30 overflow-hidden z-50"
-                    >
-                      {/* Profile Header */}
-                      <div className="p-4 border-b border-white/10">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#692c7a]/30">
-                            {getInitials()}
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-white">
-                              {user.name || user.email}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {user.email}
-                            </p>
+                        {/* Footer */}
+                        <div className="p-3 border-t border-white/10 bg-gradient-to-r from-white/5 to-transparent">
+                          <button className="w-full text-xs font-medium text-[#d8b4f0] hover:text-white transition-colors">
+                            View All
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Profile Dropdown */}
+                <div className="relative">
+                  {/* Profile Button - No Border */}
+                  <motion.button
+                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-gradient-to-br from-white/5 to-white/[0.02] hover:from-white/10 hover:to-white/5 transition-all group cursor-pointer"
+                  >
+                    {/* Avatar */}
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-semibold text-xs shadow-lg shadow-[#692c7a]/30">
+                      {getInitials()}
+                    </div>
+
+                    {/* Name Only - Professional */}
+                    <div className="hidden sm:block text-left">
+                      <p className="text-sm font-medium text-white leading-none">
+                        {user.name
+                          ? user.name.split(" ")[0]
+                          : user.email.split("@")[0]}
+                      </p>
+                    </div>
+
+                    {/* Dropdown Indicator */}
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-300 ${
+                        profileDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </motion.button>
+
+                  {/* Profile Dropdown Menu */}
+                  <AnimatePresence>
+                    {profileDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full right-0 mt-3 w-72 bg-gradient-to-br from-[#2a1a40]/95 via-[#3d2557]/90 to-[#2a1a40]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-[#692c7a]/30 overflow-hidden z-50"
+                      >
+                        {/* Profile Header */}
+                        <div className="p-4 border-b border-white/10">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#692c7a] to-[#9463a8] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#692c7a]/30">
+                              {getInitials()}
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-white">
+                                {user.name || user.email}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {user.email}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Menu Items */}
-                      <div className="p-2">
-                        {/* Profile Option */}
-                        <motion.button
-                          whileHover={{
-                            backgroundColor: "rgba(105, 44, 122, 0.15)",
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white transition-colors group/item"
-                        >
-                          <User className="w-4 h-4 text-[#692c7a] group-hover/item:text-[#d8b4f0] transition-colors" />
-                          <span className="text-sm font-medium">
-                            My Profile
-                          </span>
-                        </motion.button>
+                        {/* Menu Items */}
+                        <div className="p-2">
+                          {/* Profile Option */}
+                          <motion.button
+                            whileHover={{
+                              backgroundColor: "rgba(105, 44, 122, 0.15)",
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white transition-colors group/item"
+                          >
+                            <User className="w-4 h-4 text-[#692c7a] group-hover/item:text-[#d8b4f0] transition-colors" />
+                            <span className="text-sm font-medium">
+                              My Profile
+                            </span>
+                          </motion.button>
 
-                        {/* Settings Option */}
-                        <motion.button
-                          whileHover={{
-                            backgroundColor: "rgba(105, 44, 122, 0.15)",
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white transition-colors group/item"
-                        >
-                          <Settings className="w-4 h-4 text-[#692c7a] group-hover/item:text-[#d8b4f0] transition-colors" />
-                          <span className="text-sm font-medium">Settings</span>
-                        </motion.button>
+                          {/* Settings Option */}
+                          <motion.button
+                            whileHover={{
+                              backgroundColor: "rgba(105, 44, 122, 0.15)",
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white transition-colors group/item"
+                          >
+                            <Settings className="w-4 h-4 text-[#692c7a] group-hover/item:text-[#d8b4f0] transition-colors" />
+                            <span className="text-sm font-medium">
+                              Settings
+                            </span>
+                          </motion.button>
 
-                        {/* Divider */}
-                        <div className="my-2 h-px bg-white/10" />
+                          {/* Divider */}
+                          <div className="my-2 h-px bg-white/10" />
 
-                        {/* Logout Option */}
-                        <motion.button
-                          onClick={handleLogout}
-                          whileHover={{
-                            backgroundColor: "rgba(239, 68, 68, 0.15)",
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:text-red-300 transition-colors group/item"
-                        >
-                          <LogOut className="w-4 h-4 group-hover/item:text-red-400 transition-colors" />
-                          <span className="text-sm font-medium">Logout</span>
-                        </motion.button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                          {/* Logout Option */}
+                          <motion.button
+                            onClick={handleLogout}
+                            whileHover={{
+                              backgroundColor: "rgba(239, 68, 68, 0.15)",
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:text-red-300 transition-colors group/item"
+                          >
+                            <LogOut className="w-4 h-4 group-hover/item:text-red-400 transition-colors" />
+                            <span className="text-sm font-medium">Logout</span>
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </>
             ) : (
               <div className="flex items-center gap-3">
                 <Link href="/skill-academy/login">
