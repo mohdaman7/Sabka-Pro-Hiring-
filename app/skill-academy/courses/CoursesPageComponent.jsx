@@ -356,24 +356,52 @@ export default function CoursesPageComponent() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center py-16 px-4"
+              className="py-6"
             >
-              <div className="max-w-md mx-auto">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-r from-[#7e4ba3] to-[#a87bcc] p-1 shadow-2xl"
-                >
-                  <div className="w-full h-full rounded-3xl bg-[#1a0d2e] flex items-center justify-center">
-                    <Sparkles className="w-10 h-10 text-[#a87bcc]" />
+              {/* Skeleton Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: itemsPerPage }).map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md p-4"
+                  >
+                    {/* Image skeleton */}
+                    <div className="w-full h-40 rounded-xl bg-white/10 animate-pulse" />
+
+                    {/* Title row */}
+                    <div className="mt-4 h-6 w-3/4 rounded bg-white/10 animate-pulse" />
+
+                    {/* Description lines */}
+                    <div className="mt-3 space-y-2">
+                      <div className="h-4 w-full rounded bg-white/10 animate-pulse" />
+                      <div className="h-4 w-5/6 rounded bg-white/10 animate-pulse" />
+                      <div className="h-4 w-2/3 rounded bg-white/10 animate-pulse" />
+                    </div>
+
+                    {/* Meta row */}
+                    <div className="mt-4 flex items-center gap-3">
+                      <div className="h-5 w-16 rounded bg-white/10 animate-pulse" />
+                      <div className="h-5 w-12 rounded bg-white/10 animate-pulse" />
+                      <div className="h-5 w-20 rounded bg-white/10 animate-pulse" />
+                    </div>
+
+                    {/* CTA buttons */}
+                    <div className="mt-5 flex gap-3">
+                      <div className="h-10 flex-1 rounded-lg bg-white/10 animate-pulse" />
+                      <div className="h-10 w-10 rounded-lg bg-white/10 animate-pulse" />
+                    </div>
+
+                    {/* Subtle moving shine effect */}
+                    <div className="pointer-events-none absolute inset-0">
+                      <motion.div
+                        className="absolute -inset-x-10 -inset-y-10 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                        initial={{ x: "-100%" }}
+                        animate={{ x: "100%" }}
+                        transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
+                      />
+                    </div>
                   </div>
-                </motion.div>
-                <h3 className="text-2xl font-black text-white mb-3 bg-gradient-to-r from-white to-[#c99ee6] bg-clip-text text-transparent">
-                  Loading Courses
-                </h3>
-                <p className="text-gray-300 text-base leading-relaxed">
-                  Please wait while we fetch the latest courses for you...
-                </p>
+                ))}
               </div>
             </motion.div>
           ) : error ? (

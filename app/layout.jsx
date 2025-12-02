@@ -33,6 +33,9 @@ export const metadata = {
       type: "image/png",
     },
   ],
+};
+
+export const viewport = {
   themeColor: [
     {
       media: "(prefers-color-scheme: light)",
