@@ -14,7 +14,7 @@ export default function HomePage() {
       <LandingFeatures />
       <LandingAbout />
       <LandingTestimonials />
-      <LandingPlans />
+      {/* <LandingPlans /> */}
       <LandingCTA />
       <LandingFooter />
     </main>
