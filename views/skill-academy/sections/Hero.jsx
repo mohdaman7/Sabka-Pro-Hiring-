@@ -31,12 +31,12 @@ export const Hero = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-fit lg:min-h-screen flex items-center justify-center overflow-hidden bg-black"
+      className="relative min-h-fit lg:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#3d1642] via-[#2a1138] to-[#4a1f52]"
     >
       {/* Ultra Premium Background with multiple layers */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Base gradient layer */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0a0514] to-black" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#3d1642] via-[#2a1138] to-[#4a1f52]" />
 
         {/* Primary animated gradient orb - Top Left */}
         <motion.div
@@ -183,7 +183,9 @@ export const Hero = () => {
               className="flex flex-wrap gap-4 pt-4"
             >
               <motion.button
-                onClick={() => router.push("/skill-academy/courses")}
+                onClick={() =>
+                  router.push("/skill-academy/courses/69259137caedbcfd52805094")
+                }
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="group relative px-8 py-4 bg-gradient-to-r from-[#b893d1] to-[#9463a8] hover:from-[#9463a8] hover:to-[#692c7a] text-white font-bold rounded-full shadow-2xl shadow-[#692c7a]/50 hover:shadow-3xl hover:shadow-[#692c7a]/70 transition-all duration-300 overflow-hidden"
@@ -200,7 +202,9 @@ export const Hero = () => {
               </motion.button>
 
               <motion.button
-                onClick={() => router.push("/skill-academy/courses")}
+                onClick={() =>
+                  router.push("/skill-academy/courses/69259137caedbcfd52805094")
+                }
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-full border border-white/20 backdrop-blur-md transition-all duration-300"
